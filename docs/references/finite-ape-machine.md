@@ -90,7 +90,7 @@ Inspired by CAD/CAE/CAM in manufacturing, APE defines three perspectives of the 
 
 **AAD** = Define the problem, scope, constraints. The human's domain expertise is irreplaceable.
 
-**AAE** = Architecture, task planning, simulation via tests. Tests are simulations — they verify system behavior before it exists, exactly as a finite element analysis validates a part before manufacturing.
+**AAE** = Architecture, task planning, simulation via tests. Tests are simulations — they verify system behavior before it exists, exactly as a finite element analysis validates a part "../../doc/references"before manufacturing.
 
 **AAM** = Implement, integrate, verify mechanically, deliver. The AI operates the TDD loop; the human reviews the PR and decides on merge.
 
