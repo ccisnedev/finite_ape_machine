@@ -48,15 +48,17 @@ test 'el CLI retorna exit code 64 para comando desconocido'
 
 ### Steps
 
-- [ ] 1.1 Crear `code/cli/pubspec.yaml` (sin dependencias — solo metadata y sdk constraint)
-- [ ] 1.2 Ejecutar `dart pub add modular_cli_sdk` y `dart pub add --dev test lints`
-- [ ] 1.3 Crear `code/cli/analysis_options.yaml` (lints recomendados)
-- [ ] 1.4 Escribir tests de scaffold (pseudocódigo arriba) → **RED**
-- [ ] 1.5 Crear `code/cli/bin/main.dart` — entry point que delega a `runApe(args)`
-- [ ] 1.6 Crear `code/cli/lib/ape_cli.dart` — `runApe()` con ModularCli vacío (sin comandos)
-- [ ] 1.7 Ejecutar `dart test` → **GREEN** (segundo test pasa; primero falla porque no hay 'ping')
-- [ ] 1.8 Registrar comando dummy 'ping' solo en el test, no en producción → los dos tests pasan
-- [ ] 1.9 Ejecutar `dart analyze` — cero errores, cero warnings
+- [x] 1.1 Crear `code/cli/pubspec.yaml` (sin dependencias — solo metadata y sdk constraint)
+- [x] 1.2 Ejecutar `dart pub add modular_cli_sdk` y `dart pub add --dev test lints`
+- [x] 1.3 Crear `code/cli/analysis_options.yaml` (lints recomendados)
+- [x] 1.4 Escribir tests de scaffold (pseudocódigo arriba) → **RED**
+- [x] 1.5 Crear `code/cli/bin/main.dart` — entry point que delega a `runApe(args)`
+- [x] 1.6 Crear `code/cli/lib/ape_cli.dart` — `runApe()` con ModularCli vacío (sin comandos)
+- [x] 1.7 Ejecutar `dart test` → **GREEN** (ambos tests pasan con dummy inline)
+- [x] 1.8 Registrar comando dummy 'ping' solo en el test, no en producción → los dos tests pasan
+- [x] 1.9 Ejecutar `dart analyze` — cero errores, cero warnings
+
+> Desviación: cli_router agregado como dependencia directa (lint depend_on_referenced_packages).
 
 **Commit:** `feat(cli): scaffold dart project with modular_cli_sdk`
 
