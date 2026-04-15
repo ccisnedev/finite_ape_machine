@@ -108,11 +108,13 @@ group 'InitCommand'
 
 ## Fase 3 — Compilación y validación final
 
-- [ ] 3.1 Ejecutar `dart compile exe bin/main.dart` — genera binario
-- [ ] 3.2 Ejecutar el binario compilado con `init` en directorio limpio — crea `.ape/`
-- [ ] 3.3 Ejecutar segunda vez — mensaje informativo, no falla
-- [ ] 3.4 Documentar limitaciones encontradas en los packages (si existen)
-- [ ] 3.5 Ejecutar checklist de entrega del coding manifesto (FE-01 a FE-08)
+- [x] 3.1 Ejecutar `dart compile exe bin/main.dart` — genera binario
+- [x] 3.2 Ejecutar el binario compilado con `init` en directorio limpio — crea `.ape/`
+- [x] 3.3 Ejecutar segunda vez — mensaje informativo, no falla
+- [x] 3.4 Documentar limitaciones encontradas en los packages (si existen)
+- [x] 3.5 Ejecutar checklist de entrega del coding manifesto (FE-01 a FE-06)
+
+> Sin limitaciones detectadas. modular_cli_sdk y cli_router funcionaron sin hacks.
 
 **Commit:** `chore(cli): verify compilation and document findings`
 
