@@ -10,8 +10,7 @@
 
 $ErrorActionPreference = 'Stop'
 
-$projectRoot = Split-Path -Parent $PSScriptRoot
-$cliRoot = Join-Path (Join-Path $projectRoot 'code') 'cli'
+$cliRoot = Split-Path -Parent $PSScriptRoot
 $buildDir = Join-Path $cliRoot 'build'
 
 # Clean previous build

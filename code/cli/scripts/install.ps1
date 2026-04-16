@@ -1,7 +1,7 @@
 # install.ps1 — Downloads and installs the latest APE CLI release.
 #
 # Usage:
-#   irm https://raw.githubusercontent.com/ccisnedev/finite_ape_machine/main/scripts/install.ps1 | iex
+#   irm https://raw.githubusercontent.com/ccisnedev/finite_ape_machine/main/code/cli/scripts/install.ps1 | iex
 #
 # What it does:
 #   1. Detects Windows x64
