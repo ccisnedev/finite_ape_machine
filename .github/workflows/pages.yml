@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'site/**'
+      - 'code/site/**'
       - '.github/workflows/pages.yml'
 
 permissions:
@@ -29,7 +29,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: code/site
 
       - id: deployment
         uses: actions/deploy-pages@v4
