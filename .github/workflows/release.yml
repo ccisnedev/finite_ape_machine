@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: code/cli
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.8.1'
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Analyze
+        run: dart analyze
+
+      - name: Test
+        run: dart test
+
+      - name: Build
+        run: |
+          New-Item -ItemType Directory -Force -Path build\bin | Out-Null
+          dart compile exe bin/main.dart -o build\bin\ape.exe
+          Copy-Item -Recurse assets build\assets
+        shell: pwsh
+
+      - name: Package
+        run: Compress-Archive -Path build\* -DestinationPath ape-windows-x64.zip
+        shell: pwsh
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: code/cli/ape-windows-x64.zip
+          generate_release_notes: true
