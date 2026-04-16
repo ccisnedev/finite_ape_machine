@@ -40,11 +40,26 @@ doc/
 - [x] `ape version` — print CLI version
 - [x] `ape target get` — deploy APE agents and skills to all AI coding tools
 - [x] `ape target clean` — remove deployed APE files from all targets
+- [x] `ape upgrade` — download and install the latest APE release
 - [ ] `ape memory` — Memory as Code CLI commands
 - [ ] `ape task` — GitHub Issues-backed task management
 - [ ] Orchestrator prompts for Copilot (first target)
 - [ ] BORGES validation engine
 - [ ] DARWIN learning loop
+
+## Install (Windows)
+
+```powershell
+irm https://raw.githubusercontent.com/ccisnedev/finite_ape_machine/main/scripts/install.ps1 | iex
+```
+
+This downloads the latest release, extracts it to `%LOCALAPPDATA%\ape\`, adds it to PATH, and deploys APE agents/skills to all supported AI coding tools.
+
+To update to the latest version:
+
+```powershell
+ape upgrade
+```
 
 ## The APE Cycle
 

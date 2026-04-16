@@ -12,6 +12,7 @@ import 'assets.dart';
 import 'commands/init.dart';
 import 'commands/target_clean.dart';
 import 'commands/target_get.dart';
+import 'commands/upgrade.dart';
 import 'commands/version.dart';
 import 'targets/all_adapters.dart';
 import 'targets/deployer.dart';
@@ -32,6 +33,12 @@ Future<int> runApe(List<String> args) async {
     'version',
     (req) => VersionCommand(VersionInput.fromCliRequest(req)),
     description: 'Print the current CLI version',
+  );
+
+  cli.command<UpgradeInput, UpgradeOutput>(
+    'upgrade',
+    (req) => UpgradeCommand(UpgradeInput.fromCliRequest(req)),
+    description: 'Download and install the latest APE release',
   );
 
   final deployer = TargetDeployer(

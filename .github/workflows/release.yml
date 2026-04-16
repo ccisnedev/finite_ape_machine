@@ -2,8 +2,12 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+    paths:
+      - 'code/cli/**'
+      - 'scripts/**'
+      - '.github/workflows/release.yml'
 
 permissions:
   contents: write
@@ -31,6 +35,14 @@ jobs:
       - name: Test
         run: dart test
 
+      - name: Read version from pubspec.yaml
+        id: version
+        run: |
+          $v = (Select-String -Path pubspec.yaml -Pattern '^version:\s*(.+)$').Matches.Groups[1].Value.Trim()
+          echo "VERSION=$v" >> $env:GITHUB_OUTPUT
+          echo "Version: $v"
+        shell: pwsh
+
       - name: Build
         run: |
           New-Item -ItemType Directory -Force -Path build\bin | Out-Null
@@ -42,8 +54,11 @@ jobs:
         run: Compress-Archive -Path build\* -DestinationPath ape-windows-x64.zip
         shell: pwsh
 
-      - name: Create Release
+      - name: Create or update release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.version.outputs.VERSION }}
+          name: v${{ steps.version.outputs.VERSION }}
           files: code/cli/ape-windows-x64.zip
           generate_release_notes: true
+          make_latest: true
