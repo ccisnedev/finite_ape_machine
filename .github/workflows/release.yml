@@ -45,7 +45,7 @@ jobs:
       - name: Build
         run: |
           New-Item -ItemType Directory -Force -Path build\bin | Out-Null
-          & "$env:DART_HOME\bin\dart.exe" compile exe bin/main.dart -o build\bin\ape.exe
+          dart compile exe bin/main.dart -o build\bin\ape.exe
           Copy-Item -Recurse assets build\assets
 
       - name: Package
