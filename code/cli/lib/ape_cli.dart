@@ -12,6 +12,7 @@ import 'assets.dart';
 import 'commands/init.dart';
 import 'commands/target_clean.dart';
 import 'commands/target_get.dart';
+import 'commands/version.dart';
 import 'targets/all_adapters.dart';
 import 'targets/deployer.dart';
 
@@ -25,6 +26,12 @@ Future<int> runApe(List<String> args) async {
     'init',
     (req) => InitCommand(InitInput.fromCliRequest(req)),
     description: 'Initialize a new .ape/ workspace',
+  );
+
+  cli.command<VersionInput, VersionOutput>(
+    'version',
+    (req) => VersionCommand(VersionInput.fromCliRequest(req)),
+    description: 'Print the current CLI version',
   );
 
   final deployer = TargetDeployer(
