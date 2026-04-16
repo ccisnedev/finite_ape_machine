@@ -57,6 +57,15 @@ jobs:
       - name: Create build directories
         run: New-Item -ItemType Directory -Force -Path build\bin | Out-Null
 
+      - name: Clean dart cache to force re-download
+        shell: pwsh
+        run: |
+          $dartCache = "C:\hostedtoolcache\windows\dart"
+          if (Test-Path $dartCache) {
+            Write-Host "Removing $dartCache"
+            Remove-Item -Recurse -Force $dartCache
+          }
+
       - name: Re-setup Dart (ensure SDK present before compile)
         uses: dart-lang/setup-dart@v1
         with:
