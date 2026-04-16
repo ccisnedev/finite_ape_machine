@@ -45,21 +45,10 @@ jobs:
       - name: Create build directories
         run: New-Item -ItemType Directory -Force -Path build\bin | Out-Null
 
-      - name: Diagnose dart availability
-        run: |
-          Write-Host "=== PATH ==="
-          $env:PATH -split ';' | ForEach-Object { Write-Host $_ }
-          Write-Host ""
-          Write-Host "=== DART_HOME ==="
-          Write-Host "DART_HOME=$env:DART_HOME"
-          Write-Host "Exists: $(Test-Path "$env:DART_HOME\bin\dart.exe")"
-          Write-Host ""
-          Write-Host "=== Get-Command dart ==="
-          Get-Command dart -ErrorAction SilentlyContinue | Format-List
-          Write-Host ""
-          Write-Host "=== dart --version ==="
-          dart --version
-          Write-Host "Exit code: $LASTEXITCODE"
+      - name: Re-setup Dart (ensure SDK present before compile)
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.8.1'
 
       - name: Compile
         run: dart compile exe bin/main.dart -o build\bin\ape.exe
