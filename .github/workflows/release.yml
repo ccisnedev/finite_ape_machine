@@ -42,11 +42,14 @@ jobs:
           echo "Version: $v"
         shell: pwsh
 
-      - name: Build
-        run: |
-          New-Item -ItemType Directory -Force -Path build\bin | Out-Null
-          dart compile exe bin/main.dart -o build\bin\ape.exe
-          Copy-Item -Recurse assets build\assets
+      - name: Create build directories
+        run: New-Item -ItemType Directory -Force -Path build\bin | Out-Null
+
+      - name: Compile
+        run: dart compile exe bin/main.dart -o build\bin\ape.exe
+
+      - name: Copy assets
+        run: Copy-Item -Recurse assets build\assets
 
       - name: Package
         run: Compress-Archive -Path build\* -DestinationPath ape-windows-x64.zip
