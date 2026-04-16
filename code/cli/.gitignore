@@ -7,3 +7,6 @@
 
 # .exe
 *.exe
+
+# build
+/build/
