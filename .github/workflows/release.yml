@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'code/cli/**'
-      - 'scripts/**'
       - '.github/workflows/release.yml'
 
 permissions:
@@ -46,7 +45,7 @@ jobs:
       - name: Build
         run: |
           New-Item -ItemType Directory -Force -Path build\bin | Out-Null
-          dart compile exe bin/main.dart -o build\bin\ape.exe
+          & "$env:DART_HOME\bin\dart.exe" compile exe bin/main.dart -o build\bin\ape.exe
           Copy-Item -Recurse assets build\assets
         shell: pwsh
 
