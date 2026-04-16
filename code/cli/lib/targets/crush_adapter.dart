@@ -7,6 +7,10 @@ class CrushAdapter extends TargetAdapter {
   String get name => 'crush';
 
   @override
+  String baseDirectory(String homeDir) =>
+      p.join(homeDir, '.config', 'crush');
+
+  @override
   String skillsDirectory(String homeDir) =>
       p.join(homeDir, '.config', 'crush', 'skills');
 

@@ -7,10 +7,16 @@ class CopilotAdapter extends TargetAdapter {
   String get name => 'copilot';
 
   @override
+  String baseDirectory(String homeDir) => p.join(homeDir, '.copilot');
+
+  @override
   String skillsDirectory(String homeDir) =>
       p.join(homeDir, '.copilot', 'skills');
 
   @override
   String agentDirectory(String homeDir) =>
       p.join(homeDir, '.copilot', 'agents');
+
+  @override
+  List<String> get subsumedBy => const ['claude'];
 }

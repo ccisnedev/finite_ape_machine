@@ -17,24 +17,42 @@ class TargetDeployer {
     required this.homeDir,
   });
 
-  /// Deploys all assets to all adapter directories.
+  /// Deploys all assets to eligible adapter directories.
   ///
-  /// Idempotent: cleans existing files before deploying (D18).
+  /// Idempotent: cleans all adapters before deploying (D18).
+  /// Adapters subsumed by another existing target are skipped.
   void deploy() {
     clean();
 
-    for (final adapter in adapters) {
+    final active = effectiveAdapters;
+    for (final adapter in active) {
       _deploySkills(adapter);
       _deployAgents(adapter);
     }
   }
 
-  /// Removes all deployed files from all adapter directories.
+  /// Removes all deployed files from **all** adapter directories,
+  /// including subsumed targets.
   void clean() {
     for (final adapter in adapters) {
       _deleteDirectory(adapter.skillsDirectory(homeDir));
       _deleteDirectory(adapter.agentDirectory(homeDir));
     }
+  }
+
+  /// Returns the adapters that should receive a deploy.
+  ///
+  /// An adapter is excluded when every target listed in its [subsumedBy]
+  /// exists on disk.
+  List<TargetAdapter> get effectiveAdapters {
+    final existingNames =
+        adapters.where((a) => a.exists(homeDir)).map((a) => a.name).toSet();
+
+    return adapters.where((adapter) {
+      if (adapter.subsumedBy.isEmpty) return true;
+      // Skip this adapter only if at least one subsuming target exists.
+      return !adapter.subsumedBy.any(existingNames.contains);
+    }).toList();
   }
 
   void _deploySkills(TargetAdapter adapter) {

@@ -7,6 +7,9 @@ class GeminiAdapter extends TargetAdapter {
   String get name => 'gemini';
 
   @override
+  String baseDirectory(String homeDir) => p.join(homeDir, '.gemini');
+
+  @override
   String skillsDirectory(String homeDir) =>
       p.join(homeDir, '.gemini', 'skills');
 

@@ -7,6 +7,9 @@ class ClaudeAdapter extends TargetAdapter {
   String get name => 'claude';
 
   @override
+  String baseDirectory(String homeDir) => p.join(homeDir, '.claude');
+
+  @override
   String skillsDirectory(String homeDir) =>
       p.join(homeDir, '.claude', 'skills');
 

@@ -12,6 +12,9 @@ class FakeAdapter extends TargetAdapter {
   String get name => 'fake';
 
   @override
+  String baseDirectory(String homeDir) => p.join(homeDir, '.fake');
+
+  @override
   String skillsDirectory(String homeDir) =>
       p.join(homeDir, '.fake', 'skills');
 
@@ -151,11 +154,112 @@ void main() {
       );
     });
   });
+
+  group('effectiveAdapters — coexistence filtering', () {
+    test('subsumed adapter is excluded when subsuming target exists', () {
+      // Create the base directory for the subsuming target
+      Directory(p.join(homeDir.path, '.primary')).createSync();
+
+      final primary = _PrimaryAdapter();
+      final subsumed = _SubsumedAdapter();
+      final deployer = TargetDeployer(
+        assets: assets,
+        adapters: [primary, subsumed],
+        homeDir: homeDir.path,
+      );
+
+      expect(
+        deployer.effectiveAdapters.map((a) => a.name),
+        equals(['primary']),
+      );
+    });
+
+    test('subsumed adapter is included when subsuming target is absent', () {
+      // Do NOT create .primary directory
+      final primary = _PrimaryAdapter();
+      final subsumed = _SubsumedAdapter();
+      final deployer = TargetDeployer(
+        assets: assets,
+        adapters: [primary, subsumed],
+        homeDir: homeDir.path,
+      );
+
+      expect(
+        deployer.effectiveAdapters.map((a) => a.name),
+        containsAll(['primary', 'subsumed']),
+      );
+    });
+
+    test('deploy skips subsumed adapter but clean removes its files', () {
+      // Create .primary base dir so subsumed gets excluded from deploy
+      Directory(p.join(homeDir.path, '.primary')).createSync();
+
+      final primary = _PrimaryAdapter();
+      final subsumed = _SubsumedAdapter();
+      final deployer = TargetDeployer(
+        assets: assets,
+        adapters: [primary, subsumed],
+        homeDir: homeDir.path,
+      );
+
+      // Pre-populate subsumed target with old files
+      final oldFile = File(
+          p.join(homeDir.path, '.subsumed', 'skills', 'old', 'SKILL.md'));
+      oldFile.parent.createSync(recursive: true);
+      oldFile.writeAsStringSync('# Old');
+
+      deployer.deploy();
+
+      // Primary should have files
+      expect(
+        File(p.join(
+                homeDir.path, '.primary', 'skills', 'memory-read', 'SKILL.md'))
+            .existsSync(),
+        isTrue,
+      );
+
+      // Subsumed should be cleaned (old files gone) and NOT re-populated
+      expect(oldFile.existsSync(), isFalse);
+      expect(
+        Directory(p.join(homeDir.path, '.subsumed', 'skills')).existsSync(),
+        isFalse,
+      );
+    });
+
+    test('both adapters deploy when neither has base directory', () {
+      // Neither .primary nor .subsumed exist
+      final primary = _PrimaryAdapter();
+      final subsumed = _SubsumedAdapter();
+      final deployer = TargetDeployer(
+        assets: assets,
+        adapters: [primary, subsumed],
+        homeDir: homeDir.path,
+      );
+
+      deployer.deploy();
+
+      expect(
+        File(p.join(
+                homeDir.path, '.primary', 'skills', 'memory-read', 'SKILL.md'))
+            .existsSync(),
+        isTrue,
+      );
+      expect(
+        File(p.join(homeDir.path, '.subsumed', 'skills', 'memory-read',
+                'SKILL.md'))
+            .existsSync(),
+        isTrue,
+      );
+    });
+  });
 }
 
 class _SecondFakeAdapter extends TargetAdapter {
   @override
   String get name => 'fake2';
+
+  @override
+  String baseDirectory(String homeDir) => p.join(homeDir, '.fake2');
 
   @override
   String skillsDirectory(String homeDir) =>
@@ -164,4 +268,39 @@ class _SecondFakeAdapter extends TargetAdapter {
   @override
   String agentDirectory(String homeDir) =>
       p.join(homeDir, '.fake2', 'agents');
+}
+
+class _PrimaryAdapter extends TargetAdapter {
+  @override
+  String get name => 'primary';
+
+  @override
+  String baseDirectory(String homeDir) => p.join(homeDir, '.primary');
+
+  @override
+  String skillsDirectory(String homeDir) =>
+      p.join(homeDir, '.primary', 'skills');
+
+  @override
+  String agentDirectory(String homeDir) =>
+      p.join(homeDir, '.primary', 'agents');
+}
+
+class _SubsumedAdapter extends TargetAdapter {
+  @override
+  String get name => 'subsumed';
+
+  @override
+  String baseDirectory(String homeDir) => p.join(homeDir, '.subsumed');
+
+  @override
+  String skillsDirectory(String homeDir) =>
+      p.join(homeDir, '.subsumed', 'skills');
+
+  @override
+  String agentDirectory(String homeDir) =>
+      p.join(homeDir, '.subsumed', 'agents');
+
+  @override
+  List<String> get subsumedBy => const ['primary'];
 }

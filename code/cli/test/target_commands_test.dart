@@ -15,6 +15,9 @@ class _FakeAdapter extends TargetAdapter {
   String get name => 'fake';
 
   @override
+  String baseDirectory(String homeDir) => p.join(homeDir, '.fake');
+
+  @override
   String skillsDirectory(String homeDir) =>
       p.join(homeDir, '.fake', 'skills');
 

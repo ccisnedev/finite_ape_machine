@@ -15,6 +15,11 @@ void main() {
         expect(agentDir, isNotEmpty);
       });
 
+      test('${adapter.name} returns non-empty baseDirectory', () {
+        final baseDir = adapter.baseDirectory('/home/user');
+        expect(baseDir, isNotEmpty);
+      });
+
       test('${adapter.name} has a valid name', () {
         expect(adapter.name, isNotEmpty);
       });
@@ -28,6 +33,11 @@ void main() {
         final agentDir = adapter.agentDirectory('/home/user');
         expect(agentDir, startsWith('/home/user'));
       });
+
+      test('${adapter.name} baseDirectory contains home dir', () {
+        final baseDir = adapter.baseDirectory('/home/user');
+        expect(baseDir, startsWith('/home/user'));
+      });
     }
   });
 
@@ -39,6 +49,18 @@ void main() {
     test('each adapter has a unique name', () {
       final names = allAdapters.map((a) => a.name).toSet();
       expect(names, hasLength(5));
+    });
+  });
+
+  group('copilot subsumedBy', () {
+    test('copilot declares claude as subsuming target', () {
+      final copilot = allAdapters.firstWhere((a) => a.name == 'copilot');
+      expect(copilot.subsumedBy, contains('claude'));
+    });
+
+    test('claude has no subsumedBy', () {
+      final claude = allAdapters.firstWhere((a) => a.name == 'claude');
+      expect(claude.subsumedBy, isEmpty);
     });
   });
 }

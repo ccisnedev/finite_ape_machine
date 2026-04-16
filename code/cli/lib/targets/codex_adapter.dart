@@ -7,6 +7,9 @@ class CodexAdapter extends TargetAdapter {
   String get name => 'codex';
 
   @override
+  String baseDirectory(String homeDir) => p.join(homeDir, '.codex');
+
+  @override
   String skillsDirectory(String homeDir) =>
       p.join(homeDir, '.codex', 'skills');
 
