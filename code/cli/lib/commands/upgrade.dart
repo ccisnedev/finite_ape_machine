@@ -133,7 +133,19 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
       await dlResponse.pipe(sink);
 
       // 4. Extract over current installation
+      //
+      // Windows locks running executables, so we rename the current binary
+      // before extracting. The .bak file is cleaned up after extraction.
       final installDir = input.installDir;
+      final currentExe = File(Platform.resolvedExecutable);
+      final bakFile = File('${Platform.resolvedExecutable}.bak');
+
+      // Clean up any leftover .bak from a previous upgrade
+      if (bakFile.existsSync()) bakFile.deleteSync();
+
+      // Rename the running exe — Windows allows renaming a locked file
+      currentExe.renameSync(bakFile.path);
+
       final result = await Process.run(
         'powershell',
         [
@@ -144,6 +156,13 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
       );
 
       tempDir.deleteSync(recursive: true);
+
+      // Best-effort cleanup of the old binary
+      try {
+        if (bakFile.existsSync()) bakFile.deleteSync();
+      } on FileSystemException {
+        // Still locked — will be cleaned up on next upgrade
+      }
 
       if (result.exitCode != 0) {
         return UpgradeOutput(
