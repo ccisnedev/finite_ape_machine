@@ -50,7 +50,7 @@ doc/
 ## Install (Windows)
 
 ```powershell
-irm https://raw.githubusercontent.com/ccisnedev/finite_ape_machine/main/scripts/install.ps1 | iex
+irm https://ccisnedev.github.io/finite_ape_machine/install.ps1 | iex
 ```
 
 This downloads the latest release, extracts it to `%LOCALAPPDATA%\ape\`, adds it to PATH, and deploys APE agents/skills to all supported AI coding tools.
