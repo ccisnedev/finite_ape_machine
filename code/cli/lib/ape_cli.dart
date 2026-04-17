@@ -46,6 +46,16 @@ Future<int> runApe(List<String> args) async {
     assets: Assets(
       root: p.dirname(p.dirname(Platform.resolvedExecutable)),
     ),
+    adapters: deployAdapters,
+    homeDir: Platform.environment['USERPROFILE'] ??
+        Platform.environment['HOME'] ??
+        '',
+  );
+
+  final cleaner = TargetDeployer(
+    assets: Assets(
+      root: p.dirname(p.dirname(Platform.resolvedExecutable)),
+    ),
     adapters: allAdapters,
     homeDir: Platform.environment['USERPROFILE'] ??
         Platform.environment['HOME'] ??
@@ -59,13 +69,13 @@ Future<int> runApe(List<String> args) async {
         TargetGetInput.fromCliRequest(req),
         deployer: deployer,
       ),
-      description: 'Deploy APE agents and skills to all targets',
+      description: 'Deploy APE agents and skills to Copilot',
     );
     m.command<TargetCleanInput, TargetCleanOutput>(
       'clean',
       (req) => TargetCleanCommand(
         TargetCleanInput.fromCliRequest(req),
-        deployer: deployer,
+        deployer: cleaner,
       ),
       description: 'Remove deployed APE files from all targets',
     );
@@ -75,7 +85,7 @@ Future<int> runApe(List<String> args) async {
     'uninstall',
     (req) => UninstallCommand(
       UninstallInput.fromCliRequest(req),
-      deployer: deployer,
+      deployer: cleaner,
     ),
     description: 'Remove APE CLI from the system',
   );

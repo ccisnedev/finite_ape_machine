@@ -52,15 +52,13 @@ void main() {
     });
   });
 
-  group('copilot subsumedBy', () {
-    test('copilot declares claude as subsuming target', () {
-      final copilot = allAdapters.firstWhere((a) => a.name == 'copilot');
-      expect(copilot.subsumedBy, contains('claude'));
+  group('deployAdapters registry', () {
+    test('returns exactly 1 adapter', () {
+      expect(deployAdapters, hasLength(1));
     });
 
-    test('claude has no subsumedBy', () {
-      final claude = allAdapters.firstWhere((a) => a.name == 'claude');
-      expect(claude.subsumedBy, isEmpty);
+    test('only contains copilot', () {
+      expect(deployAdapters.single.name, equals('copilot'));
     });
   });
 }

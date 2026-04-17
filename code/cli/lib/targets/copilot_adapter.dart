@@ -16,7 +16,4 @@ class CopilotAdapter extends TargetAdapter {
   @override
   String agentDirectory(String homeDir) =>
       p.join(homeDir, '.copilot', 'agents');
-
-  @override
-  List<String> get subsumedBy => const ['claude'];
 }
