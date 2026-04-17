@@ -1,7 +1,7 @@
 name: ape_cli
 description: >
   CLI for the finite ape machine — workspace initialization and orchestration.
-version: 0.0.6
+version: 0.0.7
 
 environment:
   sdk: ^3.8.1

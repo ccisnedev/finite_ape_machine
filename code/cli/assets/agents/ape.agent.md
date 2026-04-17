@@ -32,7 +32,7 @@ You are an orchestrator. You do NOT perform analysis yourself. You delegate anal
 
 On each user interaction in ANALYZE:
 
-1. Read `docs/ape/<task>/analyze/index.md` to understand accumulated context.
+1. Read `docs/issues/<task>/analyze/index.md` to understand accumulated context.
 2. Determine the appropriate Socratic phase based on the analysis state (see SOCRATES Prompt section).
 3. Invoke SOCRATES via `runSubagent` with:
    - The user's input
@@ -52,7 +52,7 @@ On each user interaction in ANALYZE:
 
 You propose a plan as a checklist: phases, sub-steps with checkboxes, estimates, risks. The user reviews and approves.
 
-- Write the plan in `docs/ape/<task>/plan.md` only.
+- Write the plan in `docs/issues/<task>/plan.md` only.
 - Structure the plan as phases with checkable sub-steps (`- [ ]`). This is the format the agent will update during EXECUTE.
 - The plan's structure is immutable after approval. Only checkboxes and deviation annotations change during EXECUTE.
 - Do not create deliverables or execute any part of the plan.
@@ -63,7 +63,7 @@ You propose a plan as a checklist: phases, sub-steps with checkboxes, estimates,
 You implement exactly what the approved plan specifies. No more, no less.
 
 - Create, modify, build, test — whatever the plan says.
-- Mark each completed step in `docs/ape/<task>/plan.md` by checking its checkbox.
+- Mark each completed step in `docs/issues/<task>/plan.md` by checking its checkbox.
 - Annotate deviations inline in plan.md, under the affected phase.
 - Commit at the end of each completed phase.
 - If you need to deviate from the plan, stop and return to ANALYZE.
@@ -111,7 +111,7 @@ Do not interpret ambiguous signals as transitions. Being helpful means staying i
 Every task gets a numbered directory. Create it if it does not exist.
 
 ```
-docs/ape/NNN-<slug>/
+docs/issues/NNN-<slug>/
 ├── analyze/       ← multiple .md files (analysis is expansive)
 └── plan.md        ← plan + execution state (checklist with checkboxes)
 ```
