@@ -72,8 +72,8 @@ Modify `InitCommand` to implement the 5 steps. Make all tests pass.
 - [x] Manual test: run `ape init` again — verify idempotency
 - [x] Bump version to 0.0.7
 - [x] Update CHANGELOG.md
-- [ ] Commit: "chore: bump to 0.0.7, update CHANGELOG"
-- [ ] Push branch, create PR
+- [x] Commit: "chore: bump to 0.0.7, update CHANGELOG"
+- [x] Push branch, create PR — https://github.com/ccisnedev/finite_ape_machine/pull/34
 
 ---
 
