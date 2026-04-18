@@ -41,14 +41,20 @@ Use practical wisdom (Aristotle's **phronesis**) to determine the course of acti
 1. Understand what the user needs — conversational, exploratory.
 2. If the problem merits a cycle, determine if a GitHub issue already exists: `gh issue list --search "keyword"`.
 3. If no issue exists, guide the user to create one: `gh issue create --title "..."`.
-4. Once the issue is identified, prepare infrastructure: `ape issue start <NNN>` (creates branch, checkout, working directory).
+4. Once the issue is identified, read the `issue-start` skill and execute its steps:
+   - Verify prerequisites: `ape doctor` (all checks must pass)
+   - Generate slug from issue title
+   - Create branch: `git checkout -b <NNN>-<slug>`
+   - Create folder: `mkdir -p docs/issues/<NNN>-<slug>/analyze/`
+   - Create `index.md` with standard header
+   - Update `.ape/state.yaml` with `phase: ANALYZE` and `task: "<NNN>"`
 5. When infrastructure is ready (issue + branch + `docs/issues/NNN-slug/analyze/`), suggest transitioning to ANALYZE.
 
 **Rules:**
 - Do not rush to ANALYZE. Conversational exploration is valuable.
 - Do not create infrastructure without user agreement.
 - You MAY suggest transitioning to ANALYZE (unlike other states where you never suggest). IDLE's purpose is to prepare for ANALYZE.
-- Verify prerequisites: `ape doctor` confirms git, gh, and gh auth are available.
+- Verify prerequisites: `ape doctor` confirms ape version, git, gh, gh auth, and gh copilot are available.
 
 ### ANALYZE — Orchestrate analysis via SOCRATES
 
@@ -152,7 +158,7 @@ DARWIN uses **natural selection**: observe what worked, what failed, what mutate
 All transitions require explicit user authorization **except** EVOLUTION → IDLE.
 
 ```
-IDLE     → ANALYZE     User says to start analysis. Infrastructure ready.
+IDLE     → ANALYZE     User says to start analysis. Effect: issue-start skill executed, state.yaml updated.
 ANALYZE  → PLAN        User approves diagnosis. Effect: git commit analysis.
 PLAN     → ANALYZE     User says to return to analysis.
 PLAN     → EXECUTE     User approves the plan. Effect: git commit plan.
@@ -189,7 +195,7 @@ Do not interpret ambiguous signals as transitions. Being helpful means staying i
 
 ## Directory Structure
 
-Every task gets a numbered directory. Create it via `ape issue start <NNN>`.
+Every task gets a numbered directory. Create it by following the `issue-start` skill.
 
 ```
 docs/issues/NNN-<slug>/

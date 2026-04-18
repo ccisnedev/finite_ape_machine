@@ -88,9 +88,10 @@ void main() {
       expect(content, isNotEmpty);
     });
 
-    test('listDirectory skills returns both skill directories', () {
+    test('listDirectory skills returns all skill directories', () {
       final dirs = assets.listDirectory('skills');
-      expect(dirs, unorderedEquals(['memory-read', 'memory-write']));
+      expect(
+          dirs, unorderedEquals(['issue-start', 'memory-read', 'memory-write']));
     });
   });
 }
