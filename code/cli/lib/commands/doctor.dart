@@ -8,14 +8,17 @@ import 'dart:io';
 import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 
+import '../src/version.dart' as version_lib;
+
 /// Function type for running external processes.
 ///
 /// Allows injection of a mock for testing.
-typedef ProcessRunner = Future<ProcessResult> Function(
-  String executable,
-  List<String> arguments, {
-  String? workingDirectory,
-});
+typedef ProcessRunner =
+    Future<ProcessResult> Function(
+      String executable,
+      List<String> arguments, {
+      String? workingDirectory,
+    });
 
 /// Result of a single prerequisite check.
 class DoctorCheck {
@@ -32,11 +35,11 @@ class DoctorCheck {
   });
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'passed': passed,
-        if (version != null) 'version': version,
-        if (error != null) 'error': error,
-      };
+    'name': name,
+    'passed': passed,
+    if (version != null) 'version': version,
+    if (error != null) 'error': error,
+  };
 }
 
 /// Input for the doctor command.
@@ -60,9 +63,9 @@ class DoctorOutput extends Output {
 
   @override
   Map<String, dynamic> toJson() => {
-        'checks': checks.map((c) => c.toJson()).toList(),
-        'passed': passed,
-      };
+    'checks': checks.map((c) => c.toJson()).toList(),
+    'passed': passed,
+  };
 
   @override
   int get exitCode => passed ? ExitCode.ok : ExitCode.genericError;
@@ -81,8 +84,9 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
   DoctorCommand(
     this.input, {
     ProcessRunner? runProcess,
-    this.apeVersion = '0.0.8',
-  }) : _runProcess = runProcess ?? Process.run;
+    String? apeVersionOverride,
+  }) : _runProcess = runProcess ?? Process.run,
+       apeVersion = apeVersionOverride ?? version_lib.apeVersion;
 
   @override
   String? validate() => null;
@@ -93,11 +97,7 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
     var allPassed = true;
 
     // Check 1: APE version (always passes, internal)
-    checks.add(DoctorCheck(
-      name: 'ape',
-      passed: true,
-      version: apeVersion,
-    ));
+    checks.add(DoctorCheck(name: 'ape', passed: true, version: apeVersion));
 
     // Check 2: git --version
     final gitCheck = await _checkCommand(
@@ -173,11 +173,7 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
         );
       }
     } catch (e) {
-      return DoctorCheck(
-        name: name,
-        passed: false,
-        error: e.toString(),
-      );
+      return DoctorCheck(name: name, passed: false, error: e.toString());
     }
   }
 

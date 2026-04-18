@@ -4,7 +4,9 @@ library;
 import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 
-const String apeVersion = '0.0.7';
+import '../src/version.dart';
+// Re-export version constant for backward compatibility.
+export '../src/version.dart';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 

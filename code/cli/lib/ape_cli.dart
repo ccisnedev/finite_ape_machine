@@ -13,6 +13,7 @@ import 'commands/doctor.dart';
 import 'commands/init.dart';
 import 'commands/target_clean.dart';
 import 'commands/target_get.dart';
+import 'commands/tui.dart';
 import 'commands/uninstall.dart';
 import 'commands/upgrade.dart';
 import 'commands/version.dart';
@@ -24,6 +25,14 @@ import 'targets/deployer.dart';
 /// Returns a process exit code.
 Future<int> runApe(List<String> args) async {
   final cli = ModularCli();
+
+  // TUI: Display FSM diagram when invoked without arguments.
+  // Must be registered first to catch empty route.
+  cli.command<TuiInput, TuiOutput>(
+    '',
+    (req) => TuiCommand(TuiInput.fromCliRequest(req)),
+    description: 'Display APE status and FSM diagram',
+  );
 
   cli.command<InitInput, InitOutput>(
     'init',

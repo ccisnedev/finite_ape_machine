@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.0.9]
+### Added
+- `ape` TUI — displays FSM diagram when invoked without arguments
+- Skill `issue-end` — 9-step protocol for completing APE cycles (EXECUTE → EVOLUTION)
+### Fixed
+- Version inconsistency: unified to single source of truth in `lib/src/version.dart`
+### Changed
+- `ape doctor` now imports shared version constant
+- `ape version` now imports shared version constant
+
+## [0.0.8]
+### Added
+- `ape doctor` command — verifies prerequisites (ape, git, gh, gh auth, gh copilot)
+- Skill `issue-start` — 8-step protocol for transitioning IDLE → ANALYZE
+### Changed
+- Updated `ape.agent.md` with doctor checks and issue-start skill reference
+
 ## [0.0.7]
 ### Changed
 - `ape init` now performs 5 idempotent steps (#21):

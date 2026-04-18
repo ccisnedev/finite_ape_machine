@@ -88,10 +88,19 @@ void main() {
       expect(content, isNotEmpty);
     });
 
+    test('reads skills/issue-end/SKILL.md', () {
+      final content = assets.loadString('skills/issue-end/SKILL.md');
+      expect(content, contains('issue-end'));
+      expect(content, contains('EXECUTE'));
+      expect(content, isNotEmpty);
+    });
+
     test('listDirectory skills returns all skill directories', () {
       final dirs = assets.listDirectory('skills');
       expect(
-          dirs, unorderedEquals(['issue-start', 'memory-read', 'memory-write']));
+          dirs,
+          unorderedEquals(
+              ['issue-end', 'issue-start', 'memory-read', 'memory-write']));
     });
   });
 }

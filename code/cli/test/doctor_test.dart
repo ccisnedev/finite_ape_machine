@@ -12,8 +12,11 @@ void main() {
       bool ghAuthFails = false,
       bool copilotFails = false,
     }) {
-      return (String executable, List<String> arguments,
-          {String? workingDirectory}) async {
+      return (
+        String executable,
+        List<String> arguments, {
+        String? workingDirectory,
+      }) async {
         // git --version
         if (executable == 'git' && arguments.contains('--version')) {
           if (gitFails) {
@@ -26,7 +29,11 @@ void main() {
         if (executable == 'gh' && arguments.contains('copilot')) {
           if (copilotFails) {
             return ProcessResult(
-                1, 1, '', 'gh: "copilot" is not a gh command.');
+              1,
+              1,
+              '',
+              'gh: "copilot" is not a gh command.',
+            );
           }
           return ProcessResult(0, 0, 'gh copilot version 1.0.0', '');
         }
@@ -35,10 +42,18 @@ void main() {
         if (executable == 'gh' && arguments.contains('auth')) {
           if (ghAuthFails) {
             return ProcessResult(
-                1, 1, '', 'You are not logged into any GitHub hosts.');
+              1,
+              1,
+              '',
+              'You are not logged into any GitHub hosts.',
+            );
           }
           return ProcessResult(
-              0, 0, 'Logged in to github.com as user (oauth_token)', '');
+            0,
+            0,
+            'Logged in to github.com as user (oauth_token)',
+            '',
+          );
         }
 
         // gh --version (after copilot and auth checks)
@@ -58,7 +73,7 @@ void main() {
       final cmd = DoctorCommand(
         DoctorInput(),
         runProcess: fakeRunner(),
-        apeVersion: '0.0.8',
+        apeVersionOverride: '0.0.9',
       );
 
       final output = await cmd.execute();
@@ -73,7 +88,7 @@ void main() {
       final cmd = DoctorCommand(
         DoctorInput(),
         runProcess: fakeRunner(gitFails: true),
-        apeVersion: '0.0.8',
+        apeVersionOverride: '0.0.9',
       );
 
       final output = await cmd.execute();
@@ -90,7 +105,7 @@ void main() {
       final cmd = DoctorCommand(
         DoctorInput(),
         runProcess: fakeRunner(ghFails: true),
-        apeVersion: '0.0.8',
+        apeVersionOverride: '0.0.9',
       );
 
       final output = await cmd.execute();
@@ -106,7 +121,7 @@ void main() {
       final cmd = DoctorCommand(
         DoctorInput(),
         runProcess: fakeRunner(ghAuthFails: true),
-        apeVersion: '0.0.8',
+        apeVersionOverride: '0.0.9',
       );
 
       final output = await cmd.execute();
@@ -122,7 +137,7 @@ void main() {
       final cmd = DoctorCommand(
         DoctorInput(),
         runProcess: fakeRunner(copilotFails: true),
-        apeVersion: '0.0.8',
+        apeVersionOverride: '0.0.9',
       );
 
       final output = await cmd.execute();
@@ -130,8 +145,9 @@ void main() {
       expect(output.passed, isFalse);
       expect(output.exitCode, 1);
 
-      final copilotCheck =
-          output.checks.firstWhere((c) => c.name == 'gh copilot');
+      final copilotCheck = output.checks.firstWhere(
+        (c) => c.name == 'gh copilot',
+      );
       expect(copilotCheck.passed, isFalse);
     });
 
@@ -139,7 +155,7 @@ void main() {
       final cmd = DoctorCommand(
         DoctorInput(),
         runProcess: fakeRunner(),
-        apeVersion: '0.0.8',
+        apeVersionOverride: '0.0.9',
       );
 
       final output = await cmd.execute();
@@ -152,7 +168,7 @@ void main() {
       final firstCheck = (json['checks'] as List).first as Map<String, dynamic>;
       expect(firstCheck, containsPair('name', 'ape'));
       expect(firstCheck, containsPair('passed', true));
-      expect(firstCheck, containsPair('version', '0.0.8'));
+      expect(firstCheck, containsPair('version', '0.0.9'));
     });
 
     test('DoctorInput.toJson() returns empty map', () {
@@ -161,11 +177,7 @@ void main() {
     });
 
     test('DoctorCheck.toJson() includes error when present', () {
-      final check = DoctorCheck(
-        name: 'git',
-        passed: false,
-        error: 'not found',
-      );
+      final check = DoctorCheck(name: 'git', passed: false, error: 'not found');
 
       final json = check.toJson();
 
