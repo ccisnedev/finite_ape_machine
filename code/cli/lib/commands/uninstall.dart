@@ -12,6 +12,7 @@ import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 
 import '../targets/deployer.dart';
+import '../targets/platform_ops.dart';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 
@@ -49,8 +50,13 @@ class UninstallCommand implements Command<UninstallInput, UninstallOutput> {
   @override
   final UninstallInput input;
   final TargetDeployer deployer;
+  final PlatformOps platformOps;
 
-  UninstallCommand(this.input, {required this.deployer});
+  UninstallCommand(
+    this.input, {
+    required this.deployer,
+    PlatformOps? platformOps,
+  }) : platformOps = platformOps ?? PlatformOps.current();
 
   @override
   String? validate() => null;
@@ -60,11 +66,11 @@ class UninstallCommand implements Command<UninstallInput, UninstallOutput> {
     // 1. Clean all targets
     deployer.clean();
 
-    // 2. Remove ape\bin\ from user PATH
+    // 2. Remove ape\bin\ from user PATH (via PlatformOps)
     _removeFromPath(p.join(input.installDir, 'bin'));
 
     // 3. Spawn background process to delete install directory
-    _scheduleDirectoryDeletion(input.installDir);
+    platformOps.scheduleDeletion(input.installDir);
 
     return UninstallOutput(
       message: 'APE uninstalled. Restart your terminal to apply PATH changes.',
@@ -72,58 +78,19 @@ class UninstallCommand implements Command<UninstallInput, UninstallOutput> {
   }
 
   void _removeFromPath(String binDir) {
-    final userPath = _getEnvironmentVariable('PATH', 'User') ?? '';
+    final userPath = platformOps.getEnvVariable('PATH') ?? '';
     final parts = userPath
-        .split(';')
+        .split(Platform.isWindows ? ';' : ':')
         .where((p) => p.isNotEmpty)
         .where((p) => !_pathEquals(p, binDir))
         .toList();
-    final newPath = parts.join(';');
+    final newPath = parts.join(Platform.isWindows ? ';' : ':');
 
     if (newPath != userPath) {
-      _setEnvironmentVariable('PATH', newPath, 'User');
+      platformOps.setEnvVariable('PATH', newPath);
     }
-  }
-
-  void _scheduleDirectoryDeletion(String dir) {
-    // Rename the running exe so the directory can be deleted.
-    final currentExe = File(Platform.resolvedExecutable);
-    final bakPath = '${Platform.resolvedExecutable}.bak';
-    try {
-      currentExe.renameSync(bakPath);
-    } on FileSystemException {
-      // Best effort — may already be renamed
-    }
-
-    // Spawn a detached cmd process that waits 2 seconds then deletes.
-    Process.start('cmd', [
-      '/c',
-      'timeout /t 2 /nobreak >nul & rmdir /s /q "$dir"',
-    ], mode: ProcessStartMode.detached);
   }
 
   bool _pathEquals(String a, String b) =>
       p.normalize(a).toLowerCase() == p.normalize(b).toLowerCase();
-
-  // Wrappers for testability — PowerShell is the reliable way to
-  // read/write user-scoped environment variables on Windows.
-
-  String? _getEnvironmentVariable(String name, String scope) {
-    final result = Process.runSync('powershell', [
-      '-NoProfile',
-      '-Command',
-      '[System.Environment]::GetEnvironmentVariable("$name", "$scope")',
-    ]);
-    if (result.exitCode != 0) return null;
-    final value = (result.stdout as String).trim();
-    return value.isEmpty ? null : value;
-  }
-
-  void _setEnvironmentVariable(String name, String value, String scope) {
-    Process.runSync('powershell', [
-      '-NoProfile',
-      '-Command',
-      '[System.Environment]::SetEnvironmentVariable("$name", "$value", "$scope")',
-    ]);
-  }
 }

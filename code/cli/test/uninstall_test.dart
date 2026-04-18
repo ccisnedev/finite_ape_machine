@@ -9,6 +9,8 @@ import 'package:ape_cli/commands/uninstall.dart';
 import 'package:ape_cli/targets/deployer.dart';
 import 'package:ape_cli/targets/target_adapter.dart';
 
+import 'platform_ops_test.dart' show FakePlatformOps;
+
 class _FakeAdapter extends TargetAdapter {
   @override
   String get name => 'fake';
@@ -69,6 +71,7 @@ void main() {
       final command = UninstallCommand(
         UninstallInput(installDir: tempDir.path),
         deployer: deployer,
+        platformOps: FakePlatformOps(),
       );
 
       final output = await command.execute();
@@ -91,6 +94,7 @@ void main() {
       final command = UninstallCommand(
         UninstallInput(installDir: tempDir.path),
         deployer: deployer,
+        platformOps: FakePlatformOps(),
       );
 
       final output = await command.execute();

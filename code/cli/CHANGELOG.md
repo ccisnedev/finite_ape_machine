@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.0.11]
+### Added
+- **Linux support**: PlatformOps abstraction with Windows and Linux implementations
+- `install.sh` — Linux installer (`curl | bash`)
+- `build.sh` — Linux build script (mirrors `build.ps1`)
+- `ci.yml` — CI workflow with `ubuntu-latest` + `windows-latest` matrix
+- `ape doctor` now checks VS Code Copilot extension (`code --list-extensions`)
+- OS tabs (Windows/Linux) on landing page
+### Changed
+- FSM rewrite: 6-state model with END state, optional EVOLUTION, retrospective.md, git conventions
+- `release.yml` restructured to 3-job pattern: check-version → create-release → build (matrix)
+- `ape upgrade` refactored to use PlatformOps (cross-platform archive extraction)
+- `ape uninstall` refactored to use PlatformOps (cross-platform env vars and deletion)
+- Windows Defender workaround in release.yml now conditional (`if: runner.os == 'Windows'`)
+### Fixed
+- `ape init` `_relative()` now uses `p.relative()` instead of fragile `replaceFirst`
+- Uninstall tests no longer corrupt `dart.exe` (FakePlatformOps injection)
+
 ## [0.0.10]
 ### Fixed
 - TUI shows diagram only in text mode (no "version:", "diagram:" field labels)

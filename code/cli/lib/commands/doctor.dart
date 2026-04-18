@@ -1,6 +1,6 @@
 /// Doctor command — verifies prerequisites.
 ///
-/// Checks: ape version, git, gh, gh auth, gh copilot.
+/// Checks: ape version, git, gh, gh auth, gh copilot, vscode copilot extension.
 library;
 
 import 'dart:io';
@@ -168,7 +168,47 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
       allPassed = false;
     }
 
+    // Check 6: VS Code with GitHub Copilot extension
+    final vscodeCheck = await _checkVsCodeCopilot();
+    checks.add(vscodeCheck);
+    if (!vscodeCheck.passed) {
+      allPassed = false;
+    }
+
     return DoctorOutput(checks: checks, passed: allPassed);
+  }
+
+  /// Checks that VS Code is installed and has the GitHub Copilot extension.
+  Future<DoctorCheck> _checkVsCodeCopilot() async {
+    try {
+      final result = await _runProcess('code', ['--list-extensions']);
+      if (result.exitCode != 0) {
+        return DoctorCheck(
+          name: 'vscode copilot',
+          passed: false,
+          error: 'VS Code CLI not found',
+        );
+      }
+      final extensions = result.stdout.toString();
+      final hasCopilot = extensions
+          .split('\n')
+          .any((line) => line.trim().toLowerCase() == 'github.copilot');
+      if (hasCopilot) {
+        return DoctorCheck(name: 'vscode copilot', passed: true);
+      } else {
+        return DoctorCheck(
+          name: 'vscode copilot',
+          passed: false,
+          error: 'GitHub Copilot extension not installed in VS Code',
+        );
+      }
+    } catch (e) {
+      return DoctorCheck(
+        name: 'vscode copilot',
+        passed: false,
+        error: e.toString(),
+      );
+    }
   }
 
   /// Runs a command and returns a [DoctorCheck] with the result.

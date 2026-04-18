@@ -90,4 +90,4 @@ MIT
 
 ## Acknowledgments
 
-Intellectually inspired by [gentle-ai](https://github.com/user/gentle-ai) (Gentleman Programming). No code is shared.
+Inspired by [gentle-ai](https://github.com/user/gentle-ai).

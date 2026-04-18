@@ -11,10 +11,10 @@ import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 
+import '../targets/platform_ops.dart';
 import 'version.dart';
 
 const String _repo = 'ccisnedev/finite_ape_machine';
-const String _assetName = 'ape-windows-x64.zip';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 
@@ -71,9 +71,14 @@ class UpgradeOutput extends Output {
 class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
   @override
   final UpgradeInput input;
+  final PlatformOps platformOps;
   final HttpClient? httpClientOverride;
 
-  UpgradeCommand(this.input, {this.httpClientOverride});
+  UpgradeCommand(
+    this.input, {
+    PlatformOps? platformOps,
+    this.httpClientOverride,
+  }) : platformOps = platformOps ?? PlatformOps.current();
 
   @override
   String? validate() => null;
@@ -117,13 +122,14 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
         );
       }
 
-      // 2. Find the zip asset
+      // 2. Find the asset for this platform
+      final expectedAsset = platformOps.assetName;
       final assets = release['assets'] as List<dynamic>;
       final asset = assets.cast<Map<String, dynamic>>().firstWhere(
-        (a) => (a['name'] as String) == _assetName,
+        (a) => (a['name'] as String) == expectedAsset,
         orElse: () => throw CommandException(
           code: 'ASSET_NOT_FOUND',
-          message: 'No $_assetName asset in release $tagName',
+          message: 'No $expectedAsset asset in release $tagName',
           exitCode: ExitCode.notFound,
         ),
       );
@@ -132,7 +138,7 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
 
       // 3. Download to temp
       final tempDir = Directory.systemTemp.createTempSync('ape_upgrade_');
-      final zipFile = File(p.join(tempDir.path, _assetName));
+      final zipFile = File(p.join(tempDir.path, expectedAsset));
 
       final dlRequest = await client.getUrl(Uri.parse(downloadUrl));
       dlRequest.headers.set('User-Agent', 'ape-cli/$apeVersion');
@@ -142,49 +148,42 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
       final sink = zipFile.openWrite();
       await dlResponse.pipe(sink);
 
-      // 4. Extract over current installation
-      //
-      // Windows locks running executables, so we rename the current binary
-      // before extracting. The .bak file is cleaned up after extraction.
+      // 4. Extract over current installation via PlatformOps
       final installDir = input.installDir;
-      final currentExe = File(Platform.resolvedExecutable);
-      final bakFile = File('${Platform.resolvedExecutable}.bak');
 
-      // Clean up any leftover .bak from a previous upgrade
-      if (bakFile.existsSync()) bakFile.deleteSync();
-
-      // Rename the running exe — Windows allows renaming a locked file
-      currentExe.renameSync(bakFile.path);
-
-      final result = await Process.run('powershell', [
-        '-NoProfile',
-        '-Command',
-        'Expand-Archive -Path "${zipFile.path}" -DestinationPath "$installDir" -Force',
-      ]);
-
-      tempDir.deleteSync(recursive: true);
-
-      // Best-effort cleanup of the old binary
       try {
-        if (bakFile.existsSync()) bakFile.deleteSync();
-      } on FileSystemException {
-        // Still locked — will be cleaned up on next upgrade
-      }
+        // Windows locks running executables — rename before extraction
+        if (Platform.isWindows) {
+          final bakFile = File('${Platform.resolvedExecutable}.bak');
+          if (bakFile.existsSync()) bakFile.deleteSync();
+          File(Platform.resolvedExecutable).renameSync(bakFile.path);
+        }
 
-      if (result.exitCode != 0) {
+        await platformOps.expandArchive(zipFile.path, installDir);
+
+        // Best-effort cleanup of old binary
+        if (Platform.isWindows) {
+          try {
+            final bakFile = File('${Platform.resolvedExecutable}.bak');
+            if (bakFile.existsSync()) bakFile.deleteSync();
+          } on FileSystemException {
+            // Still locked — will be cleaned up on next upgrade
+          }
+        }
+      } catch (e) {
+        tempDir.deleteSync(recursive: true);
         return UpgradeOutput(
-          message: 'Failed to extract: ${result.stderr}',
+          message: 'Failed to extract: $e',
           previousVersion: apeVersion,
           newVersion: latestVersion,
           upgraded: false,
         );
       }
 
+      tempDir.deleteSync(recursive: true);
+
       // 5. Redeploy targets using the new binary
-      await Process.run(p.join(installDir, 'bin', 'ape.exe'), [
-        'target',
-        'get',
-      ]);
+      await platformOps.runPostInstall(installDir);
 
       return UpgradeOutput(
         message: 'Upgraded from $apeVersion to $latestVersion',
