@@ -29,16 +29,16 @@ Dependencias: ninguna
 
 #### Entregables
 
-- [ ] Definir matriz Estado x Evento con transiciones permitidas e ilegales.
-- [ ] Definir operaciones por transicion (precheck, efectos, artefactos, commit policy).
-- [ ] Definir contrato de precondiciones para acciones irreversibles.
-- [ ] Definir contrato de prompt fragments por transicion.
+- [x] Definir matriz Estado x Evento con transiciones permitidas e ilegales.
+- [x] Definir operaciones por transicion (precheck, efectos, artefactos, commit policy).
+- [x] Definir contrato de precondiciones para acciones irreversibles.
+- [x] Definir contrato de prompt fragments por transicion.
 
 #### Criterios de aceptacion
 
-- [ ] Existe especificacion unica versionada para transiciones.
-- [ ] Cada transicion tiene lista de operaciones obligatorias.
-- [ ] Las transiciones ilegales estan explicitamente codificadas.
+- [x] Existe especificacion unica versionada para transiciones.
+- [x] Cada transicion tiene lista de operaciones obligatorias.
+- [x] Las transiciones ilegales estan explicitamente codificadas.
 
 #### Pruebas (pseudocodigo)
 
