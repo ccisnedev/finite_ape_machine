@@ -189,21 +189,21 @@ grep -n "ape issue start" code/cli/assets/agents/ape.agent.md
 
 **Steps:**
 
-- [ ] **5.1: Run full test suite**
-  - `dart test` → all pass
+- [x] **5.1: Run full test suite**
+  - `dart test` → 88 tests pass
   - `dart analyze` → 0 errors
 
-- [ ] **5.2: Manual end-to-end test**
+- [x] **5.2: Manual end-to-end test**
   - `dart run bin/main.dart doctor` works
   - `dart run bin/main.dart doctor --json` works
   - Skill file readable and complete
   - ape.agent.md accurate
 
-- [ ] **5.3: Commit and push**
-  - Commit message: "v0.0.8: Add ape doctor, issue-start skill, update ape.agent.md"
+- [x] **5.3: Commit and push**
+  - Commit message: "v0.0.8: ape doctor + issue-start skill + IDLE updates"
 
-- [ ] **5.4: Create PR**
-  - `gh pr create --title "v0.0.8: ape doctor + skill issue-start + IDLE triage"`
+- [x] **5.4: Create PR**
+  - PR #38 created: https://github.com/ccisnedev/finite_ape_machine/pull/38
 
 **Verification:**
 - All tests pass
