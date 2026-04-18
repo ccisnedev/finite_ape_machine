@@ -9,6 +9,7 @@ import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 
 import 'assets.dart';
+import 'commands/doctor.dart';
 import 'commands/init.dart';
 import 'commands/target_clean.dart';
 import 'commands/target_get.dart';
@@ -34,6 +35,12 @@ Future<int> runApe(List<String> args) async {
     'version',
     (req) => VersionCommand(VersionInput.fromCliRequest(req)),
     description: 'Print the current CLI version',
+  );
+
+  cli.command<DoctorInput, DoctorOutput>(
+    'doctor',
+    (req) => DoctorCommand(DoctorInput.fromCliRequest(req)),
+    description: 'Verify prerequisites (ape, git, gh, gh auth, gh copilot)',
   );
 
   cli.command<UpgradeInput, UpgradeOutput>(
