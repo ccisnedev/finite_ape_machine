@@ -22,7 +22,7 @@ El resultado fue modificacion de archivos sin haber creado/seleccionado issue pr
 3. El usuario confirmo el criterio metodologico:
    - IDLE puede leer, buscar, analizar y editar como exploracion.
    - IDLE no debe comprometer cambios (`git commit`) sin issue creado/seleccionado y checkout asociado.
-4. La motivacion de `issue-first` es metodologica (disciplina de proceso), no una politica de seguridad tecnica.
+4. La motivacion de `issue-first` es metodologica y de seguridad operativa: protege la rama principal al exigir trazabilidad por issue y flujo via pull request antes de integrar cambios.
 
 ## Decisiones tomadas en ANALYZE
 
@@ -58,7 +58,7 @@ $$
 2. **Riesgo de subcobertura**:
    - Corregir solo IDLE deja el mismo patron posible en otros estados.
 3. **Riesgo metodologico**:
-   - Si `issue-first` se vuelve opcional, se degrada la trazabilidad del ciclo.
+   - Si `issue-first` se vuelve opcional, se degrada la trazabilidad del ciclo y se debilita la proteccion de rama basada en PR.
 4. **Riesgo de friccion operativa**:
    - Un bloqueo demasiado temprano puede frenar exploracion legitima de triage.
 
