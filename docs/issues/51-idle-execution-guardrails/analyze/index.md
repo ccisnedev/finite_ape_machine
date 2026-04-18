@@ -12,17 +12,23 @@ This analysis examines how IDLE state violated its core constraint by executing 
 
 ## Phases
 
-- [ ] **CLARIFICATION**: Define IDLE contract, scope, and terms
-- [ ] **ASSUMPTIONS**: Challenge what we assume about state machine enforcement
-- [ ] **EVIDENCE**: Validate root causes with git/code inspection
-- [ ] **PERSPECTIVES**: Consider how different roles experience this violation
-- [ ] **IMPLICATIONS**: Project consequences of allowing/forbidding different fixes
-- [ ] **META-REFLECTION**: Validate analysis direction
-- [ ] **DIAGNOSIS**: Final rigorous technical document
+- [x] **CLARIFICATION**: Define IDLE contract, scope, and terms
+- [x] **ASSUMPTIONS**: Challenge what we assume about state machine enforcement
+- [x] **EVIDENCE**: Validate root causes with git/code inspection
+- [ ] **PERSPECTIVES**: Deferred in this cycle (folded into diagnosis synthesis)
+- [ ] **IMPLICATIONS**: Deferred in this cycle (captured in diagnosis risks)
+- [ ] **META-REFLECTION**: Deferred in this cycle
+- [x] **DIAGNOSIS**: Final rigorous technical document
 
 ## Working Documents
 
-(To be populated as analysis progresses)
+| ID | Title | Date | Status | Tags |
+|----|-------|------|--------|------|
+| clarification | CLARIFICATION Phase — SOCRATES Dialogue | 2026-04-18 | completed | idle, triage, scope |
+| assumptions | ASSUMPTIONS Phase — SOCRATES Dialogue | 2026-04-18 | completed | assumptions, guardrails, methodology |
+| evidence-raw | EVIDENCE Phase — Raw Facts from Incident | 2026-04-18 | completed | evidence, git, incident |
+| evidence-findings | EVIDENCE Phase — Rigorous Analysis | 2026-04-18 | completed | findings, root-cause, validation |
+| diagnosis | Diagnostico tecnico del incidente IDLE sin issue-first | 2026-04-18 | completed | idle, fsm, issue-first, guardrails, triage |
 
 ## References
 
