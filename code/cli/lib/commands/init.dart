@@ -12,6 +12,7 @@ import 'dart:io';
 
 import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
+import 'package:path/path.dart' as p;
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 
@@ -144,5 +145,5 @@ class InitCommand implements Command<InitInput, InitOutput> {
   }
 
   String _relative(String root, String path) =>
-      path.replaceFirst('$root/', '').replaceFirst('$root\\', '');
+      p.relative(path, from: root);
 }
