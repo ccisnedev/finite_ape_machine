@@ -1,7 +1,7 @@
 ---
 id: cli-as-api
 title: "CLI as API — skills instruct, commands execute"
-date: 2026-04-16
+date: 2026-04-17
 status: active
 tags: [architecture, cli, skills, commands, validation, human-usable]
 author: socrates
@@ -56,10 +56,37 @@ The current implementation does not reflect this. The `memory-write` skill today
 
 ## Mapping: Skill → Command
 
-| Skill | CLI Command | Writes to |
-|-------|-------------|-----------|
-| memory-write | `ape memory write` | `docs/` (persistent) |
-| memory-read | `ape memory read` | stdout (query) |
-| (future) task management | `ape task create` | `docs/issues/{issue}/` |
-| (future) signal | `ape signal <event>` | `.ape/state.yaml` |
-| (future) status | `ape status` | stdout (derived from docs/) |
+| Skill | CLI Command | Writes to | APE State |
+|-------|-------------|-----------|-----------|
+| triage | `gh issue list`, `gh issue create`, `ape issue start` | Issue + branch + folder | IDLE |
+| memory-write | `ape memory write` | `docs/` (persistent) | ANALYZE |
+| memory-read | `ape memory read` | stdout (query) | ANALYZE |
+| planning | (via DESCARTES sub-agent) | `docs/issues/{task}/plan.md` | PLAN |
+| tdd | (domain skill for BASHŌ) | Source code + tests | EXECUTE |
+| api-design | (domain skill for BASHŌ) | Source code | EXECUTE |
+| db-as-code | (domain skill for BASHŌ) | Migration files | EXECUTE |
+| evolution | `gh issue list`, `gh issue create`, `gh issue comment` | Issues in APE repo | EVOLUTION |
+| (future) signal | `ape signal <event>` | `.ape/state.yaml` | Any |
+| (future) status | `ape status` | stdout (derived from docs/) | Any |
+
+## CLI Commands: Existing and Planned
+
+### Existing (v0.0.7)
+
+| Command | Description |
+|---------|-------------|
+| `ape init` | Initialize APE in a repo (docs/issues/, .gitignore, .ape/state.yaml) |
+| `ape target get` | Deploy agent + skills to target (Copilot) |
+| `ape target clean` | Remove deployed files |
+| `ape upgrade` | Upgrade CLI binary |
+| `ape version` | Show version |
+| `ape uninstall` | Remove APE completely |
+
+### Planned (v0.0.8+)
+
+| Command | Description |
+|---------|-------------|
+| `ape issue start <NNN>` | Create branch + checkout + working directory from issue |
+| `ape doctor` | Verify prerequisites: git, gh, gh auth status |
+| `ape config set <key> <value>` | Configure APE settings (.ape/config.yaml) |
+| `ape state transition <event>` | Execute state transition with effects (commit, push, etc.) |

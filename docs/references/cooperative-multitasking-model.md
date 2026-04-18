@@ -1,7 +1,7 @@
 ---
 id: cooperative-multitasking-model
 title: "Cooperative multitasking model — two-level FSM architecture"
-date: 2026-04-16
+date: 2026-04-17
 status: active
 tags: [architecture, fsm, rtos, scheduler, multitasking]
 author: socrates
@@ -18,46 +18,69 @@ Direct analogy with cooperative multitasking on microcontrollers. The APE cycle 
 ### Level 1: APE Cycle (the scheduler)
 
 ```
-IDLE → ANALYZE → PLAN → EXECUTE → RETROSPECTIVE → IDLE
+IDLE → ANALYZE → PLAN → EXECUTE → EVOLUTION
 ```
 
-The cycle FSM has no intelligence. It tracks which phase is active and which agents are registered for that phase. It does not produce artifacts.
+The cycle FSM has no intelligence. It tracks which phase is active and dispatches the registered sub-agent for that phase. It does not produce artifacts. APE is the Finite APE Machine — not an ape.
 
 ### Level 2: Agent FSMs (the tasks)
 
-Each agent has its own FSM with internal states. Agents run sequentially within a phase, one step per tick, round-robin.
+Each sub-agent operates within one APE state. Sub-agents are launched with clean context and a specific prompt. They receive the context they need and return results. APE the scheduler does not accumulate sub-agent context — this keeps the scheduler lean and the agents focused.
 
 ```c
 void ape_tick() {
   switch(ape_state) {
-    case IDLE:           break;
-    case ANALYZE:        socrates_run(); break;
-    case PLAN:           /* TBD agents */ break;
-    case EXECUTE:        ada_run(); dijkstra_run(); break;
-    case RETROSPECTIVE:  /* TBD agents */ break;
+    case IDLE:       ape_triage();         break;  // APE direct + triage skill
+    case ANALYZE:    socrates_run();       break;  // Sub-agent: SOCRATES
+    case PLAN:       descartes_run();      break;  // Sub-agent: DESCARTES
+    case EXECUTE:    basho_run();          break;  // Sub-agent: BASHŌ
+    case EVOLUTION:  darwin_run();         break;  // Sub-agent: DARWIN
   }
 }
 ```
 
 ### Key Properties
 
-1. **Multiple agents per phase.** Each APE state hosts 1 or more agents. All run sequentially.
-2. **Agents are unaware of each other.** No agent knows what other agents exist. Communication is through signals routed by the scheduler (see [signal-based-coordination](signal-based-coordination.md)).
-3. **Event-driven scheduling with round-robin among READY agents.** Each READY agent executes one state transition and yields. Like a microcontroller, each agent has the illusion of running continuously, but only gets one time slice per tick. Agents in IDLE or WAITING state are never invoked — only READY agents get CPU time (see [signal-based-coordination](signal-based-coordination.md)).
+1. **One primary sub-agent per phase.** IDLE uses APE directly (with a skill). ANALYZE→SOCRATES. PLAN→DESCARTES. EXECUTE→BASHŌ. EVOLUTION→DARWIN.
+2. **Sub-agents are launched with clean context.** Each invocation receives: the user's input, the relevant artifacts (diagnosis.md, plan.md, etc.), and a phase-specific prompt. The sub-agent does not know about other phases or agents.
+3. **Illusion of continuity.** Sub-agents don't persist between ticks. APE reconstructs context from artifacts (`state.yaml`, `diagnosis.md`, `plan.md`) and passes it to the sub-agent on each invocation. The agent experiences continuity; the scheduler provides it.
+4. **Agents are unaware of each other.** No agent knows what other agents exist. Communication is through artifacts (files) routed by the scheduler (see [signal-based-coordination](signal-based-coordination.md)).
+5. **Event-driven scheduling.** Agents in IDLE or WAITING state are never invoked — only READY agents get CPU time.
+
+## The Four Sub-Agents
+
+| Agent | State | Thinking Tool | Key Artifact |
+|-------|-------|---------------|-------------|
+| SOCRATES | ANALYZE | Mayéutica (Socratic method) | `diagnosis.md` — rigorous paper with references |
+| DESCARTES | PLAN | Method (divide, order, verify, enumerate) | `plan.md` — WBS with checkboxes + test pseudocode |
+| BASHŌ | EXECUTE | Techne + 用の美 (functional beauty) | Code + commits per phase |
+| DARWIN | EVOLUTION | Natural selection (observe, compare, select) | Issues in APE repo (via `gh`) |
+
+## APE in IDLE (triage)
+
+In IDLE, APE operates directly — no sub-agent. It uses the triage skill, which embodies Aristotle's **phronesis** (practical wisdom): the ability to decide what merits action.
+
+Triage determines:
+- Whether the problem merits a formal APE cycle
+- Whether a GitHub issue already exists (via `gh issue list --search`)
+- Infrastructure preparation: `gh issue create` (if needed) → `ape issue start NNN` (branch + checkout + folder)
+
+The gate to exit IDLE: issue exists + branch created + working directory ready.
 
 ## Relationship to Existing Specs
 
-The [orchestrator-spec](../../references/orchestrator-spec.md) §1.2 already describes this model with the microcontroller analogy table. This document **confirms** that model and adds:
+The [orchestrator-spec](../../references/orchestrator-spec.md) §1.2 describes this model with the microcontroller analogy table. This document **updates** that model:
 
-- **RETROSPECTIVE as a first-class state** (not in orchestrator-spec, which uses REVIEW → DARWIN as separate phases).
-- **Agents never poll** — only the scheduler decides who runs (refined from orchestrator-spec §3.5 precondition table into a signal-based model).
+- **EVOLUTION replaces RETROSPECTIVE/REVIEW/DARWIN** as a single state. Product retrospective lives inside EXECUTE's final phase; process introspection is EVOLUTION.
+- **Sub-agents replace the multi-agent-per-phase model.** The original vision had multiple agents per phase (e.g., ADA + DIJKSTRA in EXECUTE). The current model simplifies to one sub-agent per phase, with domain skills providing specialized knowledge.
+- **Agents never poll** — only the scheduler decides who runs (signal-based model).
 
-## Contradiction with finite-ape-machine.md
+## Alignment Notes
 
-The [finite-ape-machine spec](../../references/finite-ape-machine.md) §2.1 describes three loops (inner/middle/outer) but the outer loop says "Analyze → Plan → Execute → Learn" without making Learn (RETROSPECTIVE) a formal FSM state. The orchestrator-spec uses REVIEW and DARWIN as separate phases. Both need alignment to the confirmed model:
+The [finite-ape-machine spec](../../references/finite-ape-machine.md) §2.1 describes three loops (inner/middle/outer). The outer loop now aligns:
 
 ```
-IDLE → ANALYZE → PLAN → EXECUTE → RETROSPECTIVE → IDLE
+IDLE → ANALYZE → PLAN → EXECUTE → EVOLUTION → IDLE
 ```
 
-Where REVIEW (DIJKSTRA) is an agent within EXECUTE, and DARWIN is an agent within RETROSPECTIVE.
+The [lore](../lore.md) describes 10 agents from the original vision. Four are now active (SOCRATES, DESCARTES, BASHŌ, DARWIN). The rest remain as lore/future reference.

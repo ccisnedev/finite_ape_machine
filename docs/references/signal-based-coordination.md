@@ -1,7 +1,7 @@
 ---
 id: signal-based-coordination
 title: "Signal-based coordination — RTOS event model for agent communication"
-date: 2026-04-16
+date: 2026-04-17
 status: active
 tags: [architecture, rtos, signals, events, scheduler, coordination]
 author: socrates
@@ -11,7 +11,7 @@ author: socrates
 
 ## Problem
 
-Multiple agents run within a single APE phase (e.g., ADA and DIJKSTRA in EXECUTE). They are unaware of each other. Yet DIJKSTRA cannot start until ADA delivers. How do they coordinate?
+APE state transitions must be mechanical and deterministic. Each transition has preconditions (artifacts exist, user approves) and effects (commit, branch, folder creation). How does the scheduler coordinate transitions and agent dispatch?
 
 ## RTOS Analogy
 
@@ -28,27 +28,36 @@ Tasks never reference each other. They only know about events.
 
 ### Signals
 
-An agent emits a signal when it completes a meaningful step:
+A signal is emitted when a meaningful step completes:
 
 ```bash
 ape signal <event-name>
 ```
 
-The agent does not know who (if anyone) listens. It just signals.
+The emitter does not know who (if anyone) listens. It just signals.
 
 ### Routing Table (embedded in ape.exe)
 
-The scheduler maintains a routing table that maps signals to agent state changes:
+The scheduler maintains a routing table that maps signals to state changes:
 
 ```yaml
 # Embedded in ape.exe, NOT in .ape/
 signals:
-  analyze-complete:
-    suggests_transition: PLAN    # Scheduler suggests to human
-  execute-stage-complete:
-    wakes: dijkstra              # Moves DIJKSTRA from WAITING to READY
-  dijkstra-approved:
-    wakes: ada                   # Next runbook phase, or signals PR readiness
+  issue_ready:
+    transition: IDLE → ANALYZE
+    effects: [verify_branch, verify_folder]
+  analysis_approved:
+    transition: ANALYZE → PLAN
+    effects: [git_commit_analysis]
+  plan_approved:
+    transition: PLAN → EXECUTE
+    effects: [git_commit_plan]
+  execution_approved:
+    transition: EXECUTE → EVOLUTION
+    effects: [git_commit, git_push, gh_pr_create]
+  cycle_complete:
+    transition: EVOLUTION → IDLE
+    effects: [close_issue_if_applicable]
 ```
 
 ### Agent States in Context
@@ -63,44 +72,67 @@ COMPLETE → Finished work for this phase
 
 The scheduler only invokes READY agents. IDLE and WAITING agents are skipped — no wasted ticks.
 
-## Example: EXECUTE Phase with ADA + DIJKSTRA
+## Example: Full APE Cycle
 
 ```
-Tick 1: ADA is READY, DIJKSTRA is WAITING(execute-stage-complete)
-        → ada_run() → ADA transitions RUNNING → does implementation
-Tick 2: ADA emits "ape signal execute-stage-complete"
-        → Scheduler routes signal → DIJKSTRA moves WAITING → READY
-Tick 3: DIJKSTRA is READY
-        → dijkstra_run() → checks contracts, quality
-Tick 4: DIJKSTRA emits "ape signal dijkstra-approved"
-        → Scheduler routes → ADA WAITING → READY (for next phase)
-        OR → all agents COMPLETE → scheduler suggests RETROSPECTIVE
-```
+IDLE:
+  APE uses triage skill → user defines problem
+  User: "ape issue start 42" → creates branch + folder
+  Signal: issue_ready → transition to ANALYZE
 
-From ADA's perspective: it runs, signals, and later gets re-activated. It never knew DIJKSTRA existed.
+ANALYZE:
+  SOCRATES invoked with clean context + analyze/index.md
+  SOCRATES explores, questions, documents
+  SOCRATES produces diagnosis.md
+  User approves → signal: analysis_approved
+  Effects: git commit analysis docs → transition to PLAN
+
+PLAN:
+  DESCARTES invoked with diagnosis.md
+  DESCARTES decomposes into WBS, defines test pseudocode
+  DESCARTES produces plan.md
+  User approves → signal: plan_approved
+  Effects: git commit plan.md → transition to EXECUTE
+
+EXECUTE:
+  BASHŌ invoked with plan.md + codebase context
+  BASHŌ implements phase by phase, commit per phase
+  Final phase: product retrospective + validation report
+  User approves → signal: execution_approved
+  Effects: git commit, git push, gh pr create → transition to EVOLUTION
+
+EVOLUTION:
+  DARWIN invoked with full cycle artifacts
+  DARWIN evaluates APE process
+  DARWIN: gh issue list --repo finite_ape_machine --search "keyword"
+  DARWIN: creates/comments on issues
+  Automatic → signal: cycle_complete → transition to IDLE
+```
 
 ## Transition Signals
 
-APE state transitions (ANALYZE → PLAN) use the same mechanism but with a human gate:
+APE state transitions use signals with a human gate:
 
 ```
-All agents in phase reach COMPLETE
+Sub-agent reaches COMPLETE
   → Scheduler emits suggestion: "Analysis complete. Approve transition to PLAN?"
-  → Human: "ape approve" (or equivalent)
-  → Scheduler transitions APE state
-  → New phase agents move from IDLE to READY
+  → Human: explicit authorization (not "ok" or "sounds good")
+  → Scheduler executes transition effects (commit, etc.)
+  → New phase sub-agent moves from IDLE to READY
 ```
 
-The human's `ape approve` is itself a signal — the highest-priority interrupt.
+The human's explicit approval is itself a signal — the highest-priority interrupt.
+
+**Exception:** EVOLUTION → IDLE is automatic (no human gate). DARWIN runs and completes. This can be disabled via `.ape/config.yaml` (`evolution.enabled: false`).
 
 ## Relationship to Existing Specs
 
 The [orchestrator-spec](../../references/orchestrator-spec.md) §3.5 defines a precondition table where each agent checks conditions (e.g., "RED tests exist"). This is **polling** — the agent checks every tick if its condition is met.
 
-The signal model replaces polling with events. Instead of DIJKSTRA checking "do GREEN tests exist?" every tick, it waits for the `execute-stage-complete` signal. This is more efficient and more faithful to the RTOS analogy.
+The signal model replaces polling with events. Instead of checking preconditions every tick, agents wait for signals. This is more efficient and more faithful to the RTOS analogy.
 
 ## Open Questions
 
 1. **Signal persistence.** If a signal fires while no agent is waiting on it, is it lost? In RTOS, event flags persist until cleared. Should `.ape/state.yaml` record pending signals?
-2. **Error signals.** What happens when ADA emits `execute-stage-blocked` instead of `execute-stage-complete`? The routing table needs error paths.
-3. **Human signals.** Beyond `ape approve`, what other signals can the human emit? `ape abort`, `ape retry`, `ape skip`?
+2. **Error signals.** What happens when BASHŌ emits `execute-blocked` instead of completing? The routing table needs error paths that return to ANALYZE.
+3. **Human signals.** Beyond approval, what other signals can the human emit? `ape abort`, `ape retry`, `ape skip`?

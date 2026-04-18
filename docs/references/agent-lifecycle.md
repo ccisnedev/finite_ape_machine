@@ -1,54 +1,75 @@
 ---
 id: agent-lifecycle
-title: "Agent lifecycle — confirmed registry and five-state scheduler model"
-date: 2026-04-16
+title: "Agent lifecycle — five-state model and confirmed agent registry"
+date: 2026-04-17
 status: active
-tags: [agents, fsm, lifecycle, registry, socrates]
+tags: [agents, fsm, lifecycle, registry, socrates, descartes, basho, darwin]
 author: socrates
 ---
 
 # Agent Lifecycle and States
 
-## Confirmed vs. In Review
+## APE Cycle States (confirmed)
 
-### Confirmed States (implemented)
+The Finite APE Machine operates as a five-state FSM:
 
-| APE State | Description |
-|-----------|-------------|
-| ANALYZE | Requirements understanding, scope definition |
-| PLAN | Technical design, runbook, test definition |
-| EXECUTE | TDD implementation, quality verification |
+```
+IDLE → ANALYZE → PLAN → EXECUTE → EVOLUTION
+```
 
-### In Review States
+| APE State | Function | Operator | Thinking Tool |
+|-----------|----------|----------|---------------|
+| IDLE | Triage — classify, prepare infrastructure | APE + triage skill | Phronesis (Aristotle) — practical wisdom |
+| ANALYZE | Deep understanding via Socratic method | SOCRATES (sub-agent) | Mayéutica — draw truth through questions |
+| PLAN | Experimental design, WBS, test definition | DESCARTES (sub-agent) | Method — divide, order, verify, enumerate |
+| EXECUTE | Implementation under constraints | BASHŌ (sub-agent) | Techne + 用の美 (yō no bi) — functional beauty |
+| EVOLUTION | Evaluate APE process, create improvement issues | DARWIN (sub-agent) | Natural selection — observe, compare, select |
 
-| APE State | Description | Status |
-|-----------|-------------|--------|
-| IDLE | No active task | Logical but not yet implemented |
-| RETROSPECTIVE | Post-cycle lessons, evolution | Replaces REVIEW + DARWIN from orchestrator-spec |
+### State descriptions
 
-### Confirmed Agents (implemented)
+**IDLE** — APE's default state. The user converses freely. APE uses the triage skill to evaluate whether the problem merits a formal cycle. If so, the skill guides infrastructure preparation: verify/create the GitHub issue (`gh`), create the branch and working directory (`ape issue start NNN`), and transition to ANALYZE. APE operates directly in this state — no sub-agent.
 
-| Agent | Lives in | Description |
-|-------|----------|-------------|
-| SOCRATES | ANALYZE | Conversational requirements understanding |
+**ANALYZE** — SOCRATES conducts Socratic analysis. Explores the problem through questions, challenges assumptions, documents findings. Produces `diagnosis.md` — a rigorous technical document (paper-style, with references) that serves as the sole input for the planning phase. The user approves the diagnosis before transitioning.
 
-### In Review Agents
+**PLAN** — DESCARTES applies the scientific method: the plan is an experimental design. Decomposes complexity into phases (WBS), defines tests in pseudocode, sequences by dependencies. Produces `plan.md` as an immutable checklist. The plan must be detailed enough that EXECUTE is mechanical — following instructions, not inventing them. The user approves the plan before transitioning.
 
-| Agent | Lives in | Description |
-|-------|----------|-------------|
-| MARCOPOLO | ANALYZE | Document ingestion and normalization |
-| VITRUVIUS | ANALYZE | Decomposition, WBS, sizing |
-| SUNZI | PLAN | Technical design, runbook generation |
-| GATSBY | PLAN | Contract definition, RED tests |
-| ADA | EXECUTE | TDD implementation |
-| DIJKSTRA | EXECUTE | Quality gate pre-PR |
-| DARWIN | RETROSPECTIVE | Lessons learned, system evolution |
+**EXECUTE** — BASHŌ implements the plan phase by phase, like a haiku master working within formal constraints (the plan's restrictions = the 5-7-5 form). Each phase produces a commit. The final phase includes product retrospective: an implementation report with validation instructions for the user. If a deviation is detected, returns to ANALYZE (like falsifying a hypothesis in the scientific method). The user approves execution (commit + push + PR) before transitioning.
 
-## The Three-State Simplification → Five-State Scheduler Model
+**EVOLUTION** — DARWIN reads the complete cycle (diagnosis, plan, commits, deviations) and evaluates APE's own process. Searches for existing issues in `finite_ape_machine` repo (`gh issue list --search`), comments on matches or creates new issues. Automatic, no user approval required. Opt-out via `.ape/config.yaml` (`evolution.enabled: false`).
 
-### Decision
+## Agent Registry
 
-Agent states visible to the scheduler are five, grouped in two categories:
+### Confirmed Agents (v0.0.8 target)
+
+| Agent | Namesake | State | Herramienta | Description |
+|-------|----------|-------|-------------|-------------|
+| SOCRATES | Sócrates (470–399 BC) | ANALYZE | Mayéutica | Conversational understanding, produces `diagnosis.md` |
+| DESCARTES | René Descartes (1596–1650) | PLAN | Método | Experimental design, WBS, test pseudocode |
+| BASHŌ | Matsuo Bashō (1644–1694) | EXECUTE | Techne/用の美 | Implementation as functional art under constraints |
+| DARWIN | Charles Darwin (1809–1882) | EVOLUTION | Selección natural | Process evaluation, self-improvement issues |
+
+### APE (the scheduler)
+
+APE is NOT an ape. It is the Finite APE Machine — the scheduler, the event loop, the RTOS. It has no personality, no namesake. It reads state, evaluates conditions, dispatches sub-agents, and updates state. It operates directly in IDLE (with the triage skill) and delegates to sub-agents in all other states.
+
+### Lore Agents (future/referential)
+
+The [lore](../lore.md) describes additional agents from the original vision. These remain as reference for future expansion:
+
+| Agent | Original Role | Current Status |
+|-------|--------------|----------------|
+| MARCOPOLO | Document ingestion | Future — SOCRATES handles this via skills |
+| VITRUVIUS | WBS/decomposition | Absorbed by DESCARTES |
+| SUNZI | Strategic planning | Replaced by DESCARTES |
+| GATSBY | RED tests/@contracts | Absorbed by DESCARTES (test pseudocode in plan) |
+| ADA | TDD implementation | Replaced by BASHŌ |
+| DIJKSTRA | Quality gate | Future — may be a skill within EXECUTE |
+| BORGES | Schema enforcement | Future — may be a CLI validation layer |
+| HERMES | State updates | Future — may be `ape state transition` command |
+
+## Agent Scheduling Model
+
+### Five agent states (scheduler-visible)
 
 ```
 Not scheduled:  IDLE, WAITING
@@ -65,32 +86,52 @@ READY ──[scheduler tick]──→ RUNNING
 RUNNING ──[step complete]──→ READY | WAITING | COMPLETE
 ```
 
-From the **agent's perspective**, only three states are visible: it is either not doing anything (IDLE/WAITING), working (READY/RUNNING), or done (COMPLETE). The agent does not know whether it was WAITING or IDLE — that distinction is managed by the scheduler via signals (see [signal-based-coordination](signal-based-coordination.md)).
+From the **agent's perspective**, only three states are visible: idle, working, or done. The IDLE/WAITING distinction is managed by the scheduler via signals (see [signal-based-coordination](signal-based-coordination.md)).
 
-### Rationale
+### Key principle
 
-The [finite-ape-machine spec](../../references/finite-ape-machine.md) §3.2 defines detailed FSMs per agent (e.g., SOCRATES: `idle → understanding → questioning → clarifying → documenting → idle`). These detailed phases are **methodology, not FSM states**.
-
-SOCRATES uses the Socratic method internally (CLARIFICATION → ASSUMPTIONS → EVIDENCE → PERSPECTIVES → IMPLICATIONS → META-REFLECTION), but these are conversation strategies that the AI decides when to apply. They are not rigid state transitions that the scheduler tracks.
-
-The distinction:
+Agent intelligence lives in prompts, not in state machines. SOCRATES uses Socratic phases (CLARIFICATION → ASSUMPTIONS → EVIDENCE → PERSPECTIVES → IMPLICATIONS → META-REFLECTION) as conversation strategies, not scheduler-tracked states. DESCARTES applies the 4 rules of the Method internally. BASHŌ selects the appropriate domain skill per phase. These are opaque to the scheduler.
 
 | Concept | Visible to scheduler | Visible to agent |
 |---------|---------------------|------------------|
 | IDLE/WAITING/READY/RUNNING/COMPLETE | Yes — formal FSM | Partially (agent sees idle/working/complete) |
 | Internal methodology phases | No — opaque | Yes — embedded in prompt |
 
-### Implications
+## Transition Mechanics
 
-1. **The scheduler tracks five states per agent** (IDLE, WAITING, READY, RUNNING, COMPLETE), but agents only perceive three (idle, working, complete). This keeps `.ape/state.yaml` manageable while enabling signal-based coordination.
-2. **Agent intelligence lives in prompts, not in state machines.** SOCRATES can revisit any Socratic phase at any time — it's the AI's judgment, not a scheduler constraint.
-3. **COMPLETE triggers scheduler evaluation.** When all agents in a phase reach COMPLETE, the scheduler may suggest transitioning to the next APE state. The human decides.
+All APE state transitions are mechanical, executed via skill → CLI chain:
 
-## Transition Ownership
+| Transition | Event | Effects |
+|-----------|-------|---------|
+| IDLE → ANALYZE | `issue_ready` | Verify rama + carpeta exist |
+| ANALYZE → PLAN | `analysis_approved` | `git commit` analysis docs |
+| PLAN → EXECUTE | `plan_approved` | `git commit` plan.md |
+| EXECUTE → EVOLUTION | `execution_approved` | `git commit`, `git push`, `gh pr create` |
+| EVOLUTION → IDLE | `cycle_complete` | Close issue if applicable |
 
-- **APE state transitions** (ANALYZE → PLAN): The human decides. The scheduler suggests when all agents are COMPLETE, but never forces.
-- **Agent state transitions** (IDLE → RUNNING → COMPLETE): The scheduler manages IDLE → RUNNING (based on signals/preconditions). The agent itself transitions RUNNING → COMPLETE when it judges its work done.
+**Illegal transitions:**
+- IDLE → PLAN (no analysis)
+- IDLE → EXECUTE (no plan)
+- ANALYZE → EXECUTE (skipping plan)
+- EXECUTE → PLAN (must go through ANALYZE)
 
-## Contradiction with finite-ape-machine.md
+### Transition ownership
 
-The spec §3.2 defines detailed FSMs per agent that imply the scheduler tracks granular states (e.g., `understanding → questioning → clarifying`). This analysis concludes those are internal methodology, not scheduler-visible states. The spec should be updated to reflect the five-state model (IDLE/WAITING/READY/RUNNING/COMPLETE) where the agent only perceives three (idle/working/complete).
+- **APE state transitions** (ANALYZE → PLAN): The human decides. The scheduler suggests when the agent reaches COMPLETE, but never forces.
+- **Agent state transitions** (IDLE → RUNNING → COMPLETE): The scheduler manages dispatch. The agent itself transitions to COMPLETE when it judges its work done.
+
+## Artifacts per State
+
+```
+docs/issues/NNN-<slug>/
+├── analyze/
+│   ├── index.md              ← navigation
+│   ├── *.md                  ← working documents (exploration, discards)
+│   └── diagnosis.md          ← final output: rigorous paper with references
+└── plan.md                   ← WBS with checkboxes, test pseudocode
+```
+
+- `NNN` matches the GitHub issue number
+- `<slug>` matches the branch name
+- `diagnosis.md` is the contract between ANALYZE and PLAN
+- `plan.md` is the contract between PLAN and EXECUTE

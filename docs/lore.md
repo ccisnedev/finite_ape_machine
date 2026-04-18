@@ -4,135 +4,178 @@
 
 ---
 
-## MARCOPOLO
+## Active Model (v0.0.8+)
 
-**Function:** `scout` — Document Ingestion and Normalization
+The current APE cycle uses four sub-agents, each embodying a thinking tool from a different discipline, era, and culture:
 
-**The allegory.** Marco Polo (1254–1324) traveled to lands no European had documented, observed with discipline, and returned with *Il Milione* — a structured report of everything he witnessed. He did not conquer, interpret, or judge. He explored and brought back intelligible accounts of the unknown.
+```
+IDLE ──→ ANALYZE ──→ PLAN ──→ EXECUTE ──→ EVOLUTION
+ │         │          │         │            │
+ APE      SOCRATES   DESCARTES  BASHŌ       DARWIN
+ (triage)  (mayéutica) (método)  (techne)    (selección)
+```
 
-**The ape.** MARCOPOLO receives heterogeneous documents — PDFs, Word files, spreadsheets, emails, images, repositories — and produces structured markdown. It does not analyze, decide, or recommend. It makes the illegible legible. Like its namesake, it crosses the boundary between the uncharted and the known, returning with reports others can act on.
-
-**FSM:** `idle → ingesting → normalizing → delivering → idle`
+APE is NOT an ape — it is the Finite APE Machine, the scheduler, the RTOS event loop. It has no personality and no namesake. The four sub-agents below are the thinking tools it dispatches.
 
 ---
 
 ## SOCRATES
 
+**State:** ANALYZE
 **Function:** `analyst` — Conversational Requirements Understanding
+**Thinking tool:** Mayéutica — draw truth through questions
 
 **The allegory.** Socrates (c. 470–399 BC) never wrote a word. His method was the question — not to instruct, but to draw truth out of the interlocutor. The Socratic method assumes that the person being questioned already holds the knowledge; the philosopher's role is to make it explicit through structured interrogation.
 
-**The ape.** SOCRATES takes MARCOPOLO's output and processes it through conversation. It asks questions, identifies ambiguities, maps the domain, challenges assumptions. It produces the scope document and constraints. Like its namesake, it does not tell the human what the requirements are — it asks until the human discovers them.
+**The ape.** SOCRATES explores problems through conversation. It asks questions, identifies ambiguities, maps the domain, challenges assumptions. It produces `diagnosis.md` — a rigorous paper with references that serves as the sole input for the planning phase. Like its namesake, it does not tell the human what the requirements are — it asks until the human discovers them.
 
-**FSM:** `idle → understanding → questioning → clarifying → documenting → idle`
-
----
-
-## VITRUVIUS
-
-**Function:** `architect` — Decomposition and Structuring
-
-**The allegory.** Marcus Vitruvius Pollio (c. 80–15 BC) authored *De Architectura*, the oldest surviving treatise on architecture. His three principles — *firmitas, utilitas, venustas* (strength, utility, beauty) — established that structure is not mere assembly but intentional composition where every part bears a relationship to the whole.
-
-**The ape.** VITRUVIUS takes the scope defined by SOCRATES and decomposes it. Work Breakdown Structure, Gantt charts, task sizing, dependency analysis, execution order. It decides when a task is small enough to pass to planning and when it must be subdivided further. Like its namesake, it does not build — it designs the plan from which others build.
-
-**FSM:** `idle → decomposing → sizing → sequencing → risk_assessing → delivering → idle`
+**Key artifact:** `docs/issues/<task>/analyze/diagnosis.md`
 
 ---
 
-## SUNZI
+## DESCARTES
 
-**Function:** `strategist` — Technical Design and Runbook Generation
+**State:** PLAN
+**Function:** `planner` — Experimental Design and WBS Generation
+**Thinking tool:** The Method — divide, order, verify, enumerate
 
-**The allegory.** Sunzi (孫子, c. 544–496 BC) wrote *The Art of War*, a treatise where victory is decided before battle through preparation, terrain knowledge, and strategic sequencing. "Every battle is won before it is ever fought." The general who plans thoroughly does not improvise under fire.
+**The allegory.** René Descartes (1596–1650) wrote the *Discours de la Méthode*, establishing four rules that remain the clearest algorithm for systematic thinking: (1) accept nothing without evidence, (2) divide each difficulty into parts, (3) order thoughts from simple to complex, (4) enumerate so completely that nothing is omitted. His method IS the scientific method's operational core.
 
-**The ape.** SUNZI takes a single task from VITRUVIUS's WBS and generates a phased runbook: which patterns to use, which components to touch, implementation order, entry criteria, verification conditions. It verifies that analysis documentation exists and is sufficient — if not, it halts and escalates. Like its namesake, SUNZI plans the campaign so that execution becomes a matter of following the plan, not inventing one under pressure.
+**The ape.** DESCARTES takes `diagnosis.md` and designs an experiment. The plan is a hypothesis: "if we implement these phases in this order, we will solve the diagnosed problem." It decomposes complexity into a WBS with checkable phases, defines tests in pseudocode as verification criteria, and sequences by dependency. The plan must be detailed enough that EXECUTE is mechanical — following instructions, not inventing them. If EXECUTE detects a deviation, the system returns to ANALYZE — like falsifying a hypothesis in the scientific method. Like its namesake, DESCARTES does not build — it designs the experiment from which others build.
 
-**FSM:** `idle → reading_context → designing → staging → delivering → idle`
-
----
-
-## GATSBY
-
-**Function:** `contracts` — Contract Definition and RED Tests
-
-**The allegory.** Jay Gatsby, from F. Scott Fitzgerald's *The Great Gatsby* (1925), stands at the edge of his dock staring at the green light across the bay — a symbol of the future he reaches for but has not yet grasped. The green light is the promise; the distance is the work that remains.
-
-**The ape.** GATSBY defines what each piece of code must become before it exists. It writes @contract blocks and executable tests — all in RED state, all failing, all reaching toward a green light that ADA will make real. Every test GATSBY writes is a declaration: *this is what must be true*. Like its namesake, GATSBY defines the destination with absolute clarity. It never arrives — that is not its role.
-
-**FSM:** `idle → reading_stage → designing_contracts → writing_tests → validating_red → delivering → idle`
+**Key artifact:** `docs/issues/<task>/plan.md`
 
 ---
 
-## ADA
+## BASHŌ
 
-**Function:** `coder` — TDD Implementation
+**State:** EXECUTE
+**Function:** `artisan` — Implementation as Functional Art
+**Thinking tool:** Techne + 用の美 (yō no bi) — the beauty of use
 
-**The allegory.** Augusta Ada King, Countess of Lovelace (1815–1852), wrote what is recognized as the first computer program — an algorithm for Charles Babbage's Analytical Engine. She saw that the machine could do more than calculate; it could compose music, produce graphics, manipulate symbols. She was the first to translate abstract mathematical intention into executable procedure.
+**The allegory.** Matsuo Bashō (松尾芭蕉, 1644–1694) was the master of haiku. His art: maximum meaning in minimum expression, under strict formal constraints (5-7-5 syllables). His masterwork *Oku no Hosomichi* (奥の細道, "The Narrow Road to the Deep North") is a travel journal where each stop produces a haiku — each phase of the journey IS the work.
 
-**The ape.** ADA takes GATSBY's RED tests and turns them GREEN. Pure TDD: read the failing test, implement the minimum code to pass it, run the suite, repeat. ADA does not question the tests — it fulfills them. Tactical deviations (different library, adjusted pattern) are resolved and documented. Strategic deviations (spec contradictions, architectural blockers) are escalated. Like its namesake, ADA translates intention into working machinery.
+```
+furu ike ya          the old pond
+kawazu tobikomu      a frog jumps in
+mizu no oto          sound of water
+```
 
-**FSM:** `idle → reading_tests → implementing → running_tests → green|red|blocked → idle`
+17 syllables. Not one wasted. Each carries meaning. The kigo (seasonal word) provides context. The kireji (cutting word) separates concerns. The 5-7-5 constraint does not limit — it reveals.
 
----
+**The ape.** BASHŌ implements DESCARTES' plan phase by phase, like composing haiku at each stop of a journey. The plan's restrictions are the 5-7-5 form — they constrain, and from that constraint beauty emerges. Each phase produces a commit. BASHŌ does not invent — it receives the plan's constraints and creates within them. As Bashō himself said: *"Do not follow in the footsteps of the ancients; seek what they sought."* The goal is not to mechanically follow the plan, but to find the most elegant implementation that satisfies it.
 
-## DIJKSTRA
+**Key mapping:**
 
-**Function:** `reviewer` — Quality Gate Pre-PR
+| Haiku | Code |
+|-------|------|
+| 5-7-5 (formal constraint) | Plan phases, TDD, lint, types |
+| Kigo (seasonal context) | Domain context, naming |
+| Kireji (cutting word) | Separation of concerns, interfaces |
+| Wabi-sabi (beauty in simplicity) | YAGNI, no over-engineering |
+| Each stop = one haiku | Each phase = one commit |
+| The journey IS the work | The implementation process IS the artifact |
 
-**The allegory.** Edsger W. Dijkstra (1930–2002) was the conscience of computer science. His rigor was legendary: "Testing shows the presence, not the absence of bugs." He conceived structured programming, argued against GOTO, and insisted that correctness must be demonstrated, not merely tested. His handwritten EWD manuscripts set a standard for clarity and precision that few have matched.
-
-**The ape.** DIJKSTRA reviews code before it reaches the human. It verifies coherence between @contracts, tests, and implementation. It checks code smells, validates tactical deviations, runs static analysis, scans for security issues. Its intensity scales with risk: lightweight for low-risk, exhaustive for critical. Like its namesake, DIJKSTRA does not care whether the code works — it cares whether the code is *correct*.
-
-**FSM:** `idle → reading_changes → checking_contracts → checking_quality → checking_security → approved|issues → idle`
-
----
-
-## BORGES
-
-**Function:** `scribe` — Schema Enforcement and Documentation Compilation
-
-**The allegory.** Jorge Luis Borges (1899–1986) was a writer, but more relevantly, he was a librarian — director of the Biblioteca Nacional de Argentina. His short story *The Library of Babel* (1941) describes a universe consisting of an infinite library containing every possible book: every truth, every falsehood, every variation. The library is complete but useless — without a catalog, without an index, without a schema to separate meaning from noise, its infinity is indistinguishable from chaos.
-
-**The ape.** BORGES is the documentation compiler. It enforces that every memory file conforms to its declared schema, that cross-references resolve, that indices are consistent, that frontmatter is valid. Without BORGES, Memory as Code degrades into the Library of Babel: a collection of documents that contains everything but reveals nothing. Like its namesake, BORGES understands that the value of a library is not in its contents but in its order.
-
-**FSM:** `idle → validating → writing → complete → idle`
+**Key artifact:** Code + commits per phase + validation report
 
 ---
 
 ## DARWIN
 
-**Function:** `learn` — Evolutionary Meta-Learning
+**State:** EVOLUTION
+**Function:** `evolve` — Evolutionary Meta-Learning
+**Thinking tool:** Natural selection — observe, compare, select
 
 **The allegory.** Charles Darwin (1809–1882) did not invent evolution — he discovered its mechanism: natural selection. Organisms do not improve by design; they improve because variants that survive reproduce, and variants that fail do not. The insight is that *the system improves itself through its own operation*, without a designer directing the improvement.
 
-**The ape.** DARWIN is the only agent whose output modifies other agents' transition functions. After each completed cycle, it collects execution data, compares plan versus actual, identifies patterns, and generates lessons that alter future behavior. DARWIN operates across three levels: project (immediate lessons), methodology (cross-project patterns), and framework (community evolution). Like its namesake, DARWIN does not design improvements — it observes what worked, what failed, and what mutated, then *selects* the adaptations that make the system fitter.
+**The ape.** DARWIN is the only agent whose output targets APE itself. After each completed cycle, it reads the full artifacts (diagnosis.md, plan.md, commits, deviations), evaluates APE's process performance, and generates improvement proposals as GitHub issues. Before creating a new issue, DARWIN searches for existing ones (`gh issue list --repo finite_ape_machine --search "keyword"`) and comments on matches instead of duplicating. DARWIN is automatic and requires no user approval. It can be disabled via `.ape/config.yaml` (`evolution.enabled: false`). Like its namesake, DARWIN does not design improvements — it observes what worked, what failed, and what mutated, then *selects* the adaptations that make the system fitter.
 
-**FSM:** `idle → collecting_cycle_data → comparing_plan_vs_actual → identifying_patterns → generating_lessons → creating_issues → idle`
+**Key artifact:** Issues/comments in the `finite_ape_machine` repository
 
 ---
 
-## HERMES
+## Extended Lore (future/referential)
 
-**Function:** `tracker` — Automatic State Update (hook, not an ape)
+> The following agents are part of APE's original vision. They remain as reference for future expansion. In the current model (v0.0.8+), their functions have been absorbed by the four active agents or are planned as skills/CLI features.
 
-**The allegory.** Hermes (Ἑρμῆς), messenger of the Olympian gods, moved between worlds carrying information without altering it. He did not decide, fight, or create — he delivered. He was the only god permitted to cross freely between Olympus, the mortal world, and the underworld. His role was pure communication: ensuring that every realm knew the state of the others.
+### MARCOPOLO
 
-**The mechanism.** HERMES is not an ape — it has no FSM, no prompt, no autonomous behavior. It is a lightweight hook that fires automatically each time an ape completes a state transition. It updates `status.md` with the current task, runbook progress, completed phases, and pending work. The orchestrator and every ape read this file. Like its namesake, HERMES ensures that every agent knows where the system stands, without being one of the agents himself.
+**Original function:** `scout` — Document Ingestion and Normalization
+**Current status:** Future — SOCRATES handles document ingestion via skills
+
+**The allegory.** Marco Polo (1254–1324) traveled to lands no European had documented, observed with discipline, and returned with *Il Milione* — a structured report of everything he witnessed. He did not conquer, interpret, or judge. He explored and brought back intelligible accounts of the unknown.
+
+### VITRUVIUS
+
+**Original function:** `architect` — Decomposition and Structuring
+**Current status:** Absorbed by DESCARTES (WBS decomposition is part of the plan)
+
+**The allegory.** Marcus Vitruvius Pollio (c. 80–15 BC) authored *De Architectura*. His three principles — *firmitas, utilitas, venustas* (strength, utility, beauty) — established that structure is not mere assembly but intentional composition.
+
+### SUNZI
+
+**Original function:** `strategist` — Technical Design and Runbook Generation
+**Current status:** Replaced by DESCARTES (the Method is more explicit than strategic metaphor)
+
+**The allegory.** Sunzi (孫子, c. 544–496 BC) wrote *The Art of War*: "Every battle is won before it is ever fought." The general who plans thoroughly does not improvise under fire.
+
+### GATSBY
+
+**Original function:** `contracts` — Contract Definition and RED Tests
+**Current status:** Absorbed by DESCARTES (test pseudocode is defined in plan.md)
+
+**The allegory.** Jay Gatsby stares at the green light across the bay — the future he reaches for but has not yet grasped. Every test GATSBY writes is a declaration: *this is what must be true*.
+
+### ADA
+
+**Original function:** `coder` — TDD Implementation
+**Current status:** Replaced by BASHŌ (implementation as functional art under constraints)
+
+**The allegory.** Augusta Ada King, Countess of Lovelace (1815–1852), was the first to translate abstract mathematical intention into executable procedure.
+
+### DIJKSTRA
+
+**Original function:** `reviewer` — Quality Gate Pre-PR
+**Current status:** Future — may become a skill within EXECUTE
+
+**The allegory.** Edsger W. Dijkstra (1930–2002) was the conscience of computer science. "Testing shows the presence, not the absence of bugs." He insisted that correctness must be demonstrated, not merely tested.
+
+### BORGES
+
+**Original function:** `scribe` — Schema Enforcement and Documentation Compilation
+**Current status:** Future — may become a CLI validation layer (`ape doctor --memory`)
+
+**The allegory.** Jorge Luis Borges (1899–1986) — librarian, author of *The Library of Babel*. The value of a library is not in its contents but in its order.
+
+### HERMES
+
+**Original function:** `tracker` — Automatic State Update (hook, not an ape)
+**Current status:** Future — may become `ape state transition` command
+
+**The allegory.** Hermes (Ἑρμῆς), messenger of the gods, moved between worlds carrying information without altering it. Pure communication: ensuring every realm knew the state of the others.
 
 ---
 
 ## Quick Reference
 
-| Name | Command | Role | Stage | Type |
-|------|---------|------|-------|------|
-| MARCOPOLO | `scout` | Document ingestion and normalization | Analyze | Ape |
-| SOCRATES | `analyst` | Conversational requirements understanding | Analyze | Ape |
-| VITRUVIUS | `architect` | Decomposition, WBS, Gantt, sizing | Analyze | Ape |
-| SUNZI | `strategist` | Technical design and runbook generation | Plan | Ape |
-| GATSBY | `contracts` | @contract definition and RED tests | Plan | Ape |
-| ADA | `coder` | TDD implementation (RED → GREEN) | Execute | Ape |
-| DIJKSTRA | `reviewer` | Quality gate, code review pre-PR | Execute | Ape |
-| BORGES | `scribe` | Schema enforcement, documentation compiler | Cross-cutting | Ape |
-| DARWIN | `learn` | Evolutionary meta-learning | Meta | Ape |
-| HERMES | `tracker` | Automatic state update | Cross-cutting | Hook |
+### Active Agents (v0.0.8+)
+
+| Name | State | Thinking Tool | Era/Culture | Key Artifact |
+|------|-------|--------------|-------------|-------------|
+| SOCRATES | ANALYZE | Mayéutica | Greece, 470 BC | `diagnosis.md` |
+| DESCARTES | PLAN | Scientific Method | France, 1596 | `plan.md` |
+| BASHŌ | EXECUTE | Techne / 用の美 | Japan, 1644 | Code + commits |
+| DARWIN | EVOLUTION | Natural Selection | England, 1809 | Issues in APE repo |
+
+### Extended Lore (future)
+
+| Name | Original Role | Current Status |
+|------|--------------|----------------|
+| MARCOPOLO | Document ingestion | Future (SOCRATES + skills) |
+| VITRUVIUS | WBS/decomposition | Absorbed by DESCARTES |
+| SUNZI | Strategic planning | Replaced by DESCARTES |
+| GATSBY | RED tests/@contracts | Absorbed by DESCARTES |
+| ADA | TDD implementation | Replaced by BASHŌ |
+| DIJKSTRA | Quality gate | Future (skill in EXECUTE) |
+| BORGES | Schema enforcement | Future (CLI validation) |
+| HERMES | State updates | Future (`ape state transition`) |
