@@ -69,6 +69,24 @@ class DoctorOutput extends Output {
 
   @override
   int get exitCode => passed ? ExitCode.ok : ExitCode.genericError;
+
+  /// Returns formatted checkmarks for text mode (like flutter doctor).
+  @override
+  String? toText() {
+    final buffer = StringBuffer('Checking prerequisites...\n');
+    for (final check in checks) {
+      final icon = check.passed ? '✓' : '✗';
+      final suffix = check.version ?? check.error ?? '';
+      if (suffix.isNotEmpty) {
+        buffer.writeln('  $icon ${check.name} $suffix');
+      } else {
+        buffer.writeln('  $icon ${check.name}');
+      }
+    }
+    buffer.writeln();
+    buffer.write(passed ? 'All checks passed.' : 'Some checks failed.');
+    return buffer.toString();
+  }
 }
 
 /// Command that verifies all prerequisites are installed.

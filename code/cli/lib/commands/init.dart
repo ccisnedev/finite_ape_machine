@@ -40,10 +40,7 @@ class InitOutput extends Output {
   InitOutput({required this.message, required this.isCreated});
 
   @override
-  Map<String, dynamic> toJson() => {
-        'message': message,
-        'created': isCreated,
-      };
+  Map<String, dynamic> toJson() => {'message': message, 'created': isCreated};
 
   @override
   int get exitCode => ExitCode.ok;
@@ -93,10 +90,7 @@ class InitCommand implements Command<InitInput, InitOutput> {
       );
     }
 
-    return InitOutput(
-      message: steps.join('\n'),
-      isCreated: true,
-    );
+    return InitOutput(message: steps.join('\n'), isCreated: true);
   }
 
   /// Detects whether `doc/` or `docs/` exists. Prefers `docs/`.

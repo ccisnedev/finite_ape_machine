@@ -62,5 +62,15 @@ void main() {
       final cmd = TuiCommand(TuiInput());
       expect(cmd.validate(), isNull);
     });
+
+    test('TuiOutput.toText() returns diagram only', () async {
+      final cmd = TuiCommand(TuiInput());
+      final output = await cmd.execute();
+
+      // toText() should return only the diagram, not field labels
+      expect(output.toText(), equals(output.diagram));
+      expect(output.toText(), isNot(contains('version:')));
+      expect(output.toText(), isNot(contains('diagram:')));
+    });
   });
 }

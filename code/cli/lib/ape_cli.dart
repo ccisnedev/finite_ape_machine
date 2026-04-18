@@ -59,21 +59,19 @@ Future<int> runApe(List<String> args) async {
   );
 
   final deployer = TargetDeployer(
-    assets: Assets(
-      root: p.dirname(p.dirname(Platform.resolvedExecutable)),
-    ),
+    assets: Assets(root: p.dirname(p.dirname(Platform.resolvedExecutable))),
     adapters: deployAdapters,
-    homeDir: Platform.environment['USERPROFILE'] ??
+    homeDir:
+        Platform.environment['USERPROFILE'] ??
         Platform.environment['HOME'] ??
         '',
   );
 
   final cleaner = TargetDeployer(
-    assets: Assets(
-      root: p.dirname(p.dirname(Platform.resolvedExecutable)),
-    ),
+    assets: Assets(root: p.dirname(p.dirname(Platform.resolvedExecutable))),
     adapters: allAdapters,
-    homeDir: Platform.environment['USERPROFILE'] ??
+    homeDir:
+        Platform.environment['USERPROFILE'] ??
         Platform.environment['HOME'] ??
         '',
   );
@@ -99,10 +97,8 @@ Future<int> runApe(List<String> args) async {
 
   cli.command<UninstallInput, UninstallOutput>(
     'uninstall',
-    (req) => UninstallCommand(
-      UninstallInput.fromCliRequest(req),
-      deployer: cleaner,
-    ),
+    (req) =>
+        UninstallCommand(UninstallInput.fromCliRequest(req), deployer: cleaner),
     description: 'Remove APE CLI from the system',
   );
 

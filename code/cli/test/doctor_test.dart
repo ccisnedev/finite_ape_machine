@@ -186,5 +186,37 @@ void main() {
       expect(json, containsPair('error', 'not found'));
       expect(json.containsKey('version'), isFalse);
     });
+
+    test('toText() returns formatted checkmarks when all pass', () async {
+      final cmd = DoctorCommand(
+        DoctorInput(),
+        runProcess: fakeRunner(),
+        apeVersionOverride: '0.0.10',
+      );
+
+      final output = await cmd.execute();
+      final text = output.toText()!;
+
+      expect(text, contains('Checking prerequisites...'));
+      expect(text, contains('✓ ape'));
+      expect(text, contains('✓ git'));
+      expect(text, contains('✓ gh'));
+      expect(text, contains('All checks passed.'));
+    });
+
+    test('toText() shows failure indicators when check fails', () async {
+      final cmd = DoctorCommand(
+        DoctorInput(),
+        runProcess: fakeRunner(gitFails: true),
+        apeVersionOverride: '0.0.10',
+      );
+
+      final output = await cmd.execute();
+      final text = output.toText()!;
+
+      expect(text, contains('✓ ape'));
+      expect(text, contains('✗ git'));
+      expect(text, contains('Some checks failed.'));
+    });
   });
 }

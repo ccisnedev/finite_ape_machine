@@ -24,8 +24,7 @@ class UpgradeInput extends Input {
   UpgradeInput({required this.installDir});
 
   factory UpgradeInput.fromCliRequest(CliRequest req) {
-    final installDir =
-        p.dirname(p.dirname(Platform.resolvedExecutable));
+    final installDir = p.dirname(p.dirname(Platform.resolvedExecutable));
     return UpgradeInput(installDir: installDir);
   }
 
@@ -50,14 +49,21 @@ class UpgradeOutput extends Output {
 
   @override
   Map<String, dynamic> toJson() => {
-        'message': message,
-        'previousVersion': previousVersion,
-        'newVersion': newVersion,
-        'upgraded': upgraded,
-      };
+    'message': message,
+    'previousVersion': previousVersion,
+    'newVersion': newVersion,
+    'upgraded': upgraded,
+  };
 
   @override
   int get exitCode => ExitCode.ok;
+
+  /// Returns human-friendly upgrade status.
+  @override
+  String? toText() {
+    if (!upgraded) return message;
+    return '✓ Upgraded: $previousVersion → $newVersion';
+  }
 }
 
 // ─── Command ────────────────────────────────────────────────────────────────
@@ -78,7 +84,8 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
     try {
       // 1. Fetch latest release metadata
       final releaseUrl = Uri.parse(
-          'https://api.github.com/repos/$_repo/releases/latest');
+        'https://api.github.com/repos/$_repo/releases/latest',
+      );
       final metaRequest = await client.getUrl(releaseUrl);
       metaRequest.headers.set('Accept', 'application/vnd.github+json');
       metaRequest.headers.set('User-Agent', 'ape-cli/$apeVersion');
@@ -86,7 +93,8 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
 
       if (metaResponse.statusCode != 200) {
         return UpgradeOutput(
-          message: 'Failed to fetch release info (HTTP ${metaResponse.statusCode})',
+          message:
+              'Failed to fetch release info (HTTP ${metaResponse.statusCode})',
           previousVersion: apeVersion,
           newVersion: apeVersion,
           upgraded: false,
@@ -96,7 +104,9 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
       final body = await metaResponse.transform(utf8.decoder).join();
       final release = jsonDecode(body) as Map<String, dynamic>;
       final tagName = release['tag_name'] as String;
-      final latestVersion = tagName.startsWith('v') ? tagName.substring(1) : tagName;
+      final latestVersion = tagName.startsWith('v')
+          ? tagName.substring(1)
+          : tagName;
 
       if (latestVersion == apeVersion) {
         return UpgradeOutput(
@@ -146,14 +156,11 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
       // Rename the running exe — Windows allows renaming a locked file
       currentExe.renameSync(bakFile.path);
 
-      final result = await Process.run(
-        'powershell',
-        [
-          '-NoProfile',
-          '-Command',
-          'Expand-Archive -Path "${zipFile.path}" -DestinationPath "$installDir" -Force',
-        ],
-      );
+      final result = await Process.run('powershell', [
+        '-NoProfile',
+        '-Command',
+        'Expand-Archive -Path "${zipFile.path}" -DestinationPath "$installDir" -Force',
+      ]);
 
       tempDir.deleteSync(recursive: true);
 
@@ -174,10 +181,10 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
       }
 
       // 5. Redeploy targets using the new binary
-      await Process.run(
-        p.join(installDir, 'bin', 'ape.exe'),
-        ['target', 'get'],
-      );
+      await Process.run(p.join(installDir, 'bin', 'ape.exe'), [
+        'target',
+        'get',
+      ]);
 
       return UpgradeOutput(
         message: 'Upgraded from $apeVersion to $latestVersion',

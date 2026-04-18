@@ -87,19 +87,22 @@ void main() {
     // ─── Step 3: .gitignore ───────────────────────────────────────────
 
     group('.gitignore management', () {
-      test('creates .gitignore with .ape/ entry if no .gitignore exists',
-          () async {
-        final command = InitCommand(InitInput(workingDirectory: tempDir.path));
-        await command.execute();
+      test(
+        'creates .gitignore with .ape/ entry if no .gitignore exists',
+        () async {
+          final command = InitCommand(
+            InitInput(workingDirectory: tempDir.path),
+          );
+          await command.execute();
 
-        final gitignore = File('${tempDir.path}/.gitignore');
-        expect(gitignore.existsSync(), isTrue);
-        expect(gitignore.readAsStringSync(), contains('.ape/'));
-      });
+          final gitignore = File('${tempDir.path}/.gitignore');
+          expect(gitignore.existsSync(), isTrue);
+          expect(gitignore.readAsStringSync(), contains('.ape/'));
+        },
+      );
 
       test('appends .ape/ to existing .gitignore that lacks it', () async {
-        File('${tempDir.path}/.gitignore')
-            .writeAsStringSync('node_modules/\n');
+        File('${tempDir.path}/.gitignore').writeAsStringSync('node_modules/\n');
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
@@ -138,14 +141,16 @@ void main() {
 
       test('skips .ape/state.yaml if already exists', () async {
         Directory('${tempDir.path}/.ape').createSync();
-        File('${tempDir.path}/.ape/state.yaml')
-            .writeAsStringSync('phase: ANALYZE\ntask: "042-something"\n');
+        File(
+          '${tempDir.path}/.ape/state.yaml',
+        ).writeAsStringSync('phase: ANALYZE\ntask: "042-something"\n');
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
-        final content =
-            File('${tempDir.path}/.ape/state.yaml').readAsStringSync();
+        final content = File(
+          '${tempDir.path}/.ape/state.yaml',
+        ).readAsStringSync();
         expect(content, contains('phase: ANALYZE'));
         expect(content, contains('042-something'));
       });
@@ -159,17 +164,21 @@ void main() {
 
         await command.execute();
         // Capture state after first run
-        final stateAfterFirst =
-            File('${tempDir.path}/.ape/state.yaml').readAsStringSync();
-        final gitignoreAfterFirst =
-            File('${tempDir.path}/.gitignore').readAsStringSync();
+        final stateAfterFirst = File(
+          '${tempDir.path}/.ape/state.yaml',
+        ).readAsStringSync();
+        final gitignoreAfterFirst = File(
+          '${tempDir.path}/.gitignore',
+        ).readAsStringSync();
 
         await command.execute();
         // Verify state unchanged after second run
-        final stateAfterSecond =
-            File('${tempDir.path}/.ape/state.yaml').readAsStringSync();
-        final gitignoreAfterSecond =
-            File('${tempDir.path}/.gitignore').readAsStringSync();
+        final stateAfterSecond = File(
+          '${tempDir.path}/.ape/state.yaml',
+        ).readAsStringSync();
+        final gitignoreAfterSecond = File(
+          '${tempDir.path}/.gitignore',
+        ).readAsStringSync();
 
         expect(stateAfterSecond, equals(stateAfterFirst));
         expect(gitignoreAfterSecond, equals(gitignoreAfterFirst));
