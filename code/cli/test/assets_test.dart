@@ -21,7 +21,10 @@ void main() {
       final assets = Assets(root: tempDir.path);
       final resolved = assets.path('agents/ape.agent.md');
 
-      expect(resolved, p.join(tempDir.path, 'assets', 'agents', 'ape.agent.md'));
+      expect(
+        resolved,
+        p.join(tempDir.path, 'assets', 'agents', 'ape.agent.md'),
+      );
     });
 
     test('loadString reads file content relative to root', () {
@@ -46,13 +49,15 @@ void main() {
     });
 
     test('listDirectory returns relative paths of files in a directory', () {
-      final skillsDir =
-          Directory(p.join(tempDir.path, 'assets', 'skills', 'memory-read'));
+      final skillsDir = Directory(
+        p.join(tempDir.path, 'assets', 'skills', 'memory-read'),
+      );
       skillsDir.createSync(recursive: true);
       File(p.join(skillsDir.path, 'SKILL.md')).writeAsStringSync('# Skill');
 
-      final skillsDir2 =
-          Directory(p.join(tempDir.path, 'assets', 'skills', 'memory-write'));
+      final skillsDir2 = Directory(
+        p.join(tempDir.path, 'assets', 'skills', 'memory-write'),
+      );
       skillsDir2.createSync(recursive: true);
       File(p.join(skillsDir2.path, 'SKILL.md')).writeAsStringSync('# Skill 2');
 
@@ -98,9 +103,14 @@ void main() {
     test('listDirectory skills returns all skill directories', () {
       final dirs = assets.listDirectory('skills');
       expect(
-          dirs,
-          unorderedEquals(
-              ['issue-end', 'issue-start', 'memory-read', 'memory-write']));
+        dirs,
+        unorderedEquals([
+          'issue-end',
+          'issue-start',
+          'memory-read',
+          'memory-write',
+        ]),
+      );
     });
   });
 }

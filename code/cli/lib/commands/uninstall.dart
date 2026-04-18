@@ -72,8 +72,7 @@ class UninstallCommand implements Command<UninstallInput, UninstallOutput> {
   }
 
   void _removeFromPath(String binDir) {
-    final userPath =
-        _getEnvironmentVariable('PATH', 'User') ?? '';
+    final userPath = _getEnvironmentVariable('PATH', 'User') ?? '';
     final parts = userPath
         .split(';')
         .where((p) => p.isNotEmpty)
@@ -97,11 +96,10 @@ class UninstallCommand implements Command<UninstallInput, UninstallOutput> {
     }
 
     // Spawn a detached cmd process that waits 2 seconds then deletes.
-    Process.start(
-      'cmd',
-      ['/c', 'timeout /t 2 /nobreak >nul & rmdir /s /q "$dir"'],
-      mode: ProcessStartMode.detached,
-    );
+    Process.start('cmd', [
+      '/c',
+      'timeout /t 2 /nobreak >nul & rmdir /s /q "$dir"',
+    ], mode: ProcessStartMode.detached);
   }
 
   bool _pathEquals(String a, String b) =>

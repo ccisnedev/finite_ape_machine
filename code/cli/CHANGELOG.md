@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.0.10]
+### Fixed
+- TUI shows diagram only in text mode (no "version:", "diagram:" field labels)
+- Doctor shows formatted checkmarks in text mode (✓/✗) like `flutter doctor`
+- Upgrade shows cleaner status message with checkmark
+### Changed
+- Deps: modular_cli_sdk ^0.2.1 (adds `Output.toText()` for custom text formatting)
+### Added
+- `Output.toText()` implementations for TuiOutput, DoctorOutput, UpgradeOutput
+- 5 new tests for toText() behavior
+
 ## [0.0.9]
 ### Added
 - `ape` TUI — displays FSM diagram when invoked without arguments

@@ -15,12 +15,10 @@ class FakeAdapter extends TargetAdapter {
   String baseDirectory(String homeDir) => p.join(homeDir, '.fake');
 
   @override
-  String skillsDirectory(String homeDir) =>
-      p.join(homeDir, '.fake', 'skills');
+  String skillsDirectory(String homeDir) => p.join(homeDir, '.fake', 'skills');
 
   @override
-  String agentDirectory(String homeDir) =>
-      p.join(homeDir, '.fake', 'agents');
+  String agentDirectory(String homeDir) => p.join(homeDir, '.fake', 'agents');
 }
 
 void main() {
@@ -35,22 +33,25 @@ void main() {
     homeDir = Directory(p.join(tempDir.path, 'home'))..createSync();
 
     // Create asset files
-    final skillDir =
-        Directory(p.join(tempDir.path, 'assets', 'skills', 'memory-read'));
+    final skillDir = Directory(
+      p.join(tempDir.path, 'assets', 'skills', 'memory-read'),
+    );
     skillDir.createSync(recursive: true);
     File(p.join(skillDir.path, 'SKILL.md')).writeAsStringSync('# Memory Read');
 
-    final skillDir2 =
-        Directory(p.join(tempDir.path, 'assets', 'skills', 'memory-write'));
+    final skillDir2 = Directory(
+      p.join(tempDir.path, 'assets', 'skills', 'memory-write'),
+    );
     skillDir2.createSync(recursive: true);
-    File(p.join(skillDir2.path, 'SKILL.md'))
-        .writeAsStringSync('# Memory Write');
+    File(
+      p.join(skillDir2.path, 'SKILL.md'),
+    ).writeAsStringSync('# Memory Write');
 
-    final agentDir =
-        Directory(p.join(tempDir.path, 'assets', 'agents'));
+    final agentDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
     agentDir.createSync(recursive: true);
-    File(p.join(agentDir.path, 'ape.agent.md'))
-        .writeAsStringSync('# APE Agent');
+    File(
+      p.join(agentDir.path, 'ape.agent.md'),
+    ).writeAsStringSync('# APE Agent');
 
     assets = Assets(root: tempDir.path);
     adapter = FakeAdapter();
@@ -70,12 +71,14 @@ void main() {
       deployer.deploy();
 
       final skillFile = File(
-          p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'));
+        p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'),
+      );
       expect(skillFile.existsSync(), isTrue);
       expect(skillFile.readAsStringSync(), '# Memory Read');
 
       final skillFile2 = File(
-          p.join(homeDir.path, '.fake', 'skills', 'memory-write', 'SKILL.md'));
+        p.join(homeDir.path, '.fake', 'skills', 'memory-write', 'SKILL.md'),
+      );
       expect(skillFile2.existsSync(), isTrue);
       expect(skillFile2.readAsStringSync(), '# Memory Write');
     });
@@ -83,8 +86,9 @@ void main() {
     test('deploy copies agent to each adapter agentDirectory', () {
       deployer.deploy();
 
-      final agentFile =
-          File(p.join(homeDir.path, '.fake', 'agents', 'ape.agent.md'));
+      final agentFile = File(
+        p.join(homeDir.path, '.fake', 'agents', 'ape.agent.md'),
+      );
       expect(agentFile.existsSync(), isTrue);
       expect(agentFile.readAsStringSync(), '# APE Agent');
     });
@@ -94,7 +98,8 @@ void main() {
       deployer.deploy();
 
       final skillFile = File(
-          p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'));
+        p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'),
+      );
       expect(skillFile.existsSync(), isTrue);
       expect(skillFile.readAsStringSync(), '# Memory Read');
     });
@@ -104,7 +109,8 @@ void main() {
 
       // Create an extra file that shouldn't survive redeploy
       final extraFile = File(
-          p.join(homeDir.path, '.fake', 'skills', 'stale-skill', 'SKILL.md'));
+        p.join(homeDir.path, '.fake', 'skills', 'stale-skill', 'SKILL.md'),
+      );
       extraFile.parent.createSync(recursive: true);
       extraFile.writeAsStringSync('# Stale');
 
@@ -142,14 +148,15 @@ void main() {
 
       // Verify both adapters received files
       expect(
-        File(p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'))
-            .existsSync(),
+        File(
+          p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'),
+        ).existsSync(),
         isTrue,
       );
       expect(
-        File(p.join(
-                homeDir.path, '.fake2', 'skills', 'memory-read', 'SKILL.md'))
-            .existsSync(),
+        File(
+          p.join(homeDir.path, '.fake2', 'skills', 'memory-read', 'SKILL.md'),
+        ).existsSync(),
         isTrue,
       );
     });
@@ -164,10 +171,8 @@ class _SecondFakeAdapter extends TargetAdapter {
   String baseDirectory(String homeDir) => p.join(homeDir, '.fake2');
 
   @override
-  String skillsDirectory(String homeDir) =>
-      p.join(homeDir, '.fake2', 'skills');
+  String skillsDirectory(String homeDir) => p.join(homeDir, '.fake2', 'skills');
 
   @override
-  String agentDirectory(String homeDir) =>
-      p.join(homeDir, '.fake2', 'agents');
+  String agentDirectory(String homeDir) => p.join(homeDir, '.fake2', 'agents');
 }

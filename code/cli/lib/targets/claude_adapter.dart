@@ -14,6 +14,5 @@ class ClaudeAdapter extends TargetAdapter {
       p.join(homeDir, '.claude', 'skills');
 
   @override
-  String agentDirectory(String homeDir) =>
-      p.join(homeDir, '.claude', 'agents');
+  String agentDirectory(String homeDir) => p.join(homeDir, '.claude', 'agents');
 }

@@ -34,5 +34,27 @@ void main() {
       expect(output.previousVersion, '0.0.1');
       expect(output.newVersion, '0.0.2');
     });
+
+    test('toText() returns checkmark message when upgraded', () {
+      final output = UpgradeOutput(
+        message: 'Upgraded from 0.0.1 to 0.0.2',
+        previousVersion: '0.0.1',
+        newVersion: '0.0.2',
+        upgraded: true,
+      );
+      expect(output.toText(), contains('✓'));
+      expect(output.toText(), contains('0.0.1'));
+      expect(output.toText(), contains('0.0.2'));
+    });
+
+    test('toText() returns plain message when not upgraded', () {
+      final output = UpgradeOutput(
+        message: 'Already on the latest version',
+        previousVersion: '0.0.2',
+        newVersion: '0.0.2',
+        upgraded: false,
+      );
+      expect(output.toText(), equals('Already on the latest version'));
+    });
   });
 }

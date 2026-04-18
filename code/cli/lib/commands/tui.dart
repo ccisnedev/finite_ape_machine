@@ -30,13 +30,14 @@ class TuiOutput extends Output {
   TuiOutput({required this.version, required this.diagram});
 
   @override
-  Map<String, dynamic> toJson() => {
-        'version': version,
-        'diagram': diagram,
-      };
+  Map<String, dynamic> toJson() => {'version': version, 'diagram': diagram};
 
   @override
   int get exitCode => ExitCode.ok;
+
+  /// Returns only the diagram for text mode (no field labels).
+  @override
+  String? toText() => diagram;
 }
 
 // ─── Command ────────────────────────────────────────────────────────────────
@@ -63,12 +64,11 @@ class TuiCommand implements Command<TuiInput, TuiOutput> {
 /// Builds the FSM diagram with the given version.
 String _buildDiagram(String version) {
   return '''
-APE v$version
-Finite Ape Machine
+Finite Ape Machine v$version
 
-       ╭─────────────────────────╮
+       ╭──────────────────────────╮
 IDLE → │ Analyze → Plan → Execute │ → EVOLUTION
-       ╰─────────────────────────╯
+       ╰──────────────────────────╯
 
 Commands: init, doctor, version
 Run: ape --help''';

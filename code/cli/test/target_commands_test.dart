@@ -18,12 +18,10 @@ class _FakeAdapter extends TargetAdapter {
   String baseDirectory(String homeDir) => p.join(homeDir, '.fake');
 
   @override
-  String skillsDirectory(String homeDir) =>
-      p.join(homeDir, '.fake', 'skills');
+  String skillsDirectory(String homeDir) => p.join(homeDir, '.fake', 'skills');
 
   @override
-  String agentDirectory(String homeDir) =>
-      p.join(homeDir, '.fake', 'agents');
+  String agentDirectory(String homeDir) => p.join(homeDir, '.fake', 'agents');
 }
 
 void main() {
@@ -36,15 +34,17 @@ void main() {
     homeDir = Directory(p.join(tempDir.path, 'home'))..createSync();
 
     // Create asset files
-    final skillDir =
-        Directory(p.join(tempDir.path, 'assets', 'skills', 'memory-read'));
+    final skillDir = Directory(
+      p.join(tempDir.path, 'assets', 'skills', 'memory-read'),
+    );
     skillDir.createSync(recursive: true);
     File(p.join(skillDir.path, 'SKILL.md')).writeAsStringSync('# Memory Read');
 
     final agentDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
     agentDir.createSync(recursive: true);
-    File(p.join(agentDir.path, 'ape.agent.md'))
-        .writeAsStringSync('# APE Agent');
+    File(
+      p.join(agentDir.path, 'ape.agent.md'),
+    ).writeAsStringSync('# APE Agent');
 
     deployer = TargetDeployer(
       assets: Assets(root: tempDir.path),
@@ -59,31 +59,27 @@ void main() {
 
   group('ape target get', () {
     test('exits 0 and deploys files to all targets', () async {
-      final command = TargetGetCommand(
-        TargetGetInput(),
-        deployer: deployer,
-      );
+      final command = TargetGetCommand(TargetGetInput(), deployer: deployer);
 
       final output = await command.execute();
 
       expect(output.exitCode, ExitCode.ok);
       expect(
-        File(p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'))
-            .existsSync(),
+        File(
+          p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'),
+        ).existsSync(),
         isTrue,
       );
       expect(
-        File(p.join(homeDir.path, '.fake', 'agents', 'ape.agent.md'))
-            .existsSync(),
+        File(
+          p.join(homeDir.path, '.fake', 'agents', 'ape.agent.md'),
+        ).existsSync(),
         isTrue,
       );
     });
 
     test('exits 0 on idempotent re-run', () async {
-      final command = TargetGetCommand(
-        TargetGetInput(),
-        deployer: deployer,
-      );
+      final command = TargetGetCommand(TargetGetInput(), deployer: deployer);
 
       await command.execute();
       final output = await command.execute();

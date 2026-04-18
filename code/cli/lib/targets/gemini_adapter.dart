@@ -14,6 +14,5 @@ class GeminiAdapter extends TargetAdapter {
       p.join(homeDir, '.gemini', 'skills');
 
   @override
-  String agentDirectory(String homeDir) =>
-      p.join(homeDir, '.gemini', 'agents');
+  String agentDirectory(String homeDir) => p.join(homeDir, '.gemini', 'agents');
 }

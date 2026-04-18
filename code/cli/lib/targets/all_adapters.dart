@@ -17,6 +17,4 @@ final List<TargetAdapter> allAdapters = [
 
 /// Adapters that receive deploys in the current version.
 /// For v0.0.x only Copilot is active (D20).
-final List<TargetAdapter> deployAdapters = [
-  CopilotAdapter(),
-];
+final List<TargetAdapter> deployAdapters = [CopilotAdapter()];

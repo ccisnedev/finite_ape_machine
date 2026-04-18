@@ -137,6 +137,12 @@ gh pr create \
 "
 ```
 
+**Important:** PR creation = APE cycle completion. The APE cycle ends here.
+
+- PR merge is an **external event** (happens later, possibly with CI checks)
+- DARWIN collects retrospective data from this cycle
+- Do not wait for PR merge to transition to EVOLUTION
+
 ### Step 9: Transition to EVOLUTION
 
 Update `.ape/state.yaml` (if using state tracking):

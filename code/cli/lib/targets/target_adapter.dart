@@ -17,8 +17,7 @@ abstract class TargetAdapter {
   String agentDirectory(String homeDir);
 
   /// Whether this target's base directory exists on disk.
-  bool exists(String homeDir) =>
-      Directory(baseDirectory(homeDir)).existsSync();
+  bool exists(String homeDir) => Directory(baseDirectory(homeDir)).existsSync();
 
   /// Names of other targets that make this one redundant.
   ///

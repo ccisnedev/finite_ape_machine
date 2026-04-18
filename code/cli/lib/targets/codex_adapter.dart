@@ -10,10 +10,8 @@ class CodexAdapter extends TargetAdapter {
   String baseDirectory(String homeDir) => p.join(homeDir, '.codex');
 
   @override
-  String skillsDirectory(String homeDir) =>
-      p.join(homeDir, '.codex', 'skills');
+  String skillsDirectory(String homeDir) => p.join(homeDir, '.codex', 'skills');
 
   @override
-  String agentDirectory(String homeDir) =>
-      p.join(homeDir, '.codex', 'agents');
+  String agentDirectory(String homeDir) => p.join(homeDir, '.codex', 'agents');
 }
