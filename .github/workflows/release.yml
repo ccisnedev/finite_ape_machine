@@ -1,17 +1,16 @@
-# Release workflow
+# Release workflow — 3-job pattern: check-version → create-release → build (matrix)
 #
-# WORKAROUND: Windows Defender on the windows-2025 / windows-latest runner
-# image (20260413.84.1+) quarantines dart.exe from the toolcache after
+# WORKAROUND (Windows only): Windows Defender on the windows-2025 / windows-latest
+# runner image (20260413.84.1+) quarantines dart.exe from the toolcache after
 # `dart test` runs. Symptom: `dart pub get`, `dart analyze`, `dart test`
 # succeed, but `dart compile exe` fails with "dart not recognized" even
 # though $env:DART_HOME still points at a now-empty directory.
 #
 # Mitigation: before compiling, wipe the dart toolcache dir and the
-# temp zip, then re-run dart-lang/setup-dart. Defender exclusions at the
-# top of the job appear not to take effect on hosted runners but are kept
-# as a defense-in-depth hint.
+# temp zip, then re-run dart-lang/setup-dart. This is applied conditionally
+# via `if: runner.os == 'Windows'` in the build job.
 #
-# If this workaround is removed, the release build will fail in ways
+# If this workaround is removed, the Windows release build will fail in ways
 # that look (but are not) like PATH issues.
 
 name: Release
@@ -28,6 +27,7 @@ permissions:
   contents: write
 
 jobs:
+  # ─── Job 1: Check version ──────────────────────────────────────────
   check-version:
     runs-on: ubuntu-latest
     outputs:
@@ -55,57 +55,72 @@ jobs:
             echo "should_release=true" >> "$GITHUB_OUTPUT"
           fi
 
-  build-and-release:
+  # ─── Job 2: Create release (published, not draft) ─────────────────
+  create-release:
     needs: check-version
     if: needs.check-version.outputs.should_release == 'true'
-    runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: code/cli
-
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create git tag
+        run: |
+          TAG="v${{ needs.check-version.outputs.version }}"
+          git tag "$TAG"
+          git push origin "$TAG"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v${{ needs.check-version.outputs.version }}"
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --generate-notes \
+            --latest
+
+  # ─── Job 3: Build + upload (matrix: Windows + Linux) ───────────────
+  build:
+    needs: [check-version, create-release]
+    if: needs.check-version.outputs.should_release == 'true'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            asset: ape-windows-x64.zip
+            binary: ape.exe
+          - os: ubuntu-latest
+            asset: ape-linux-x64.tar.gz
+            binary: ape
+    defaults:
+      run:
+        working-directory: code/cli
+    steps:
+      - uses: actions/checkout@v4
+
+      # ── Windows Defender workaround (Windows only) ──
       - name: Exclude toolcache from Windows Defender
+        if: runner.os == 'Windows'
         shell: pwsh
         run: |
           Add-MpPreference -ExclusionPath "C:\hostedtoolcache" -ErrorAction SilentlyContinue
           Add-MpPreference -ExclusionPath "D:\a" -ErrorAction SilentlyContinue
           Add-MpPreference -ExclusionProcess "dart.exe" -ErrorAction SilentlyContinue
-          # Clean a possibly-empty cached dart dir so setup-dart re-downloads
           $dartCache = "C:\hostedtoolcache\windows\dart"
           if (Test-Path $dartCache) {
             Remove-Item -Recurse -Force $dartCache
           }
 
       - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: '3.8.1'
 
-      - name: Install dependencies
-        run: dart pub get
+      - run: dart pub get
+      - run: dart analyze
+      - run: dart test
 
-      - name: Analyze
-        run: dart analyze
-
-      - name: Test
-        run: dart test
-
-      - name: Read version from pubspec.yaml
-        id: version
-        run: |
-          $v = (Select-String -Path pubspec.yaml -Pattern '^version:\s*(.+)$').Matches.Groups[1].Value.Trim()
-          echo "VERSION=$v" >> $env:GITHUB_OUTPUT
-          echo "Version: $v"
-        shell: pwsh
-
-      - name: Create build directories
-        run: New-Item -ItemType Directory -Force -Path build\bin | Out-Null
-
-      # Defender removes dart.exe after tests run. Wipe caches so the
-      # next setup-dart step downloads a fresh SDK instead of reusing
-      # the corrupted (empty) cached dir.
+      # ── Windows Defender workaround before compile (Windows only) ──
       - name: Clean dart cache to force re-download
+        if: runner.os == 'Windows'
         shell: pwsh
         run: |
           $dartCache = "C:\hostedtoolcache\windows\dart"
@@ -120,24 +135,45 @@ jobs:
           }
 
       - name: Re-setup Dart (ensure SDK present before compile)
+        if: runner.os == 'Windows'
         uses: dart-lang/setup-dart@v1
-        with:
-          sdk: '3.8.1'
+
+      # ── Compile ──
+      - name: Create build directories (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: New-Item -ItemType Directory -Force -Path build\bin | Out-Null
+
+      - name: Create build directories (Linux)
+        if: runner.os == 'Linux'
+        run: mkdir -p build/bin
 
       - name: Compile
-        run: dart compile exe bin/main.dart -o build\bin\ape.exe
+        run: dart compile exe bin/main.dart -o build/bin/${{ matrix.binary }}
 
-      - name: Copy assets
+      - name: Copy assets (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
         run: Copy-Item -Recurse assets build\assets
 
-      - name: Package
-        run: Compress-Archive -Path build\* -DestinationPath ape-windows-x64.zip
+      - name: Copy assets (Linux)
+        if: runner.os == 'Linux'
+        run: cp -r assets build/assets
 
-      - name: Create or update release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.version.outputs.VERSION }}
-          name: v${{ steps.version.outputs.VERSION }}
-          files: code/cli/ape-windows-x64.zip
-          generate_release_notes: true
-          make_latest: true
+      # ── Package (platform-specific) ──
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: Compress-Archive -Path build\* -DestinationPath ${{ matrix.asset }}
+
+      - name: Package (Linux)
+        if: runner.os == 'Linux'
+        run: tar czf ${{ matrix.asset }} -C build .
+
+      # ── Upload ──
+      - name: Upload release asset
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "v${{ needs.check-version.outputs.version }}" ${{ matrix.asset }} --clobber
+        shell: bash
