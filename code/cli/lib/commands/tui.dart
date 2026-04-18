@@ -70,6 +70,7 @@ Finite Ape Machine v$version
 IDLE → │ Analyze → Plan → Execute │ → EVOLUTION
        ╰──────────────────────────╯
 
+
 Commands: init, doctor, version
 Run: ape --help''';
 }
