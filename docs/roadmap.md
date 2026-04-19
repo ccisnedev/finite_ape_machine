@@ -1,6 +1,6 @@
 # Roadmap
 
-> Where APE is going next. For where APE is today, see [README.md](README.md).
+> Where APE is going next. For where APE is today, see [README.md](../README.md).
 
 This roadmap is **descriptive, not prescriptive**: it reflects the open issues currently in the backlog and the long-running theses that motivate the project. Anything not backed by an issue is exploratory.
 

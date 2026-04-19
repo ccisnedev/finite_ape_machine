@@ -97,12 +97,13 @@ EVOLUTION is opt-in (`evolution.enabled` in `.ape/config.yaml`) and one-shot: if
 
 ## Documentation
 
+- **[`docs/architecture.md`](docs/architecture.md)** — how the CLI is built (repo layout, modules, data flows, dependencies)
+- **[`docs/roadmap.md`](docs/roadmap.md)** — where APE is going next (near/mid/long-term, lore vs reality)
 - **[`docs/spec/`](docs/spec/index.md)** — canonical specifications (FSM, CLI, Memory as Code, orchestrator, target-specific agents)
 - **[`docs/research/ape_builds_ape/`](docs/research/ape_builds_ape/index.md)** — research papers and methodology (APE building APE — empirical bootstrap)
 - **[`docs/adr/`](docs/adr/)** — Architecture Decision Records
 - **[`docs/issues/`](docs/issues/)** — per-cycle work artifacts (analysis, plan, metrics)
 - **[`docs/lore.md`](docs/lore.md)** — the apes' nomenclature and historical vision
-- **[`roadmap.md`](roadmap.md)** — where APE is going next
 
 ## Philosophy
 
