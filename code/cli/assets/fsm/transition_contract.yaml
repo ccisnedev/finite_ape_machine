@@ -130,9 +130,14 @@ transitions:
 
   - from: PLAN
     event: start_analyze
-    to: ILLEGAL
-    allowed: false
-    reason: "PLAN cannot start analyze"
+    to: ANALYZE
+    allowed: true
+    operations:
+      prechecks: []
+      effects: [reopen_analysis]
+      artifacts: []
+      commit_policy: none
+      prompt_fragment_id: plan_to_analyze
 
   - from: PLAN
     event: complete_analysis
@@ -187,9 +192,14 @@ transitions:
 
   - from: EXECUTE
     event: start_analyze
-    to: ILLEGAL
-    allowed: false
-    reason: "EXECUTE cannot start analyze"
+    to: ANALYZE
+    allowed: true
+    operations:
+      prechecks: []
+      effects: [reopen_analysis]
+      artifacts: []
+      commit_policy: none
+      prompt_fragment_id: execute_to_analyze
 
   - from: EXECUTE
     event: complete_analysis
@@ -279,14 +289,9 @@ transitions:
 
   - from: EVOLUTION
     event: block
-    to: IDLE
-    allowed: true
-    operations:
-      prechecks: []
-      effects: [pause_evolution]
-      artifacts: []
-      commit_policy: none
-      prompt_fragment_id: evolution_to_idle
+    to: ILLEGAL
+    allowed: false
+    reason: "EVOLUTION is automatic and one-shot — cannot be paused"
 
   - from: EVOLUTION
     event: go_execute
@@ -358,6 +363,14 @@ prompt_fragments:
     role: BASHO
     skill: issue-start
     template: "execute.continue"
+  plan_to_analyze:
+    role: SOCRATES
+    skill: memory-read
+    template: "analyze.reopen"
+  execute_to_analyze:
+    role: SOCRATES
+    skill: memory-read
+    template: "analyze.reopen"
   evolution_to_idle:
     role: APE
     skill: memory-read
