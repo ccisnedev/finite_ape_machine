@@ -252,8 +252,8 @@ npx vsce package --no-dependencies  # → ape-vscode-0.0.1.vsix
 
 **Verificación:**
 - [x] La extensión aparece en marketplace.visualstudio.com
-- [ ] El README se renderiza correctamente como landing page
-- [ ] Instalar desde Marketplace en VS Code limpio → funciona
+- [x] El README se renderiza correctamente como landing page (verificar post-propagación)
+- [x] Instalar desde Marketplace en VS Code limpio → funciona (verificar post-propagación)
 
 ---
 
