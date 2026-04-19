@@ -200,6 +200,11 @@
       color: var(--fg);
     }
 
+    .target-badge.future {
+      color: var(--muted);
+      border-style: dashed;
+    }
+
     .cycle {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -304,11 +309,11 @@
       <h2>Targets</h2>
       <p>APE deploys agents and skills to the global configuration of:</p>
       <div class="targets">
-        <span class="target-badge">Copilot</span>
-        <span class="target-badge">Claude</span>
-        <span class="target-badge">Codex</span>
-        <span class="target-badge">Crush</span>
-        <span class="target-badge">Gemini</span>
+        <span class="target-badge">GitHub Copilot</span>
+        <span class="target-badge future">Claude</span>
+        <span class="target-badge future">Codex</span>
+        <span class="target-badge future">Crush</span>
+        <span class="target-badge future">Gemini</span>
       </div>
     </section>
 
@@ -326,10 +331,6 @@
         <div class="phase">
           <div class="name">Execute</div>
           <div class="detail">TDD &amp; collaborate</div>
-        </div>
-        <div class="phase">
-          <div class="name">Learn</div>
-          <div class="detail">Extract &amp; improve</div>
         </div>
       </div>
     </section>
