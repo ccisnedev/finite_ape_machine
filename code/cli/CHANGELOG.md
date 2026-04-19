@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.0.13]
+### Changed
+- **Modular structure refactor** (#66): Align ape_cli with modular_cli_sdk conventions
+  - Create `lib/modules/{global,target,state}/commands/` directory structure
+  - Extract `buildGlobalModule`, `buildTargetModule`, `buildStateModule` builder functions
+  - Move 9 command files from flat `lib/commands/` to domain-grouped modules
+  - Rewrite `ape_cli.dart` entry point: 117 → 49 lines (3 `cli.module()` registrations)
+- **cli_router regression tests**: 7 empty-mount tests added to cli_router
+
 ## [0.0.12]
 ### Added
 - **FSM Declarative Transition Contract** (#51): YAML-based state machine contract defining allowed/forbidden transitions and operations
