@@ -273,7 +273,7 @@ VERIFICAR:
 
 ### Pasos
 
-- [ ] **4.1** Crear `collection-process.md` en el directorio del issue con la siguiente estructura:
+- [x] **4.1** Crear `collection-process.md` en el directorio del issue con la siguiente estructura:
 
   ```markdown
   ---
