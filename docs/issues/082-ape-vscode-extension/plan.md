@@ -248,10 +248,10 @@ npx vsce package --no-dependencies  # → ape-vscode-0.0.1.vsix
 - [x] **6.3** `icon.png` 128×128 (SVG→PNG, vsce requiere PNG)
 - [x] **6.4** `repository`, `categories`, `keywords` en package.json
 - [x] **6.5** `ape-vscode-0.0.1.vsix` — 61 KB, 19 files
-- [ ] **6.6** Publicar: `npx vsce publish` — pendiente autorización usuario
+- [x] **6.6** Publicado: `ccisnedev.ape-vscode v0.0.1` en Marketplace
 
 **Verificación:**
-- [ ] La extensión aparece en marketplace.visualstudio.com
+- [x] La extensión aparece en marketplace.visualstudio.com
 - [ ] El README se renderiza correctamente como landing page
 - [ ] Instalar desde Marketplace en VS Code limpio → funciona
 
