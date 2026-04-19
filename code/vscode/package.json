@@ -4,11 +4,14 @@
   "publisher": "ccisnedev",
   "version": "0.0.1",
   "description": "APE — Autonomous Programming Engine for VS Code",
+  "license": "MIT",
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/ccisne-dev/finite_ape_machine"
   },
+  "bugs": { "url": "https://github.com/ccisne-dev/finite_ape_machine/issues" },
+  "homepage": "https://github.com/ccisne-dev/finite_ape_machine",
   "categories": ["Other"],
   "keywords": ["ape", "cli", "fsm", "state-machine"],
   "engines": {
