@@ -117,8 +117,12 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [0.0.2]
 ### Added
-- Initial Dart project scaffold and `ape init` command.
 - `assets` module with `ape` agent and memory skills.
 - Adapter pattern with 5 targets (claude, codex, copilot, crush, gemini).
 - Deployer and `ape target get` / `ape target clean` commands.
 - `ape version` command.
+
+## [0.0.1]
+### Added
+- Initial Dart project scaffold with `modular_cli_sdk`.
+- `ape init` command.

@@ -2,7 +2,7 @@
 
 **Author:** C. Cisneros (ccisnedev)
 
-**Abstract.** We present the Finite APE Machine (APE), a methodology and framework for AI-assisted software development that models AI coding agents as cooperative finite state machines orchestrated by an event loop inspired by embedded systems architectures. APE introduces a structured cycle — Analyze, Plan, Execute + Learn — where specialized agents ("apes") operate as deterministic automata with prompts as transition functions. The framework contributes several novel constructs: (1) a cooperative event loop orchestrator adapted from microcontroller scheduling, enabling emergent intelligent behavior from the coordination of simple agents; (2) Memory as Code, a persistent project memory system that applies database-inspired indexing patterns to version-controlled markdown files; (3) DARWIN, an evolutionary meta-agent whose output modifies other agents' transition functions across three learning levels; (4) a semantic risk matrix that replaces mechanical approval with context-aware human gates, addressing the documented problem of automation complacency; and (5) @contracts, a language-agnostic mechanism linking test code to specifications for full traceability. We formalize the collaboration model as Agent-Aided Design, Engineering, and Manufacturing (AAD/AAE/AAM), drawing an explicit analogy to the CAD/CAE/CAM paradigm that transformed manufacturing. The framework is designed to be antifragile across multiple AI market scenarios — from cloud model collapse to capability plateaus — by prioritizing methodology over model capability. We position APE within the existing literature on multi-agent systems, finite automata theory, control theory, and human-AI collaboration, identifying ten original contributions to the field.
+**Abstract.** We present the Finite APE Machine (APE), a methodology and framework for AI-assisted software development that models AI coding agents as cooperative finite state machines orchestrated by an event loop inspired by embedded systems architectures. APE introduces a structured cycle — Analyze, Plan, Execute + Learn — where specialized agents ("apes") operate as deterministic-in-specification automata with prompts as transition functions. The framework applies known techniques in a novel context, contributing six primary constructs: (1) prompts formalized as FSM transition functions δ; (2) a cooperative event loop orchestrator adapted from microcontroller scheduling; (3) Memory as Code, a persistent project memory system with database-inspired indexing over version-controlled markdown; (4) DARWIN, an evolutionary meta-agent that modifies other agents' transition functions across three learning levels — empirically validated with 9 generated evolution issues; (5) a semantic risk matrix addressing automation complacency through context-aware human gates; and (6) antifragile design across four AI market scenarios. Both the framework and this paper are under active construction — APE is being built using itself (v0.0.14, 131 tests, 69 issues/PRs), providing bootstrap validation through self-construction. We position APE within the existing literature on multi-agent systems, finite automata theory, control theory, and human-AI collaboration.
 
 **Keywords:** AI agents, finite state machines, multi-agent orchestration, software engineering methodology, test-driven development, evolutionary learning, human-AI collaboration
 
@@ -94,14 +94,21 @@ The methodology follows a four-phase cycle applied to every development task:
 
 **Plan.** The SOCRATES (in planning mode) or a dedicated PLANNER produces a phased runbook — an ordered sequence of implementation steps, each with entry criteria, deliverables, and verification conditions. This is not a suggestion; it is the execution contract.
 
-**Execute.** Seven specialized apes collaborate through the orchestrator, each a minimal FSM with defined states:
-- **MARCOPOLO** (document ingestion) ingests external documents (PDFs, Word, spreadsheets) and normalizes them into structured markdown for the memory system. States: {IDLE, INGESTING, NORMALIZING, COMPLETE}.
+**Execute.** Specialized apes collaborate through the orchestrator, each a minimal FSM with defined states. The full design roster includes seven apes; the current implementation (v0.0.14) deploys four — SOCRATES, DESCARTES, BASHŌ, and DARWIN — with additional apes to be introduced as the framework matures and empirical evidence justifies their necessity.
+
+*Current implementation:*
 - **SOCRATES** (requirements analysis) decomposes requirements, classifies risk, and produces scope documents. States: {IDLE, READING, ANALYZING, COMPLETE}.
-- **VITRUVIUS** (decomposition and structuring) generates work breakdown structures, phase ordering, effort estimation, and runbooks. States: {IDLE, DECOMPOSING, ORDERING, COMPLETE}.
-- **ADA** (TDD implementation) operates in strict TDD: RED (write failing test) → GREEN (make it pass). These are atomic states from the orchestrator's perspective. States: {IDLE, RED, GREEN, REFACTOR}.
-- **GATSBY** (contract definition and RED tests) validates test quality, coverage, and @contract compliance independently of ADA. States: {IDLE, VALIDATING, COMPLETE}.
-- **DIJKSTRA** (quality gate) performs code review against specifications, project conventions, and security criteria. States: {IDLE, REVIEWING, APPROVED, CHANGES_REQUESTED}.
-- **BORGES** (documentation compiler) maintains documentation consistency, enforcing schema on all memory files as a documentation compiler. States: {IDLE, VALIDATING, WRITING, COMPLETE}.
+- **DESCARTES** (planning) produces phased runbooks with entry criteria, deliverables, and verification conditions. States: {IDLE, DECOMPOSING, ORDERING, COMPLETE}.
+- **BASHŌ** (execution) implements following the plan strictly, operating in TDD when applicable. States: {IDLE, RED, GREEN, REFACTOR}.
+- **DARWIN** (evolution) extracts lessons from the execution trace and updates the learning hierarchy (Section 6). States: {IDLE, EVALUATING, COMPLETE}.
+
+*Design roster (future, pending empirical justification):*
+- **MARCOPOLO** (document ingestion) ingests external documents and normalizes them into structured markdown.
+- **GATSBY** (contract validation) validates test quality, coverage, and @contract compliance independently.
+- **DIJKSTRA** (quality gate) performs code review against specifications, conventions, and security criteria.
+- **BORGES** (documentation compiler) maintains documentation consistency, enforcing schema on all memory files.
+
+> **Note:** Both this paper and `ape_cli` are under active construction. The agent roster will evolve based on empirical evidence from the bootstrap process. See the public repository for current state: https://github.com/ccisnedev/finite_ape_machine
 
 **Learn (DARWIN).** After task completion, the DARWIN meta-agent extracts lessons from the execution trace and updates the learning hierarchy (Section 6).
 
@@ -197,7 +204,20 @@ DARWIN operates across three levels with decreasing frequency and increasing sco
 
 **Level 3 — Framework.** Optionally and with explicit user consent, anonymized patterns can be contributed to the framework repository. This creates a community learning flywheel — more users → more patterns → smarter defaults → more value — analogous to Holland's [30] classifier systems where successful rules propagate through a population.
 
-### 6.3 The Flywheel Effect
+### 6.3 Empirical Evidence: DARWIN in Practice
+
+DARWIN is not aspirational — it is deployed and producing observable results. After completing APE cycle #51 ("Enforce non-execution guardrails in IDLE"), DARWIN generated issue [#54](https://github.com/ccisnedev/finite_ape_machine/issues/54): "APE Cycle #51 Evaluation: Process and Pattern Learnings." The issue contains:
+
+- A structured comparison of plan vs. execution (5 phases, 0 deviations)
+- Three reusable patterns extracted: (1) Precondition Validation > Tool Gating, (2) FSM Declarativo YAML > Code-Based FSM, (3) Fail-Closed Prompt Registry > Silent Fallback
+- An evaluation matrix of the APE process itself (ANALYZE sufficient? PLAN detailed? EXECUTE fluid?)
+- Actionable recommendations for future cycles
+
+As of v0.0.14, DARWIN has generated 9 issues labeled `evolution` (see [issue list](https://github.com/ccisnedev/finite_ape_machine/issues?q=label%3Aevolution)). Of these, #51 was closed (its recommendation adopted in a subsequent cycle), demonstrating the complete feedback loop: DARWIN observes → generates issue → maintainer triages → issue is addressed in a future APE cycle.
+
+Currently, DARWIN reads `.ape/mutations.md` (human observations written during the cycle) as additional input. Future versions will also feed automated metrics (test deltas, deviation counts) to enrich DARWIN's analysis.
+
+### 6.4 The Flywheel Effect
 
 The three-level hierarchy creates a compounding improvement mechanism. Unlike static frameworks where capability is fixed at release, APE improves continuously through use. This property is particularly valuable under Scenario C (Section 8) — when the underlying LLM cannot improve, DARWIN remains the only available improvement mechanism.
 
@@ -242,29 +262,35 @@ Under all four scenarios, APE's value proposition strengthens or remains stable.
 
 ---
 
-## 9. Original Contributions
+## 9. Contributions
 
-We identify ten contributions that, to our knowledge, are novel in the literature:
+We identify six primary contributions — applications of known techniques in a novel context — and four derived properties that emerge from their combination:
 
-1. **Prompts as transition functions.** Formalizing LLM prompts as δ in the FSM 5-tuple A = (S, C, δ, s₀, F), treating prompt engineering as automata design rather than informal craft.
+### Primary contributions
 
-2. **Cooperative event loop orchestration for AI agents.** Applying the cooperative multitasking model from 8-bit embedded systems to LLM agent coordination, with apes as FSM tasks sharing state through project memory.
+1. **Prompts as transition functions.** Applying FSM formalism to prompt engineering: formalizing LLM prompts as δ in the 5-tuple A = (S, C, δ, s₀, F), treating prompt design as automata design. While prior work [11, 12] uses FSMs to describe agent behavior, APE treats the prompt itself as the mathematical object δ.
 
-3. **Memory as Code.** A persistent memory system for AI agents that uses version-controlled markdown files with database-inspired indexing (primary index, YAML-as-WHERE-clause, BORGES-as-schema-enforcer), eliminating external dependencies while maintaining queryability.
+2. **Cooperative event loop orchestration for AI agents.** Applying the cooperative multitasking model from 8-bit embedded systems [17] to LLM agent coordination, with apes as FSM tasks sharing state through project memory. The interleaving property — where the orchestrator inserts validation and review steps between an agent's atomic states without the agent's awareness — enables rich workflow behavior from simple agent implementations.
 
-4. **BORGES as documentation compiler.** An agent that enforces schema constraints on project documentation, functioning as the equivalent of database DDL enforcement applied to a markdown knowledge base.
+3. **Memory as Code.** A persistent memory system for AI agents that uses version-controlled markdown files with database-inspired indexing (primary index, YAML-as-WHERE-clause, schema enforcement), eliminating external dependencies while maintaining queryability. The schema enforcement agent (BORGES) functions as database DDL enforcement applied to a markdown knowledge base.
 
-5. **DARWIN as evolutionary meta-agent.** A meta-learning agent whose output modifies other agents' transition functions, operating across a three-level hierarchy (project → methodology → framework) that creates compounding improvement.
+4. **DARWIN as evolutionary meta-agent.** A meta-learning agent whose output modifies other agents' transition functions, operating across a three-level hierarchy (project → methodology → framework) that creates compounding improvement. Empirically validated: 9 evolution issues generated as of v0.0.14 (§6.3).
 
-6. **@contracts.** Language-agnostic semantic metadata embedded in test comments that creates bidirectional traceability between specifications and verification code, enabling automated compliance verification.
+5. **Semantic risk matrix.** A context-aware human gate system that classifies actions by impact × domain to determine approval authority, directly addressing the documented problem of automation complacency [7, 8] by ensuring that human attention is reserved for decisions requiring engineering judgment.
 
-7. **Semantic risk matrix.** A context-aware human gate system that classifies actions by impact × domain to determine approval authority, directly addressing automation complacency by ensuring that human attention is reserved for decisions requiring engineering judgment.
+6. **Antifragile framework design.** A deliberate architectural strategy that ensures the framework benefits from AI market disorder across four identified scenarios (§8), achieved through local-first design, model-agnostic prompts, and methodology-over-model prioritization.
 
-8. **AAD/AAE/AAM collaboration model.** A formalization of human-AI collaboration modes (Agent-Aided Design/Engineering/Manufacturing) adapted from the CAD/CAE/CAM paradigm, providing a continuous spectrum of control from full human authority to full automation.
+### Derived properties
 
-9. **Interleaving-transparent agents.** An architecture where the orchestrator inserts validation, documentation, and review steps between an agent's atomic states without the agent's awareness, enabling rich workflow behavior from simple agent implementations.
+The following emerge from the primary contributions but are not independent innovations:
 
-10. **Antifragile framework design.** A deliberate architectural strategy that ensures the framework benefits from AI market disorder across four identified scenarios, achieved through local-first design, model-agnostic prompts, and methodology-over-model prioritization.
+- **AAD/AAE/AAM collaboration taxonomy.** A framing of human-AI collaboration modes (Agent-Aided Design/Engineering/Manufacturing) adapted from the CAD/CAE/CAM paradigm [29]. This provides vocabulary for describing the control spectrum but is not a technical mechanism.
+
+- **@contracts (proposed).** Language-agnostic semantic metadata for bidirectional spec ↔ test traceability. Not yet implemented; included as design intent for future validation.
+
+- **Interleaving transparency.** A property of contribution #2 (the event loop): agents are unaware of orchestrator-inserted steps between their state transitions.
+
+- **Documentation-as-schema.** A property of contribution #3 (Memory as Code): an agent enforcing structural constraints on the knowledge base, analogous to DDL in relational databases.
 
 ---
 
@@ -276,7 +302,7 @@ The Finite APE Machine demonstrates that the missing element in AI-assisted soft
 
 Future work includes: empirical validation through the aforementioned companion study; extension of the DARWIN learning mechanism to cross-user pattern sharing; formal verification of orchestrator properties (liveness, safety, fairness); and implementation of model-routing optimization for Scenario D (cost-aware per-ape model assignment).
 
-The framework's tagline — *infinite monkeys produce noise; finite APEs produce software* — encapsulates both its thesis and its aspiration: that constraint, not freedom, is the path to reliable AI-assisted software engineering.
+The framework's thesis — that constraint, not freedom, is the path to reliable AI-assisted software engineering — is validated through its own self-constructing development history: 14 versions, 131 tests, 69 issues/PRs, and 9 DARWIN-generated evolution issues, all produced by the methodology describing itself.
 
 ---
 
@@ -353,7 +379,3 @@ The framework's tagline — *infinite monkeys produce noise; finite APEs produce
 [35] Bai, Y., Kadavath, S., Kundu, S., et al. (2022). Constitutional AI: Harmlessness from AI feedback. *Anthropic*. arXiv:2212.08073.
 
 [36] Nygard, M. T. (2011). Documenting architecture decisions. *Cognitect Blog*. See also: ADR community standard at adr.github.io.
-
----
-
-*Acknowledgments.* The Finite APE Machine is intellectually inspired by gentle-ai (Gentleman Programming), acknowledged with gratitude. No code is shared. The framework was designed through iterative human-AI collaboration sessions using the APE methodology itself — a bootstrap process that served as the first validation of the approach.*
