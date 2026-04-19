@@ -15,4 +15,17 @@ void main() {
         reason:
             'version.dart ($apeVersion) must match pubspec.yaml ($yamlVersion)');
   });
+
+  test('site index.html badge matches pubspec.yaml version', () {
+    final indexFile = File('../../code/site/index.html');
+    expect(indexFile.existsSync(), isTrue,
+        reason: 'code/site/index.html must exist');
+    final html = indexFile.readAsStringSync();
+    final match = RegExp(r'class="badge">v(\d+\.\d+\.\d+)').firstMatch(html);
+    expect(match, isNotNull, reason: 'index.html must contain a version badge');
+    final webVersion = match!.group(1)!;
+    expect(apeVersion, equals(webVersion),
+        reason:
+            'index.html badge (v$webVersion) must match version.dart ($apeVersion)');
+  });
 }
