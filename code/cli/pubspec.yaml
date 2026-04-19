@@ -1,12 +1,12 @@
 name: ape_cli
 description: >
   CLI for the finite ape machine — workspace initialization and orchestration.
-version: 0.0.12
+version: 0.0.13
 
 environment:
   sdk: ^3.8.1
 dependencies:
-  cli_router: ^0.0.2
+  cli_router: ^0.0.3
   modular_cli_sdk: ^0.2.1
   path: ^1.9.1
   yaml: ^3.1.3

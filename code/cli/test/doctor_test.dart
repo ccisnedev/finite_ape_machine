@@ -10,8 +10,6 @@ void main() {
       bool gitFails = false,
       bool ghFails = false,
       bool ghAuthFails = false,
-      bool copilotFails = false,
-      bool vscodeFails = false,
     }) {
       return (
         String executable,
@@ -24,19 +22,6 @@ void main() {
             return ProcessResult(1, 1, '', 'git: command not found');
           }
           return ProcessResult(0, 0, 'git version 2.43.0', '');
-        }
-
-        // gh copilot --version (check before gh --version!)
-        if (executable == 'gh' && arguments.contains('copilot')) {
-          if (copilotFails) {
-            return ProcessResult(
-              1,
-              1,
-              '',
-              'gh: "copilot" is not a gh command.',
-            );
-          }
-          return ProcessResult(0, 0, 'gh copilot version 1.0.0', '');
         }
 
         // gh auth status
@@ -57,25 +42,12 @@ void main() {
           );
         }
 
-        // gh --version (after copilot and auth checks)
+        // gh --version
         if (executable == 'gh' && arguments.contains('--version')) {
           if (ghFails) {
             return ProcessResult(1, 1, '', 'gh: command not found');
           }
           return ProcessResult(0, 0, 'gh version 2.45.0 (2024-03-01)', '');
-        }
-
-        // code --list-extensions
-        if (executable == 'code' && arguments.contains('--list-extensions')) {
-          if (vscodeFails) {
-            return ProcessResult(1, 1, '', 'code: command not found');
-          }
-          return ProcessResult(
-            0,
-            0,
-            'GitHub.copilot\nGitHub.copilot-chat\nms-python.python\n',
-            '',
-          );
         }
 
         // Default: success
@@ -94,26 +66,8 @@ void main() {
 
       expect(output.passed, isTrue);
       expect(output.exitCode, 0);
-      expect(output.checks.length, 6);
+      expect(output.checks.length, 4);
       expect(output.checks.every((c) => c.passed), isTrue);
-    });
-
-    test('vscode copilot missing → exit 1', () async {
-      final cmd = DoctorCommand(
-        DoctorInput(),
-        runProcess: fakeRunner(vscodeFails: true),
-        apeVersionOverride: '0.0.9',
-      );
-
-      final output = await cmd.execute();
-
-      expect(output.passed, isFalse);
-      expect(output.exitCode, 1);
-
-      final vscodeCheck = output.checks.firstWhere(
-        (c) => c.name == 'vscode copilot',
-      );
-      expect(vscodeCheck.passed, isFalse);
     });
 
     test('git missing → exit 1, stopped at git', () async {
@@ -165,24 +119,6 @@ void main() {
       expect(authCheck.passed, isFalse);
     });
 
-    test('copilot missing → exit 1', () async {
-      final cmd = DoctorCommand(
-        DoctorInput(),
-        runProcess: fakeRunner(copilotFails: true),
-        apeVersionOverride: '0.0.9',
-      );
-
-      final output = await cmd.execute();
-
-      expect(output.passed, isFalse);
-      expect(output.exitCode, 1);
-
-      final copilotCheck = output.checks.firstWhere(
-        (c) => c.name == 'gh copilot',
-      );
-      expect(copilotCheck.passed, isFalse);
-    });
-
     test('toJson() returns correct structure', () async {
       final cmd = DoctorCommand(
         DoctorInput(),
@@ -195,7 +131,7 @@ void main() {
 
       expect(json, containsPair('passed', true));
       expect(json['checks'], isList);
-      expect((json['checks'] as List).length, 6);
+      expect((json['checks'] as List).length, 4);
 
       final firstCheck = (json['checks'] as List).first as Map<String, dynamic>;
       expect(firstCheck, containsPair('name', 'ape'));

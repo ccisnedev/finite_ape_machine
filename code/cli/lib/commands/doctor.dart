@@ -1,6 +1,6 @@
 /// Doctor command — verifies prerequisites.
 ///
-/// Checks: ape version, git, gh, gh auth, gh copilot, vscode copilot extension.
+/// Checks: ape version, git, gh, gh auth.
 library;
 
 import 'dart:io';
@@ -153,62 +153,9 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
     checks.add(authCheck);
     if (!authCheck.passed) {
       allPassed = false;
-      return DoctorOutput(checks: checks, passed: false);
-    }
-
-    // Check 5: gh copilot --version
-    final copilotCheck = await _checkCommand(
-      name: 'gh copilot',
-      executable: 'gh',
-      arguments: ['copilot', '--version'],
-      versionExtractor: _extractCopilotVersion,
-    );
-    checks.add(copilotCheck);
-    if (!copilotCheck.passed) {
-      allPassed = false;
-    }
-
-    // Check 6: VS Code with GitHub Copilot extension
-    final vscodeCheck = await _checkVsCodeCopilot();
-    checks.add(vscodeCheck);
-    if (!vscodeCheck.passed) {
-      allPassed = false;
     }
 
     return DoctorOutput(checks: checks, passed: allPassed);
-  }
-
-  /// Checks that VS Code is installed and has the GitHub Copilot extension.
-  Future<DoctorCheck> _checkVsCodeCopilot() async {
-    try {
-      final result = await _runProcess('code', ['--list-extensions']);
-      if (result.exitCode != 0) {
-        return DoctorCheck(
-          name: 'vscode copilot',
-          passed: false,
-          error: 'VS Code CLI not found',
-        );
-      }
-      final extensions = result.stdout.toString();
-      final hasCopilot = extensions
-          .split('\n')
-          .any((line) => line.trim().toLowerCase() == 'github.copilot');
-      if (hasCopilot) {
-        return DoctorCheck(name: 'vscode copilot', passed: true);
-      } else {
-        return DoctorCheck(
-          name: 'vscode copilot',
-          passed: false,
-          error: 'GitHub Copilot extension not installed in VS Code',
-        );
-      }
-    } catch (e) {
-      return DoctorCheck(
-        name: 'vscode copilot',
-        passed: false,
-        error: e.toString(),
-      );
-    }
   }
 
   /// Runs a command and returns a [DoctorCheck] with the result.
@@ -244,12 +191,6 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
   /// Extracts version from "gh version X.Y.Z (...)".
   String? _extractGhVersion(String stdout) {
     final match = RegExp(r'gh version (\d+\.\d+\.\d+)').firstMatch(stdout);
-    return match?.group(1);
-  }
-
-  /// Extracts version from "gh copilot version X.Y.Z".
-  String? _extractCopilotVersion(String stdout) {
-    final match = RegExp(r'copilot version (\d+\.\d+\.\d+)').firstMatch(stdout);
     return match?.group(1);
   }
 }
