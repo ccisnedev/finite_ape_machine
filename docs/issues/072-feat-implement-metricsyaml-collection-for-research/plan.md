@@ -393,26 +393,26 @@ VERIFICAR:
 
 ### Pasos
 
-- [ ] **5.1** Ejecutar la suite completa de tests del CLI:
+- [x] **5.1** Ejecutar la suite completa de tests del CLI:
   ```bash
   cd code/cli && dart test
   ```
   - Criterio: **Todos los tests pasan** (0 failures).
   - Si algún test falla, diagnosticar si el fallo es causado por los cambios de Fase 1 (effects/artifacts en el contrato) o es un fallo preexistente.
 
-- [ ] **5.2** Validar YAML del contrato de transiciones:
+- [x] **5.2** Validar YAML del contrato de transiciones:
   ```bash
   python -c "import yaml; yaml.safe_load(open('code/cli/assets/fsm/transition_contract.yaml'))"
   ```
   - Criterio: Sin errores de parsing.
 
-- [ ] **5.3** Verificar coherencia cruzada entre artefactos:
+- [x] **5.3** Verificar coherencia cruzada entre artefactos:
   - `transition_contract.yaml` declara `snapshot_metrics` → `ape.agent.md` IDLE menciona snapshot → `metrics-schema.md` Notes menciona snapshot → `collection-process.md` Punto 1 describe snapshot.
   - `transition_contract.yaml` declara `collect_metrics` → `ape.agent.md` EVOLUTION menciona generación → DARWIN prompt tiene Metrics Collection → `collection-process.md` Punto 2 describe recolección.
   - `ape.agent.md` DARWIN Rules dice "Exception: write `.ape/metrics.yaml`" → `collection-process.md` confirma DARWIN escribe en `.ape/`.
   - `ape.agent.md` EVOLUTION menciona copia condicional → `collection-process.md` Copia condicional describe la condición.
 
-- [ ] **5.4** Verificar que los 7 acceptance criteria del diagnóstico §7 están cubiertos:
+- [x] **5.4** Verificar que los 7 acceptance criteria del diagnóstico §7 están cubiertos:
   1. ✅ `transition_contract.yaml` declara `snapshot_metrics` en IDLE → ANALYZE → Fase 1.1
   2. ✅ `transition_contract.yaml` declara `collect_metrics` en EVOLUTION → IDLE → Fase 1.2
   3. ✅ `ape.agent.md` incluye instrucciones para DARWIN genere `.ape/metrics.yaml` → Fase 2C.1
