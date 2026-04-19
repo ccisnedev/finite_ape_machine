@@ -156,6 +156,68 @@ void main() {
       });
     });
 
+    // ─── Step 5: .ape/config.yaml ─────────────────────────────────────
+
+    group('.ape/config.yaml', () {
+      test('creates .ape/config.yaml with default config', () async {
+        final command = InitCommand(InitInput(workingDirectory: tempDir.path));
+        await command.execute();
+
+        final configFile = File('${tempDir.path}/.ape/config.yaml');
+        expect(configFile.existsSync(), isTrue);
+
+        final content = configFile.readAsStringSync();
+        expect(content, contains('evolution:'));
+        expect(content, contains('enabled: false'));
+      });
+
+      test('skips .ape/config.yaml if already exists', () async {
+        Directory('${tempDir.path}/.ape').createSync();
+        File(
+          '${tempDir.path}/.ape/config.yaml',
+        ).writeAsStringSync('evolution:\n  enabled: true\n');
+
+        final command = InitCommand(InitInput(workingDirectory: tempDir.path));
+        await command.execute();
+
+        final content = File(
+          '${tempDir.path}/.ape/config.yaml',
+        ).readAsStringSync();
+        expect(content, contains('enabled: true'));
+      });
+    });
+
+    // ─── Step 6: .ape/mutations.md ──────────────────────────────────
+
+    group('.ape/mutations.md', () {
+      test('creates .ape/mutations.md with header template', () async {
+        final command = InitCommand(InitInput(workingDirectory: tempDir.path));
+        await command.execute();
+
+        final mutationsFile = File('${tempDir.path}/.ape/mutations.md');
+        expect(mutationsFile.existsSync(), isTrue);
+
+        final content = mutationsFile.readAsStringSync();
+        expect(content, contains('# Mutations'));
+        expect(content, contains('Notes for DARWIN'));
+      });
+
+      test('skips .ape/mutations.md if already exists', () async {
+        Directory('${tempDir.path}/.ape').createSync();
+        File(
+          '${tempDir.path}/.ape/mutations.md',
+        ).writeAsStringSync('# Mutations\n\n- My custom note\n');
+
+        final command = InitCommand(InitInput(workingDirectory: tempDir.path));
+        await command.execute();
+
+        final content = File(
+          '${tempDir.path}/.ape/mutations.md',
+        ).readAsStringSync();
+        expect(content, contains('My custom note'));
+      });
+    });
+
     // ─── Idempotency ──────────────────────────────────────────────────
 
     group('idempotency', () {
@@ -170,6 +232,12 @@ void main() {
         final gitignoreAfterFirst = File(
           '${tempDir.path}/.gitignore',
         ).readAsStringSync();
+        final configAfterFirst = File(
+          '${tempDir.path}/.ape/config.yaml',
+        ).readAsStringSync();
+        final mutationsAfterFirst = File(
+          '${tempDir.path}/.ape/mutations.md',
+        ).readAsStringSync();
 
         await command.execute();
         // Verify state unchanged after second run
@@ -179,9 +247,17 @@ void main() {
         final gitignoreAfterSecond = File(
           '${tempDir.path}/.gitignore',
         ).readAsStringSync();
+        final configAfterSecond = File(
+          '${tempDir.path}/.ape/config.yaml',
+        ).readAsStringSync();
+        final mutationsAfterSecond = File(
+          '${tempDir.path}/.ape/mutations.md',
+        ).readAsStringSync();
 
         expect(stateAfterSecond, equals(stateAfterFirst));
         expect(gitignoreAfterSecond, equals(gitignoreAfterFirst));
+        expect(configAfterSecond, equals(configAfterFirst));
+        expect(mutationsAfterSecond, equals(mutationsAfterFirst));
         expect(Directory('${tempDir.path}/docs/issues').existsSync(), isTrue);
       });
     });

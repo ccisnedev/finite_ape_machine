@@ -2,7 +2,7 @@
 id: plan
 title: "EVOLUTION infrastructure: config.yaml + mutations.md lifecycle"
 date: 2026-04-18
-status: draft
+status: approved
 tags: [evolution, config, mutations, fsm, init]
 author: DESCARTES
 ---
@@ -31,8 +31,8 @@ If we add two new files to `ape init` (config.yaml, mutations.md), declare `rese
 
 Smallest change. No code logic — only YAML edits to existing transitions.
 
-- [ ] 1.1 IDLE→ANALYZE (`start_analyze`): change `effects: [open_analysis_context]` → `effects: [open_analysis_context, reset_mutations]`
-- [ ] 1.2 EVOLUTION→IDLE (`finish_evolution`): change `effects: [close_cycle]` → `effects: [close_cycle, reset_mutations]`
+- [x] 1.1 IDLE→ANALYZE (`start_analyze`): change `effects: [open_analysis_context]` → `effects: [open_analysis_context, reset_mutations]`
+- [x] 1.2 EVOLUTION→IDLE (`finish_evolution`): change `effects: [close_cycle]` → `effects: [close_cycle, reset_mutations]`
 
 **Risk:** None. Effects are opaque strings. Existing tests validate transition structure (from/to/allowed), not effect content.
 
@@ -44,8 +44,8 @@ Smallest change. No code logic — only YAML edits to existing transitions.
 
 Documentation-only change. No runtime impact.
 
-- [ ] 2.1 In DARWIN prompt `## Input` section (~line 470), add bullet: `- .ape/mutations.md (human observations about APE's process performance during this cycle)`
-- [ ] 2.2 In EVOLUTION state description (~line 155), add note: "DARWIN reads `.ape/mutations.md` for human observations about APE's process performance."
+- [x] 2.1 In DARWIN prompt `## Input` section (~line 470), add bullet: `- .ape/mutations.md (human observations about APE's process performance during this cycle)`
+- [x] 2.2 In EVOLUTION state description (~line 155), add note: "DARWIN reads `.ape/mutations.md` for human observations about APE's process performance."
 
 **Risk:** None. Agent prompt is read by the LLM at runtime — no compilation, no parsing.
 
@@ -57,7 +57,7 @@ Documentation-only change. No runtime impact.
 
 Two new `_ensure*` methods following the exact pattern of `_ensureStateYaml()`.
 
-- [ ] 3.1 Add `_ensureConfigYaml(String root, List<String> steps)`:
+- [x] 3.1 Add `_ensureConfigYaml(String root, List<String> steps)`:
   - Path: `$root/.ape/config.yaml`
   - Guard: `if (!configFile.existsSync())`
   - Content:
@@ -67,7 +67,7 @@ Two new `_ensure*` methods following the exact pattern of `_ensureStateYaml()`.
     ```
   - Append step message: `'Created .ape/config.yaml'`
 
-- [ ] 3.2 Add `_ensureMutationsMd(String root, List<String> steps)`:
+- [x] 3.2 Add `_ensureMutationsMd(String root, List<String> steps)`:
   - Path: `$root/.ape/mutations.md`
   - Guard: `if (!mutationsFile.existsSync())`
   - Content:
@@ -79,7 +79,7 @@ Two new `_ensure*` methods following the exact pattern of `_ensureStateYaml()`.
     ```
   - Append step message: `'Created .ape/mutations.md'`
 
-- [ ] 3.3 Call both methods from `execute()`, after `_ensureStateYaml(root, steps)`:
+- [x] 3.3 Call both methods from `execute()`, after `_ensureStateYaml(root, steps)`:
   ```dart
   // Step 5: Create .ape/config.yaml with defaults
   _ensureConfigYaml(root, steps);
@@ -88,7 +88,7 @@ Two new `_ensure*` methods following the exact pattern of `_ensureStateYaml()`.
   _ensureMutationsMd(root, steps);
   ```
 
-- [ ] 3.4 Update doc comment: "Five idempotent steps" → "Seven idempotent steps", add steps 5 and 6 to list
+- [x] 3.4 Update doc comment: "Five idempotent steps" → "Seven idempotent steps", add steps 5 and 6 to list
 
 **Risk:** `.ape/` directory might not exist if state.yaml was already present (created in a prior init run). Mitigation: `_ensureStateYaml` already creates `.ape/` dir — the new methods must also guard `apeDir.existsSync()` or rely on the fact that step 4 always runs first. Since step 4 guarantees `.ape/` exists (either created or pre-existing), steps 5-6 can assume the directory exists. Verify this assumption in tests.
 
@@ -100,7 +100,7 @@ Two new `_ensure*` methods following the exact pattern of `_ensureStateYaml()`.
 
 Four new tests in existing test file, following the temp directory pattern.
 
-- [ ] 4.1 Test: creates `.ape/config.yaml` with correct content
+- [x] 4.1 Test: creates `.ape/config.yaml` with correct content
   ```
   arrange: empty tempDir
   act:     InitCommand(tempDir).execute()
@@ -109,7 +109,7 @@ Four new tests in existing test file, following the temp directory pattern.
            content contains 'enabled: false'
   ```
 
-- [ ] 4.2 Test: creates `.ape/mutations.md` with header template
+- [x] 4.2 Test: creates `.ape/mutations.md` with header template
   ```
   arrange: empty tempDir
   act:     InitCommand(tempDir).execute()
@@ -118,21 +118,21 @@ Four new tests in existing test file, following the temp directory pattern.
            content contains 'Notes for DARWIN'
   ```
 
-- [ ] 4.3 Test: idempotent — does not overwrite existing config.yaml
+- [x] 4.3 Test: idempotent — does not overwrite existing config.yaml
   ```
   arrange: create .ape/config.yaml with 'evolution:\n  enabled: true\n'
   act:     InitCommand(tempDir).execute()
   assert:  content still contains 'enabled: true' (not overwritten to false)
   ```
 
-- [ ] 4.4 Test: idempotent — does not overwrite existing mutations.md
+- [x] 4.4 Test: idempotent — does not overwrite existing mutations.md
   ```
   arrange: create .ape/mutations.md with '# Mutations\n\nSome user notes here\n'
   act:     InitCommand(tempDir).execute()
   assert:  content still contains 'Some user notes here' (not overwritten)
   ```
 
-- [ ] 4.5 Update existing idempotency test to also verify config.yaml and mutations.md survive double-init
+- [x] 4.5 Update existing idempotency test to also verify config.yaml and mutations.md survive double-init
 
 **Risk:** Tests 4.3 and 4.4 require pre-creating `.ape/` directory. The setUp doesn't create it — each test must create it explicitly (same pattern as the existing state.yaml idempotency test at line 141).
 
@@ -140,9 +140,9 @@ Four new tests in existing test file, following the temp directory pattern.
 
 ## Phase 5 — Verification
 
-- [ ] 5.1 `dart analyze` — 0 issues
-- [ ] 5.2 `dart test` — all tests green (existing + 4-5 new)
-- [ ] 5.3 Manual smoke: `dart run example/example.dart` (if applicable) to confirm no import breakage
+- [x] 5.1 `dart analyze` — 0 issues
+- [x] 5.2 `dart test` — all tests green (existing + 4-5 new)
+- [x] 5.3 Manual smoke: `dart run example/example.dart` (if applicable) to confirm no import breakage
 
 ---
 

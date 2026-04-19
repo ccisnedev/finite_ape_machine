@@ -25,7 +25,7 @@ transitions:
     allowed: true
     operations:
       prechecks: []
-      effects: [open_analysis_context]
+      effects: [open_analysis_context, reset_mutations]
       artifacts: [analysis/index.md]
       commit_policy: none
       prompt_fragment_id: idle_to_analyze
@@ -282,7 +282,7 @@ transitions:
     allowed: true
     operations:
       prechecks: [retrospective_recorded]
-      effects: [close_cycle]
+      effects: [close_cycle, reset_mutations]
       artifacts: [retrospective.md]
       commit_policy: none
       prompt_fragment_id: evolution_to_idle
