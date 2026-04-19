@@ -11,8 +11,8 @@ import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 
-import '../targets/deployer.dart';
-import '../targets/platform_ops.dart';
+import '../../../targets/deployer.dart';
+import '../../../targets/platform_ops.dart';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 

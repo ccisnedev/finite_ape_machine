@@ -1,19 +1,19 @@
-/// `ape version` — prints the current CLI version.
+/// `ape target get` — deploys APE agents and skills to all targets.
+///
+/// Idempotent: cleans existing files before deploying (D18).
 library;
 
 import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 
-import '../src/version.dart';
-// Re-export version constant for backward compatibility.
-export '../src/version.dart';
+import '../../../targets/deployer.dart';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 
-class VersionInput extends Input {
-  VersionInput();
+class TargetGetInput extends Input {
+  TargetGetInput();
 
-  factory VersionInput.fromCliRequest(CliRequest req) => VersionInput();
+  factory TargetGetInput.fromCliRequest(CliRequest req) => TargetGetInput();
 
   @override
   Map<String, dynamic> toJson() => {};
@@ -21,13 +21,13 @@ class VersionInput extends Input {
 
 // ─── Output ─────────────────────────────────────────────────────────────────
 
-class VersionOutput extends Output {
-  final String version;
+class TargetGetOutput extends Output {
+  final String message;
 
-  VersionOutput({required this.version});
+  TargetGetOutput({required this.message});
 
   @override
-  Map<String, dynamic> toJson() => {'version': version};
+  Map<String, dynamic> toJson() => {'message': message};
 
   @override
   int get exitCode => ExitCode.ok;
@@ -35,17 +35,19 @@ class VersionOutput extends Output {
 
 // ─── Command ────────────────────────────────────────────────────────────────
 
-class VersionCommand implements Command<VersionInput, VersionOutput> {
+class TargetGetCommand implements Command<TargetGetInput, TargetGetOutput> {
   @override
-  final VersionInput input;
+  final TargetGetInput input;
+  final TargetDeployer deployer;
 
-  VersionCommand(this.input);
+  TargetGetCommand(this.input, {required this.deployer});
 
   @override
   String? validate() => null;
 
   @override
-  Future<VersionOutput> execute() async {
-    return VersionOutput(version: apeVersion);
+  Future<TargetGetOutput> execute() async {
+    deployer.deploy();
+    return TargetGetOutput(message: 'APE deployed to Github Copilot');
   }
 }

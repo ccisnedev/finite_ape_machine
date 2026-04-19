@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 
-import 'package:ape_cli/commands/init.dart';
+import 'package:ape_cli/modules/global/commands/init.dart';
 
 void main() {
   group('InitCommand', () {

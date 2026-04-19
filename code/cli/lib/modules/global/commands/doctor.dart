@@ -8,7 +8,7 @@ import 'dart:io';
 import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 
-import '../src/version.dart' as version_lib;
+import '../../../src/version.dart' as version_lib;
 
 /// Function type for running external processes.
 ///

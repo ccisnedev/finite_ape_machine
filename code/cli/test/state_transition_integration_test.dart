@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
-import 'package:ape_cli/commands/state_transition.dart';
+import 'package:ape_cli/modules/state/commands/transition.dart';
 
 void main() {
   group('state transition integration', () {

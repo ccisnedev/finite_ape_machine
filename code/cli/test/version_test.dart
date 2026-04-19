@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:ape_cli/commands/version.dart';
+import 'package:ape_cli/modules/global/commands/version.dart';
 
 void main() {
   group('ape version', () {

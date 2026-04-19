@@ -4,7 +4,7 @@ library;
 import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 
-import '../src/version.dart';
+import '../../../src/version.dart';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:ape_cli/commands/doctor.dart';
+import 'package:ape_cli/modules/global/commands/doctor.dart';
 import 'package:test/test.dart';
 
 void main() {

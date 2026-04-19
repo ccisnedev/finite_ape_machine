@@ -5,8 +5,8 @@ import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 import 'package:ape_cli/assets.dart';
-import 'package:ape_cli/commands/target_get.dart';
-import 'package:ape_cli/commands/target_clean.dart';
+import 'package:ape_cli/modules/target/commands/get.dart';
+import 'package:ape_cli/modules/target/commands/clean.dart';
 import 'package:ape_cli/targets/deployer.dart';
 import 'package:ape_cli/targets/target_adapter.dart';
 

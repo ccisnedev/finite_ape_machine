@@ -7,7 +7,7 @@ import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-import '../fsm_contract.dart';
+import '../../../fsm_contract.dart';
 
 typedef BranchProvider = Future<String> Function(String workingDirectory);
 
