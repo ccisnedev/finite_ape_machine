@@ -1,0 +1,34 @@
+{
+  "name": "ape-vscode",
+  "displayName": "APE",
+  "publisher": "ccisnedev",
+  "version": "0.0.1",
+  "description": "APE — Autonomous Programming Engine for VS Code",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "workspaceContains:.ape/"
+  ],
+  "contributes": {},
+  "scripts": {
+    "compile": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
+    "test:unit": "tsc && mocha out/test/unit/**/*.test.js",
+    "test:integration": "tsc && node ./out/test/runTest.js",
+    "package": "webpack --mode production && vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "webpack": "^5.90.0",
+    "webpack-cli": "^5.1.0",
+    "ts-loader": "^9.5.0",
+    "@types/vscode": "^1.85.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^20.0.0",
+    "mocha": "^10.2.0",
+    "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.22.0"
+  }
+}

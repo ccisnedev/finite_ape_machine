@@ -31,14 +31,14 @@ Si requiere ejecutar el binario `ape`, está FUERA de v0.0.1. Esta extensión so
 
 **Steps:**
 
-- [ ] **1.1** Crear `package.json` con: name `ape-vscode`, displayName `APE`, publisher `ccisnedev`, version `0.0.1`, engines `vscode ^1.85.0`, main `./out/extension.js`, activationEvents `workspaceContains:.ape/`
-- [ ] **1.2** Crear `tsconfig.json`: target ES2022, module Node16, strict true, outDir `./out`, rootDir `./src`, sourceMap true
-- [ ] **1.3** Crear `webpack.config.js`: entry `./src/extension.ts`, output `./out/extension.js`, target node, externals `vscode`, ts-loader
-- [ ] **1.4** Crear `src/extension.ts` con `activate()` y `deactivate()` vacíos
-- [ ] **1.5** Instalar devDependencies: `typescript`, `webpack`, `webpack-cli`, `ts-loader`, `@types/vscode`, `@types/mocha`, `@types/node`, `mocha`, `@vscode/test-electron`, `@vscode/vsce`
-- [ ] **1.6** Crear scripts npm: `compile`, `watch`, `test:unit` (mocha puro para lógica), `test:integration` (@vscode/test-electron), `package`
-- [ ] **1.7** Crear `test/unit/smoke.test.ts`: **TEST** "extension module exports activate and deactivate" — importar el módulo compilado y verificar que las funciones existen
-- [ ] **1.8** Crear `.vscodeignore` (excluir src/, test/, webpack.config.js, tsconfig.json, node_modules/) y `.gitignore` (out/, node_modules/, *.vsix)
+- [x] **1.1** Crear `package.json` con: name `ape-vscode`, displayName `APE`, publisher `ccisnedev`, version `0.0.1`, engines `vscode ^1.85.0`, main `./out/extension.js`, activationEvents `workspaceContains:.ape/`
+- [x] **1.2** Crear `tsconfig.json`: target ES2022, module Node16, strict true, outDir `./out`, rootDir `./src`, sourceMap true
+- [x] **1.3** Crear `webpack.config.js`: entry `./src/extension.ts`, output `./out/extension.js`, target node, externals `vscode`, ts-loader
+- [x] **1.4** Crear `src/extension.ts` con `activate()` y `deactivate()` vacíos
+- [x] **1.5** Instalar devDependencies: `typescript`, `webpack`, `webpack-cli`, `ts-loader`, `@types/vscode`, `@types/mocha`, `@types/node`, `mocha`, `@vscode/test-electron`, `@vscode/vsce`
+- [x] **1.6** Crear scripts npm: `compile`, `watch`, `test:unit` (mocha puro para lógica), `test:integration` (@vscode/test-electron), `package`
+- [x] **1.7** Crear `test/unit/smoke.test.ts`: **TEST** "extension module exports activate and deactivate" — importar el módulo compilado y verificar que las funciones existen
+- [x] **1.8** Crear `.vscodeignore` (excluir src/, test/, webpack.config.js, tsconfig.json, node_modules/) y `.gitignore` (out/, node_modules/, *.vsix)
 
 **Verificación:**
 ```bash
