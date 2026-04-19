@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.0.14]
+### Added
+- **EVOLUTION infrastructure** (#68): `.ape/config.yaml` + `.ape/mutations.md` lifecycle
+  - `ape init` creates `.ape/config.yaml` with `evolution.enabled: false` default
+  - `ape init` creates `.ape/mutations.md` with header template for DARWIN
+  - Both files are idempotent (never overwritten if already present)
+  - `reset_mutations` effect declared in IDLE→ANALYZE and EVOLUTION→IDLE transitions
+  - DARWIN prompt updated to include `mutations.md` as input
+
 ## [0.0.13]
 ### Changed
 - **Modular structure refactor** (#66): Align ape_cli with modular_cli_sdk conventions

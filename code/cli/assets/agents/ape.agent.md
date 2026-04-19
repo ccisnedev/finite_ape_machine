@@ -160,6 +160,7 @@ DARWIN uses **natural selection**: observe what worked, what failed, what mutate
 
 1. Invoke DARWIN via `runSubagent` with:
    - `diagnosis.md`, `plan.md`, commit history, deviation annotations
+   - `.ape/mutations.md` (human observations about APE's process performance during this cycle)
    - The DARWIN prompt (see section below)
 2. DARWIN evaluates APE's process performance.
 3. DARWIN searches for existing issues: `gh issue list --repo ccisnedev/finite_ape_machine --search "keyword"`.
@@ -468,6 +469,7 @@ You receive the complete cycle artifacts:
 - diagnosis.md (what was analyzed)
 - plan.md (what was planned, with checkbox state and deviation annotations)
 - retrospective.md (what went well, what deviated, what surprised, spawn issues)
+- .ape/mutations.md (human observations about APE's process performance during this cycle)
 - Commit history (what was actually built)
 - Any deviation notes
 

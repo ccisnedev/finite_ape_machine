@@ -1,11 +1,13 @@
 /// `ape init` — initializes APE in the working directory.
 ///
-/// Five idempotent steps:
+/// Seven idempotent steps:
 /// 1. Detect docs directory (doc/ or docs/, prefer docs/)
 /// 2. Create {docs}/issues/ if missing
 /// 3. Add .ape/ to .gitignore
 /// 4. Create .ape/state.yaml with IDLE state
-/// 5. Deploy ape.agent.md to active target
+/// 5. Create .ape/config.yaml with defaults
+/// 6. Create .ape/mutations.md with header template
+/// 7. Deploy ape.agent.md to active target
 library;
 
 import 'dart:io';
@@ -82,7 +84,13 @@ class InitCommand implements Command<InitInput, InitOutput> {
     // Step 4: Create .ape/state.yaml with IDLE state
     _ensureStateYaml(root, steps);
 
-    // Step 5: Deploy is handled by `ape target get` — not duplicated here.
+    // Step 5: Create .ape/config.yaml with defaults
+    _ensureConfigYaml(root, steps);
+
+    // Step 6: Create .ape/mutations.md with header template
+    _ensureMutationsMd(root, steps);
+
+    // Step 7: Deploy is handled by `ape target get` — not duplicated here.
 
     if (steps.isEmpty) {
       return InitOutput(
@@ -141,6 +149,34 @@ class InitCommand implements Command<InitInput, InitOutput> {
         'complete: []\n',
       );
       steps.add('Created .ape/state.yaml');
+    }
+  }
+
+  /// Ensures `.ape/config.yaml` exists with default configuration.
+  void _ensureConfigYaml(String root, List<String> steps) {
+    final configFile = File('$root/.ape/config.yaml');
+
+    if (!configFile.existsSync()) {
+      configFile.writeAsStringSync(
+        'evolution:\n'
+        '  enabled: false\n',
+      );
+      steps.add('Created .ape/config.yaml');
+    }
+  }
+
+  /// Ensures `.ape/mutations.md` exists with header template.
+  void _ensureMutationsMd(String root, List<String> steps) {
+    final mutationsFile = File('$root/.ape/mutations.md');
+
+    if (!mutationsFile.existsSync()) {
+      mutationsFile.writeAsStringSync(
+        '# Mutations\n'
+        '\n'
+        'Notes for DARWIN. Write observations about the current cycle here.\n'
+        'This file is read during EVOLUTION and cleared afterwards.\n',
+      );
+      steps.add('Created .ape/mutations.md');
     }
   }
 
