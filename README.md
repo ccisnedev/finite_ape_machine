@@ -113,3 +113,7 @@ The collaboration model — **AAD/AAE/AAM** (Agent-Aided Design/Engineering/Manu
 ## License
 
 MIT
+
+## Related work
+
+The idea of a CLI that **installs prompts and skills** into whatever AI coding agent you use — instead of keeping custom agents and skills scattered across each tool's config — comes from [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) (Gentleman Programming). APE takes that packaging idea in a different direction: a single-target deterministic FSM contract enforced by the CLI, with the methodology itself as the durable artifact.
