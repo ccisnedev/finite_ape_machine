@@ -60,8 +60,8 @@ Esta es la fase más importante. Todo lo que la extensión hace en v0.0.1 se red
 
 ### 2A: Parsear state.yaml
 
-- [ ] **2A.1** Instalar dependencia `yaml` (`npm install yaml`)
-- [ ] **2A.2** Crear fixtures: `test/fixtures/state-analyze.yaml`, `test/fixtures/state-idle.yaml`, `test/fixtures/state-empty.yaml`
+- [x] **2A.1** Instalar dependencia `yaml` (`npm install yaml`)
+- [x] **2A.2** Crear fixtures: `test/fixtures/state-analyze.yaml`, `test/fixtures/state-idle.yaml`, `test/fixtures/state-empty.yaml`
   ```yaml
   # state-analyze.yaml
   cycle:
@@ -74,43 +74,43 @@ Esta es la fase más importante. Todo lo que la extensión hace en v0.0.1 se red
     phase: IDLE
     task: ""
   ```
-- [ ] **2A.3** Crear `test/unit/state-parser.test.ts` — RED:
+- [x] **2A.3** Crear `test/unit/state-parser.test.ts` — RED:
   - **TEST** "parseState con ANALYZE y task 042 retorna {phase: 'ANALYZE', task: '042'}"
   - **TEST** "parseState con IDLE retorna {phase: 'IDLE', task: ''}"
   - **TEST** "parseState con string vacío retorna defaults {phase: 'IDLE', task: ''}"
   - **TEST** "parseState con YAML inválido retorna defaults"
   - **TEST** "parseState con phase desconocido retorna el string tal cual"
-- [ ] **2A.4** Crear `src/parsers.ts` e implementar `parseState(content: string): ApeState` — GREEN
-- [ ] **2A.5** Definir `interface ApeState { phase: string; task: string }` en `src/types.ts`
+- [x] **2A.4** Crear `src/parsers.ts` e implementar `parseState(content: string): ApeState` — GREEN
+- [x] **2A.5** Definir `interface ApeState { phase: string; task: string }` en `src/types.ts`
 
 ### 2B: Leer/escribir config.yaml
 
-- [ ] **2B.1** Crear fixtures: `test/fixtures/config-enabled.yaml`, `test/fixtures/config-disabled.yaml`, `test/fixtures/config-missing.yaml` (vacío)
+- [x] **2B.1** Crear fixtures: `test/fixtures/config-enabled.yaml`, `test/fixtures/config-disabled.yaml`, `test/fixtures/config-missing.yaml` (vacío)
   ```yaml
   # config-enabled.yaml
   evolution:
     enabled: true
   ```
-- [ ] **2B.2** Crear `test/unit/config-parser.test.ts` — RED:
+- [x] **2B.2** Crear `test/unit/config-parser.test.ts` — RED:
   - **TEST** "parseConfig con evolution.enabled=true retorna {evolutionEnabled: true}"
   - **TEST** "parseConfig con evolution.enabled=false retorna {evolutionEnabled: false}"
   - **TEST** "parseConfig con string vacío retorna {evolutionEnabled: false}"
   - **TEST** "parseConfig con YAML inválido retorna {evolutionEnabled: false}"
   - **TEST** "serializeConfig({evolutionEnabled: true}) produce YAML válido con evolution.enabled: true"
   - **TEST** "serializeConfig({evolutionEnabled: false}) produce YAML válido con evolution.enabled: false"
-- [ ] **2B.3** Implementar `parseConfig` y `serializeConfig` en `src/parsers.ts` — GREEN
+- [x] **2B.3** Implementar `parseConfig` y `serializeConfig` en `src/parsers.ts` — GREEN
 
 ### 2C: Append a mutations.md
 
-- [ ] **2C.1** Crear `test/unit/mutations.test.ts` — RED:
+- [x] **2C.1** Crear `test/unit/mutations.test.ts` — RED:
   - **TEST** "formatMutation con texto retorna '- <texto>\n'"
   - **TEST** "formatMutation con texto y timestamp retorna '- [YYYY-MM-DD HH:mm] <texto>\n'"
   - **TEST** "formatMutation escapa caracteres que romperían el markdown (|, newlines)"
-- [ ] **2C.2** Implementar `formatMutation(text: string, withTimestamp: boolean): string` en `src/parsers.ts` — GREEN
+- [x] **2C.2** Implementar `formatMutation(text: string, withTimestamp: boolean): string` en `src/parsers.ts` — GREEN
 
 ### 2D: REFACTOR
 
-- [ ] **2D.1** Revisar naming, extraer types si necesario. `npm run compile && npm run test:unit`
+- [x] **2D.1** Revisar naming, extraer types si necesario. `npm run compile && npm run test:unit`
 
 **Verificación:**
 ```bash
