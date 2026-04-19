@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methodology — Finite APE Machine</title>
+  <meta name="description" content="How APE works: a five-state finite machine, a declarative transition contract, memory as code, and the antifragility thesis.">
+  <meta name="theme-color" content="#0a0e1a">
+
+  <meta property="og:title" content="Methodology — Finite APE Machine">
+  <meta property="og:description" content="A five-state FSM, a declarative transition contract, memory as code.">
+  <meta property="og:type" content="article">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Methodology — Finite APE Machine">
+  <meta name="twitter:description" content="A five-state FSM, a declarative transition contract, memory as code.">
+
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0e1a'/><text x='50' y='72' font-family='monospace' font-size='68' font-weight='700' text-anchor='middle' fill='%23ef4444'>A</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/methodology.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="page-nav" aria-label="Breadcrumb">
+      <a href="index.html">← Finite <span class="ape">APE</span> Machine</a>
+    </nav>
+
+    <header class="page-hero">
+      <h1>Methodology over model.</h1>
+      <p class="page-subhead">
+        APE treats your AI coding assistant as a finite state machine with a declarative transition contract. The CLI enforces pre- and post-conditions. Intelligence emerges from orchestration and memory — not from any single agent's capability.
+      </p>
+    </header>
+
+    <section aria-labelledby="fsm-heading">
+      <h2 id="fsm-heading">The five-state FSM</h2>
+      <p class="section-intro">
+        Six states if you count rest. <code>IDLE</code> is the entry and exit. <code>ANALYZE</code>, <code>PLAN</code>, <code>EXECUTE</code> are the core. <code>END</code> is the PR gate. <code>EVOLUTION</code> is opt-in. The forward flow is linear; backward edges from <code>PLAN</code> and <code>EXECUTE</code> to <code>ANALYZE</code> exist because re-analysis is legal, not a recovery hack.
+      </p>
+      <figure class="fsm-diagram">
+        <img src="img/fsm.svg" alt="APE finite state machine diagram showing IDLE → ANALYZE → PLAN → EXECUTE → END → IDLE cycle, with backward transitions from PLAN and EXECUTE to ANALYZE, and an opt-in EVOLUTION state after END.">
+      </figure>
+      <div class="state-list">
+        <dl>
+          <dt><code>IDLE</code></dt>
+          <dd>Rest state. No agent runs; the cycle waits for the next issue to arrive.</dd>
+
+          <dt><code>ANALYZE</code> · SOCRATES</dt>
+          <dd>Clarifies the problem through dialog. Produces <code>diagnosis.md</code>.</dd>
+
+          <dt><code>PLAN</code> · DESCARTES</dt>
+          <dd>Divide, order, verify, enumerate. Produces <code>plan.md</code>.</dd>
+
+          <dt><code>EXECUTE</code> · BASHŌ</dt>
+          <dd>Minimal, beautiful implementation under the tests. Produces code and commits.</dd>
+
+          <dt><code>END</code> · PR gate</dt>
+          <dd>Opens and merges the pull request via <code>gh</code>. No agent; the CLI orchestrates.</dd>
+
+          <dt><code>EVOLUTION</code> · DARWIN <span class="opt-pill">opt-in</span></dt>
+          <dd>Reads the cycle's artifacts and proposes mutations to APE itself. Off by default.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section aria-labelledby="contract-heading">
+      <h2 id="contract-heading">The transition contract</h2>
+      <p class="section-intro">
+        Transitions aren't code — they're data. A YAML file declares every legal transition, its trigger event, its prechecks, and its effects. The CLI reads this file at runtime and refuses any transition the contract doesn't permit.
+      </p>
+      <pre class="code-block"><span class="comment"># code/cli/assets/transition_contract.yaml (excerpt)</span>
+<span class="key">transitions</span>:
+  - <span class="key">from</span>: ANALYZE
+    <span class="key">to</span>: PLAN
+    <span class="key">event</span>: complete_analysis
+    <span class="key">prechecks</span>:
+      - diagnosis_exists
+      - issue_linked
+    <span class="key">effects</span>:
+      - set_state: PLAN
+      - invoke_agent: DESCARTES
+
+  - <span class="key">from</span>: PLAN
+    <span class="key">to</span>: ANALYZE
+    <span class="key">event</span>: start_analyze
+    <span class="comment"># backward transition: re-analysis is legal</span>
+    <span class="key">prechecks</span>:
+      - human_approval</pre>
+      <p>
+        This is the core artifact. It's what makes APE reproducible across models: every ape reads the same contract and can only produce the transitions it permits. If a future target (Claude, Codex, Gemini) processes a different prompt, the contract constrains the output shape identically.
+      </p>
+    </section>
+
+    <section aria-labelledby="memory-heading">
+      <h2 id="memory-heading">Memory as code</h2>
+      <p class="section-intro">
+        Project memory lives in two places, both markdown, both in git. No vector DB. No cloud dependency. The repository <em>is</em> the database.
+      </p>
+      <div class="memory-cols">
+        <div class="memory-col">
+          <h3><code>.ape/</code> — per-repo state</h3>
+          <ul class="memory-list">
+            <li><code>state.yaml</code> — current FSM state and last transition</li>
+            <li><code>config.yaml</code> — feature flags (<code>evolution.enabled</code>, target, etc.)</li>
+            <li><code>mutations.md</code> — history of DARWIN's accepted mutations</li>
+            <li><code>diagnosis.md</code>, <code>plan.md</code> — active cycle's artifacts</li>
+          </ul>
+        </div>
+        <div class="memory-col">
+          <h3><code>docs/</code> — project knowledge</h3>
+          <ul class="memory-list">
+            <li>ADRs, specs, runbooks — whatever the project needs long-term</li>
+            <li>Indexed by the agents via the <code>memory-read</code> skill</li>
+            <li><code>index.md</code> per directory acts as a primary index</li>
+            <li>Frontmatter YAML acts as a schema (enforced by a future skill)</li>
+          </ul>
+        </div>
+      </div>
+      <p>
+        Database-inspired indexing without a database. Directories are tables. Files are rows. Frontmatter is the schema. <code>index.md</code> is the primary index. An agent with grep is more than an agent with a vector store for this scale of knowledge. Dual legibility: the same file an agent reads is the same file you review in GitHub. No translation layer.
+      </p>
+    </section>
+
+    <section aria-labelledby="risk-heading">
+      <h2 id="risk-heading">The risk matrix</h2>
+      <p class="section-intro">
+        Spec-only today. The idea: <code>ape state transition</code> should gate on human approval only when the engineering risk warrants it. Low-risk mechanical transitions (scaffolding, formatting, test scaffolding) proceed silently. High-risk ones (schema changes, production deploys, external API mutations) demand explicit approval.
+      </p>
+      <div class="callout callout--warn">
+        <strong>Roadmap item.</strong> Until the matrix is implemented, every state transition requires operator confirmation. The default is safe but verbose. See the <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/roadmap.md">roadmap</a> under long-term items.
+      </div>
+    </section>
+
+    <section aria-labelledby="why-heading">
+      <h2 id="why-heading">Why methodology beats model</h2>
+      <blockquote class="pull-quote">
+        If the framework carries the weight, the model gets lighter.
+      </blockquote>
+      <p>
+        Three scenarios, same conclusion. Cloud models get expensive? APE works with local ones. Frontier models plateau? DARWIN becomes the only improvement mechanism left. Models keep improving? APE amplifies the gains without rewriting the runbook. The framework benefits from disorder — antifragile across the AI market.
+      </p>
+      <p>
+        The thesis APE exists to test: given an identical task, a smaller model running APE outperforms a frontier model freestyling. The evidence lives in a <code>metrics.yaml</code> dataset that doesn't fully exist yet — the reproducibility score sits at 2/10 until 30 clean cycles and a multi-target test matrix land. See <a href="ape-builds-ape.html">APE builds APE →</a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="deeper-heading" class="go-deeper-section">
+      <h2 id="deeper-heading">Go deeper</h2>
+      <div class="deeper">
+        <a href="agents.html" class="deeper-card">
+          <h3>Meet the APEs →</h3>
+          <p>The four agents that run each phase, and the five that collapsed.</p>
+        </a>
+        <a href="ape-builds-ape.html" class="deeper-card">
+          <h3>APE builds APE →</h3>
+          <p>The empirical bootstrap. Evidence that the methodology works — or what's still missing.</p>
+        </a>
+        <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/docs/spec/finite-ape-machine.md" class="deeper-card">
+          <h3>Read the spec →</h3>
+          <p>The formal specification, referenced throughout this page.</p>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <a href="index.html">Home</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine">GitHub</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/roadmap.md">Roadmap</a>·
+      MIT License
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evolution — Finite APE Machine</title>
+  <meta name="description" content="How the EVOLUTION state works: opt-in, off by default. What DARWIN reads, what it proposes, and why your code never leaves your machine.">
+  <meta name="theme-color" content="#0a0e1a">
+
+  <meta property="og:title" content="Evolution — Finite APE Machine">
+  <meta property="og:description" content="Opt-in. Off by default. Your code never leaves your machine.">
+  <meta property="og:type" content="article">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Evolution — Finite APE Machine">
+  <meta name="twitter:description" content="Opt-in. Off by default. Your code never leaves your machine.">
+
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0e1a'/><text x='50' y='72' font-family='monospace' font-size='68' font-weight='700' text-anchor='middle' fill='%23ef4444'>A</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/evolution.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="page-nav" aria-label="Breadcrumb">
+      <a href="index.html">← Finite <span class="ape">APE</span> Machine</a>
+    </nav>
+
+    <header class="page-hero">
+      <h1>Opt-in. Off by default.</h1>
+      <p class="page-subhead">
+        EVOLUTION is the last state of the APE cycle. When enabled, DARWIN proposes changes to APE itself as issues in the APE repo. Your code never leaves your machine.
+      </p>
+    </header>
+
+    <section aria-labelledby="what-heading">
+      <h2 id="what-heading">What DARWIN does</h2>
+      <p>
+        After <code>EXECUTE</code> and <code>END</code>, if <code>evolution.enabled</code> is true, DARWIN reads the cycle's artifacts — <code>diagnosis.md</code>, <code>plan.md</code>, <code>mutations.md</code> — and composes one or more mutation proposals. Those proposals are filed as GitHub issues on the APE repo. Each issue describes what DARWIN thinks should change about the framework: new states, modified agent prompts, better preconditions, deprecated apes.
+      </p>
+      <p>
+        The proposals aren't applied automatically. They enter the same review flow as any GitHub issue — the maintainer decides whether to accept, reject, or modify. The <a href="agents.html">collapse from nine lore apes to four</a> happened through this mechanism.
+      </p>
+    </section>
+
+    <section aria-labelledby="collect-heading">
+      <h2 id="collect-heading">What gets collected</h2>
+      <p class="section-intro">
+        The scope is narrow and explicit. DARWIN only reads files inside <code>.ape/</code>.
+      </p>
+      <ul class="privacy-list">
+        <li class="yes">
+          <span class="privacy-icon" aria-hidden="true">✓</span>
+          <span>Artifacts from <code>.ape/</code>: <code>diagnosis.md</code>, <code>plan.md</code>, <code>mutations.md</code></span>
+        </li>
+        <li class="yes">
+          <span class="privacy-icon" aria-hidden="true">✓</span>
+          <span>DARWIN's own synthesis of the cycle — reasoning composed from those artifacts</span>
+        </li>
+        <li class="no">
+          <span class="privacy-icon" aria-hidden="true">✗</span>
+          <span>Source code from your project</span>
+        </li>
+        <li class="no">
+          <span class="privacy-icon" aria-hidden="true">✗</span>
+          <span>Paths, filenames, or metadata from anywhere outside <code>.ape/</code></span>
+        </li>
+        <li class="no">
+          <span class="privacy-icon" aria-hidden="true">✗</span>
+          <span>Telemetry, analytics, or third-party services</span>
+        </li>
+        <li class="no">
+          <span class="privacy-icon" aria-hidden="true">✗</span>
+          <span>Any data transmitted silently — every issue is visible to you before it's filed</span>
+        </li>
+      </ul>
+      <div class="callout callout--ok">
+        <strong>Audit everything before it ships.</strong> DARWIN pauses with the draft issue body for your review. You see the exact content being proposed; nothing goes out without your approval. Fully automated filing is scoped for <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/roadmap.md">roadmap</a> item #57 — until that lands, the review step is mandatory.
+      </div>
+    </section>
+
+    <section aria-labelledby="enable-heading">
+      <h2 id="enable-heading">How to enable</h2>
+      <p>
+        One flag in <code>.ape/config.yaml</code>. The cycle proceeds as usual; at the boundary between <code>END</code> and <code>IDLE</code>, DARWIN activates.
+      </p>
+      <pre class="code-block"><span class="comment"># .ape/config.yaml</span>
+<span class="key">evolution</span>:
+  <span class="key">enabled</span>: <span class="string">true</span>
+
+<span class="comment"># the rest of your config stays as-is</span>
+<span class="key">target</span>: copilot
+<span class="key">language</span>: en</pre>
+      <p>
+        One-shot per cycle. If the EVOLUTION step is interrupted — network failure, manual cancel, any error — the cycle returns to <code>IDLE</code> with no side effects. No half-filed issues, no corrupted state. Safe to experiment with, safe to disable again.
+      </p>
+    </section>
+
+    <section aria-labelledby="why-heading">
+      <h2 id="why-heading">Why it exists</h2>
+      <blockquote class="pull-quote">
+        Each cycle should leave APE measurably better.
+      </blockquote>
+      <p>
+        This is the antifragility thesis applied to the framework itself. Without an evolution loop, APE is exactly what it was — locked, static, aging. With it, operational friction becomes proposed improvements. Every time a cycle hits a rough edge that the maintainer had to work around, DARWIN can file a proposal to smooth it.
+      </p>
+      <p>
+        The guarantee: those proposals are public, auditable, and subject to review. Nothing disappears silently. Nothing happens in a private ops dashboard. The evolution story of APE is told in its issue tracker, in your language, at your approval.
+      </p>
+    </section>
+
+    <section aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Privacy summary</h2>
+      <p>
+        The one-paragraph version you can quote anywhere: <strong>EVOLUTION is off by default. When enabled, DARWIN reads only files inside <code>.ape/</code>. Proposals are filed as public issues on the APE repo, with your approval before each filing. No telemetry. No analytics. No third-party service. Your source code stays on your machine.</strong>
+      </p>
+    </section>
+
+    <section aria-labelledby="deeper-heading" class="go-deeper-section">
+      <h2 id="deeper-heading">Go deeper</h2>
+      <div class="deeper">
+        <a href="agents.html#darwin" class="deeper-card">
+          <h3>DARWIN →</h3>
+          <p>The agent behind the proposals — what it reads, what it's shaped to produce.</p>
+        </a>
+        <a href="methodology.html" class="deeper-card">
+          <h3>Methodology →</h3>
+          <p>How EVOLUTION fits into the five-state cycle, and the transition contract that gates it.</p>
+        </a>
+        <a href="ape-builds-ape.html" class="deeper-card">
+          <h3>APE builds APE →</h3>
+          <p>What DARWIN has already produced — the collapse from nine apes to four was its work.</p>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <a href="index.html">Home</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine">GitHub</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/roadmap.md">Roadmap</a>·
+      MIT License
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

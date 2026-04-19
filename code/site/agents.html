@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meet the APEs — Finite APE Machine</title>
+  <meta name="description" content="Four active agents — SOCRATES, DESCARTES, BASHŌ, DARWIN — and the honest story of five that collapsed. How the APE roster went from nine to four.">
+  <meta name="theme-color" content="#0a0e1a">
+
+  <meta property="og:title" content="Meet the APEs — Finite APE Machine">
+  <meta property="og:description" content="Four active agents, and the honest story of five that collapsed.">
+  <meta property="og:type" content="article">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Meet the APEs — Finite APE Machine">
+  <meta name="twitter:description" content="Four active agents, and the honest story of five that collapsed.">
+
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0e1a'/><text x='50' y='72' font-family='monospace' font-size='68' font-weight='700' text-anchor='middle' fill='%23ef4444'>A</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/agents.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="page-nav" aria-label="Breadcrumb">
+      <a href="index.html">← Finite <span class="ape">APE</span> Machine</a>
+    </nav>
+
+    <header class="page-hero">
+      <h1>Four apes, not nine.</h1>
+      <p class="page-subhead">
+        APE started with nine named agents. Two months of building APE with APE collapsed the roster to four. Here's who's on the team, and the honest story of who didn't make it.
+      </p>
+    </header>
+
+    <section aria-labelledby="roster-heading">
+      <h2 id="roster-heading">The four active</h2>
+      <div class="agents-grid">
+
+        <article class="agent-card agent-card--socrates" id="socrates">
+          <div class="motif-strip">
+            <svg viewBox="0 0 280 16" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <pattern id="greek-key" x="0" y="0" width="20" height="16" patternUnits="userSpaceOnUse">
+                  <path d="M 1 13 L 1 3 L 15 3 L 15 11 L 7 11 L 7 7 L 11 7" stroke="#ef4444" stroke-width="1" fill="none" stroke-linejoin="miter" stroke-linecap="square"/>
+                </pattern>
+              </defs>
+              <rect width="280" height="16" fill="url(#greek-key)"/>
+              <line x1="0" y1="15" x2="280" y2="15" stroke="#ef4444" stroke-width="1" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="inner">
+            <div class="agent-header">
+              <span class="agent-phase">Analyze</span>
+              <h3 class="agent-name">SOCRATES</h3>
+              <span class="agent-discipline">Mayéutica</span>
+            </div>
+            <p class="agent-maxim">The unexamined life is not worth living.</p>
+            <p class="agent-body">
+              Clarifies requirements through dialog. Where most agents guess, SOCRATES asks. Leaves behind a diagnosis of the problem, captured before a single line of code is written.
+            </p>
+            <div class="agent-output">
+              <span class="output-label">Output</span>
+              <code>diagnosis.md</code>
+            </div>
+          </div>
+        </article>
+
+        <article class="agent-card agent-card--descartes" id="descartes">
+          <svg class="motif-corner" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <pattern id="cart-grid" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+                <circle cx="4" cy="4" r="0.55" fill="#6a7188" opacity="0.8"/>
+              </pattern>
+            </defs>
+            <rect x="8" y="8" width="44" height="44" fill="url(#cart-grid)" opacity="0.6"/>
+            <line x1="30" y1="8" x2="30" y2="52" stroke="#a8b0c4" stroke-width="0.8"/>
+            <line x1="8" y1="30" x2="52" y2="30" stroke="#a8b0c4" stroke-width="0.8"/>
+            <path d="M 27 11 L 30 8 L 33 11" stroke="#a8b0c4" stroke-width="0.8" fill="none"/>
+            <path d="M 49 27 L 52 30 L 49 33" stroke="#a8b0c4" stroke-width="0.8" fill="none"/>
+            <circle cx="42" cy="18" r="2" fill="#ef4444"/>
+            <line x1="42" y1="18" x2="42" y2="30" stroke="#ef4444" stroke-width="0.6" stroke-dasharray="1.5 1.5"/>
+            <line x1="30" y1="18" x2="42" y2="18" stroke="#ef4444" stroke-width="0.6" stroke-dasharray="1.5 1.5"/>
+          </svg>
+          <div class="inner">
+            <div class="agent-header">
+              <span class="agent-phase">Plan</span>
+              <h3 class="agent-name">DESCARTES</h3>
+              <span class="agent-discipline">Method</span>
+            </div>
+            <p class="agent-maxim">Divide each difficulty into as many parts as feasible and necessary to resolve it.</p>
+            <p class="agent-body">
+              The Cartesian method — divide, order, verify, enumerate — applied to planning. Replaces two earlier apes (SUNZI and VITRUVIUS). One method does both their jobs, and it's testable.
+            </p>
+            <div class="agent-output">
+              <span class="output-label">Output</span>
+              <code>plan.md</code>
+            </div>
+          </div>
+        </article>
+
+        <article class="agent-card agent-card--basho" id="basho">
+          <svg class="sakura-anchor" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g fill="#ef4444" opacity="0.85">
+              <ellipse cx="16" cy="6" rx="3.2" ry="4.6"/>
+              <ellipse cx="16" cy="6" rx="3.2" ry="4.6" transform="rotate(72 16 16)"/>
+              <ellipse cx="16" cy="6" rx="3.2" ry="4.6" transform="rotate(144 16 16)"/>
+              <ellipse cx="16" cy="6" rx="3.2" ry="4.6" transform="rotate(216 16 16)"/>
+              <ellipse cx="16" cy="6" rx="3.2" ry="4.6" transform="rotate(288 16 16)"/>
+            </g>
+            <circle cx="16" cy="16" r="2" fill="#141b2e"/>
+            <circle cx="16" cy="16" r="1.2" fill="#e6a02d" opacity="0.9"/>
+          </svg>
+          <div class="inner">
+            <div class="agent-header">
+              <span class="agent-phase">Execute</span>
+              <h3 class="agent-name">BASHŌ</h3>
+              <span class="agent-discipline">Techne</span>
+            </div>
+            <p class="haiku">
+              古池や<br>
+              the old pond<br>
+              a frog leaps in — <em>plop.</em>
+            </p>
+            <p class="agent-body">
+              Minimal, beautiful implementation under the constraints of the tests. Like a haiku: the constraint is the form itself. The craft happens inside the limits.
+            </p>
+            <svg class="sumi-divider" viewBox="0 0 280 14" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M 10 8 Q 50 2, 100 8 T 200 9 T 270 7" stroke="#ef4444" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.9"/>
+              <path d="M 60 8 Q 100 3, 140 8 T 220 9" stroke="#ef4444" stroke-width="3.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+            </svg>
+            <div class="agent-output">
+              <span class="output-label">Output</span>
+              <code>code + commits</code>
+            </div>
+          </div>
+        </article>
+
+        <article class="agent-card agent-card--opt agent-card--darwin" id="darwin">
+          <span class="opt-badge">opt-in</span>
+          <svg class="motif-corner" viewBox="0 0 50 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g stroke="#a8b0c4" fill="none" stroke-linecap="round">
+              <path d="M 25 68 Q 24 56, 25 42 Q 26 26, 25 10" stroke-width="1.5"/>
+              <path d="M 25 48 Q 33 44, 40 36" stroke-width="1.1"/>
+              <path d="M 36 38 Q 40 32, 44 28" stroke-width="0.9"/>
+              <path d="M 25 30 Q 18 26, 12 18" stroke-width="1.1"/>
+              <path d="M 16 23 Q 14 19, 10 14" stroke-width="0.9"/>
+            </g>
+            <circle cx="44" cy="28" r="1.8" fill="#ef4444"/>
+            <circle cx="40" cy="36" r="1.3" fill="#6a7188"/>
+            <circle cx="10" cy="14" r="1.3" fill="#6a7188"/>
+            <circle cx="12" cy="18" r="1.6" fill="#ef4444"/>
+            <circle cx="25" cy="10" r="2" fill="#ef4444"/>
+          </svg>
+          <div class="inner">
+            <div class="agent-header">
+              <span class="agent-phase">Evolution</span>
+              <h3 class="agent-name">DARWIN</h3>
+              <span class="agent-discipline">Natural selection</span>
+            </div>
+            <p class="agent-body">
+              Reads the cycle's artifacts and proposes mutations to APE itself — changes to the framework, the transition contract, the other apes. The only ape that improves APE. Off by default; when enabled, files its proposals as issues in this repo (evidence: <a href="https://github.com/ccisnedev/finite_ape_machine/issues/54">#54</a>).
+            </p>
+            <p class="field-note">Observation nº 54 — collapse of the roster from nine to four; three absorbed, one replaced, pattern consistent across six cycles.</p>
+            <div class="agent-output">
+              <span class="output-label">Output</span>
+              <code>repo issues</code>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section aria-labelledby="collapse-heading">
+      <h2 id="collapse-heading">Lore vs reality</h2>
+      <p class="section-intro">
+        The original <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/docs/lore.md"><code>lore.md</code></a> sketched nine apes. After two months of building APE with APE, the roster collapsed to four. This is honest accounting, not a roadmap to revive the deferred ones. Most were absorbed by simpler agents that turned out to do the job better.
+      </p>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th scope="col">Lore agent</th>
+              <th scope="col">Status</th>
+              <th scope="col">What happened</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">SOCRATES</th>
+              <td><span class="status-pill status-active">Active</span></td>
+              <td>ANALYZE — implemented as the mayéutica agent.</td>
+            </tr>
+            <tr>
+              <th scope="row">DESCARTES</th>
+              <td><span class="status-pill status-active">Active</span></td>
+              <td>PLAN — replaces SUNZI's strategy and VITRUVIUS's WBS in one Cartesian method.</td>
+            </tr>
+            <tr>
+              <th scope="row">BASHŌ</th>
+              <td><span class="status-pill status-active">Active</span></td>
+              <td>EXECUTE — replaces ADA's TDD with techne: functional beauty under constraints.</td>
+            </tr>
+            <tr>
+              <th scope="row">DARWIN</th>
+              <td><span class="status-pill status-active">Active</span></td>
+              <td>EVOLUTION — implemented; produces concrete evidence (e.g. issue #54).</td>
+            </tr>
+            <tr>
+              <th scope="row">MARCOPOLO</th>
+              <td><span class="status-pill status-absorbed">Absorbed</span></td>
+              <td>Document ingestion handled by SOCRATES and the <code>memory-read</code> skill.</td>
+            </tr>
+            <tr>
+              <th scope="row">VITRUVIUS</th>
+              <td><span class="status-pill status-absorbed">Absorbed</span></td>
+              <td>WBS / decomposition is part of DESCARTES's plan phase.</td>
+            </tr>
+            <tr>
+              <th scope="row">SUNZI</th>
+              <td><span class="status-pill status-replaced">Replaced</span></td>
+              <td>DESCARTES's method is more explicit and testable than strategic prose.</td>
+            </tr>
+            <tr>
+              <th scope="row">GATSBY</th>
+              <td><span class="status-pill status-absorbed">Absorbed</span></td>
+              <td>Test pseudocode lives in <code>plan.md</code>, written by DESCARTES.</td>
+            </tr>
+            <tr>
+              <th scope="row">ADA</th>
+              <td><span class="status-pill status-replaced">Replaced</span></td>
+              <td>BASHŌ's techne replaces explicit TDD as a separate phase.</td>
+            </tr>
+            <tr>
+              <th scope="row">DIJKSTRA</th>
+              <td><span class="status-pill status-future">Future skill</span></td>
+              <td>Quality-gate becomes a <code>pre-pr-review</code> skill inside END, not a separate agent.</td>
+            </tr>
+            <tr>
+              <th scope="row">BORGES</th>
+              <td><span class="status-pill status-future">Future skill</span></td>
+              <td>Schema validation becomes <code>ape memory validate</code>, not a standalone ape.</td>
+            </tr>
+            <tr>
+              <th scope="row">HERMES</th>
+              <td><span class="status-pill status-materialized">Materialized</span></td>
+              <td>State transitions are now <code>ape state transition</code> — a CLI command, not an agent.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="lesson-heading">
+      <h2 id="lesson-heading">The lesson</h2>
+      <blockquote class="pull-quote">
+        The framework wants fewer, sharper agents, not more.
+      </blockquote>
+      <p>
+        Each absorption came from a real cycle where two agents were doing what one could do better. MARCOPOLO and the memory-read skill were doing the same reading SOCRATES already did during ANALYZE. VITRUVIUS's decomposition happened inside DESCARTES's method. GATSBY's test pseudocode lived naturally in <code>plan.md</code>.
+      </p>
+      <p>
+        This is antifragility applied to the framework itself: APE got better by running against itself and discarding what didn't earn its weight. Every deprecation is logged in a DARWIN evolution issue, with reasoning. Nothing disappears silently.
+      </p>
+    </section>
+
+    <section aria-labelledby="deeper-heading" class="go-deeper-section">
+      <h2 id="deeper-heading">Go deeper</h2>
+      <div class="deeper">
+        <a href="methodology.html" class="deeper-card">
+          <h3>Methodology →</h3>
+          <p>The FSM, the transition contract, and how the four apes connect.</p>
+        </a>
+        <a href="ape-builds-ape.html" class="deeper-card">
+          <h3>APE builds APE →</h3>
+          <p>The empirical bootstrap — where the collapse from nine to four came from.</p>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <a href="index.html">Home</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine">GitHub</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/roadmap.md">Roadmap</a>·
+      MIT License
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

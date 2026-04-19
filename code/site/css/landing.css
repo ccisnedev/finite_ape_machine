@@ -1,0 +1,325 @@
+/* landing.css — Styles specific to the landing page (index.html) */
+
+/* ----- Header / Hero ----- */
+header {
+  text-align: center;
+  padding: 4rem 0 2rem;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 6.5vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.25rem;
+  line-height: 1.1;
+}
+
+h1 .ape {
+  font-family: var(--mono);
+  color: var(--primary);
+  letter-spacing: 0;
+}
+
+.primary-tagline {
+  font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+  color: var(--fg);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  max-width: 42ch;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+.secondary-tagline {
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-style: italic;
+  margin-bottom: 1.75rem;
+}
+
+.hero-diagram {
+  margin-top: 2.5rem;
+}
+
+/* Install block promoted to hero — fills container width to match FSM diagram parity */
+.hero-install {
+  margin: 2rem auto 0;
+  text-align: left;
+}
+
+/* ----- Intro ----- */
+.intro {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1.05rem;
+  color: var(--fg-dim);
+  line-height: 1.7;
+}
+
+.intro strong { color: var(--fg); font-weight: 600; }
+
+/* ----- Install ----- */
+.os-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+}
+
+.os-tab {
+  padding: 0.6rem 1.25rem;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-weight: 500;
+}
+
+.os-tab[aria-selected="true"] {
+  color: var(--fg);
+  background: var(--bg-elevated);
+  position: relative;
+  z-index: 1;
+}
+
+.os-tab:hover:not([aria-selected="true"]):not(:disabled) {
+  color: var(--fg-dim);
+}
+
+.os-tab:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.os-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.os-tab .soon-tag {
+  font-size: 0.7em;
+  margin-left: 0.35rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.os-panel[hidden] { display: none; }
+
+.install-block {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 0 8px 8px 8px;
+  padding: 1.25rem 1.5rem;
+  position: relative;
+}
+
+.install-block .label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--mono);
+}
+
+.install-block code {
+  font-size: 0.9rem;
+  color: var(--fg);
+  word-break: break-all;
+  display: block;
+  padding-right: 4rem;
+}
+
+.install-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.75rem;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: var(--border);
+  border: none;
+  color: var(--fg);
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-family: var(--sans);
+}
+
+.copy-btn:hover { background: #484f58; }
+.copy-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ----- Quick start ----- */
+pre.quickstart {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.75;
+}
+
+pre.quickstart .comment { color: var(--muted); }
+pre.quickstart .cmd { color: var(--fg); }
+
+/* Hero-specific diagram spacing (base .fsm-diagram lives in shared.css) */
+
+/* ----- Cycle (landing's three core phases: ANALYZE · PLAN · EXECUTE) ----- */
+.cycle {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.phase {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.1rem 1.2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.phase-name {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin: 0;
+}
+
+.phase-desc {
+  font-size: 0.9rem;
+  color: var(--fg-dim);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.phase .output {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.1rem 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+  background: rgba(0, 212, 180, 0.1);
+  border-radius: 3px;
+  margin-top: auto;
+}
+
+.cycle-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+/* ----- Commands ----- */
+.commands {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+  list-style: none;
+  padding-left: 0;
+}
+
+.cmd {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  display: grid;
+  grid-template-columns: minmax(150px, max-content) 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cmd code {
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+.cmd .desc {
+  color: var(--fg-dim);
+  font-size: 0.88rem;
+}
+
+.see-all {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ----- Targets ----- */
+.targets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  list-style: none;
+  padding-left: 0;
+}
+
+.target-badge {
+  padding: 0.3rem 0.7rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--fg);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.target-badge.future {
+  color: var(--fg-dim);
+  border-style: dashed;
+}
+
+.target-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.target-badge.future .dot { background: var(--muted); }
+
+/* ----- Evolution note ----- */
+.evolution-note {
+  margin-top: 2.5rem;
+  padding: 0.9rem 1.2rem;
+  border-left: 3px solid var(--warn);
+  background: var(--bg-elevated);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.9rem;
+  color: var(--fg-dim);
+}
+
+.evolution-note strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* ----- Responsive (landing-specific) ----- */
+@media (max-width: 540px) {
+  header { padding: 2rem 0 1.5rem; }
+  .cmd { grid-template-columns: 1fr; gap: 0.25rem; }
+  .install-block code { padding-right: 0; padding-top: 1.75rem; }
+}

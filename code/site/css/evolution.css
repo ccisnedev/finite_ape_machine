@@ -1,0 +1,74 @@
+/* evolution.css — Styles specific to the /evolution page */
+
+/* ----- Privacy list (what gets collected) ----- */
+.privacy-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 1rem 0 1.25rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.privacy-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.92rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+}
+
+.privacy-list li.yes {
+  border-left-color: var(--primary);
+}
+
+.privacy-list li.no {
+  border-left-color: var(--muted);
+  color: var(--muted);
+}
+
+.privacy-list li code {
+  font-family: var(--mono);
+  color: var(--fg);
+  font-size: 0.9em;
+}
+
+.privacy-list li.no code {
+  color: var(--fg-dim);
+}
+
+.privacy-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.privacy-list li.yes .privacy-icon {
+  color: var(--primary);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.privacy-list li.no .privacy-icon {
+  color: var(--muted);
+  background: rgba(106, 113, 136, 0.1);
+}
+
+/* ----- Pull quote variant (orange for evolution) ----- */
+.page-hero + section .pull-quote,
+#why-heading + .pull-quote,
+#why-heading ~ .pull-quote {
+  border-left-color: var(--warn);
+}

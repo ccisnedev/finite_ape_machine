@@ -3,358 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finite APE Machine</title>
-  <style>
-    :root {
-      --bg: #0d1117;
-      --fg: #e6edf3;
-      --muted: #8b949e;
-      --accent: #58a6ff;
-      --green: #3fb950;
-      --border: #30363d;
-      --code-bg: #161b22;
-    }
+  <title>Finite APE Machine — Ship software with any AI coding agent</title>
+  <meta name="description" content="A methodology framework that turns your AI coding assistant into a deterministic finite state machine. Works with frontier and free models alike.">
+  <meta name="theme-color" content="#0a0e1a">
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta property="og:title" content="Finite APE Machine">
+  <meta property="og:description" content="Ship software with any AI coding agent — frontier or free.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.ccisne.dev/finite_ape_machine/">
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--fg);
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Finite APE Machine">
+  <meta name="twitter:description" content="Ship software with any AI coding agent — frontier or free.">
 
-    .container {
-      max-width: 720px;
-      width: 100%;
-      padding: 2rem 1.5rem;
-    }
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0e1a'/><text x='50' y='72' font-family='monospace' font-size='68' font-weight='700' text-anchor='middle' fill='%23ef4444'>A</text></svg>">
 
-    header {
-      text-align: center;
-      padding: 3rem 0 2rem;
-    }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    h1 .ape { color: var(--green); }
-
-    .tagline {
-      color: var(--muted);
-      font-size: 1.1rem;
-      font-style: italic;
-    }
-
-    .badge {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.25rem 0.75rem;
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 1rem;
-      font-size: 0.85rem;
-      color: var(--green);
-    }
-
-    section {
-      margin-top: 2.5rem;
-    }
-
-    h2 {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-      color: var(--accent);
-    }
-
-    p { margin-bottom: 1rem; color: var(--muted); }
-
-    .install-block {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.25rem 1.5rem;
-      position: relative;
-      margin-bottom: 1.5rem;
-    }
-
-    .install-block code {
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-      font-size: 0.9rem;
-      color: var(--fg);
-      word-break: break-all;
-    }
-
-    .install-block .label {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .os-tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 0;
-    }
-
-    .os-tab {
-      padding: 0.5rem 1.25rem;
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-bottom: none;
-      border-radius: 6px 6px 0 0;
-      cursor: pointer;
-      font-size: 0.85rem;
-      color: var(--muted);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    }
-
-    .os-tab.active {
-      color: var(--fg);
-      border-bottom-color: var(--code-bg);
-      background: var(--code-bg);
-      border-bottom: 1px solid var(--code-bg);
-      position: relative;
-      z-index: 1;
-    }
-
-    .os-tab:not(.active) {
-      background: var(--bg);
-    }
-
-    .os-panel {
-      display: none;
-    }
-
-    .os-panel.active {
-      display: block;
-    }
-
-    .os-panel .install-block {
-      border-radius: 0 8px 8px 8px;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 0.75rem;
-      right: 0.75rem;
-      background: var(--border);
-      border: none;
-      color: var(--muted);
-      padding: 0.3rem 0.6rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-
-    .copy-btn:hover { color: var(--fg); background: #484f58; }
-
-    .commands {
-      display: grid;
-      gap: 0.75rem;
-    }
-
-    .cmd {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.75rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .cmd code {
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-      font-size: 0.85rem;
-    }
-
-    .cmd .desc {
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-
-    .targets {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .target-badge {
-      padding: 0.2rem 0.6rem;
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-size: 0.8rem;
-      color: var(--fg);
-    }
-
-    .target-badge.future {
-      color: var(--muted);
-      border-style: dashed;
-    }
-
-    .cycle {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 0.75rem;
-      margin-top: 0.5rem;
-    }
-
-    .phase {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .phase .name {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--green);
-    }
-
-    .phase .detail {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 0.25rem;
-    }
-
-    footer {
-      margin-top: 3rem;
-      padding: 1.5rem 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.8rem;
-      border-top: 1px solid var(--border);
-      width: 100%;
-      max-width: 720px;
-    }
-
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-  </style>
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
   <div class="container">
     <header>
       <h1>Finite <span class="ape">APE</span> Machine</h1>
-      <p class="tagline">Infinite monkeys produce noise. Finite APEs produce software.</p>
-      <span class="badge">v0.0.14 — Windows &amp; Linux</span>
+      <p class="primary-tagline">Ship software with any AI coding agent — frontier or free.</p>
+      <p class="secondary-tagline">Infinite monkeys produce noise. Finite APEs produce software.</p>
+
+      <div class="hero-install" id="install">
+        <div class="os-tabs" role="tablist" aria-label="Operating system">
+          <button class="os-tab" role="tab" aria-selected="true" aria-controls="panel-windows" id="tab-windows" onclick="switchTab('windows')">Windows</button>
+          <button class="os-tab" role="tab" aria-selected="false" aria-controls="panel-linux" id="tab-linux" onclick="switchTab('linux')">Linux</button>
+          <button class="os-tab" role="tab" aria-selected="false" disabled title="Coming soon">macOS<span class="soon-tag">soon</span></button>
+        </div>
+        <div id="panel-windows" class="os-panel" role="tabpanel" aria-labelledby="tab-windows">
+          <div class="install-block">
+            <span class="label">PowerShell</span>
+            <button class="copy-btn" onclick="copy(this)" aria-label="Copy install command">Copy</button>
+            <code>irm https://www.ccisne.dev/finite_ape_machine/install.ps1 | iex</code>
+          </div>
+          <p class="install-note">Installs to <code>%LOCALAPPDATA%\ape\</code>, adds to <code>PATH</code>, and deploys APE agents to your AI coding tool.</p>
+        </div>
+        <div id="panel-linux" class="os-panel" role="tabpanel" aria-labelledby="tab-linux" hidden>
+          <div class="install-block">
+            <span class="label">Bash</span>
+            <button class="copy-btn" onclick="copy(this)" aria-label="Copy install command">Copy</button>
+            <code>curl -fsSL https://www.ccisne.dev/finite_ape_machine/install.sh | bash</code>
+          </div>
+          <p class="install-note">Installs to <code>~/.ape/</code> and deploys APE agents to your AI coding tool.</p>
+        </div>
+      </div>
+
+      <figure class="fsm-diagram hero-diagram">
+        <img src="img/fsm.svg" alt="APE finite state machine diagram showing IDLE → ANALYZE → PLAN → EXECUTE → END → IDLE cycle, with backward transitions and opt-in EVOLUTION state.">
+      </figure>
     </header>
 
-    <section>
-      <h2>Install</h2>
-      <div class="os-tabs">
-        <button class="os-tab active" onclick="switchTab('windows')">Windows</button>
-        <button class="os-tab" onclick="switchTab('linux')">Linux</button>
-      </div>
-      <div id="panel-windows" class="os-panel active">
-        <div class="install-block">
-          <span class="label">PowerShell</span>
-          <button class="copy-btn" onclick="copy(this)">Copy</button>
-          <code>irm https://www.ccisne.dev/finite_ape_machine/install.ps1 | iex</code>
-        </div>
-        <p>Downloads the latest release, installs to <code>%LOCALAPPDATA%\ape\</code>, adds to PATH, and deploys APE agents to all supported AI coding tools.</p>
-      </div>
-      <div id="panel-linux" class="os-panel">
-        <div class="install-block">
-          <span class="label">Bash</span>
-          <button class="copy-btn" onclick="copy(this)">Copy</button>
-          <code>curl -fsSL https://www.ccisne.dev/finite_ape_machine/install.sh | bash</code>
-        </div>
-        <p>Downloads the latest release, installs to <code>~/.ape/</code>, and deploys APE agents to all supported AI coding tools.</p>
-      </div>
-    </section>
+    <p class="intro">
+      APE structures your AI coding assistant as a <strong>five-state finite machine</strong> — one specialized agent per phase, transitions verified by the CLI. The bet is <strong>methodology over model</strong>: if the framework carries the weight, a smaller or free model following it should stay useful where freestyling falls apart. That's the thesis APE exists to test.
+    </p>
 
-    <section>
-      <h2>Commands</h2>
-      <div class="commands">
-        <div class="cmd">
-          <code>ape target get</code>
-          <span class="desc">Deploy agents &amp; skills to all targets</span>
-        </div>
-        <div class="cmd">
-          <code>ape target clean</code>
-          <span class="desc">Remove deployed files from all targets</span>
-        </div>
-        <div class="cmd">
-          <code>ape upgrade</code>
-          <span class="desc">Update to the latest release</span>
-        </div>
-        <div class="cmd">
-          <code>ape version</code>
-          <span class="desc">Print current version</span>
-        </div>
-        <div class="cmd">
-          <code>ape init</code>
-          <span class="desc">Initialize .ape/ workspace</span>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Targets</h2>
-      <p>APE deploys agents and skills to the global configuration of:</p>
-      <div class="targets">
-        <span class="target-badge">GitHub Copilot</span>
-        <span class="target-badge future">Claude</span>
-        <span class="target-badge future">Codex</span>
-        <span class="target-badge future">Crush</span>
-        <span class="target-badge future">Gemini</span>
-      </div>
-    </section>
-
-    <section>
-      <h2>The APE Cycle</h2>
+    <section id="cycle">
+      <h2>The phases</h2>
       <div class="cycle">
         <div class="phase">
-          <div class="name">Analyze</div>
-          <div class="detail">Understand &amp; classify</div>
+          <h3 class="phase-name">ANALYZE</h3>
+          <p class="phase-desc">Clarify the problem. Capture requirements, assumptions, and edge cases before any code is written.</p>
+          <span class="output">diagnosis.md</span>
         </div>
         <div class="phase">
-          <div class="name">Plan</div>
-          <div class="detail">Runbook &amp; criteria</div>
+          <h3 class="phase-name">PLAN</h3>
+          <p class="phase-desc">Decompose the work. Order the steps, verify each, enumerate nothing missed.</p>
+          <span class="output">plan.md</span>
         </div>
         <div class="phase">
-          <div class="name">Execute</div>
-          <div class="detail">TDD &amp; collaborate</div>
+          <h3 class="phase-name">EXECUTE</h3>
+          <p class="phase-desc">Implement under the constraints of the tests. Each change small enough to merge confidently.</p>
+          <span class="output">code + commits</span>
         </div>
+      </div>
+      <p class="cycle-note">Backward transitions from <code>PLAN</code> or <code>EXECUTE</code> back to <code>ANALYZE</code> are allowed — re-analysis is part of the contract.</p>
+    </section>
+
+    <section id="quickstart">
+      <h2>Quick start</h2>
+      <pre class="quickstart"><span class="comment"># verify prerequisites (ape, git, gh, gh auth)</span>
+<span class="cmd">ape doctor</span>
+
+<span class="comment"># deploy APE agent + skills to your AI tool (Copilot today)</span>
+<span class="cmd">ape target get</span>
+
+<span class="comment"># scaffold .ape/ in your repo</span>
+<span class="cmd">cd your-repo &amp;&amp; ape init</span></pre>
+    </section>
+
+    <section id="commands">
+      <h2>Commands</h2>
+      <ul class="commands">
+        <li class="cmd"><code>ape</code><span class="desc">Print ASCII banner + version</span></li>
+        <li class="cmd"><code>ape init</code><span class="desc">Scaffold <code>.ape/</code> (state, config, mutations)</span></li>
+        <li class="cmd"><code>ape doctor</code><span class="desc">Verify prerequisites</span></li>
+        <li class="cmd"><code>ape target get</code><span class="desc">Deploy agent + skills to AI tool</span></li>
+        <li class="cmd"><code>ape state transition</code><span class="desc">Execute a deterministic FSM transition</span></li>
+        <li class="cmd"><code>ape upgrade</code><span class="desc">Update to the latest release</span></li>
+      </ul>
+      <p class="see-all">9 commands total — see <a href="https://github.com/ccisnedev/finite_ape_machine#available-commands">the full table on GitHub</a>.</p>
+    </section>
+
+    <section id="targets">
+      <h2>Targets</h2>
+      <p>APE deploys agent prompts and skills to the global configuration of your AI coding tool.</p>
+      <ul class="targets">
+        <li class="target-badge"><span class="dot"></span>GitHub Copilot</li>
+        <li class="target-badge future"><span class="dot"></span>Claude Code</li>
+        <li class="target-badge future"><span class="dot"></span>Codex</li>
+        <li class="target-badge future"><span class="dot"></span>Crush</li>
+        <li class="target-badge future"><span class="dot"></span>Gemini</li>
+      </ul>
+      <p class="install-note">Adapters for Claude, Codex, Crush, and Gemini already exist — awaiting a stable agent prompt API before being wired in (<a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/docs/spec/target-specific-agents.md">ADR D20</a>).</p>
+    </section>
+
+    <section id="deeper">
+      <h2>Go deeper</h2>
+      <div class="deeper">
+        <a href="agents.html" class="deeper-card">
+          <h3>Meet the APEs →</h3>
+          <p>Four active agents — SOCRATES, DESCARTES, BASHŌ, DARWIN — and the honest story of five that collapsed.</p>
+        </a>
+        <a href="methodology.html" class="deeper-card">
+          <h3>Methodology →</h3>
+          <p>The FSM, the transition contract, memory-as-code, and the semantic risk matrix.</p>
+        </a>
+        <a href="ape-builds-ape.html" class="deeper-card">
+          <h3>APE builds APE →</h3>
+          <p>The empirical bootstrap: APE is being built using APE. Each cycle is evidence.</p>
+        </a>
       </div>
     </section>
 
+    <aside class="evolution-note" aria-label="Evolution">
+      <strong>Evolution is opt-in.</strong> After each cycle, DARWIN can propose mutations to APE itself as issues in this repo. Your code never leaves your machine. Off by default. <a href="evolution.html">How it works →</a>
+    </aside>
+
     <footer>
-      <a href="https://github.com/ccisnedev/finite_ape_machine">GitHub</a> ·
+      <a href="https://github.com/ccisnedev/finite_ape_machine">GitHub</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/roadmap.md">Roadmap</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/docs/spec/finite-ape-machine.md">Spec</a>·
       MIT License
     </footer>
   </div>
 
-  <script>
-    function copy(btn) {
-      const code = btn.parentElement.querySelector('code');
-      navigator.clipboard.writeText(code.textContent);
-      btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy', 2000);
-    }
-
-    function switchTab(os) {
-      document.querySelectorAll('.os-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.os-panel').forEach(p => p.classList.remove('active'));
-      document.querySelector(`.os-tab[onclick="switchTab('${os}')"]`).classList.add('active');
-      document.getElementById('panel-' + os).classList.add('active');
-    }
-  </script>
+  <script src="js/main.js"></script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              

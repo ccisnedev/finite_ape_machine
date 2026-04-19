@@ -1,0 +1,105 @@
+/* methodology.css — Styles specific to the /methodology page */
+
+/* ----- State list (dl with per-state entries) ----- */
+.state-list dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 1.5rem;
+  align-items: baseline;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.state-list dt {
+  font-family: var(--mono);
+  color: var(--fg);
+  white-space: nowrap;
+  padding-top: 0.1rem;
+}
+
+.state-list dt code {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.state-list dd {
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+.state-list .opt-pill {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.4rem;
+  font-size: 0.68rem;
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+  vertical-align: 0.1em;
+}
+
+/* ----- Memory two-column layout ----- */
+.memory-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.memory-col {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem 1.25rem 1.1rem;
+}
+
+.memory-col h3 {
+  color: var(--fg);
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.memory-col h3 code {
+  font-family: var(--mono);
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.memory-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.memory-list li {
+  font-size: 0.88rem;
+  color: var(--fg-dim);
+  line-height: 1.5;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.memory-list li::before {
+  content: '·';
+  position: absolute;
+  left: 0.25rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 540px) {
+  .state-list dl {
+    grid-template-columns: 1fr;
+    gap: 0.2rem 0;
+  }
+
+  .state-list dt { padding-top: 0.5rem; }
+  .state-list dt:first-child { padding-top: 0; }
+}

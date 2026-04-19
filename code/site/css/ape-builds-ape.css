@@ -1,0 +1,153 @@
+/* ape-builds-ape.css — Styles specific to the /ape-builds-ape page */
+
+/* ----- Stages timeline ----- */
+.stages {
+  list-style: none;
+  padding-left: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 1rem;
+  counter-reset: stage;
+}
+
+.stage {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: 6px;
+  padding: 1.25rem 1.4rem 1.1rem;
+  position: relative;
+}
+
+.stage-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.stage-num {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.stage-range {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  padding: 0.1rem 0.5rem;
+  background: rgba(0, 212, 180, 0.08);
+  border-radius: 3px;
+}
+
+.stage h3 {
+  color: var(--fg);
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+}
+
+.stage p {
+  color: var(--fg-dim);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 0.75rem;
+}
+
+.stage-evidence {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-style: italic;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--border-dim);
+}
+
+.stage-evidence code {
+  font-style: normal;
+  color: var(--fg-dim);
+}
+
+/* ----- Stats grid ----- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.stat {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.1rem 1rem;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--fg);
+  line-height: 1.45;
+}
+
+.stat-sub {
+  display: inline-block;
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.stat-sub code {
+  font-family: var(--mono);
+  font-size: 0.95em;
+  color: var(--muted);
+}
+
+/* ----- Gap list (what's missing) ----- */
+.gap-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0.5rem 0 0;
+}
+
+.gap-list dt {
+  font-family: var(--sans);
+  font-weight: 600;
+  color: var(--fg);
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.gap-list dd {
+  margin: 0 0 0 0;
+  color: var(--fg-dim);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--border-dim);
+}
+
+.gap-list dd strong {
+  color: var(--warn);
+  font-weight: 600;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 540px) {
+  .stat-num { font-size: 1.65rem; }
+  .stage { padding: 1rem 1.1rem 0.9rem; }
+}

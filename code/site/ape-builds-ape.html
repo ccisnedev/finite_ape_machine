@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APE builds APE — Finite APE Machine</title>
+  <meta name="description" content="The empirical bootstrap: APE is being built using APE. Four stages from implicit methodology to a machine-verifiable contract. Evidence, and what's still missing.">
+  <meta name="theme-color" content="#0a0e1a">
+
+  <meta property="og:title" content="APE builds APE — Finite APE Machine">
+  <meta property="og:description" content="The empirical bootstrap. Four stages. Evidence. What's still missing.">
+  <meta property="og:type" content="article">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="APE builds APE — Finite APE Machine">
+  <meta name="twitter:description" content="The empirical bootstrap. Four stages. Evidence. What's still missing.">
+
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0e1a'/><text x='50' y='72' font-family='monospace' font-size='68' font-weight='700' text-anchor='middle' fill='%23ef4444'>A</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/ape-builds-ape.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="page-nav" aria-label="Breadcrumb">
+      <a href="index.html">← Finite <span class="ape">APE</span> Machine</a>
+    </nav>
+
+    <header class="page-hero">
+      <h1>APE builds APE.</h1>
+      <p class="page-subhead">
+        After two months of using APE to build APE, the lore collapsed, the agents sharpened, and the framework improved itself one cycle at a time. This is what that looks like in practice — and what's still missing before it becomes a paper.
+      </p>
+    </header>
+
+    <section aria-labelledby="stages-heading">
+      <h2 id="stages-heading">Four stages of the bootstrap</h2>
+      <p class="section-intro">
+        <code>ape_cli</code> evolved from a mental model into a machine-verifiable contract. The versions map to a discrete progression — each stage earned the next by surviving real use.
+      </p>
+      <ol class="stages">
+        <li class="stage">
+          <div class="stage-header">
+            <span class="stage-num">Stage 1</span>
+            <span class="stage-range">pre-v0.0.1</span>
+          </div>
+          <h3>Implicit APE</h3>
+          <p>The author directed a default AI coding agent stage-by-stage, manually enforcing the Analyze → Plan → Execute cycle through conversational discipline. No tooling existed. The methodology lived entirely in a human's mental model.</p>
+          <div class="stage-evidence">Evidence: early commit history, unstructured conversations.</div>
+        </li>
+
+        <li class="stage">
+          <div class="stage-header">
+            <span class="stage-num">Stage 2</span>
+            <span class="stage-range">v0.0.1 — v0.0.5</span>
+          </div>
+          <h3>Prompt as methodology</h3>
+          <p>The mental model was codified into a prompt. <code>ape.agent.md</code> formalized states, transitions, and sub-agent roles. The prompt became the transition function — executable, if imperfectly.</p>
+          <div class="stage-evidence">Evidence: first versions of <code>ape.agent.md</code>, commit diffs of prompt evolution.</div>
+        </li>
+
+        <li class="stage">
+          <div class="stage-header">
+            <span class="stage-num">Stage 3</span>
+            <span class="stage-range">v0.0.6 — v0.0.10</span>
+          </div>
+          <h3>Custom agent</h3>
+          <p>Deploy infrastructure (<code>ape target get</code>) stabilized as a single-target Copilot deployment. The cycle became self-enforcing — the agent refused to skip states, demanded issue numbers, required user gates. The system began constraining its own development.</p>
+          <div class="stage-evidence">Evidence: every version from v0.0.7+ has <code>docs/issues/NNN-slug/</code> artifacts.</div>
+        </li>
+
+        <li class="stage">
+          <div class="stage-header">
+            <span class="stage-num">Stage 4</span>
+            <span class="stage-range">v0.0.11 — v0.0.14</span>
+          </div>
+          <h3>CLI + contract</h3>
+          <p>Runtime infrastructure arrived: FSM transition contract (YAML), programmatic transitions with precondition validation (<code>ape state transition</code>), declarative effects, and evolution infrastructure (<code>.ape/config.yaml</code>, <code>.ape/mutations.md</code>). The contract says what's legal; tests prove the contract holds.</p>
+          <div class="stage-evidence">Evidence: <code>transition_contract.yaml</code>, 131 passing tests, 12 GitHub releases, 69+ issues and PRs.</div>
+        </li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="evidence-heading">
+      <h2 id="evidence-heading">Evidence today</h2>
+      <p class="section-intro">
+        Numbers after two months. Everything is in git history and the GitHub API — auditable by anyone who wants to check.
+      </p>
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-num">14</div>
+          <div class="stat-label">versions shipped<br><span class="stat-sub">12 GitHub releases</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">131</div>
+          <div class="stat-label">tests passing<br><span class="stat-sub">cross-platform</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">9</div>
+          <div class="stat-label">CLI commands<br><span class="stat-sub">across 3 modules</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">4</div>
+          <div class="stat-label">active agents<br><span class="stat-sub">down from 9 in lore</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">69+</div>
+          <div class="stat-label">issues &amp; PRs<br><span class="stat-sub">every change through the cycle</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">v0.0.7+</div>
+          <div class="stat-label">with cycle artifacts<br><span class="stat-sub"><code>docs/issues/NNN-slug/</code></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="darwin-heading">
+      <h2 id="darwin-heading">What DARWIN has produced</h2>
+      <p>
+        When <code>evolution.enabled</code> is true, DARWIN reads the cycle's artifacts and files concrete mutation proposals as GitHub issues. The collapse from nine lore apes to four active ones was driven by these proposals — every deprecation is logged, with reasoning.
+      </p>
+      <div class="callout">
+        <strong>Example.</strong> Issue <a href="https://github.com/ccisnedev/finite_ape_machine/issues/54">#54</a> proposes a change to how EXECUTE interacts with the test runner, citing three cycles where the same inefficiency appeared. The proposal is public, debatable, and subject to the same review process as any other issue. Nothing is filed silently.
+      </div>
+      <p>
+        The mutations aren't theoretical. <a href="agents.html">The four active apes</a> exist as they do because DARWIN proposed absorbing MARCOPOLO into SOCRATES, replacing SUNZI with DESCARTES's method, and deprecating ADA's TDD phase in favor of BASHŌ's techne — and the maintainer accepted those proposals based on cycle evidence.
+      </p>
+    </section>
+
+    <section aria-labelledby="missing-heading">
+      <h2 id="missing-heading">What's still missing</h2>
+      <p class="section-intro">
+        Honest accounting. The bootstrap is empirical but incomplete. Three gaps block the paper.
+      </p>
+      <dl class="gap-list">
+        <dt>1. Structured per-cycle metrics</dt>
+        <dd>
+          The cycle produces artifacts, but there's no machine-readable <code>metrics.yaml</code> capturing time-to-plan, plan completion rate, test pass delta, or reviewer overrides. <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/roadmap.md">Roadmap item #72</a>.
+        </dd>
+        <dt>2. Thirty clean cycles of data</dt>
+        <dd>
+          Current reproducibility score: <strong>2/10</strong>. Early cycles ran before the contract stabilized; only post-v0.0.11 cycles qualify as clean. Thirty is a minimum for statistical claims.
+        </dd>
+        <dt>3. A test matrix across targets</dt>
+        <dd>
+          Single-target MVP today (Copilot). Adapters exist for Claude Code, Codex, Crush, and Gemini per <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/docs/spec/target-specific-agents.md">ADR D20</a>, but aren't wired in. The <em>methodology &gt; model</em> thesis demands comparison across targets — ideally including a local 7B — to be testable at all.
+        </dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="plan-heading">
+      <h2 id="plan-heading">Read the full plan</h2>
+      <p>
+        The complete research plan — thesis, data sources, metrics to graph, statistical methodology — lives in the repository. It's a working document; the shape is stable, the numbers are still accumulating.
+      </p>
+      <p>
+        <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/docs/research/ape_builds_ape/bootstrap-validation.md">→ <code>docs/research/ape_builds_ape/bootstrap-validation.md</code></a>
+      </p>
+    </section>
+
+    <section aria-labelledby="deeper-heading" class="go-deeper-section">
+      <h2 id="deeper-heading">Go deeper</h2>
+      <div class="deeper">
+        <a href="methodology.html" class="deeper-card">
+          <h3>Methodology →</h3>
+          <p>The FSM, the transition contract, and why methodology beats model.</p>
+        </a>
+        <a href="agents.html" class="deeper-card">
+          <h3>Meet the APEs →</h3>
+          <p>The four active agents that survived the collapse — and the five that didn't.</p>
+        </a>
+        <a href="evolution.html" class="deeper-card">
+          <h3>Evolution →</h3>
+          <p>How DARWIN works, what it collects, and why it's off by default.</p>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <a href="index.html">Home</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine">GitHub</a>·
+      <a href="https://github.com/ccisnedev/finite_ape_machine/blob/main/roadmap.md">Roadmap</a>·
+      MIT License
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

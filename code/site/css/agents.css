@@ -1,0 +1,273 @@
+/* agents.css — Styles specific to the /agents page */
+
+/* ----- Agents grid ----- */
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.agent-card {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.agent-card--opt {
+  border-left-color: var(--warn);
+  border-left-style: dashed;
+}
+
+.agent-card .inner {
+  padding: 1.5rem 1.4rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+.agent-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.agent-phase {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.agent-name {
+  font-family: var(--mono);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.01em;
+  line-height: 1;
+  margin: 0;
+}
+
+.agent-card--opt .agent-name { color: var(--warn); }
+
+.agent-discipline {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--fg-dim);
+}
+
+.agent-body {
+  font-size: 0.95rem;
+  color: var(--fg-dim);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.agent-output {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border-dim);
+  font-size: 0.8rem;
+}
+
+.agent-output .output-label {
+  font-family: var(--mono);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+}
+
+.agent-output code {
+  font-family: var(--mono);
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.agent-card .opt-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--warn);
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--warn);
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ----- Epigraph (shared quote pattern for all agent cards) ----- */
+.agent-maxim {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+  font-style: italic;
+  line-height: 1.55;
+  padding-left: 0.9rem;
+  border-left: 1px solid rgba(239, 68, 68, 0.4);
+  margin: 0.25rem 0;
+}
+
+/* ===== Cultural motifs per agent =====
+   Subtle archetypal identity for each namesake's cultural origin. */
+
+/* --- SOCRATES: Greek meander (fret) strip at top --- */
+.agent-card--socrates .motif-strip {
+  border-bottom: 1px solid var(--border-dim);
+  padding: 0.65rem 1rem;
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.agent-card--socrates .motif-strip svg {
+  display: block;
+  width: 100%;
+  height: 16px;
+}
+
+/* --- DESCARTES: Cartesian plane in top-right corner --- */
+.agent-card--descartes .motif-corner {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  width: 68px;
+  height: 68px;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.agent-card--descartes .inner {
+  padding-right: 5.75rem;
+}
+
+/* --- BASHŌ: asymmetric layout + sakura + sumi-e + haiku --- */
+.agent-card--basho .inner {
+  padding-left: 3.25rem;
+  position: relative;
+}
+
+.agent-card--basho .sakura-anchor {
+  position: absolute;
+  top: 1.3rem;
+  left: 0.9rem;
+  width: 32px;
+  height: 32px;
+}
+
+.agent-card--basho .sumi-divider {
+  display: block;
+  width: 100%;
+  height: 14px;
+  margin: 0.2rem 0 0.4rem;
+}
+
+.agent-card--basho .haiku {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+  font-style: italic;
+  line-height: 1.5;
+  padding-left: 0.9rem;
+  border-left: 1px solid rgba(239, 68, 68, 0.4);
+  margin: 0.25rem 0;
+}
+
+/* --- DARWIN: evolutionary tree + field note --- */
+.agent-card--darwin .motif-corner {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.9rem;
+  width: 48px;
+  height: 64px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.agent-card--darwin .inner {
+  padding-right: 4.5rem;
+}
+
+.agent-card--darwin .field-note {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+  padding: 0.4rem 0.6rem 0.3rem;
+  border-left: 2px solid var(--border-strong);
+  background: rgba(168, 176, 196, 0.04);
+}
+
+.agent-card--darwin .field-note::before {
+  content: '— ';
+  color: var(--fg-dim);
+}
+
+/* ----- Status pills (for the Lore vs reality table) ----- */
+.status-pill {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.status-active {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.status-absorbed {
+  color: var(--muted);
+  border-color: var(--border-strong);
+  background: rgba(106, 113, 136, 0.08);
+}
+
+.status-replaced {
+  color: var(--muted);
+  border-color: var(--border-strong);
+  background: transparent;
+  text-decoration: line-through;
+  text-decoration-color: var(--muted);
+  text-decoration-thickness: 1px;
+}
+
+.status-future {
+  color: var(--warn);
+  border-color: var(--warn);
+  background: rgba(230, 160, 45, 0.08);
+  border-style: dashed;
+}
+
+.status-materialized {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(0, 212, 180, 0.1);
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 540px) {
+  .agent-card .inner { padding: 1.25rem 1.1rem 1.1rem; }
+  .agent-name { font-size: 1.3rem; }
+  .agent-card--descartes .inner,
+  .agent-card--darwin .inner { padding-right: 1.1rem; }
+  .agent-card--descartes .motif-corner,
+  .agent-card--darwin .motif-corner { display: none; }
+}
