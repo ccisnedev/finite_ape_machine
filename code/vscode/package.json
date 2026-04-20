@@ -2,7 +2,7 @@
   "name": "ape-vscode",
   "displayName": "APE",
   "publisher": "ccisnedev",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "APE — Autonomous Programming Engine for VS Code",
   "license": "MIT",
   "icon": "assets/icon.png",

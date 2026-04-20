@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.0.4] - 2026-04-19
+
+### Changed
+- Brand refresh: horizontal APE icon (JetBrains Mono 700, red on navy with radial glow)
+- Sidebar glyph now uses `currentColor` so it tints with the VS Code theme
+
 ## [0.0.3] - 2026-04-19
 
 ### Fixed
