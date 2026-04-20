@@ -13,7 +13,6 @@ export async function toggleEvolution(apeFolderPath: string): Promise<void> {
   const config = parseConfig(content);
   config.evolutionEnabled = !config.evolutionEnabled;
   const newContent = serializeConfig(config);
-  fs.mkdirSync(path.dirname(configPath), { recursive: true });
   fs.writeFileSync(configPath, newContent, 'utf-8');
 
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -34,7 +33,6 @@ export async function addMutation(apeFolderPath: string): Promise<void> {
 
   const mutationsPath = path.join(apeFolderPath, 'mutations.md');
   const entry = formatMutation(text, true);
-  fs.mkdirSync(path.dirname(mutationsPath), { recursive: true });
   fs.appendFileSync(mutationsPath, entry, 'utf-8');
   vscode.window.showInformationMessage('APE: Mutation note added');
 }
