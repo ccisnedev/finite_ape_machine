@@ -19,10 +19,12 @@
   },
   "main": "./out/extension.js",
   "activationEvents": [
-    "workspaceContains:.ape/"
+    "workspaceContains:.ape/",
+    "onCommand:ape.init"
   ],
   "contributes": {
     "commands": [
+      { "command": "ape.init", "title": "APE: Init" },
       { "command": "ape.toggleEvolution", "title": "APE: Toggle Evolution" },
       { "command": "ape.addMutation", "title": "APE: Add Mutation Note" }
     ]

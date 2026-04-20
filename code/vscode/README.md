@@ -7,7 +7,7 @@
 
 ---
 
-## ✨ Overview
+##  Overview
 
 APE (Autonomous Programming Engine) is a strict six-state FSM that structures AI-assisted development: **IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION**.
 
@@ -15,18 +15,18 @@ This extension brings APE's lifecycle into VS Code — no CLI execution needed. 
 
 ---
 
-## 🧩 Features
+##  Features
 
 | Feature | Description |
 |---------|-------------|
-| 📊 **Status Bar** | Live display of the current APE state with phase-specific icons |
-| 🔄 **Toggle Evolution** | Enable/disable the EVOLUTION phase via `.ape/config.yaml` |
-| 📝 **Add Mutation Note** | Append observations to `.ape/mutations.md` from the Command Palette |
-| ⚡ **Auto-activation** | Extension activates automatically when `.ape/` exists in the workspace |
+|  **Status Bar** | Live display of the current APE state with phase-specific icons |
+|  **Toggle Evolution** | Enable/disable the EVOLUTION phase via `.ape/config.yaml` |
+|  **Add Mutation Note** | Append observations to `.ape/mutations.md` from the Command Palette |
+|  **Auto-activation** | Extension activates automatically when `.ape/` exists in the workspace |
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 1. Install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ccisnedev.ape-vscode)
 2. Open a workspace that contains a `.ape/` directory
@@ -35,7 +35,7 @@ This extension brings APE's lifecycle into VS Code — no CLI execution needed. 
 
 ---
 
-## 💾 Commands
+##  Commands
 
 | Command | Action |
 |---------|--------|
@@ -44,7 +44,7 @@ This extension brings APE's lifecycle into VS Code — no CLI execution needed. 
 
 ---
 
-## 📊 Status Bar Icons
+##  Status Bar Icons
 
 | State | Icon |
 |-------|------|
@@ -64,7 +64,7 @@ This extension brings APE's lifecycle into VS Code — no CLI execution needed. 
 
 ---
 
-## 🔭 Roadmap
+##  Roadmap
 
 - CLI integration (`ape` command execution from VS Code)
 - Tree view for `.ape/` directory contents
@@ -73,13 +73,13 @@ This extension brings APE's lifecycle into VS Code — no CLI execution needed. 
 
 ---
 
-## 🧾 License
+##  License
 
 MIT © 2026 Cristian Cisneros
 
 ---
 
-## 🧩 Links
+##  Links
 
-- 🧠 APE CLI: [ccisne-dev/finite_ape_machine](https://github.com/ccisne-dev/finite_ape_machine)
-- 💬 Report issues: [GitHub Issues](https://github.com/ccisne-dev/finite_ape_machine/issues)
+-  APE CLI: [ccisne-dev/finite_ape_machine](https://github.com/ccisne-dev/finite_ape_machine)
+-  Report issues: [GitHub Issues](https://github.com/ccisne-dev/finite_ape_machine/issues)
