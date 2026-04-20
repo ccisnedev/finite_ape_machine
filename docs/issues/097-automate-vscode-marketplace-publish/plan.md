@@ -31,12 +31,13 @@ state.
 
 **Dependencies:** None.
 
-- [ ] 1.1 Verify whether `ape-vscode-0.0.6.vsix` is still tracked by git
+- [x] 1.1 Verify whether `ape-vscode-0.0.6.vsix` is still tracked by git
   - Run `git ls-files "*.vsix"` in repository root
   - If no files returned → artifact already untracked, skip to 1.3
-- [ ] 1.2 If tracked: run `git rm code/vscode/ape-vscode-0.0.6.vsix` (or whatever path is returned)
-- [ ] 1.3 Verify `code/vscode/.gitignore` contains `*.vsix` entry (already confirmed: line 3)
-- [ ] 1.4 Commit: `chore(097): remove tracked .vsix build artifact`
+  - **Result: no files returned — already untracked**
+- [x] 1.2 ~~If tracked: run `git rm`~~ SKIPPED — already untracked
+- [x] 1.3 Verify `code/vscode/.gitignore` contains `*.vsix` entry (already confirmed: line 3)
+- [x] 1.4 ~~Commit~~ SKIPPED — no-op, no changes to commit
 
 **Verification:**
 ```pseudo
@@ -62,28 +63,26 @@ because the test job (Phase 4) runs `npm run test:unit`, which will execute this
 **Dependencies:** Phase 1. Existing test infrastructure (`test:unit` script, mocha,
 `tsconfig.json` compiling `test/unit/**/*.test.ts`).
 
-- [ ] 2.1 **RED — Write the unit test** `code/vscode/test/unit/pat-expiry.test.ts`:
-  - [ ] 2.1.1 Test reads `code/vscode/.pat-expires` file (resolve path relative to
-    workspace root using `path.resolve(__dirname, '../../.pat-expires')` or equivalent)
-  - [ ] 2.1.2 Test parses the file content as a `YYYY-MM-DD` date string (single line,
+- [x] 2.1 **RED — Write the unit test** `code/vscode/test/unit/pat-expiry.test.ts`:
+  - [x] 2.1.1 Test reads `code/vscode/.pat-expires` file (resolve path relative to
+    workspace root using `path.resolve(__dirname, '../../../.pat-expires')`)
+  - [x] 2.1.2 Test parses the file content as a `YYYY-MM-DD` date string (single line,
     trimmed)
-  - [ ] 2.1.3 Test calculates days until expiration: `expirationDate - today`
-  - [ ] 2.1.4 Behavior:
+  - [x] 2.1.3 Test calculates days until expiration: `expirationDate - today`
+  - [x] 2.1.4 Behavior:
     - If expired (days ≤ 0): `assert.fail('VSCE PAT has expired on <date>. Rotate immediately.')`
     - If expires within 7 days: `assert.fail('VSCE PAT expires in <N> days (<date>). Rotate now.')`
     - If expires within 30 days: `console.warn('⚠ VSCE PAT expires in <N> days (<date>). Plan rotation.')` — test PASSES
     - If expires in >30 days: test PASSES silently
-  - [ ] 2.1.5 If `.pat-expires` file is missing or unparseable: `assert.fail('Missing or invalid .pat-expires file')`
-  - [ ] 2.1.6 Verify test FAILS when run now (RED) — file does not yet exist
-- [ ] 2.2 **GREEN — Create the expiration tracking file** `code/vscode/.pat-expires`:
-  - [ ] 2.2.1 File content: single line `2026-12-31` (matches current PAT expiration)
-  - [ ] 2.2.2 No trailing newline required, but tolerate one in the test
-  - [ ] 2.2.3 Run `npm run test:unit` — verify the new test PASSES (GREEN)
-  - [ ] 2.2.4 Verify console warns if within 30 days (won't happen now — 255 days remain)
-- [ ] 2.3 Verify `.pat-expires` is NOT in `.vscodeignore` (it's a dev file, not
-  packaged — but since `.vscodeignore` uses allowlists with `**/*` patterns, confirm
-  it won't accidentally be included in the `.vsix`)
-- [ ] 2.4 Commit: `feat(097): add PAT expiration tracking file and unit test`
+  - [x] 2.1.5 If `.pat-expires` file is missing or unparseable: `assert.fail('Missing or invalid .pat-expires file')`
+  - [x] 2.1.6 Verify test FAILS when run now (RED) — confirmed
+- [x] 2.2 **GREEN — Create the expiration tracking file** `code/vscode/.pat-expires`:
+  - [x] 2.2.1 File content: single line `2026-12-31` (matches current PAT expiration)
+  - [x] 2.2.2 No trailing newline required, but tolerate one in the test
+  - [x] 2.2.3 Run `npm run test:unit` — 60 passing, 0 failing (GREEN)
+  - [x] 2.2.4 Verify console warns if within 30 days (won't happen now — 255 days remain)
+- [x] 2.3 `.pat-expires` added to `.vscodeignore` — confirmed absent from `vsce ls` output
+- [x] 2.4 Commit: `feat(097): add PAT expiration tracking file and unit test`
 
 **Verification:**
 ```pseudo
@@ -123,38 +122,14 @@ significant phase — get it right before adding test and publish jobs.
 
 **Dependencies:** Phase 2.
 
-- [ ] 3.1 Create `.github/workflows/vscode-marketplace.yml` with workflow metadata:
-  ```yaml
-  name: VS Code Marketplace
-  on:
-    push:
-      branches: [main]
-      paths:
-        - 'code/vscode/**'
-        - '.github/workflows/vscode-marketplace.yml'
-  ```
-- [ ] 3.2 Implement `check-version` job on `ubuntu-latest`:
-  - [ ] 3.2.1 Step: Checkout with `actions/checkout@v4`
-  - [ ] 3.2.2 Step: Read local version from `code/vscode/package.json` using `jq` or `node -p`
-    - Output: `local_version` (e.g., `0.0.6`)
-  - [ ] 3.2.3 Step: Query Marketplace for published version
-    - Use the public Marketplace REST API:
-      ```
-      POST https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery
-      ```
-      with JSON body filtering by `ccisnedev.ape-vscode`, extracting
-      `results[0].extensions[0].versions[0].version`
-    - Alternative (simpler): `npx @vscode/vsce show ccisnedev.ape-vscode --json` and parse version
-    - **Decision:** Use the `npx @vscode/vsce show` approach — it's simpler, uses a tool
-      already in devDependencies, and avoids hand-crafting REST requests
-    - Output: `marketplace_version` (e.g., `0.0.6`, or empty string if not yet published)
-  - [ ] 3.2.4 Step: Compare versions and set `should_publish` output
-    - If `local_version == marketplace_version` → `should_publish=false`
-    - If `local_version != marketplace_version` → `should_publish=true`
-    - If Marketplace query fails (extension not found / API error) → `should_publish=true`
-      (first publish scenario)
-  - [ ] 3.2.5 Declare job outputs: `should_publish`, `local_version`
-- [ ] 3.3 Commit: `ci(097): add vscode-marketplace workflow with version check job`
+- [x] 3.1 Create `.github/workflows/vscode-marketplace.yml` with workflow metadata
+- [x] 3.2 Implement `check-version` job on `ubuntu-latest`:
+  - [x] 3.2.1 Step: Checkout with `actions/checkout@v4`
+  - [x] 3.2.2 Step: Read local version from `code/vscode/package.json` using `node -p`
+  - [x] 3.2.3 Step: Query Marketplace via `npx @vscode/vsce show` with text grep fallback
+  - [x] 3.2.4 Step: Compare versions and set `should_publish` output
+  - [x] 3.2.5 Declare job outputs: `should_publish`, `local_version`
+- [x] 3.3 Commit: `ci(097): add vscode-marketplace workflow with version check job`
 
 **Verification:**
 ```pseudo
@@ -184,16 +159,12 @@ the version check (no dependency), but the publish job depends on both. The
 
 **Dependencies:** Phase 3 (workflow file exists). Phase 2 (test file + `.pat-expires` exist).
 
-- [ ] 4.1 Add `test` job to the workflow:
-  - [ ] 4.1.1 Runs on matrix: `[ubuntu-latest, windows-latest]`
-  - [ ] 4.1.2 Set `defaults.run.working-directory: code/vscode`
-  - [ ] 4.1.3 Steps:
-    - `actions/checkout@v4`
-    - `actions/setup-node@v4` with `node-version: 20`
-    - `npm ci`
-    - `npm run test:unit`
-- [ ] 4.2 Verify the test job has NO dependency on `check-version` (runs in parallel)
-- [ ] 4.3 Commit: `ci(097): add cross-platform test job to vscode-marketplace workflow`
+- [x] 4.1 Add `test` job to the workflow:
+  - [x] 4.1.1 Runs on matrix: `[ubuntu-latest, windows-latest]`
+  - [x] 4.1.2 Set `defaults.run.working-directory: code/vscode`
+  - [x] 4.1.3 Steps: checkout, setup-node@v4, npm ci, npm run test:unit
+- [x] 4.2 Verify the test job has NO dependency on `check-version` (runs in parallel)
+- [x] 4.3 Commit: `ci(097): add cross-platform test job to vscode-marketplace workflow`
 
 **Verification:**
 ```pseudo
@@ -225,31 +196,14 @@ reads `.pat-expires` directly in the workflow as defense-in-depth.
 
 **Dependencies:** Phase 4 (and transitively, Phases 2 and 3).
 
-- [ ] 5.1 Add `publish` job to the workflow:
-  - [ ] 5.1.1 Set `needs: [check-version, test]`
-  - [ ] 5.1.2 Set `if: needs.check-version.outputs.should_publish == 'true'`
-  - [ ] 5.1.3 Runs on `ubuntu-latest`
-  - [ ] 5.1.4 Set `defaults.run.working-directory: code/vscode`
-  - [ ] 5.1.5 Steps:
-    - `actions/checkout@v4`
-    - `actions/setup-node@v4` with `node-version: 20`
-    - `npm ci`
-    - **PAT expiry check step** (before compile/publish):
-      ```yaml
-      - name: Check PAT expiration
-        run: |
-          expires=$(cat .pat-expires | tr -d '[:space:]')
-          today=$(date -u +%Y-%m-%d)
-          if [[ "$today" > "$expires" || "$today" == "$expires" ]]; then
-            echo "::error::VSCE PAT expired on $expires. Rotate the token."
-            exit 1
-          fi
-      ```
-    - `npm run compile` (webpack production build)
-    - `npx vsce publish --no-dependencies` with env `VSCE_PAT: ${{ secrets.VSCE_PAT }}`
-- [ ] 5.2 Verify publish job skips gracefully when `should_publish == 'false'`
-  (GitHub Actions native behavior: job is skipped, workflow shows green)
-- [ ] 5.3 Commit: `ci(097): add conditional publish job with PAT expiry guard`
+- [x] 5.1 Add `publish` job to the workflow:
+  - [x] 5.1.1 Set `needs: [check-version, test]`
+  - [x] 5.1.2 Set `if: needs.check-version.outputs.should_publish == 'true'`
+  - [x] 5.1.3 Runs on `ubuntu-latest`
+  - [x] 5.1.4 Set `defaults.run.working-directory: code/vscode`
+  - [x] 5.1.5 Steps: checkout, setup-node, npm ci, PAT expiry check, npm run compile, vsce publish
+- [x] 5.2 Verify publish job skips gracefully when `should_publish == 'false'`
+- [x] 5.3 Commit: `ci(097): add conditional publish job with PAT expiry guard`
 
 **Verification:**
 ```pseudo
@@ -291,26 +245,16 @@ with existing repository patterns, and documentation of the manual prerequisites
 
 **Dependencies:** Phase 5.
 
-- [ ] 6.1 Review the complete `vscode-marketplace.yml` for:
-  - [ ] 6.1.1 Correct trigger configuration (push to main, path filter)
-  - [ ] 6.1.2 Job dependency graph: `check-version` ← `publish` → `test`
-    (check-version and test run in parallel; publish depends on both)
-  - [ ] 6.1.3 Consistent use of `actions/checkout@v4` and `actions/setup-node@v4`
-  - [ ] 6.1.4 No permissions block needed (no GITHUB_TOKEN usage beyond default read)
-  - [ ] 6.1.5 Working directory set correctly on jobs that need it
-  - [ ] 6.1.6 PAT expiry check step present in publish job before `vsce publish`
-- [ ] 6.2 Add a comment block at the top of the workflow (following `release.yml` pattern)
-  documenting:
-  - Purpose of the workflow
-  - The two-gate approach (path filter + version check)
-  - `VSCE_PAT` secret requirement and how to create it
-  - `.pat-expires` file maintenance requirement (update when rotating PAT)
-- [ ] 6.3 Verify the workflow does NOT:
-  - Create git tags
-  - Create GitHub releases
-  - Modify any files in `code/cli/` or `code/site/`
-  - Use `contents: write` permission
-- [ ] 6.4 Commit: `ci(097): finalize vscode-marketplace workflow with documentation`
+- [x] 6.1 Review the complete `vscode-marketplace.yml`:
+  - [x] 6.1.1 Correct trigger configuration (push to main, path filter)
+  - [x] 6.1.2 Job dependency graph: check-version ∥ test → publish
+  - [x] 6.1.3 Consistent use of `actions/checkout@v4` and `actions/setup-node@v4`
+  - [x] 6.1.4 No permissions block needed (no GITHUB_TOKEN usage beyond default read)
+  - [x] 6.1.5 Working directory set correctly on jobs that need it
+  - [x] 6.1.6 PAT expiry check step present in publish job before `vsce publish`
+- [x] 6.2 Header comment block added (following `release.yml` pattern)
+- [x] 6.3 Verified: no git tags, no releases, no cli/site mods, no write perms
+- [x] 6.4 Commit: `ci(097): finalize vscode-marketplace workflow with documentation`
 
 **Verification:**
 ```pseudo
@@ -331,16 +275,9 @@ THEN it contains exactly 3 jobs: check-version, test, publish
 
 **Dependencies:** Phase 6.
 
-- [ ] 7.1 Produce validation report:
-  - What was implemented
-  - How to verify (manual steps the user can take)
-  - Known limitations
-- [ ] 7.2 Produce `retrospective.md`:
-  - What went well
-  - What deviated from the plan
-  - What surprised
-  - Spawn issues identified
-- [ ] 7.3 Final commit: `docs(097): execution retrospective`
+- [x] 7.1 Validation report produced in retrospective.md
+- [x] 7.2 Retrospective produced: what went well, deviations, surprises, spawn issues
+- [x] 7.3 Final commit: `docs(097): execution retrospective`
 
 ---
 
