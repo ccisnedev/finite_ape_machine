@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.0.16]
+### Added
+- **Site validation tests** (`site_test.dart`): 14 tests validating `code/site/` HTML structure, meta tags, install scripts, and secondary pages
+- **Triangular version sync test**: `version_sync_test.dart` now checks all three version sources are mutually consistent with actionable error messages
+
+### Fixed
+- **CI trigger for site changes** (#103): `ci.yml` now includes `code/site/**` in paths filter so site changes trigger version sync tests
+- **Version sync test messages**: Error output now tells the developer exactly which file to fix
+
 ## [0.0.15]
 ### Added
 - **Target verification in `ape doctor`** (#96): Verify agent and skill deployment per target

@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'code/cli/**'
+      - 'code/site/**'
       - '.github/workflows/ci.yml'
   pull_request:
     paths:
       - 'code/cli/**'
+      - 'code/site/**'
       - '.github/workflows/ci.yml'
 
 jobs:
