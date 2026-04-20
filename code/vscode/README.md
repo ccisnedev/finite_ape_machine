@@ -2,9 +2,6 @@
 
 **Analyze. Plan. Execute.**
 
-[![Marketplace](https://img.shields.io/visual-studio-marketplace/v/ccisnedev.ape-vscode?color=brightgreen&label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=ccisnedev.ape-vscode)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
 > Select **@ape** as your GitHub Copilot custom agent.
 > Every task follows a strict cycle: **ANALYZE → PLAN → EXECUTE**.
 > No freestyling. No hallucinated plans. Structure from analysis to PR.
