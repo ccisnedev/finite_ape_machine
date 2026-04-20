@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.0.15]
+### Added
+- **Target verification in `ape doctor`** (#96): Verify agent and skill deployment per target
+  - Check `.ape/` directory existence with `ape init` remediation suggestion
+  - Check agent file existence in `~/.copilot/agents/`
+  - Dynamic skill discovery from asset tree (no hardcoded list)
+  - Asymmetric verbosity: clean output when OK, detailed errors with remediation
+  - Exit code 1 when target checks fail
+  - `FileSystemOps` abstraction for testable filesystem access
+  - 8 new tests covering Scenarios A-D (all pass, nothing deployed, no init, partial)
+  - Cross-platform validated: Windows + Linux (WSL)
+
 ## [0.0.14]
 ### Added
 - **EVOLUTION infrastructure** (#68): `.ape/config.yaml` + `.ape/mutations.md` lifecycle
