@@ -13,7 +13,7 @@
 
 ## How it works
 
-![APE finite state machine](https://raw.githubusercontent.com/ccisnedev/finite_ape_machine/main/code/site/img/fsm.svg)
+![APE finite state machine](https://raw.githubusercontent.com/ccisnedev/finite_ape_machine/main/code/site/img/fsm.png)
 
 | Phase | What happens | Output |
 |-------|-------------|--------|

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6] - 2026-04-20
+
+### Changed
+- Icon: triple yin-yang replaces APE text logo
+- FSM diagram: embedded SVG replaces ASCII art in README
+- README phase table: removed internal agent names (cleaner for Marketplace)
+
 ## [0.0.5] - 2026-04-19
 
 ### Changed
