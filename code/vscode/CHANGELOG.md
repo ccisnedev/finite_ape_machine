@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.0.2] - 2026-04-19
+
+### Added
+- `APE: Init` command — detects, installs, and initializes APE CLI from VS Code
+- Guard clause on all commands — validates CLI + workspace before executing
+- Cross-platform install (Windows + Linux) with progress notification
+
+### Fixed
+- Commands no longer silently create `.ape/` without CLI validation
+
 ## [0.0.1] - 2026-04-19
 
 ### Added

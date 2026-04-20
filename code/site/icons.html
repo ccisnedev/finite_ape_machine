@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Icons · APE — brand + sidebar system</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0e1a;
+      --bg-elevated: #141b2e;
+      --fg: #e8ecf7;
+      --fg-dim: #a8b0c4;
+      --muted: #6a7188;
+      --primary: #ef4444;
+      --accent: #00d4b4;
+      --border: #232b45;
+      --border-strong: #4a5678;
+      --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      padding: 3rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header { text-align: center; margin-bottom: 3rem; }
+    header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    header p { color: var(--fg-dim); max-width: 66ch; margin: 0 auto; }
+
+    .nav {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+    }
+    .nav a {
+      color: var(--fg-dim);
+      text-decoration: none;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+    }
+    .nav a:hover { color: var(--fg); border-color: var(--primary); }
+
+    .direction {
+      margin-top: 3rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.75rem;
+    }
+
+    .direction header {
+      text-align: left;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--primary);
+      padding: 0.1rem 0.55rem;
+      border: 1px solid var(--primary);
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .direction h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .direction .desc {
+      color: var(--fg-dim);
+      font-size: 0.92rem;
+      flex-basis: 100%;
+      margin-top: 0.25rem;
+      max-width: 78ch;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .panel h3 {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.85rem;
+    }
+
+    .panel-note {
+      font-size: 0.8rem;
+      color: var(--fg-dim);
+      margin-top: 0.75rem;
+      font-style: italic;
+    }
+
+    .brand-row {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .brand-sample {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .brand-sample .label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+
+    .sizes {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .size {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .size .label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+
+    /* Mock VSCode sidebar container */
+    .vscode-mock {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 40px;
+      background: #181818;
+      border-radius: 4px;
+      color: #cccccc;
+    }
+    .vscode-mock.active {
+      background: #1f1f1f;
+      color: #ffffff;
+      position: relative;
+    }
+    .vscode-mock.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #ef4444;
+    }
+
+    .light-swatch {
+      background: #e8ecf7;
+      color: #0a0e1a;
+      padding: 1rem;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .row-wide {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    @media (max-width: 700px) {
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Icons · APE system</h1>
+    <p>
+      Three directions that keep the three letters <strong>APE</strong> legible across every context. Each direction has a <em>brand icon</em> (colored, detailed, for marketplace / favicon / OG / merch) and a <em>sidebar glyph</em> (monochrome line, <code>currentColor</code>, for VSCode activity bar and other small monochrome slots).
+    </p>
+    <nav class="nav">
+      <a href="#h">1 · Horizontal APE</a>
+      <a href="#s">2 · Stacked APE</a>
+      <a href="#t">3 · Triangle APE</a>
+    </nav>
+  </header>
+
+  <!-- ============================================ DIRECTION 1 ============================================ -->
+  <section class="direction" id="h">
+    <header>
+      <span class="tag">Direction 1</span>
+      <h2>Horizontal APE</h2>
+      <p class="desc">
+        Three letters on one line, JetBrains Mono bold, tight kerning. The most direct, most wordmark-like. Reads instantly as "APE" at any size. Brand version adds a subtle accent mark; sidebar version is pure letterforms.
+      </p>
+    </header>
+
+    <div class="row">
+      <!-- BRAND -->
+      <div class="panel">
+        <h3>Brand icon · colored · 128 and up</h3>
+        <div class="brand-row">
+          <div class="brand-sample">
+            <!-- 128x128 brand -->
+            <svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="20" fill="#0a0e1a"/>
+              <rect x="0" y="0" width="128" height="128" rx="20" fill="url(#h-glow)"/>
+              <defs>
+                <radialGradient id="h-glow" cx="50%" cy="0%" r="70%">
+                  <stop offset="0%" stop-color="#ef4444" stop-opacity="0.18"/>
+                  <stop offset="70%" stop-color="#ef4444" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <text x="64" y="82" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="48" fill="#ef4444" letter-spacing="-1">APE</text>
+              <circle cx="64" cy="104" r="2.5" fill="#00d4b4"/>
+            </svg>
+            <span class="label">128 × 128</span>
+          </div>
+          <div class="brand-sample">
+            <svg width="64" height="64" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="20" fill="#0a0e1a"/>
+              <text x="64" y="82" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="48" fill="#ef4444" letter-spacing="-1">APE</text>
+              <circle cx="64" cy="104" r="2.5" fill="#00d4b4"/>
+            </svg>
+            <span class="label">64 × 64</span>
+          </div>
+          <div class="brand-sample">
+            <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="20" fill="#0a0e1a"/>
+              <text x="64" y="82" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="48" fill="#ef4444" letter-spacing="-1">APE</text>
+            </svg>
+            <span class="label">32 · favicon</span>
+          </div>
+        </div>
+        <p class="panel-note">Rounded-square brand tile. Red "APE" centered, small cyan dot as accent/anchor. Navy base matches site palette.</p>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="panel">
+        <h3>Sidebar glyph · monochrome · 24 × 24</h3>
+        <div class="brand-row">
+          <div class="brand-sample">
+            <div class="vscode-mock active">
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <text x="12" y="16" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="10" fill="currentColor" letter-spacing="-0.5">APE</text>
+              </svg>
+            </div>
+            <span class="label">VSCode · active</span>
+          </div>
+          <div class="brand-sample">
+            <div class="vscode-mock">
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <text x="12" y="16" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="10" fill="currentColor" letter-spacing="-0.5">APE</text>
+              </svg>
+            </div>
+            <span class="label">VSCode · inactive</span>
+          </div>
+          <div class="brand-sample">
+            <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: #e8ecf7;">
+              <text x="12" y="16" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="10" fill="currentColor" letter-spacing="-0.5">APE</text>
+            </svg>
+            <span class="label">2× preview</span>
+          </div>
+          <div class="brand-sample">
+            <div class="light-swatch">
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: #0a0e1a;">
+                <text x="12" y="16" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="10" fill="currentColor" letter-spacing="-0.5">APE</text>
+              </svg>
+            </div>
+            <span class="label">on light</span>
+          </div>
+        </div>
+        <p class="panel-note">Single color via <code>currentColor</code> — VSCode tints it with the theme. Bold mono, tight kerning to fit 3 letters in 24 px.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ DIRECTION 2 ============================================ -->
+  <section class="direction" id="s">
+    <header>
+      <span class="tag">Direction 2</span>
+      <h2>Stacked APE</h2>
+      <p class="desc">
+        Letters stacked vertically — A over P over E. Vertical reading rarely used in dev-tool icons, which makes it memorable. At 24 px each letter gets ~7 px of height, readable in heavy mono weight. At larger sizes the stack has strong presence as a block shape.
+      </p>
+    </header>
+
+    <div class="row">
+      <!-- BRAND -->
+      <div class="panel">
+        <h3>Brand icon · colored · 128 and up</h3>
+        <div class="brand-row">
+          <div class="brand-sample">
+            <svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="20" fill="#0a0e1a"/>
+              <defs>
+                <radialGradient id="s-glow" cx="50%" cy="0%" r="70%">
+                  <stop offset="0%" stop-color="#ef4444" stop-opacity="0.18"/>
+                  <stop offset="70%" stop-color="#ef4444" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect width="128" height="128" rx="20" fill="url(#s-glow)"/>
+              <text x="64" y="44" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="34" fill="#ef4444">A</text>
+              <text x="64" y="80" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="34" fill="#ef4444">P</text>
+              <text x="64" y="116" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="34" fill="#ef4444">E</text>
+              <!-- tiny connecting dots (cycle hint) -->
+              <circle cx="84" cy="55" r="1.2" fill="#00d4b4"/>
+              <circle cx="84" cy="91" r="1.2" fill="#00d4b4"/>
+            </svg>
+            <span class="label">128 × 128</span>
+          </div>
+          <div class="brand-sample">
+            <svg width="64" height="64" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="20" fill="#0a0e1a"/>
+              <text x="64" y="44" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="34" fill="#ef4444">A</text>
+              <text x="64" y="80" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="34" fill="#ef4444">P</text>
+              <text x="64" y="116" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="34" fill="#ef4444">E</text>
+            </svg>
+            <span class="label">64 × 64</span>
+          </div>
+          <div class="brand-sample">
+            <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="20" fill="#0a0e1a"/>
+              <text x="64" y="44" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="34" fill="#ef4444">A</text>
+              <text x="64" y="80" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="34" fill="#ef4444">P</text>
+              <text x="64" y="116" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="34" fill="#ef4444">E</text>
+            </svg>
+            <span class="label">32 · favicon</span>
+          </div>
+        </div>
+        <p class="panel-note">Three letters in heavy mono, stacked. Two tiny cyan dots to the right of A-P and P-E boundaries hint at transitions without spelling them out.</p>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="panel">
+        <h3>Sidebar glyph · monochrome · 24 × 24</h3>
+        <div class="brand-row">
+          <div class="brand-sample">
+            <div class="vscode-mock active">
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <text x="12" y="8" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">A</text>
+                <text x="12" y="15" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">P</text>
+                <text x="12" y="22" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">E</text>
+              </svg>
+            </div>
+            <span class="label">VSCode · active</span>
+          </div>
+          <div class="brand-sample">
+            <div class="vscode-mock">
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <text x="12" y="8" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">A</text>
+                <text x="12" y="15" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">P</text>
+                <text x="12" y="22" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">E</text>
+              </svg>
+            </div>
+            <span class="label">VSCode · inactive</span>
+          </div>
+          <div class="brand-sample">
+            <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: #e8ecf7;">
+              <text x="12" y="8" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">A</text>
+              <text x="12" y="15" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">P</text>
+              <text x="12" y="22" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">E</text>
+            </svg>
+            <span class="label">2× preview</span>
+          </div>
+          <div class="brand-sample">
+            <div class="light-swatch">
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: #0a0e1a;">
+                <text x="12" y="8" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">A</text>
+                <text x="12" y="15" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">P</text>
+                <text x="12" y="22" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">E</text>
+              </svg>
+            </div>
+            <span class="label">on light</span>
+          </div>
+        </div>
+        <p class="panel-note">Stack reads vertically. Heaviest mono weight (800) makes each letter legible at the small size.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ DIRECTION 3 ============================================ -->
+  <section class="direction" id="t">
+    <header>
+      <span class="tag">Direction 3</span>
+      <h2>Triangle APE</h2>
+      <p class="desc">
+        A at the top vertex, P at bottom-left, E at bottom-right — three letters forming a triangle. The geometric arrangement implies a three-state FSM cycle without drawing arrows. Most distinctive direction, connects typography to methodology. Most challenging at 24 px because space per letter is smallest.
+      </p>
+    </header>
+
+    <div class="row">
+      <!-- BRAND -->
+      <div class="panel">
+        <h3>Brand icon · colored · 128 and up</h3>
+        <div class="brand-row">
+          <div class="brand-sample">
+            <svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="20" fill="#0a0e1a"/>
+              <defs>
+                <radialGradient id="t-glow" cx="50%" cy="20%" r="70%">
+                  <stop offset="0%" stop-color="#ef4444" stop-opacity="0.18"/>
+                  <stop offset="70%" stop-color="#ef4444" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect width="128" height="128" rx="20" fill="url(#t-glow)"/>
+              <!-- Cyan connecting arcs (cycle hint) -->
+              <path d="M 54 52 Q 40 70, 48 92" stroke="#00d4b4" stroke-width="1.2" fill="none" stroke-dasharray="2 3" opacity="0.6"/>
+              <path d="M 74 52 Q 88 70, 80 92" stroke="#00d4b4" stroke-width="1.2" fill="none" stroke-dasharray="2 3" opacity="0.6"/>
+              <path d="M 52 100 L 76 100" stroke="#00d4b4" stroke-width="1.2" fill="none" stroke-dasharray="2 3" opacity="0.6"/>
+              <!-- A top -->
+              <text x="64" y="58" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="30" fill="#ef4444">A</text>
+              <!-- P bottom-left -->
+              <text x="36" y="104" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="30" fill="#ef4444">P</text>
+              <!-- E bottom-right -->
+              <text x="92" y="104" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="30" fill="#ef4444">E</text>
+            </svg>
+            <span class="label">128 × 128</span>
+          </div>
+          <div class="brand-sample">
+            <svg width="64" height="64" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="20" fill="#0a0e1a"/>
+              <path d="M 54 52 Q 40 70, 48 92" stroke="#00d4b4" stroke-width="1.2" fill="none" stroke-dasharray="2 3" opacity="0.6"/>
+              <path d="M 74 52 Q 88 70, 80 92" stroke="#00d4b4" stroke-width="1.2" fill="none" stroke-dasharray="2 3" opacity="0.6"/>
+              <path d="M 52 100 L 76 100" stroke="#00d4b4" stroke-width="1.2" fill="none" stroke-dasharray="2 3" opacity="0.6"/>
+              <text x="64" y="58" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="30" fill="#ef4444">A</text>
+              <text x="36" y="104" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="30" fill="#ef4444">P</text>
+              <text x="92" y="104" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="30" fill="#ef4444">E</text>
+            </svg>
+            <span class="label">64 × 64</span>
+          </div>
+          <div class="brand-sample">
+            <svg width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+              <rect width="128" height="128" rx="20" fill="#0a0e1a"/>
+              <text x="64" y="58" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="30" fill="#ef4444">A</text>
+              <text x="36" y="104" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="30" fill="#ef4444">P</text>
+              <text x="92" y="104" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="30" fill="#ef4444">E</text>
+            </svg>
+            <span class="label">32 · favicon</span>
+          </div>
+        </div>
+        <p class="panel-note">Letters at triangle vertices. Dashed cyan arcs connect them clockwise — visible at large sizes as the cycle hint, invisible at favicon size (too small for the arcs).</p>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="panel">
+        <h3>Sidebar glyph · monochrome · 24 × 24</h3>
+        <div class="brand-row">
+          <div class="brand-sample">
+            <div class="vscode-mock active">
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <text x="12" y="11" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">A</text>
+                <text x="6" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">P</text>
+                <text x="18" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">E</text>
+              </svg>
+            </div>
+            <span class="label">VSCode · active</span>
+          </div>
+          <div class="brand-sample">
+            <div class="vscode-mock">
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <text x="12" y="11" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">A</text>
+                <text x="6" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">P</text>
+                <text x="18" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">E</text>
+              </svg>
+            </div>
+            <span class="label">VSCode · inactive</span>
+          </div>
+          <div class="brand-sample">
+            <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: #e8ecf7;">
+              <text x="12" y="11" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">A</text>
+              <text x="6" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">P</text>
+              <text x="18" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">E</text>
+            </svg>
+            <span class="label">2× preview</span>
+          </div>
+          <div class="brand-sample">
+            <div class="light-swatch">
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: #0a0e1a;">
+                <text x="12" y="11" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">A</text>
+                <text x="6" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">P</text>
+                <text x="18" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="7" fill="currentColor">E</text>
+              </svg>
+            </div>
+            <span class="label">on light</span>
+          </div>
+        </div>
+        <p class="panel-note">Three letters arranged in triangle. No arcs at 24 px — the spatial arrangement alone carries the FSM narrative. Unique silhouette in any VSCode sidebar lineup.</p>
+      </div>
+    </div>
+  </section>
+
+  <div style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-left: 3px solid var(--primary); background: var(--bg-elevated); border-radius: 0 6px 6px 0; color: var(--fg-dim);">
+    <strong style="color: var(--fg);">When you decide.</strong> I take the chosen direction, export the brand SVG (for the web favicon data-URI or a real <code>favicon.png</code>) and the sidebar SVG (for the future VSCode extension). Both become canonical files in <code>img/</code>. The ape-letter in the current favicon gets retired.
+  </div>
+</body>
+</html>

@@ -23,14 +23,14 @@ Five phases transform the extension from v0.0.1 (no onboarding, buggy file creat
 
 ### Steps
 
-- [ ] 1.1 Create `src/guard.ts` exporting:
+- [x] 1.1 Create `src/guard.ts` exporting:
   - `getApeBinaryPath(platform: string): string` — returns absolute path
     - `win32` → `path.join(process.env.LOCALAPPDATA!, 'ape', 'bin', 'ape.exe')`
     - `linux` → `path.join(process.env.HOME!, '.ape', 'bin', 'ape')`
   - `isApeInstalled(platform?: string): boolean` — `fs.existsSync(getApeBinaryPath(...))`
   - `isApeWorkspace(workspaceFolder: string): boolean` — `fs.existsSync(path.join(folder, '.ape'))`
 
-- [ ] 1.2 Write unit tests `test/unit/guard.test.ts` (RED → GREEN)
+- [x] 1.2 Write unit tests `test/unit/guard.test.ts` (RED → GREEN)
 
 ```pseudo
 describe('getApeBinaryPath')
@@ -58,8 +58,8 @@ describe('isApeWorkspace')
     assert isApeWorkspace('/workspace') == false
 ```
 
-- [ ] 1.3 All tests pass (GREEN)
-- [ ] 1.4 REFACTOR: extract platform detection to `getPlatform(): string` wrapper for testability
+- [x] 1.3 All tests pass (GREEN)
+- [x] 1.4 REFACTOR: extract platform detection to `getPlatform(): string` wrapper for testability
 
 **Risk:** `LOCALAPPDATA` env var undefined in CI. Mitigation: test with explicit platform param, mock env.
 
@@ -71,7 +71,7 @@ describe('isApeWorkspace')
 
 ### Steps
 
-- [ ] 2.1 Create `src/command-guard.ts` — VS Code-aware wrapper:
+- [x] 2.1 Create `src/command-guard.ts` — VS Code-aware wrapper:
 
 ```pseudo
 async function withGuard(apeFolderPath, options, fn):
@@ -86,7 +86,7 @@ async function withGuard(apeFolderPath, options, fn):
   await fn()
 ```
 
-- [ ] 2.2 Write unit tests `test/unit/command-guard.test.ts` (RED → GREEN)
+- [x] 2.2 Write unit tests `test/unit/command-guard.test.ts` (RED → GREEN)
 
 ```pseudo
 describe('withGuard')
@@ -110,21 +110,21 @@ describe('withGuard')
     assert fn called once
 ```
 
-- [ ] 2.3 All tests pass (GREEN)
+- [x] 2.3 All tests pass (GREEN)
 
-- [ ] 2.4 Modify `src/commands.ts`:
+- [x] 2.4 Modify `src/commands.ts`:
   - Remove `fs.mkdirSync(path.dirname(...), { recursive: true })` from both functions
   - Both functions now assume `.ape/` exists (guard ensures it)
 
-- [ ] 2.5 Modify `src/extension.ts`:
+- [x] 2.5 Modify `src/extension.ts`:
   - Wrap `toggleEvolution` call inside `withGuard(apeFolderPath, {}, () => ...)`
   - Wrap `addMutation` call inside `withGuard(apeFolderPath, {}, () => ...)`
 
-- [ ] 2.6 Update existing tests in `test/unit/toggle-evolution.test.ts` and `test/unit/add-mutation.test.ts`:
+- [x] 2.6 Update existing tests in `test/unit/toggle-evolution.test.ts` and `test/unit/add-mutation.test.ts`:
   - Tests must set up `.ape/` directory before calling commands
   - Verify `mkdirSync` is no longer called
 
-- [ ] 2.7 Run full test suite — all 29 existing + new guard tests pass
+- [x] 2.7 Run full test suite — all 29 existing + new guard tests pass
 
 **Risk:** Breaking existing tests. Mitigation: run tests after each sub-step, not just at the end.
 
@@ -136,11 +136,11 @@ describe('withGuard')
 
 ### Steps
 
-- [ ] 3.1 Update `package.json`:
+- [x] 3.1 Update `package.json`:
   - Add `"onCommand:ape.init"` to `activationEvents`
   - Add `{ "command": "ape.init", "title": "APE: Init" }` to `contributes.commands`
 
-- [ ] 3.2 Create `src/init.ts` with `apeInit(workspaceFolder: string)`:
+- [x] 3.2 Create `src/init.ts` with `apeInit(workspaceFolder: string)`:
 
 ```pseudo
 async function apeInit(workspaceFolder):
@@ -157,11 +157,11 @@ async function apeInit(workspaceFolder):
   terminal.sendText(`"${binaryPath}" init`)
 ```
 
-- [ ] 3.3 Register command in `src/extension.ts`:
+- [x] 3.3 Register command in `src/extension.ts`:
   - `vscode.commands.registerCommand('ape.init', () => apeInit(workspaceFolder))`
   - Command must work even when `workspaceFolder` was undefined at activation (re-query `workspaceFolders`)
 
-- [ ] 3.4 Write unit tests `test/unit/init.test.ts` (RED → GREEN)
+- [x] 3.4 Write unit tests `test/unit/init.test.ts` (RED → GREEN)
 
 ```pseudo
 describe('apeInit')
@@ -179,9 +179,9 @@ describe('apeInit')
     assert install flow triggered (Phase 4 stub)
 ```
 
-- [ ] 3.5 All tests pass (GREEN)
+- [x] 3.5 All tests pass (GREEN)
 
-- [ ] 3.6 Manual smoke test: `Ctrl+Shift+P` → "APE: Init" activates extension
+- [x] 3.6 Manual smoke test: `Ctrl+Shift+P` → "APE: Init" activates extension
 
 **Risk:** Terminal command path with spaces. Mitigation: quote the binary path.
 
@@ -193,7 +193,7 @@ describe('apeInit')
 
 ### Steps
 
-- [ ] 4.1 Create `src/installer.ts`:
+- [x] 4.1 Create `src/installer.ts`:
 
 ```pseudo
 async function installApeCli():
@@ -221,7 +221,7 @@ async function installApeCli():
   )
 ```
 
-- [ ] 4.2 Wire install flow into `src/init.ts`:
+- [x] 4.2 Wire install flow into `src/init.ts`:
   - When `isApeInstalled()` returns false:
     - Show notification: "APE CLI not found. Install it?" with [Install] [Cancel]
     - If Install → call `installApeCli()`
@@ -229,7 +229,7 @@ async function installApeCli():
     - If verification passes → run `ape init` in terminal
     - If verification fails → show error "Installation failed"
 
-- [ ] 4.3 Write unit tests `test/unit/installer.test.ts` (RED → GREEN)
+- [x] 4.3 Write unit tests `test/unit/installer.test.ts` (RED → GREEN)
 
 ```pseudo
 describe('installApeCli')
@@ -263,7 +263,7 @@ describe('installApeCli')
     assert progress.report called 3 times
 ```
 
-- [ ] 4.4 Integration test `test/integration/init-flow.test.ts` (deferred — requires VS Code runtime)
+- [x] 4.4 Integration test `test/integration/init-flow.test.ts` (deferred — requires VS Code runtime)
 
 ```pseudo
 describe('APE: Init integration')
@@ -271,8 +271,8 @@ describe('APE: Init integration')
   it('completes full flow: install → verify → ape init')
 ```
 
-- [ ] 4.5 All unit tests pass (GREEN)
-- [ ] 4.6 REFACTOR: extract `getInstallCommand(platform)` for testability
+- [x] 4.5 All unit tests pass (GREEN)
+- [x] 4.6 REFACTOR: extract `getInstallCommand(platform)` for testability
 
 **Risk:** Corporate proxy blocks download. Mitigation: D6 — show error with manual install URL.
 **Risk:** Antivirus quarantines binary. Mitigation: show error suggesting allowlist.
@@ -285,12 +285,12 @@ describe('APE: Init integration')
 
 ### Steps
 
-- [ ] 5.1 Update `README.md`:
+- [x] 5.1 Update `README.md`:
   - Add "Getting Started" section with `APE: Init` instructions
   - Add "Requirements" section noting Windows/Linux only
   - Document the three commands with expected behavior
 
-- [ ] 5.2 Update `CHANGELOG.md`:
+- [x] 5.2 Update `CHANGELOG.md`:
 
 ```markdown
 ## [0.0.2] - 2026-04-XX
@@ -304,15 +304,15 @@ describe('APE: Init integration')
 - Commands no longer silently create `.ape/` without CLI validation
 ```
 
-- [ ] 5.3 Bump `package.json` version: `"0.0.1"` → `"0.0.2"`
+- [x] 5.3 Bump `package.json` version: `"0.0.1"` → `"0.0.2"`
 
-- [ ] 5.4 Run full test suite: `npm run test:unit`
+- [x] 5.4 Run full test suite: `npm run test:unit`
 
-- [ ] 5.5 Package: `npx vsce package --no-dependencies`
+- [x] 5.5 Package: `npx vsce package --no-dependencies`
 
-- [ ] 5.6 Publish: `npx vsce publish --no-dependencies`
+- [x] 5.6 Publish: `npx vsce publish --no-dependencies`
 
-- [ ] 5.7 Commit + PR: `"086: ape-vscode v0.0.2 — APE Init + command guards"`
+- [x] 5.7 Commit + PR: `"086: ape-vscode v0.0.2 — APE Init + command guards"`
 
 ---
 
