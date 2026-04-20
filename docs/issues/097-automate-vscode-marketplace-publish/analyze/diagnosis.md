@@ -82,6 +82,39 @@ Publishing uses `vsce publish` with a Personal Access Token stored as the `VSCE_
 repository secret. This enables end-to-end automation: push a version bump to `main`,
 and the extension is published without human intervention.
 
+**PAT creation process (Azure DevOps):**
+
+1. Go to https://aex.dev.azure.com/me → Personal access tokens → New Token
+2. Name: descriptive (e.g., `vscode-extension`)
+3. Organization: **"All accessible organizations"** (NOT a specific org — causes 403 in CI)
+4. Expiration: max 365 days — record the exact date
+5. Scopes: Show all scopes → **Marketplace (Manage)**
+6. Create → copy token immediately (cannot be retrieved later)
+
+**GitHub secret:** configured via `gh secret set VSCE_PAT` or Settings → Secrets → Actions.
+
+**Current token:** created 2026-04-20, expires 2026-12-31 UTC.
+
+### 2.8 PAT Expiration Tracking
+
+The PAT expires silently — Azure DevOps does not notify. To prevent surprise failures,
+the expiration date will be stored in a **file in the repository**
+(`code/vscode/.pat-expires`, containing a single line: `YYYY-MM-DD`). This file serves
+as the **single source of truth** for both:
+
+1. **Unit test** (`code/vscode/test/unit/pat-expiry.test.ts`): runs during
+   `npm run test:unit` locally and in CI. Thresholds:
+   - **Warns** (console output) when PAT expires within 30 days
+   - **Fails** the test when PAT has expired or expires within 7 days
+2. **Workflow step**: reads the same file during the publish workflow for a redundant check.
+
+The unit test is the primary detection mechanism — developers see the warning every time
+they run tests locally, long before a push to `main` triggers CI. The file must be
+updated manually when the PAT is rotated.
+
+The GitHub repository variable `VSCE_PAT_EXPIRES` (already configured: `2026-12-31`)
+serves as a backup reference but is NOT the source consumed by code.
+
 ### 2.7 Cleanup Committed Build Artifact
 
 The file `ape-vscode-0.0.6.vsix` committed in the repository is a build artifact that
@@ -97,6 +130,7 @@ does not belong in source control. It must be:
 | Must not interfere with existing `release.yml` tag mechanism | Monorepo artifact isolation |
 | Must work on `ubuntu-latest` runner for the publish job | `vsce publish` has no Windows-specific requirements |
 | `VSCE_PAT` secret must be configured manually by repo owner | Secrets cannot be automated; prerequisite for first run |
+| `code/vscode/.pat-expires` file must be updated when PAT is rotated | Single source of truth for expiration date, read by tests and workflow |
 | Extension is self-contained within `code/vscode/` | No cross-artifact build dependencies |
 
 ## 4. Risks
@@ -104,7 +138,7 @@ does not belong in source control. It must be:
 | Risk | Impact | Likelihood | Mitigation |
 |------|--------|------------|------------|
 | Marketplace API unavailability during version check | Workflow cannot determine current version | Low | Fail the workflow (do not publish blindly) |
-| VSCE PAT expiration | Publish step fails | Medium | Clear error message; manual rotation required |
+| VSCE PAT expiration | Publish step fails | Medium | Unit test + workflow step reading `.pat-expires` file; warns at 30d, fails at 7d |
 | Pre-release version semantics | Wrong publish flags used | Low (not currently used) | Out of scope; add `--pre-release` path if needed later |
 
 ## 5. Scope
@@ -117,6 +151,9 @@ does not belong in source control. It must be:
 - Publish job: `vsce publish` with `VSCE_PAT` secret
 - Remove committed `.vsix` file from repository
 - Ensure `.gitignore` covers `*.vsix`
+- PAT expiration tracking file: `code/vscode/.pat-expires`
+- Unit test for PAT expiration: `code/vscode/test/unit/pat-expiry.test.ts`
+- PAT expiration early-warning step in the workflow (reads same file)
 - Documentation of required `VSCE_PAT` secret setup
 
 ### Out of Scope
