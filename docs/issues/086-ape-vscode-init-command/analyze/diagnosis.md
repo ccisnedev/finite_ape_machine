@@ -1,17 +1,44 @@
 ---
 id: diagnosis
-title: "Diagnosis: APE Init command — onboarding path from VS Code extension"
+title: "Diagnosis: APE Init + command guards — onboarding and validation from VS Code extension"
 date: 2026-04-19
 status: completed
-tags: [vscode, onboarding, cli-detection, install, ux]
+tags: [vscode, onboarding, cli-detection, install, ux, bug-fix, guard-clause]
 author: socrates
 ---
 
-# Diagnosis: APE Init Command
+# Diagnosis: APE Init + Command Guards
 
 ## Problem Statement
 
 Users who install the APE VS Code extension from the Marketplace cannot use it without first installing the APE CLI separately. There is no onboarding path from within VS Code — the extension activates only when `.ape/` exists, creating a chicken-and-egg problem for new users.
+
+## Bug in v0.0.1
+
+The commands `APE: Add Mutation Note` and `APE: Toggle Evolution` are active even when `.ape/` does not exist. If invoked without a workspace, they silently create the `.ape/` directory and their corresponding file (`mutations.md`, `config.yaml`) directly — bypassing `ape init` entirely.
+
+This is incorrect behavior:
+- Files are created without CLI validation, producing an incomplete `.ape/` structure
+- The user gets no feedback that the CLI is missing
+- The extension masks the absence of a proper `ape init` run
+
+**All APE commands must validate CLI installation and `.ape/` existence before executing.** Files should never be created directly by the extension.
+
+## Guard Clause Pattern
+
+Every APE command (`ape.init`, `ape.toggleEvolution`, `ape.addMutation`) must pass through a shared guard before execution:
+
+```
+1. Command triggered
+2. Guard: does `ape` binary exist at known path?
+   ├─ NO  → notification: "APE CLI not found. [Install] [Cancel]"
+   │        (Install triggers the install flow from APE: Init)
+   └─ YES → does `.ape/` exist in workspace?
+            ├─ NO  → notification: "No APE workspace found. Run APE: Init first. [Run Init] [Cancel]"
+            └─ YES → execute the command normally
+```
+
+Exception: `ape.init` skips the `.ape/` check (its purpose is to create it).
 
 ## User Persona
 
@@ -51,10 +78,11 @@ New user browsing the VS Code Marketplace for AI-assisted programming tools. Fin
 | D7 | `ape init` runs in terminal (not hidden) | User sees output of `ape init`, transparency over magic |
 | D8 | No backward compatibility requirement | v0.0.x phase, no installed base to worry about |
 | D9 | Discoverability via Marketplace docs | `Ctrl+Shift+P` → "APE" shows `APE: Init`. Document in README. |
+| D10 | All APE commands validate CLI + `.ape/` before executing | v0.0.1 bug: commands silently create files without CLI. Guard clause centralizes validation, provides user-friendly notifications with actionable buttons, and prevents corrupt `.ape/` state. |
 
 ## Constraints
 
-- v0.0.2 scope — only adds `APE: Init` command
+- v0.0.2 scope — adds `APE: Init` command + guard clause on all commands
 - No CLI execution beyond `ape init` (boundary from v0.0.1)
 - Cross-platform: Windows x64 + Linux x64
 - Scripts hosted at `ccisne.dev/finite_ape_machine/install.{ps1,sh}`
@@ -76,6 +104,8 @@ New user browsing the VS Code Marketplace for AI-assisted programming tools. Fin
 - CLI detection (file existence check at known path)
 - Install via scripts with progress notification
 - Run `ape init` after install/detection
+- Guard clause on `ape.toggleEvolution` and `ape.addMutation` (validate CLI + `.ape/`)
+- Remove direct file creation from existing commands (bug fix)
 - Updated README with onboarding instructions
 
 **OUT (deferred):**
