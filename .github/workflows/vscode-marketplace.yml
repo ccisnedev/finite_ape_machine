@@ -1,0 +1,111 @@
+# VS Code Marketplace publish workflow — 3-job pattern: check-version + test (parallel) → publish
+#
+# Two-gate approach:
+#   1. Path filter: only triggers on changes to code/vscode/** or this workflow file
+#   2. Version check: compares local package.json version against Marketplace; skips if unchanged
+#
+# Secret requirements:
+#   VSCE_PAT — Azure DevOps Personal Access Token with Marketplace (Manage) scope.
+#   Create at: https://dev.azure.com → User Settings → Personal Access Tokens
+#   Organization: "All accessible organizations" (required — specific org causes 403 in CI)
+#   Scopes: Marketplace → Manage
+#
+# PAT expiry guard:
+#   The file code/vscode/.pat-expires contains the PAT expiration date (YYYY-MM-DD).
+#   The publish job checks this before attempting to publish.
+#   Update .pat-expires whenever the VSCE_PAT secret is rotated.
+
+name: VS Code Marketplace
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'code/vscode/**'
+      - '.github/workflows/vscode-marketplace.yml'
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      should_publish: ${{ steps.compare.outputs.should_publish }}
+      local_version: ${{ steps.local.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Read local version
+        id: local
+        run: |
+          version=$(node -p "require('./code/vscode/package.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Query Marketplace version
+        id: marketplace
+        run: |
+          set +e
+          output=$(npx @vscode/vsce show ccisnedev.ape-vscode 2>&1)
+          exit_code=$?
+          set -e
+          if [ $exit_code -ne 0 ]; then
+            echo "Extension not found on Marketplace (first publish)"
+            echo "version=" >> "$GITHUB_OUTPUT"
+          else
+            mp_version=$(echo "$output" | grep -oP '^\s*Version:\s*\K[\d.]+' || echo "")
+            echo "version=$mp_version" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Compare versions
+        id: compare
+        run: |
+          local="${{ steps.local.outputs.version }}"
+          marketplace="${{ steps.marketplace.outputs.version }}"
+          if [ -z "$marketplace" ] || [ "$local" != "$marketplace" ]; then
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+            echo "Version changed: $marketplace -> $local"
+          else
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+            echo "Version unchanged: $local"
+          fi
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    defaults:
+      run:
+        working-directory: code/vscode
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run test:unit
+
+  publish:
+    needs: [check-version, test]
+    if: needs.check-version.outputs.should_publish == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: code/vscode
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: Check PAT expiration
+        run: |
+          expires=$(cat .pat-expires | tr -d '[:space:]')
+          today=$(date -u +%Y-%m-%d)
+          if [[ "$today" > "$expires" || "$today" == "$expires" ]]; then
+            echo "::error::VSCE PAT expired on $expires. Rotate the token."
+            exit 1
+          fi
+      - run: npm run compile
+      - name: Publish to Marketplace
+        run: npx @vscode/vsce publish --no-dependencies
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
