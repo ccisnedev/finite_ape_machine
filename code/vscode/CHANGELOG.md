@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.0.3] - 2026-04-19
+
+### Fixed
+- Installer uses download-then-execute pattern instead of pipe-to-exec (fixes Marketplace virus scan failure)
+- Exclude `docs/` from `.vsix` package
+
+### Changed
+- `getInstallCommand` replaced by `getInstallScriptUrl` + `getRunCommand` (two-step: download to temp, then execute file)
+- Installer now downloads script to `%TEMP%`/`/tmp` via Node.js `https.get`, then runs with `powershell -File` / `bash`
+
 ## [0.0.2] - 2026-04-19
 
 ### Added
