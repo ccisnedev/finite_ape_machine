@@ -1,8 +1,8 @@
 # Finite APE Machine
 
-> Infinite monkeys produce noise. Finite APEs produce software.
+**Analyze. Plan. Execute.**
 
-A framework for AI-assisted software development that models coding agents as a cooperative finite state machine. APE replaces "vibe coding" with a deterministic methodology cycle — **Analyze → Plan → Execute → End → [Evolution] → Idle** — where the value is in the process, not the model.
+A methodology for AI-assisted software development that models coding agents as a cooperative finite state machine — **Analyze → Plan → Execute → End → [Evolution] → Idle** — where the value is in the process, not the model.
 
 **Status:** `v0.0.14` · 131 tests · 12 GitHub releases · Windows + Linux · Single-target MVP (Copilot)
 
@@ -60,22 +60,7 @@ ape                      # show TUI banner with current FSM state
 
 ## The APE cycle
 
-```
-IDLE ──start_analyze──▶ ANALYZE ──complete_analysis──▶ PLAN
-                          │                              │
-                          │                       approve_plan
-                          │                              ▼
-                          └────── start_analyze ──── EXECUTE
-                                                        │
-                                                  finish_execute
-                                                        ▼
-                          IDLE ◀── finish_end ──── END (PR gate)
-                            ▲                          │
-                            │                    finish_end
-                            │                          ▼
-                            └─── finish_evolution ── EVOLUTION
-                                  (when enabled)
-```
+![APE finite state machine](code/site/img/fsm.svg)
 
 | State | Agent | Function | Output |
 |---|---|---|---|

@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.6] - 2026-04-20
+
+### Changed
+- Icon: triple yin-yang replaces APE text logo
+- FSM diagram: embedded SVG replaces ASCII art in README
+- README phase table: removed internal agent names (cleaner for Marketplace)
+
+## [0.0.5] - 2026-04-19
+
+### Changed
+- Description aligned with APE branding: "Analyze. Plan. Execute."
+- README rewritten as landing page with honest Copilot-only messaging
+- Removed redundant `onCommand:ape.init` from `activationEvents`
+
 ## [0.0.4] - 2026-04-19
 
 ### Changed
