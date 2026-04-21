@@ -159,9 +159,9 @@ Granular, testable acceptance criteria derived from impact surface analysis + SO
 ## AC-12: GitHub Org + Repo Transfer
 
 ### Step 1: Create org
-- [ ] Create GitHub org `siliconbrainedmachines` on GitHub
-- [ ] Set org email to `ops@si14bm.com`
-- [ ] Add user `ccisnedev` as owner
+- [x] Create GitHub org `siliconbrainedmachines` on GitHub
+- [x] Set org email to `ccisnedev@gmail.com`
+- [x] Add user `ccisnedev` as owner
 - [ ] Set org avatar to `Si¹⁴` logo
 
 ### Step 2: Rename repo
