@@ -1,31 +1,32 @@
-# install.ps1 — Downloads and installs the latest APE CLI release.
+# install.ps1 — Downloads and installs the latest Inquiry CLI release.
 #
 # Usage:
-#   irm https://www.ccisne.dev/finite_ape_machine/install.ps1 | iex
+#   irm https://www.si14bm.com/inquiry/install.ps1 | iex
 #
 # What it does:
 #   1. Detects Windows x64
 #   2. Downloads the latest .zip from GitHub Releases
-#   3. Extracts to $env:LOCALAPPDATA\ape\
-#   4. Adds ape\bin\ to the user PATH
-#   5. Runs `ape target get`
-#   6. Verifies with `ape version`
+#   3. Extracts to $env:LOCALAPPDATA\inquiry\
+#   4. Adds inquiry\bin\ to the user PATH
+#   5. Creates `iq.cmd` batch shim
+#   6. Runs `inquiry target get`
+#   7. Verifies with `inquiry version`
 
 $ErrorActionPreference = 'Stop'
 
-$repo = 'ccisnedev/finite_ape_machine'
-$installDir = Join-Path $env:LOCALAPPDATA 'ape'
+$repo = 'siliconbrainedmachines/inquiry'
+$installDir = Join-Path $env:LOCALAPPDATA 'inquiry'
 $binDir = Join-Path $installDir 'bin'
 
 # ─── Platform check ──────────────────────────────────────────────────────────
 
 if ($env:OS -ne 'Windows_NT') {
-    Write-Error 'APE CLI currently supports Windows only.'
+    Write-Error 'Inquiry CLI currently supports Windows only.'
     exit 1
 }
 
 if ([System.Environment]::Is64BitOperatingSystem -eq $false) {
-    Write-Error 'APE CLI requires a 64-bit operating system.'
+    Write-Error 'Inquiry CLI requires a 64-bit operating system.'
     exit 1
 }
 
@@ -36,10 +37,10 @@ $releaseUrl = "https://api.github.com/repos/$repo/releases/latest"
 $headers = @{ Accept = 'application/vnd.github+json' }
 
 $release = Invoke-RestMethod -Uri $releaseUrl -Headers $headers
-$asset = $release.assets | Where-Object { $_.name -like 'ape-windows-x64*.zip' } | Select-Object -First 1
+$asset = $release.assets | Where-Object { $_.name -like 'inquiry-windows-x64*.zip' } | Select-Object -First 1
 
 if (-not $asset) {
-    Write-Error "No ape-windows-x64 asset found in release $($release.tag_name)."
+    Write-Error "No inquiry-windows-x64 asset found in release $($release.tag_name)."
     exit 1
 }
 
@@ -48,7 +49,7 @@ Write-Host "    Asset:   $($asset.name)"
 
 # ─── Download and extract ────────────────────────────────────────────────────
 
-$tempZip = Join-Path $env:TEMP "ape-$($release.tag_name).zip"
+$tempZip = Join-Path $env:TEMP "inquiry-$($release.tag_name).zip"
 
 Write-Host '>>> Downloading...'
 Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $tempZip
@@ -63,12 +64,17 @@ Write-Host '>>> Extracting...'
 Expand-Archive -Path $tempZip -DestinationPath $installDir -Force
 Remove-Item $tempZip
 
+# ─── Create iq alias ─────────────────────────────────────────────────────────
+
+Write-Host '>>> Creating iq alias...'
+Set-Content -Path (Join-Path $binDir 'iq.cmd') -Value '@"%~dp0inquiry.exe" %*' -Encoding ASCII
+
 # ─── Update PATH ─────────────────────────────────────────────────────────────
 
 $userPath = [System.Environment]::GetEnvironmentVariable('PATH', 'User')
 
 if ($userPath -notlike "*$binDir*") {
-    Write-Host '>>> Adding ape\bin\ to PATH...'
+    Write-Host '>>> Adding inquiry\bin\ to PATH...'
     [System.Environment]::SetEnvironmentVariable(
         'PATH',
         "$userPath;$binDir",
@@ -79,14 +85,14 @@ if ($userPath -notlike "*$binDir*") {
 
 # ─── Deploy and verify ───────────────────────────────────────────────────────
 
-Write-Host '>>> Deploying APE to all targets...'
-& (Join-Path $binDir 'ape.exe') target get
+Write-Host '>>> Deploying Inquiry to all targets...'
+& (Join-Path $binDir 'inquiry.exe') target get
 
 Write-Host '>>> Verifying installation...'
-$versionOutput = & (Join-Path $binDir 'ape.exe') version
+$versionOutput = & (Join-Path $binDir 'inquiry.exe') version
 Write-Host "    $versionOutput"
 
 Write-Host ''
-Write-Host '>>> APE CLI installed successfully!'
+Write-Host '>>> Inquiry CLI installed successfully!'
 Write-Host "    Location: $installDir"
-Write-Host '    Restart your terminal to use `ape` from any directory.'
+Write-Host '    Restart your terminal to use `inquiry` or `iq` from any directory.'

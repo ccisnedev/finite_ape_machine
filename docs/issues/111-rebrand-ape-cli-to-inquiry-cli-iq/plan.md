@@ -175,43 +175,44 @@ author: DESCARTES
 
 ### 3a: Actualizar expectativas de tests (RED → GREEN)
 
-- [ ] `code/cli/test/init_command_test.dart`:
+- [x] `code/cli/test/init_command_test.dart`:
   - Todas las aserciones `.ape/` → `.inquiry/`
   - `grep -n "\.ape" code/cli/test/init_command_test.dart`
-- [ ] `code/cli/test/doctor_test.dart`:
+- [x] `code/cli/test/doctor_test.dart`:
   - Verificar si hay checks de nombre de binario → actualizar
   - `grep -n "ape" code/cli/test/doctor_test.dart`
-- [ ] `code/cli/test/assets_test.dart`:
+- [x] `code/cli/test/assets_test.dart`:
   - Refs a `ape.agent.md` → `inquiry.agent.md`
   - `grep -n "ape" code/cli/test/assets_test.dart`
-- [ ] `code/cli/test/target_commands_test.dart`:
+- [x] `code/cli/test/target_commands_test.dart`:
   - Refs a agent file → actualizar
   - `grep -n "ape" code/cli/test/target_commands_test.dart`
-- [ ] `code/cli/test/deployer_test.dart`:
+- [x] `code/cli/test/deployer_test.dart`:
   - Refs a agent file y paths → actualizar
   - `grep -n "ape" code/cli/test/deployer_test.dart`
-- [ ] `code/cli/test/platform_ops_test.dart`:
+- [x] `code/cli/test/platform_ops_test.dart`:
   - Refs a `.ape/bin/` → `.inquiry/bin/`
   - `grep -n "\.ape" code/cli/test/platform_ops_test.dart`
-- [ ] `code/cli/test/scaffold_test.dart`:
+- [x] `code/cli/test/scaffold_test.dart`:
   - Verificar si referencia `.ape/` → actualizar
-- [ ] `code/cli/test/version_test.dart`:
+- [x] `code/cli/test/version_test.dart`:
   - `apeVersion` → `inquiryVersion`
-- [ ] `code/cli/test/version_sync_test.dart`:
+- [x] `code/cli/test/version_sync_test.dart`:
   - `apeVersion` → `inquiryVersion` en refs
   - Verificar si valida badge del site (si sí, puede fallar hasta Fase 7)
-- [ ] `code/cli/test/upgrade_test.dart`:
+- [x] `code/cli/test/upgrade_test.dart`:
   - User-Agent strings, refs a binary names
-- [ ] `code/cli/test/tui_test.dart`:
+- [x] `code/cli/test/tui_test.dart`:
   - Banner/branding strings
-- [ ] `code/cli/test/site_test.dart`:
+- [x] `code/cli/test/site_test.dart`:
   - Este test valida HTML del site — fallará hasta Fase 7. Documentar que es esperado.
-- [ ] Auditoría exhaustiva: `grep -rn "ape" code/cli/test/ | grep -v "APE\|ape_builds_ape\|Analyze.Plan.Execute"` para encontrar refs restantes al tool
+- [x] Auditoría exhaustiva: `grep -rn "ape" code/cli/test/ | grep -v "APE\|ape_builds_ape\|Analyze.Plan.Execute"` para encontrar refs restantes al tool
 
 ### 3b: Ejecutar suite completa
 
-- [ ] `cd code/cli && dart test` → todos los tests pasan (excepto `site_test.dart` y posiblemente `version_sync_test.dart` si validan el site badge — documentar excepciones)
-- [ ] Si hay fallos inesperados: diagnosticar y corregir antes de continuar
+- [x] `cd code/cli && dart test` → todos los tests pasan (excepto `site_test.dart` y posiblemente `version_sync_test.dart` si validan el site badge — documentar excepciones)
+  - **Resultado:** 155 pass, 2 fail (version_sync_test: site badge aún 0.0.16 → se corrige en Fase 6)
+- [x] Si hay fallos inesperados: diagnosticar y corregir antes de continuar
 
 **Verificación:**
 - `dart test` reporta 0 failures (o failures documentadas como esperadas por dependencia de fases posteriores)

@@ -1,23 +1,24 @@
 #!/bin/bash
-# install.sh — Downloads and installs the latest APE CLI release on Linux.
+# install.sh — Downloads and installs the latest Inquiry CLI release on Linux.
 #
 # Usage:
-#   curl -fsSL https://www.ccisne.dev/finite_ape_machine/install.sh | bash
+#   curl -fsSL https://www.si14bm.com/inquiry/install.sh | bash
 #
 # What it does:
 #   1. Detects Linux x64
 #   2. Downloads the latest .tar.gz from GitHub Releases
-#   3. Extracts to ~/.ape/
+#   3. Extracts to ~/.inquiry/
 #   4. Symlinks to ~/.local/bin (XDG standard, in default PATH)
-#   5. Runs `ape target get`
-#   6. Verifies with `ape version`
+#   5. Symlinks `iq` alias
+#   6. Runs `inquiry target get`
+#   7. Verifies with `inquiry version`
 
 set -euo pipefail
 
-REPO="ccisnedev/finite_ape_machine"
-INSTALL_DIR="$HOME/.ape"
+REPO="siliconbrainedmachines/inquiry"
+INSTALL_DIR="$HOME/.inquiry"
 BIN_DIR="$INSTALL_DIR/bin"
-ASSET_NAME="ape-linux-x64.tar.gz"
+ASSET_NAME="inquiry-linux-x64.tar.gz"
 
 # ─── Platform check ──────────────────────────────────────────────────────────
 
@@ -25,12 +26,12 @@ ARCH=$(uname -m)
 OS=$(uname -s)
 
 if [ "$OS" != "Linux" ]; then
-  echo "Error: APE CLI install.sh is for Linux only. Got: $OS" >&2
+  echo "Error: Inquiry CLI install.sh is for Linux only. Got: $OS" >&2
   exit 1
 fi
 
 if [ "$ARCH" != "x86_64" ]; then
-  echo "Error: APE CLI requires x86_64. Got: $ARCH" >&2
+  echo "Error: Inquiry CLI requires x86_64. Got: $ARCH" >&2
   exit 1
 fi
 
@@ -53,7 +54,7 @@ echo "    Asset:   $ASSET_NAME"
 
 # ─── Download and extract ────────────────────────────────────────────────────
 
-TEMP_FILE=$(mktemp /tmp/ape-XXXXXX.tar.gz)
+TEMP_FILE=$(mktemp /tmp/inquiry-XXXXXX.tar.gz)
 
 echo ">>> Downloading..."
 curl -fsSL -o "$TEMP_FILE" "$DOWNLOAD_URL"
@@ -70,21 +71,26 @@ tar xzf "$TEMP_FILE" -C "$INSTALL_DIR"
 rm -f "$TEMP_FILE"
 
 # Make binary executable
-chmod +x "$BIN_DIR/ape"
+chmod +x "$BIN_DIR/inquiry"
 
 # ─── PATH integration ────────────────────────────────────────────────────────
 
 # Symlink to ~/.local/bin (XDG standard, in default PATH on most distros)
 LINK_DIR="$HOME/.local/bin"
-LINK_PATH="$LINK_DIR/ape"
+LINK_PATH="$LINK_DIR/inquiry"
 mkdir -p "$LINK_DIR"
 
-if [ -L "$LINK_PATH" ] && [ "$(readlink "$LINK_PATH")" = "$BIN_DIR/ape" ]; then
-  echo ">>> Symlink already configured: $LINK_PATH -> $BIN_DIR/ape"
+if [ -L "$LINK_PATH" ] && [ "$(readlink "$LINK_PATH")" = "$BIN_DIR/inquiry" ]; then
+  echo ">>> Symlink already configured: $LINK_PATH -> $BIN_DIR/inquiry"
 else
-  ln -sf "$BIN_DIR/ape" "$LINK_PATH"
-  echo ">>> Symlink configured: $LINK_PATH -> $BIN_DIR/ape"
+  ln -sf "$BIN_DIR/inquiry" "$LINK_PATH"
+  echo ">>> Symlink configured: $LINK_PATH -> $BIN_DIR/inquiry"
 fi
+
+# Create iq alias
+IQ_LINK="$LINK_DIR/iq"
+ln -sf "$BIN_DIR/inquiry" "$IQ_LINK"
+echo ">>> Alias configured: $IQ_LINK -> $BIN_DIR/inquiry"
 
 # Ensure ~/.local/bin is in PATH for current session
 if [[ ":$PATH:" != *":$LINK_DIR:"* ]]; then
@@ -96,14 +102,14 @@ fi
 
 # ─── Deploy and verify ───────────────────────────────────────────────────────
 
-echo ">>> Deploying APE to all targets..."
-"$BIN_DIR/ape" target get
+echo ">>> Deploying Inquiry to all targets..."
+"$BIN_DIR/inquiry" target get
 
 echo ">>> Verifying installation..."
-VERSION_OUTPUT=$("$BIN_DIR/ape" version)
+VERSION_OUTPUT=$("$BIN_DIR/inquiry" version)
 echo "    $VERSION_OUTPUT"
 
 echo ""
-echo ">>> APE CLI installed successfully!"
+echo ">>> Inquiry CLI installed successfully!"
 echo "    Location: $INSTALL_DIR"
-echo "    Restart your terminal to use 'ape' from any directory."
+echo "    Restart your terminal to use 'inquiry' or 'iq' from any directory."
