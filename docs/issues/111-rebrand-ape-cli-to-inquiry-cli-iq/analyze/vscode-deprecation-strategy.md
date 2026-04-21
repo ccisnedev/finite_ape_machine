@@ -38,8 +38,8 @@ Better approach — publish a final version with:
    ```json
    {
      "displayName": "APE (Deprecated — use Inquiry)",
-     "description": "DEPRECATED: This extension has been replaced by Inquiry (ccisnedev.inquiry-vscode). Install Inquiry instead.",
-     "extensionDependencies": ["ccisnedev.inquiry-vscode"]
+     "description": "DEPRECATED: This extension has been replaced by Inquiry (finiteapemachine.inquiry-vscode). Install Inquiry instead.",
+     "extensionDependencies": ["finiteapemachine.inquiry-vscode"]
    }
    ```
 
@@ -47,7 +47,7 @@ Better approach — publish a final version with:
    ```markdown
    # APE (Deprecated)
    
-   > This extension has been replaced by **[Inquiry](https://marketplace.visualstudio.com/items?itemName=ccisnedev.inquiry-vscode)**.
+   > This extension has been replaced by **[Inquiry](https://marketplace.visualstudio.com/items?itemName=finiteapemachine.inquiry-vscode)**.
    > 
    > APE is now Inquiry. Install the new extension and uninstall this one.
    ```
@@ -64,8 +64,8 @@ Since ~2023, VS Code Marketplace supports a `replacement` field:
 {
   "badges": [],
   "replacement": {
-    "extensionId": "ccisnedev.inquiry-vscode",
-    "url": "https://marketplace.visualstudio.com/items?itemName=ccisnedev.inquiry-vscode"
+    "extensionId": "finiteapemachine.inquiry-vscode",
+    "url": "https://marketplace.visualstudio.com/items?itemName=finiteapemachine.inquiry-vscode"
   }
 }
 ```
@@ -76,14 +76,16 @@ Note: This field may need to be set via the Marketplace web UI or publisher port
 
 ## Execution Order
 
-1. **First:** Publish `ccisnedev.inquiry-vscode` as a new extension (fully functional)
-2. **Second:** Publish final version of `ccisnedev.ape-vscode` with deprecation notice + `extensionDependencies` pointing to the new one
-3. **Third:** Mark `ape-vscode` as deprecated in the Marketplace portal
+1. **First:** Create publisher `finiteapemachine` on VS Code Marketplace
+2. **Second:** Publish `finiteapemachine.inquiry-vscode` as a new extension (fully functional)
+3. **Third:** Publish final version of `ccisnedev.ape-vscode` with deprecation notice + `extensionDependencies` pointing to `finiteapemachine.inquiry-vscode`
+4. **Fourth:** Mark `ape-vscode` as deprecated in the Marketplace portal
 
 ## CI/CD Impact
 
-- New workflow or updated `vscode-marketplace.yml` must publish `inquiry-vscode`
-- One-time manual step: publish the deprecation version of `ape-vscode`
+- New workflow or updated `vscode-marketplace.yml` must publish under publisher `finiteapemachine`
+- New PAT required for `finiteapemachine` publisher (Azure DevOps, All accessible orgs, Marketplace Manage)
+- One-time manual step: publish the deprecation version of `ccisnedev.ape-vscode`
 - After deprecation, the old workflow can be removed
 
 ## Risk

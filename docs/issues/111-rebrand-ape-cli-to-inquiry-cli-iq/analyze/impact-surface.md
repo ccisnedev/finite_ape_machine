@@ -130,15 +130,28 @@ Three new "iq" logos needed:
 | CLI TUI banner | ASCII art in terminal output | Text | N/A |
 | VS Code sidebar icon | Activity bar icon | SVG | 24×24 logical |
 
-## 10. GitHub Repository
+## 10. GitHub Organization + Repository
 
-The repository name `finite_ape_machine` must be renamed to `inquiry-cli`:
-- GitHub supports renames with automatic redirects (old URLs → new)
-- Git clones follow redirects, existing clones continue to work
-- `git remote set-url origin` needed in local clones after rename
-- GitHub Pages custom domain (`ccisne.dev`) is unaffected
-- Forks continue to work (redirect)
-- Install scripts, CI, and `installer.ts` must reference new repo name
+New org + rename + transfer:
+
+| Step | Action | Result |
+|------|--------|--------|
+| 1 | Create org `finiteapemachine` on GitHub | New org exists |
+| 2 | Rename repo `ccisnedev/finite_ape_machine` → `ccisnedev/inquiry` | Redirect active |
+| 3 | Transfer `ccisnedev/inquiry` → `finiteapemachine/inquiry` | Final location |
+
+Post-transfer:
+- Recreate `VSCE_PAT` secret (lost during transfer)
+- Verify GitHub Pages / custom domain
+- Update local clone remote URL
+- All install scripts, CI, `installer.ts` must reference `finiteapemachine/inquiry`
+
+### VS Code Marketplace Publisher
+
+New publisher `finiteapemachine` — coherent with org name:
+- Extension ID: `finiteapemachine.inquiry-vscode`
+- Requires new PAT from Azure DevOps (All accessible organizations, Marketplace Manage scope)
+- Old extension `ccisnedev.ape-vscode` gets deprecation update under old publisher
 
 ## 11. Dart Code Internal Names
 
