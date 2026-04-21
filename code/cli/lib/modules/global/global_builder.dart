@@ -15,13 +15,13 @@ void buildGlobalModule(
   m.command<TuiInput, TuiOutput>(
     '',
     (req) => TuiCommand(TuiInput.fromCliRequest(req)),
-    description: 'Display APE status and FSM diagram',
+    description: 'Display Inquiry status and FSM diagram',
   );
 
   m.command<InitInput, InitOutput>(
     'init',
     (req) => InitCommand(InitInput.fromCliRequest(req)),
-    description: 'Initialize a new .ape/ workspace',
+    description: 'Initialize a new .inquiry/ workspace',
   );
 
   m.command<VersionInput, VersionOutput>(
@@ -33,13 +33,13 @@ void buildGlobalModule(
   m.command<DoctorInput, DoctorOutput>(
     'doctor',
     (req) => DoctorCommand(DoctorInput.fromCliRequest(req)),
-    description: 'Verify prerequisites (ape, git, gh, gh auth, gh copilot)',
+    description: 'Verify prerequisites (inquiry, git, gh, gh auth, gh copilot)',
   );
 
   m.command<UpgradeInput, UpgradeOutput>(
     'upgrade',
     (req) => UpgradeCommand(UpgradeInput.fromCliRequest(req)),
-    description: 'Download and install the latest APE release',
+    description: 'Download and install the latest Inquiry release',
   );
 
   m.command<UninstallInput, UninstallOutput>(

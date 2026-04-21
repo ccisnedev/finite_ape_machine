@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
-import 'package:ape_cli/fsm_contract.dart';
+import 'package:inquiry_cli/fsm_contract.dart';
 
 void main() {
   late FsmContract contract;

@@ -1,6 +1,6 @@
-/// Public API for the `ape` CLI.
+/// Public API for the `inquiry` CLI.
 ///
-/// [runApe] is the single entry point — called by `bin/main.dart` and by tests.
+/// [runInquiry] is the single entry point — called by `bin/main.dart` and by tests.
 library;
 
 import 'dart:io';
@@ -18,7 +18,7 @@ import 'targets/deployer.dart';
 /// Configures the CLI, registers all commands, and dispatches [args].
 ///
 /// Returns a process exit code.
-Future<int> runApe(List<String> args) async {
+Future<int> runInquiry(List<String> args) async {
   final cli = ModularCli();
 
   final deployer = TargetDeployer(

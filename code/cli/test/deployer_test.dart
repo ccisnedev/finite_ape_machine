@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
-import 'package:ape_cli/assets.dart';
-import 'package:ape_cli/targets/deployer.dart';
-import 'package:ape_cli/targets/target_adapter.dart';
+import 'package:inquiry_cli/assets.dart';
+import 'package:inquiry_cli/targets/deployer.dart';
+import 'package:inquiry_cli/targets/target_adapter.dart';
 
 class FakeAdapter extends TargetAdapter {
   @override
@@ -50,7 +50,7 @@ void main() {
     final agentDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
     agentDir.createSync(recursive: true);
     File(
-      p.join(agentDir.path, 'ape.agent.md'),
+      p.join(agentDir.path, 'inquiry.agent.md'),
     ).writeAsStringSync('# APE Agent');
 
     assets = Assets(root: tempDir.path);
@@ -87,7 +87,7 @@ void main() {
       deployer.deploy();
 
       final agentFile = File(
-        p.join(homeDir.path, '.fake', 'agents', 'ape.agent.md'),
+        p.join(homeDir.path, '.fake', 'agents', 'inquiry.agent.md'),
       );
       expect(agentFile.existsSync(), isTrue);
       expect(agentFile.readAsStringSync(), '# APE Agent');

@@ -1,13 +1,13 @@
-/// `ape init` — initializes APE in the working directory.
+/// `inquiry init` — initializes Inquiry in the working directory.
 ///
 /// Seven idempotent steps:
 /// 1. Detect docs directory (doc/ or docs/, prefer docs/)
 /// 2. Create {docs}/issues/ if missing
-/// 3. Add .ape/ to .gitignore
-/// 4. Create .ape/state.yaml with IDLE state
-/// 5. Create .ape/config.yaml with defaults
-/// 6. Create .ape/mutations.md with header template
-/// 7. Deploy ape.agent.md to active target
+/// 3. Add .inquiry/ to .gitignore
+/// 4. Create .inquiry/state.yaml with IDLE state
+/// 5. Create .inquiry/config.yaml with defaults
+/// 6. Create .inquiry/mutations.md with header template
+/// 7. Deploy inquiry.agent.md to active target
 library;
 
 import 'dart:io';
@@ -51,7 +51,7 @@ class InitOutput extends Output {
 
 // ─── Command ────────────────────────────────────────────────────────────────
 
-/// Initializes APE in [InitInput.workingDirectory].
+/// Initializes Inquiry in [InitInput.workingDirectory].
 ///
 /// Idempotent: running twice produces the same result.
 class InitCommand implements Command<InitInput, InitOutput> {
@@ -78,23 +78,23 @@ class InitCommand implements Command<InitInput, InitOutput> {
       steps.add('Created ${_relative(root, issuesDir.path)}');
     }
 
-    // Step 3: Add .ape/ to .gitignore
+    // Step 3: Add .inquiry/ to .gitignore
     _ensureGitignore(root, steps);
 
-    // Step 4: Create .ape/state.yaml with IDLE state
+    // Step 4: Create .inquiry/state.yaml with IDLE state
     _ensureStateYaml(root, steps);
 
-    // Step 5: Create .ape/config.yaml with defaults
+    // Step 5: Create .inquiry/config.yaml with defaults
     _ensureConfigYaml(root, steps);
 
-    // Step 6: Create .ape/mutations.md with header template
+    // Step 6: Create .inquiry/mutations.md with header template
     _ensureMutationsMd(root, steps);
 
-    // Step 7: Deploy is handled by `ape target get` — not duplicated here.
+    // Step 7: Deploy is handled by `inquiry target get` — not duplicated here.
 
     if (steps.isEmpty) {
       return InitOutput(
-        message: 'APE already initialized in $root',
+        message: 'Inquiry already initialized in $root',
         isCreated: false,
       );
     }
@@ -116,29 +116,29 @@ class InitCommand implements Command<InitInput, InitOutput> {
     return docs.path;
   }
 
-  /// Ensures `.ape/` is in `.gitignore`.
+  /// Ensures `.inquiry/` is in `.gitignore`.
   void _ensureGitignore(String root, List<String> steps) {
     final gitignore = File('$root/.gitignore');
 
     if (gitignore.existsSync()) {
       final content = gitignore.readAsStringSync();
-      if (!content.contains('.ape/')) {
-        gitignore.writeAsStringSync('$content.ape/\n');
-        steps.add('Added .ape/ to .gitignore');
+      if (!content.contains('.inquiry/')) {
+        gitignore.writeAsStringSync('$content.inquiry/\n');
+        steps.add('Added .inquiry/ to .gitignore');
       }
     } else {
-      gitignore.writeAsStringSync('.ape/\n');
-      steps.add('Created .gitignore with .ape/');
+      gitignore.writeAsStringSync('.inquiry/\n');
+      steps.add('Created .gitignore with .inquiry/');
     }
   }
 
-  /// Ensures `.ape/state.yaml` exists with IDLE state.
+  /// Ensures `.inquiry/state.yaml` exists with IDLE state.
   void _ensureStateYaml(String root, List<String> steps) {
-    final apeDir = Directory('$root/.ape');
-    final stateFile = File('$root/.ape/state.yaml');
+    final inquiryDir = Directory('$root/.inquiry');
+    final stateFile = File('$root/.inquiry/state.yaml');
 
     if (!stateFile.existsSync()) {
-      if (!apeDir.existsSync()) apeDir.createSync();
+      if (!inquiryDir.existsSync()) inquiryDir.createSync();
       stateFile.writeAsStringSync(
         'cycle:\n'
         '  phase: IDLE\n'
@@ -148,26 +148,26 @@ class InitCommand implements Command<InitInput, InitOutput> {
         'waiting: []\n'
         'complete: []\n',
       );
-      steps.add('Created .ape/state.yaml');
+      steps.add('Created .inquiry/state.yaml');
     }
   }
 
-  /// Ensures `.ape/config.yaml` exists with default configuration.
+  /// Ensures `.inquiry/config.yaml` exists with default configuration.
   void _ensureConfigYaml(String root, List<String> steps) {
-    final configFile = File('$root/.ape/config.yaml');
+    final configFile = File('$root/.inquiry/config.yaml');
 
     if (!configFile.existsSync()) {
       configFile.writeAsStringSync(
         'evolution:\n'
         '  enabled: false\n',
       );
-      steps.add('Created .ape/config.yaml');
+      steps.add('Created .inquiry/config.yaml');
     }
   }
 
-  /// Ensures `.ape/mutations.md` exists with header template.
+  /// Ensures `.inquiry/mutations.md` exists with header template.
   void _ensureMutationsMd(String root, List<String> steps) {
-    final mutationsFile = File('$root/.ape/mutations.md');
+    final mutationsFile = File('$root/.inquiry/mutations.md');
 
     if (!mutationsFile.existsSync()) {
       mutationsFile.writeAsStringSync(
@@ -176,7 +176,7 @@ class InitCommand implements Command<InitInput, InitOutput> {
         'Notes for DARWIN. Write observations about the current cycle here.\n'
         'This file is read during EVOLUTION and cleared afterwards.\n',
       );
-      steps.add('Created .ape/mutations.md');
+      steps.add('Created .inquiry/mutations.md');
     }
   }
 

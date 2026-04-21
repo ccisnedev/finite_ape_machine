@@ -1,6 +1,6 @@
 /// Doctor command — verifies prerequisites and target deployment.
 ///
-/// Checks: ape version, git, gh, gh auth, .ape/ init, target deployment.
+/// Checks: inquiry version, git, gh, gh auth, .inquiry/ init, target deployment.
 library;
 
 import 'dart:io';
@@ -149,7 +149,7 @@ class DoctorOutput extends Output {
               '${tc.missingSkills.join(', ')}',
             );
           }
-          buffer.writeln("    → Run 'ape target get' to deploy");
+          buffer.writeln("    → Run 'inquiry target get' to deploy");
         }
       }
     }
@@ -194,7 +194,7 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
   final Assets? _assets;
   final List<TargetAdapter> _activeAdapters;
 
-  /// Current APE version (injected for testability).
+  /// Current Inquiry version (injected for testability).
   final String inquiryVersion;
 
   DoctorCommand(
@@ -219,7 +219,7 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
     var prereqPassed = true;
 
     // Check 1: APE version (always passes, internal)
-    checks.add(DoctorCheck(name: 'ape', passed: true, version: inquiryVersion));
+    checks.add(DoctorCheck(name: 'inquiry', passed: true, version: inquiryVersion));
 
     // Check 2: git --version
     final gitCheck = await _checkCommand(
@@ -259,15 +259,15 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
       prereqPassed = false;
     }
 
-    // Check 5: .ape/ directory (init)
-    final initExists = _fileSystem.directoryExists('.ape');
+    // Check 5: .inquiry/ directory (init)
+    final initExists = _fileSystem.directoryExists('.inquiry');
     if (!initExists) {
       checks.add(
         DoctorCheck(
-          name: 'ape init',
+          name: 'inquiry init',
           passed: false,
           error: 'not initialized',
-          remediation: "Run 'ape init' to initialize",
+          remediation: "Run 'inquiry init' to initialize",
         ),
       );
       prereqPassed = false;
@@ -304,7 +304,7 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
     final expectedSkills = _getExpectedSkills();
 
     // Check agent
-    final agentPath = p.join(adapter.agentDirectory(homeDir), 'ape.agent.md');
+    final agentPath = p.join(adapter.agentDirectory(homeDir), 'inquiry.agent.md');
     final agentExists = _fileSystem.fileExists(agentPath);
 
     // Check skills

@@ -1,5 +1,5 @@
 ---
-name: ape
+name: inquiry
 description: 'APE — The Finite APE Machine. A strict six-state FSM scheduler for structured task delivery. Dispatches sub-agents (SOCRATES, DESCARTES, BASHŌ, DARWIN). Starts in IDLE, transitions only with explicit user authorization.'
 tools: [vscode, execute, read, agent, edit, search, web, browser, todo]
 ---

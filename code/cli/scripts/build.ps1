@@ -1,10 +1,10 @@
-# build.ps1 — Compiles ape CLI and packages assets for distribution.
+# build.ps1 — Compiles Inquiry CLI and packages assets for distribution.
 #
 # Output structure:
 #   build/
-#     bin/ape.exe
+#     bin/inquiry.exe
 #     assets/
-#       agents/ape.agent.md
+#       agents/inquiry.agent.md
 #       skills/memory-read/SKILL.md
 #       skills/memory-write/SKILL.md
 
@@ -22,8 +22,8 @@ if (Test-Path $buildDir) {
 New-Item -ItemType Directory -Force -Path (Join-Path $buildDir 'bin') | Out-Null
 
 # Compile
-Write-Host '>>> Compiling ape.exe...'
-$binOutput = Join-Path (Join-Path $buildDir 'bin') 'ape.exe'
+Write-Host '>>> Compiling inquiry.exe...'
+$binOutput = Join-Path (Join-Path $buildDir 'bin') 'inquiry.exe'
 Push-Location $cliRoot
 dart compile exe bin/main.dart -o $binOutput
 Pop-Location

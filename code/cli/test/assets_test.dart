@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
-import 'package:ape_cli/assets.dart';
+import 'package:inquiry_cli/assets.dart';
 
 void main() {
   group('Assets', () {
@@ -19,22 +19,22 @@ void main() {
 
     test('path resolves under assets/', () {
       final assets = Assets(root: tempDir.path);
-      final resolved = assets.path('agents/ape.agent.md');
+      final resolved = assets.path('agents/inquiry.agent.md');
 
       expect(
         resolved,
-        p.join(tempDir.path, 'assets', 'agents', 'ape.agent.md'),
+        p.join(tempDir.path, 'assets', 'agents', 'inquiry.agent.md'),
       );
     });
 
     test('loadString reads file content relative to root', () {
       final assetsDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
       assetsDir.createSync(recursive: true);
-      final file = File(p.join(assetsDir.path, 'ape.agent.md'));
+      final file = File(p.join(assetsDir.path, 'inquiry.agent.md'));
       file.writeAsStringSync('# APE Agent');
 
       final assets = Assets(root: tempDir.path);
-      final content = assets.loadString('agents/ape.agent.md');
+      final content = assets.loadString('agents/inquiry.agent.md');
 
       expect(content, '# APE Agent');
     });
@@ -75,8 +75,8 @@ void main() {
       assets = Assets(root: Directory.current.path);
     });
 
-    test('reads agents/ape.agent.md', () {
-      final content = assets.loadString('agents/ape.agent.md');
+    test('reads agents/inquiry.agent.md', () {
+      final content = assets.loadString('agents/inquiry.agent.md');
       expect(content, contains('APE'));
       expect(content, isNotEmpty);
     });

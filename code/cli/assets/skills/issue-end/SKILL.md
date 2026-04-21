@@ -26,8 +26,8 @@ description: 'Protocol for ending an APE cycle. Use when: all plan.md checkboxes
 Confirm current phase is EXECUTE:
 
 ```bash
-# Check state (if using .ape/state.yaml)
-cat .ape/state.yaml
+# Check state (if using .inquiry/state.yaml)
+cat .inquiry/state.yaml
 ```
 
 Expected: `phase: EXECUTE`
@@ -63,7 +63,7 @@ Calculate new version from current `apeVersion` in `lib/src/version.dart`:
 
 ```bash
 # Read current version
-grep "apeVersion" lib/src/version.dart
+grep "inquiryVersion" lib/src/version.dart
 ```
 
 **Examples:**
@@ -82,7 +82,7 @@ version: X.Y.Z
 
 **2. `lib/src/version.dart`:**
 ```dart
-const String apeVersion = 'X.Y.Z';
+const String inquiryVersion = 'X.Y.Z';
 ```
 
 ### Step 5: Update CHANGELOG
@@ -145,7 +145,7 @@ gh pr create \
 
 ### Step 9: Transition to EVOLUTION
 
-Update `.ape/state.yaml` (if using state tracking):
+Update `.inquiry/state.yaml` (if using state tracking):
 
 ```yaml
 phase: EVOLUTION

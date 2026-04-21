@@ -13,9 +13,9 @@ description: 'Protocol for starting work on a GitHub issue. Creates branch, work
 
 ## Prerequisites
 
-Run `ape doctor` and confirm all checks pass:
+Run `iq doctor` and confirm all checks pass:
 
-- ✓ ape version
+- ✓ inquiry version
 - ✓ git
 - ✓ gh
 - ✓ gh auth
@@ -28,7 +28,7 @@ If any check fails, follow the on-screen instructions to install the missing too
 ### Step 1: Verify Prerequisites
 
 ```bash
-ape doctor
+iq doctor
 ```
 
 All checks must pass. Do not proceed if any check fails.
@@ -108,7 +108,7 @@ Create `docs/issues/<NNN>-<slug>/analyze/index.md` with this template:
 
 ### Step 7: Update state.yaml
 
-Write `.ape/state.yaml` with:
+Write `.inquiry/state.yaml` with:
 
 ```yaml
 cycle:
@@ -120,7 +120,7 @@ waiting: []
 complete: []
 ```
 
-Use the same raw string write pattern as `ape init` does.
+Use the same raw string write pattern as `inquiry init` does.
 
 ### Step 8: Announce Transition
 
@@ -138,7 +138,7 @@ After completing all steps, verify:
 
 - [ ] Branch exists: `git branch --show-current` returns `<NNN>-<slug>`
 - [ ] Directory exists: `docs/issues/<NNN>-<slug>/analyze/index.md`
-- [ ] State updated: `.ape/state.yaml` shows `phase: ANALYZE`
+- [ ] State updated: `.inquiry/state.yaml` shows `phase: ANALYZE`
 
 ## Notes
 

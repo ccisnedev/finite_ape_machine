@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:ape_cli/targets/all_adapters.dart';
+import 'package:inquiry_cli/targets/all_adapters.dart';
 
 void main() {
   group('TargetAdapter implementations', () {

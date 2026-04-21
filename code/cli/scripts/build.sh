@@ -1,11 +1,11 @@
 #!/bin/bash
-# build.sh — Compiles ape CLI and packages assets for distribution (Linux).
+# build.sh — Compiles Inquiry CLI and packages assets for distribution (Linux).
 #
 # Output structure:
 #   build/
-#     bin/ape
+#     bin/inquiry
 #     assets/
-#       agents/ape.agent.md
+#       agents/inquiry.agent.md
 #       skills/memory-read/SKILL.md
 #       skills/memory-write/SKILL.md
 
@@ -23,14 +23,14 @@ fi
 mkdir -p "$BUILD_DIR/bin"
 
 # Compile
-echo ">>> Compiling ape..."
+echo ">>> Compiling inquiry..."
 cd "$CLI_ROOT"
-dart compile exe bin/main.dart -o "$BUILD_DIR/bin/ape"
+dart compile exe bin/main.dart -o "$BUILD_DIR/bin/inquiry"
 
 # Copy assets
 echo ">>> Copying assets..."
 cp -r "$CLI_ROOT/assets" "$BUILD_DIR/assets"
 
 echo ">>> Build complete."
-echo "    Binary: $BUILD_DIR/bin/ape"
+echo "    Binary: $BUILD_DIR/bin/inquiry"
 echo "    Assets: $BUILD_DIR/assets"

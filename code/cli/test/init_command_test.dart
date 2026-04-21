@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 
-import 'package:ape_cli/modules/global/commands/init.dart';
+import 'package:inquiry_cli/modules/global/commands/init.dart';
 
 void main() {
   group('InitCommand', () {
     late Directory tempDir;
 
     setUp(() {
-      tempDir = Directory.systemTemp.createTempSync('ape_init_test_');
+      tempDir = Directory.systemTemp.createTempSync('inquiry_init_test_');
     });
 
     tearDown(() {
@@ -88,7 +88,7 @@ void main() {
 
     group('.gitignore management', () {
       test(
-        'creates .gitignore with .ape/ entry if no .gitignore exists',
+        'creates .gitignore with .inquiry/ entry if no .gitignore exists',
         () async {
           final command = InitCommand(
             InitInput(workingDirectory: tempDir.path),
@@ -97,11 +97,11 @@ void main() {
 
           final gitignore = File('${tempDir.path}/.gitignore');
           expect(gitignore.existsSync(), isTrue);
-          expect(gitignore.readAsStringSync(), contains('.ape/'));
+          expect(gitignore.readAsStringSync(), contains('.inquiry/'));
         },
       );
 
-      test('appends .ape/ to existing .gitignore that lacks it', () async {
+      test('appends .inquiry/ to existing .gitignore that lacks it', () async {
         File('${tempDir.path}/.gitignore').writeAsStringSync('node_modules/\n');
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
@@ -109,11 +109,11 @@ void main() {
 
         final content = File('${tempDir.path}/.gitignore').readAsStringSync();
         expect(content, contains('node_modules/'));
-        expect(content, contains('.ape/'));
+        expect(content, contains('.inquiry/'));
       });
 
-      test('does not modify .gitignore if .ape/ already present', () async {
-        final original = 'node_modules/\n.ape/\nbuild/\n';
+      test('does not modify .gitignore if .inquiry/ already present', () async {
+        final original = 'node_modules/\n.inquiry/\nbuild/\n';
         File('${tempDir.path}/.gitignore').writeAsStringSync(original);
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
@@ -124,14 +124,14 @@ void main() {
       });
     });
 
-    // ─── Step 4: .ape/state.yaml ──────────────────────────────────────
+    // ─── Step 4: .inquiry/state.yaml ──────────────────────────────────────
 
-    group('.ape/state.yaml', () {
-      test('creates .ape/state.yaml with initial IDLE state', () async {
+    group('.inquiry/state.yaml', () {
+      test('creates .inquiry/state.yaml with initial IDLE state', () async {
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
-        final stateFile = File('${tempDir.path}/.ape/state.yaml');
+        final stateFile = File('${tempDir.path}/.inquiry/state.yaml');
         expect(stateFile.existsSync(), isTrue);
 
         final content = stateFile.readAsStringSync();
@@ -139,31 +139,31 @@ void main() {
         expect(content, contains('task: null'));
       });
 
-      test('skips .ape/state.yaml if already exists', () async {
-        Directory('${tempDir.path}/.ape').createSync();
+      test('skips .inquiry/state.yaml if already exists', () async {
+        Directory('${tempDir.path}/.inquiry').createSync();
         File(
-          '${tempDir.path}/.ape/state.yaml',
+          '${tempDir.path}/.inquiry/state.yaml',
         ).writeAsStringSync('phase: ANALYZE\ntask: "042-something"\n');
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
         final content = File(
-          '${tempDir.path}/.ape/state.yaml',
+          '${tempDir.path}/.inquiry/state.yaml',
         ).readAsStringSync();
         expect(content, contains('phase: ANALYZE'));
         expect(content, contains('042-something'));
       });
     });
 
-    // ─── Step 5: .ape/config.yaml ─────────────────────────────────────
+    // ─── Step 5: .inquiry/config.yaml ─────────────────────────────────────
 
-    group('.ape/config.yaml', () {
-      test('creates .ape/config.yaml with default config', () async {
+    group('.inquiry/config.yaml', () {
+      test('creates .inquiry/config.yaml with default config', () async {
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
-        final configFile = File('${tempDir.path}/.ape/config.yaml');
+        final configFile = File('${tempDir.path}/.inquiry/config.yaml');
         expect(configFile.existsSync(), isTrue);
 
         final content = configFile.readAsStringSync();
@@ -171,30 +171,30 @@ void main() {
         expect(content, contains('enabled: false'));
       });
 
-      test('skips .ape/config.yaml if already exists', () async {
-        Directory('${tempDir.path}/.ape').createSync();
+      test('skips .inquiry/config.yaml if already exists', () async {
+        Directory('${tempDir.path}/.inquiry').createSync();
         File(
-          '${tempDir.path}/.ape/config.yaml',
+          '${tempDir.path}/.inquiry/config.yaml',
         ).writeAsStringSync('evolution:\n  enabled: true\n');
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
         final content = File(
-          '${tempDir.path}/.ape/config.yaml',
+          '${tempDir.path}/.inquiry/config.yaml',
         ).readAsStringSync();
         expect(content, contains('enabled: true'));
       });
     });
 
-    // ─── Step 6: .ape/mutations.md ──────────────────────────────────
+    // ─── Step 6: .inquiry/mutations.md ──────────────────────────────────
 
-    group('.ape/mutations.md', () {
-      test('creates .ape/mutations.md with header template', () async {
+    group('.inquiry/mutations.md', () {
+      test('creates .inquiry/mutations.md with header template', () async {
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
-        final mutationsFile = File('${tempDir.path}/.ape/mutations.md');
+        final mutationsFile = File('${tempDir.path}/.inquiry/mutations.md');
         expect(mutationsFile.existsSync(), isTrue);
 
         final content = mutationsFile.readAsStringSync();
@@ -202,17 +202,17 @@ void main() {
         expect(content, contains('Notes for DARWIN'));
       });
 
-      test('skips .ape/mutations.md if already exists', () async {
-        Directory('${tempDir.path}/.ape').createSync();
+      test('skips .inquiry/mutations.md if already exists', () async {
+        Directory('${tempDir.path}/.inquiry').createSync();
         File(
-          '${tempDir.path}/.ape/mutations.md',
+          '${tempDir.path}/.inquiry/mutations.md',
         ).writeAsStringSync('# Mutations\n\n- My custom note\n');
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
         final content = File(
-          '${tempDir.path}/.ape/mutations.md',
+          '${tempDir.path}/.inquiry/mutations.md',
         ).readAsStringSync();
         expect(content, contains('My custom note'));
       });
@@ -227,31 +227,31 @@ void main() {
         await command.execute();
         // Capture state after first run
         final stateAfterFirst = File(
-          '${tempDir.path}/.ape/state.yaml',
+          '${tempDir.path}/.inquiry/state.yaml',
         ).readAsStringSync();
         final gitignoreAfterFirst = File(
           '${tempDir.path}/.gitignore',
         ).readAsStringSync();
         final configAfterFirst = File(
-          '${tempDir.path}/.ape/config.yaml',
+          '${tempDir.path}/.inquiry/config.yaml',
         ).readAsStringSync();
         final mutationsAfterFirst = File(
-          '${tempDir.path}/.ape/mutations.md',
+          '${tempDir.path}/.inquiry/mutations.md',
         ).readAsStringSync();
 
         await command.execute();
         // Verify state unchanged after second run
         final stateAfterSecond = File(
-          '${tempDir.path}/.ape/state.yaml',
+          '${tempDir.path}/.inquiry/state.yaml',
         ).readAsStringSync();
         final gitignoreAfterSecond = File(
           '${tempDir.path}/.gitignore',
         ).readAsStringSync();
         final configAfterSecond = File(
-          '${tempDir.path}/.ape/config.yaml',
+          '${tempDir.path}/.inquiry/config.yaml',
         ).readAsStringSync();
         final mutationsAfterSecond = File(
-          '${tempDir.path}/.ape/mutations.md',
+          '${tempDir.path}/.inquiry/mutations.md',
         ).readAsStringSync();
 
         expect(stateAfterSecond, equals(stateAfterFirst));

@@ -1,7 +1,7 @@
-/// `ape uninstall` — removes APE CLI from the system.
+/// `inquiry uninstall` — removes Inquiry CLI from the system.
 ///
 /// 1. Cleans all deployed targets (agents + skills).
-/// 2. Removes ape\bin\ from the user PATH.
+/// 2. Removes inquiry\bin\ from the user PATH.
 /// 3. Spawns a background process to delete the install directory.
 library;
 
@@ -73,7 +73,7 @@ class UninstallCommand implements Command<UninstallInput, UninstallOutput> {
     platformOps.scheduleDeletion(input.installDir);
 
     return UninstallOutput(
-      message: 'APE uninstalled. Restart your terminal to apply PATH changes.',
+      message: 'Inquiry uninstalled. Restart your terminal to apply PATH changes.',
     );
   }
 

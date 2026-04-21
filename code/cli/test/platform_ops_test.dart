@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:ape_cli/targets/platform_ops.dart';
+import 'package:inquiry_cli/targets/platform_ops.dart';
 
 /// A fake [PlatformOps] for testing. Records calls and returns
 /// configurable values without touching the real OS.

@@ -1,6 +1,6 @@
-name: ape_cli
+name: inquiry_cli
 description: >
-  CLI for the finite ape machine — workspace initialization and orchestration.
+  CLI for Inquiry — structured development through the APE methodology.
 version: 0.1.0
 
 environment:

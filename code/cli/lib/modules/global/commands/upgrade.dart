@@ -1,4 +1,4 @@
-/// `ape upgrade` — downloads and installs the latest APE release.
+/// `inquiry upgrade` — downloads and installs the latest Inquiry release.
 ///
 /// Fetches the latest release from GitHub, downloads the zip,
 /// extracts it over the current installation, and redeploys targets.
@@ -96,7 +96,7 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
       );
       final metaRequest = await client.getUrl(releaseUrl);
       metaRequest.headers.set('Accept', 'application/vnd.github+json');
-      metaRequest.headers.set('User-Agent', 'ape-cli/$inquiryVersion');
+      metaRequest.headers.set('User-Agent', 'inquiry-cli/$inquiryVersion');
       final metaResponse = await metaRequest.close();
 
       if (metaResponse.statusCode != 200) {
@@ -148,7 +148,7 @@ class UpgradeCommand implements Command<UpgradeInput, UpgradeOutput> {
       final zipFile = File(p.join(tempDir.path, expectedAsset));
 
       final dlRequest = await client.getUrl(Uri.parse(downloadUrl));
-      dlRequest.headers.set('User-Agent', 'ape-cli/$inquiryVersion');
+      dlRequest.headers.set('User-Agent', 'inquiry-cli/$inquiryVersion');
       final dlResponse = await dlRequest.close();
 
       // Follow redirect if needed

@@ -85,74 +85,74 @@ author: DESCARTES
 
 ### 2a: Renombrar paquete Dart y punto de entrada
 
-- [ ] `code/cli/pubspec.yaml`: `name: ape_cli` → `name: inquiry_cli`
+- [x] `code/cli/pubspec.yaml`: `name: ape_cli` → `name: inquiry_cli`
   - Verificar que `description` se actualice: "CLI for Inquiry — structured development through the APE methodology"
-- [ ] Renombrar archivo `code/cli/lib/ape_cli.dart` → `code/cli/lib/inquiry_cli.dart`
+- [x] Renombrar archivo `code/cli/lib/ape_cli.dart` → `code/cli/lib/inquiry_cli.dart`
   - En el contenido: `library;` queda igual
   - Doc comment: "Public API for the `inquiry` CLI"
   - Función: `runApe()` → `runInquiry()`
-- [ ] `code/cli/bin/main.dart`: actualizar import `package:ape_cli/ape_cli.dart` → `package:inquiry_cli/inquiry_cli.dart`
+- [x] `code/cli/bin/main.dart`: actualizar import `package:ape_cli/ape_cli.dart` → `package:inquiry_cli/inquiry_cli.dart`
   - Actualizar llamada: `runApe(arguments)` → `runInquiry(arguments)`
   - Actualizar comentario: "Entry point for the 'inquiry' CLI"
-- [ ] Buscar y reemplazar TODOS los imports `package:ape_cli/` → `package:inquiry_cli/` en:
+- [x] Buscar y reemplazar TODOS los imports `package:ape_cli/` → `package:inquiry_cli/` en:
   - `code/cli/lib/**/*.dart` (27 archivos)
   - `code/cli/test/**/*.dart` (17 archivos)
   - Comando de auditoría: `grep -rn "package:ape_cli" code/cli/`
-- [ ] `code/cli/lib/modules/global/commands/upgrade.dart`:
+- [x] `code/cli/lib/modules/global/commands/upgrade.dart`:
   - User-Agent: `'ape-cli/$apeVersion'` → `'inquiry-cli/$inquiryVersion'` (líneas 99 y 151)
   - Comentarios referencing "ape" como tool → "inquiry"
 
 ### 2b: Config directory `.ape/` → `.inquiry/`
 
-- [ ] `code/cli/lib/modules/global/commands/init.dart`:
+- [x] `code/cli/lib/modules/global/commands/init.dart`:
   - Todos los `.ape/` → `.inquiry/` (paths, comments, step messages)
   - `.gitignore` entry: `.ape/` → `.inquiry/`
   - Variables: `apeDir` → `inquiryDir` (si aplica como nombre de variable)
-- [ ] Buscar `.ape/` en todo el código Dart:
+- [x] Buscar `.ape/` en todo el código Dart:
   - `grep -rn "\.ape/" code/cli/lib/` → actualizar cada ocurrencia
   - `grep -rn "\.ape/" code/cli/test/` → actualizar cada ocurrencia
   - Archivos esperados: `init.dart`, posiblemente `linux_platform_ops.dart`
 
 ### 2c: Build scripts
 
-- [ ] `code/cli/scripts/build.ps1`:
+- [x] `code/cli/scripts/build.ps1`:
   - Output: `ape.exe` → `inquiry.exe`
   - Comentarios: "ape CLI" → "Inquiry CLI"
   - Comment header: actualizar estructura de output (`build/bin/inquiry.exe`, `agents/inquiry.agent.md`)
-- [ ] `code/cli/scripts/build.sh`:
+- [x] `code/cli/scripts/build.sh`:
   - Output: `ape` → `inquiry`
   - Comentarios: "ape CLI" → "Inquiry CLI"
   - Comment header: actualizar estructura de output
 
 ### 2d: Agent file rename
 
-- [ ] Renombrar `code/cli/assets/agents/ape.agent.md` → `code/cli/assets/agents/inquiry.agent.md`
-- [ ] Dentro del archivo: actualizar YAML `name:` field y command references (`ape doctor` → `iq doctor`)
+- [x] Renombrar `code/cli/assets/agents/ape.agent.md` → `code/cli/assets/agents/inquiry.agent.md`
+- [x] Dentro del archivo: actualizar YAML `name:` field y command references (`ape doctor` → `iq doctor`)
   - **NO** cambiar contenido del FSM ni la metodología APE — solo refs al tool
-- [ ] Buscar refs al filename `ape.agent.md` en código Dart:
+- [x] Buscar refs al filename `ape.agent.md` en código Dart:
   - `grep -rn "ape.agent" code/cli/lib/ code/cli/test/`
   - Actualizar cada referencia a `inquiry.agent.md`
 
 ### 2e: Skill files — command references
 
-- [ ] `code/cli/assets/skills/issue-start/SKILL.md`: `ape doctor` → `iq doctor`, cualquier otra ref al binary
-- [ ] `code/cli/assets/skills/issue-end/SKILL.md`: mismas refs
-- [ ] `code/cli/assets/skills/memory-read/SKILL.md`: verificar si hay refs (probablemente no)
-- [ ] `code/cli/assets/skills/memory-write/SKILL.md`: verificar si hay refs (probablemente no)
+- [x] `code/cli/assets/skills/issue-start/SKILL.md`: `ape doctor` → `iq doctor`, cualquier otra ref al binary
+- [x] `code/cli/assets/skills/issue-end/SKILL.md`: mismas refs
+- [x] `code/cli/assets/skills/memory-read/SKILL.md`: verificar si hay refs (probablemente no)
+- [x] `code/cli/assets/skills/memory-write/SKILL.md`: verificar si hay refs (probablemente no)
   - Comando de auditoría: `grep -rn "ape " code/cli/assets/skills/`
 
 ### 2f: TUI banner
 
-- [ ] Localizar el código que genera el TUI banner (buscar en `code/cli/lib/`)
+- [x] Localizar el código que genera el TUI banner (buscar en `code/cli/lib/`)
   - `grep -rn "banner\|ascii\|logo\|tui" code/cli/lib/`
-- [ ] Actualizar el banner con el nuevo texto "Inquiry" / "iq" definido en Fase 1
-- [ ] Si hay ASCII art hardcoded, reemplazar con la nueva versión
+- [x] Actualizar el banner con el nuevo texto "Inquiry" / "iq" definido en Fase 1
+- [x] Si hay ASCII art hardcoded, reemplazar con la nueva versión
 
 ### 2g: Dart comments audit
 
-- [ ] `grep -rn '"ape"' code/cli/lib/` — buscar string literals que referencien "ape" como tool
-- [ ] `grep -rn "'ape'" code/cli/lib/` — misma búsqueda con single quotes
-- [ ] Revisar y actualizar cada comentario/doc que diga "ape" refiriéndose al tool (no a la metodología APE)
+- [x] `grep -rn '"ape"' code/cli/lib/` — buscar string literals que referencien "ape" como tool
+- [x] `grep -rn "'ape'" code/cli/lib/` — misma búsqueda con single quotes
+- [x] Revisar y actualizar cada comentario/doc que diga "ape" refiriéndose al tool (no a la metodología APE)
   - Regla: "APE methodology" / "APE FSM" → se queda. "ape CLI" / "the ape binary" → cambia a "inquiry"
 
 **Verificación:**

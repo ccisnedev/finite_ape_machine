@@ -4,10 +4,10 @@ import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
-import 'package:ape_cli/assets.dart';
-import 'package:ape_cli/modules/global/commands/uninstall.dart';
-import 'package:ape_cli/targets/deployer.dart';
-import 'package:ape_cli/targets/target_adapter.dart';
+import 'package:inquiry_cli/assets.dart';
+import 'package:inquiry_cli/modules/global/commands/uninstall.dart';
+import 'package:inquiry_cli/targets/deployer.dart';
+import 'package:inquiry_cli/targets/target_adapter.dart';
 
 import 'platform_ops_test.dart' show FakePlatformOps;
 
@@ -43,7 +43,7 @@ void main() {
     final agentDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
     agentDir.createSync(recursive: true);
     File(
-      p.join(agentDir.path, 'ape.agent.md'),
+      p.join(agentDir.path, 'inquiry.agent.md'),
     ).writeAsStringSync('# APE Agent');
 
     deployer = TargetDeployer(

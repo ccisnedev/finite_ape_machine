@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:ape_cli/assets.dart';
-import 'package:ape_cli/modules/global/commands/doctor.dart';
+import 'package:inquiry_cli/assets.dart';
+import 'package:inquiry_cli/modules/global/commands/doctor.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
@@ -77,11 +77,11 @@ void main() {
       };
     }
 
-    /// Creates a mock FS where .ape/ exists and all targets are deployed.
+    /// Creates a mock FS where .inquiry/ exists and all targets are deployed.
     MockFileSystemOps allPassFs(String home, List<String> skills) {
       final fs = MockFileSystemOps()..setHome(home);
-      fs.setDirectoryExists('.ape', true);
-      fs.setFileExists(p.join(home, '.copilot', 'agents', 'ape.agent.md'), true);
+      fs.setDirectoryExists('.inquiry', true);
+      fs.setFileExists(p.join(home, '.copilot', 'agents', 'inquiry.agent.md'), true);
       for (final skill in skills) {
         fs.setFileExists(
           p.join(home, '.copilot', 'skills', skill, 'SKILL.md'),
@@ -106,7 +106,7 @@ void main() {
       }
       final agentsDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
       agentsDir.createSync(recursive: true);
-      File(p.join(agentsDir.path, 'ape.agent.md')).writeAsStringSync('# Agent');
+      File(p.join(agentsDir.path, 'inquiry.agent.md')).writeAsStringSync('# Agent');
       testAssets = Assets(root: tempDir.path);
     });
 
@@ -185,7 +185,7 @@ void main() {
       expect((json['targetChecks'] as List).length, 1);
 
       final firstCheck = (json['checks'] as List).first as Map<String, dynamic>;
-      expect(firstCheck, containsPair('name', 'ape'));
+      expect(firstCheck, containsPair('name', 'inquiry'));
       expect(firstCheck, containsPair('passed', true));
       expect(firstCheck, containsPair('version', '0.0.9'));
     });
@@ -212,7 +212,7 @@ void main() {
       final text = output.toText()!;
 
       expect(text, contains('Checking prerequisites...'));
-      expect(text, contains('✓ ape'));
+      expect(text, contains('✓ inquiry'));
       expect(text, contains('✓ git'));
       expect(text, contains('✓ gh'));
       expect(text, contains('All checks passed.'));
@@ -223,7 +223,7 @@ void main() {
       final output = await cmd.execute();
       final text = output.toText()!;
 
-      expect(text, contains('✓ ape'));
+      expect(text, contains('✓ inquiry'));
       expect(text, contains('✗ git'));
       expect(text, contains('Some checks failed.'));
     });
@@ -248,7 +248,7 @@ void main() {
 
       test('Scenario B: nothing deployed → exit 1', () async {
         final fs = MockFileSystemOps()..setHome('/home/testuser');
-        fs.setDirectoryExists('.ape', true);
+        fs.setDirectoryExists('.inquiry', true);
         // Agent and skills do NOT exist
 
         final cmd = makeCmd(fs: fs);
@@ -263,13 +263,13 @@ void main() {
         final text = output.toText()!;
         expect(text, contains('✗ copilot: agent not deployed'));
         expect(text, contains('✗ copilot: missing skills:'));
-        expect(text, contains("Run 'ape target get' to deploy"));
+        expect(text, contains("Run 'inquiry target get' to deploy"));
         expect(text, contains('Some checks failed.'));
       });
 
-      test('Scenario C: no .ape/ directory → exit 1', () async {
+      test('Scenario C: no .inquiry/ directory → exit 1', () async {
         final fs = MockFileSystemOps()..setHome('/home/testuser');
-        // .ape does NOT exist, targets do NOT exist
+        // .inquiry does NOT exist, targets do NOT exist
 
         final cmd = makeCmd(fs: fs);
         final output = await cmd.execute();
@@ -279,22 +279,22 @@ void main() {
 
         // Init check failed
         final initCheck = output.checks.firstWhere(
-          (c) => c.name == 'ape init',
+          (c) => c.name == 'inquiry init',
         );
         expect(initCheck.passed, isFalse);
 
         final text = output.toText()!;
-        expect(text, contains('✗ ape init'));
-        expect(text, contains("Run 'ape init' to initialize"));
+        expect(text, contains('✗ inquiry init'));
+        expect(text, contains("Run 'inquiry init' to initialize"));
         expect(text, contains('✗ copilot: agent not deployed'));
-        expect(text, contains("Run 'ape target get' to deploy"));
+        expect(text, contains("Run 'inquiry target get' to deploy"));
       });
 
       test('Scenario D: partial deployment → exit 1', () async {
         final fs = MockFileSystemOps()..setHome('/home/testuser');
-        fs.setDirectoryExists('.ape', true);
+        fs.setDirectoryExists('.inquiry', true);
         fs.setFileExists(
-          p.join('/home/testuser', '.copilot', 'agents', 'ape.agent.md'),
+          p.join('/home/testuser', '.copilot', 'agents', 'inquiry.agent.md'),
           true,
         );
         // Deploy only 3 of 4 skills
@@ -317,7 +317,7 @@ void main() {
         final text = output.toText()!;
         expect(text, contains('✓ copilot: agent deployed'));
         expect(text, contains('✗ copilot: missing skills: memory-read'));
-        expect(text, contains("Run 'ape target get' to deploy"));
+        expect(text, contains("Run 'inquiry target get' to deploy"));
       });
 
       test('TargetCheck.toJson() includes all fields', () {

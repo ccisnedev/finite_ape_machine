@@ -1,9 +1,9 @@
 import 'package:test/test.dart';
 
-import 'package:ape_cli/modules/global/commands/version.dart';
+import 'package:inquiry_cli/modules/global/commands/version.dart';
 
 void main() {
-  group('ape version', () {
+  group('inquiry version', () {
     test('returns current version string', () async {
       final command = VersionCommand(VersionInput());
       final output = await command.execute();

@@ -4,11 +4,11 @@ import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
-import 'package:ape_cli/assets.dart';
-import 'package:ape_cli/modules/target/commands/get.dart';
-import 'package:ape_cli/modules/target/commands/clean.dart';
-import 'package:ape_cli/targets/deployer.dart';
-import 'package:ape_cli/targets/target_adapter.dart';
+import 'package:inquiry_cli/assets.dart';
+import 'package:inquiry_cli/modules/target/commands/get.dart';
+import 'package:inquiry_cli/modules/target/commands/clean.dart';
+import 'package:inquiry_cli/targets/deployer.dart';
+import 'package:inquiry_cli/targets/target_adapter.dart';
 
 class _FakeAdapter extends TargetAdapter {
   @override
@@ -43,7 +43,7 @@ void main() {
     final agentDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
     agentDir.createSync(recursive: true);
     File(
-      p.join(agentDir.path, 'ape.agent.md'),
+      p.join(agentDir.path, 'inquiry.agent.md'),
     ).writeAsStringSync('# APE Agent');
 
     deployer = TargetDeployer(
@@ -72,7 +72,7 @@ void main() {
       );
       expect(
         File(
-          p.join(homeDir.path, '.fake', 'agents', 'ape.agent.md'),
+          p.join(homeDir.path, '.fake', 'agents', 'inquiry.agent.md'),
         ).existsSync(),
         isTrue,
       );

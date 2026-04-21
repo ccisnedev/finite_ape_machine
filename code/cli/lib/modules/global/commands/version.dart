@@ -1,4 +1,4 @@
-/// `ape version` — prints the current CLI version.
+/// `inquiry version` — prints the current CLI version.
 library;
 
 import 'package:cli_router/cli_router.dart';

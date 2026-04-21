@@ -1,13 +1,13 @@
-/// Entry point for the `ape` CLI.
+/// Entry point for the `inquiry` CLI.
 ///
-/// Delegates immediately to [runApe] to keep the binary thin and testable.
+/// Delegates immediately to [runInquiry] to keep the binary thin and testable.
 library;
 
 import 'dart:io';
 
-import 'package:ape_cli/ape_cli.dart';
+import 'package:inquiry_cli/inquiry_cli.dart';
 
 Future<void> main(List<String> args) async {
-  final code = await runApe(args);
+  final code = await runInquiry(args);
   exit(code);
 }
