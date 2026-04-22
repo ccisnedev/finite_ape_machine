@@ -25,7 +25,7 @@ void main() {
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
-        expect(Directory('${tempDir.path}/docs/issues').existsSync(), isTrue);
+        expect(Directory('${tempDir.path}/docs/cleanrooms').existsSync(), isTrue);
       });
 
       test('uses existing doc/ directory', () async {
@@ -34,7 +34,7 @@ void main() {
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
-        expect(Directory('${tempDir.path}/doc/issues').existsSync(), isTrue);
+        expect(Directory('${tempDir.path}/doc/cleanrooms').existsSync(), isTrue);
       });
 
       test('prefers docs/ when both doc/ and docs/ exist', () async {
@@ -44,8 +44,8 @@ void main() {
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
-        expect(Directory('${tempDir.path}/docs/issues').existsSync(), isTrue);
-        expect(Directory('${tempDir.path}/doc/issues').existsSync(), isFalse);
+        expect(Directory('${tempDir.path}/docs/cleanrooms').existsSync(), isTrue);
+        expect(Directory('${tempDir.path}/doc/cleanrooms').existsSync(), isFalse);
       });
 
       test('creates docs/ when neither doc/ nor docs/ exist', () async {
@@ -53,32 +53,32 @@ void main() {
         await command.execute();
 
         expect(Directory('${tempDir.path}/docs').existsSync(), isTrue);
-        expect(Directory('${tempDir.path}/docs/issues').existsSync(), isTrue);
+        expect(Directory('${tempDir.path}/docs/cleanrooms').existsSync(), isTrue);
       });
     });
 
-    // ─── Step 2: issues/ directory ────────────────────────────────────
+    // ─── Step 2: cleanrooms/ directory ───────────────────────────────────
 
-    group('issues/ directory', () {
-      test('creates {docs}/issues/ if it does not exist', () async {
+    group('cleanrooms/ directory', () {
+      test('creates {docs}/cleanrooms/ if it does not exist', () async {
         Directory('${tempDir.path}/docs').createSync();
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
-        expect(Directory('${tempDir.path}/docs/issues').existsSync(), isTrue);
+        expect(Directory('${tempDir.path}/docs/cleanrooms').existsSync(), isTrue);
       });
 
-      test('skips {docs}/issues/ creation if already exists', () async {
-        Directory('${tempDir.path}/docs/issues').createSync(recursive: true);
+      test('skips {docs}/cleanrooms/ creation if already exists', () async {
+        Directory('${tempDir.path}/docs/cleanrooms').createSync(recursive: true);
         // Put a marker file to verify directory is not recreated/destroyed
-        File('${tempDir.path}/docs/issues/marker.md').writeAsStringSync('x');
+        File('${tempDir.path}/docs/cleanrooms/marker.md').writeAsStringSync('x');
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
         expect(
-          File('${tempDir.path}/docs/issues/marker.md').existsSync(),
+          File('${tempDir.path}/docs/cleanrooms/marker.md').existsSync(),
           isTrue,
         );
       });
@@ -258,7 +258,7 @@ void main() {
         expect(gitignoreAfterSecond, equals(gitignoreAfterFirst));
         expect(configAfterSecond, equals(configAfterFirst));
         expect(mutationsAfterSecond, equals(mutationsAfterFirst));
-        expect(Directory('${tempDir.path}/docs/issues').existsSync(), isTrue);
+        expect(Directory('${tempDir.path}/docs/cleanrooms').existsSync(), isTrue);
       });
     });
 

@@ -37,12 +37,12 @@ If not EXECUTE, abort with message:
 
 ### Step 2: Verify Plan Completion
 
-Read `docs/issues/{slug}/plan.md` and verify:
+Read `docs/cleanrooms/{slug}/plan.md` and verify:
 - All checkboxes `- [ ]` are now `- [x]`
 
 ```bash
 # Count incomplete checkboxes
-grep -c "\- \[ \]" docs/issues/{slug}/plan.md
+grep -c "\- \[ \]" docs/cleanrooms/{slug}/plan.md
 ```
 
 Expected: 0 incomplete checkboxes.

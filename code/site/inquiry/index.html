@@ -31,7 +31,7 @@
       <h1><span class="ape">Inquiry</span></h1>
       <p class="primary-tagline">Analyze. Plan. Execute.</p>
       <p class="secondary-tagline">Currently available for GitHub Copilot. More targets coming soon.</p>
-      <span class="badge">v0.1.1</span>
+      <span class="badge">v0.1.2</span>
 
       <div class="hero-install" id="install">
         <div class="os-tabs" role="tablist" aria-label="Operating system">
@@ -45,7 +45,7 @@
             <button class="copy-btn" onclick="copy(this)" aria-label="Copy install command">Copy</button>
             <code>irm https://www.si14bm.com/inquiry/install.ps1 | iex</code>
           </div>
-          <p class="install-note">Installs to <code>%LOCALAPPDATA%\inquiry\</code>, adds to <code>PATH</code>, and deploys APE agents to your AI coding tool.</p>
+          <p class="install-note">Installs to <code>%LOCALAPPDATA%\inquiry\</code>, adds to <code>PATH</code>, and deploys Inquiry agents to your AI coding tool.</p>
         </div>
         <div id="panel-linux" class="os-panel" role="tabpanel" aria-labelledby="tab-linux" hidden>
           <div class="install-block">
@@ -58,7 +58,7 @@
       </div>
 
       <figure class="fsm-diagram hero-diagram">
-        <img src="img/fsm.svg" alt="APE finite state machine diagram showing IDLE → ANALYZE → PLAN → EXECUTE → END → IDLE cycle, with backward transitions and opt-in EVOLUTION state.">
+        <img src="img/fsm.svg" alt="Inquiry finite state machine diagram showing IDLE → ANALYZE → PLAN → EXECUTE → END → IDLE cycle, with backward transitions and opt-in EVOLUTION state.">
       </figure>
     </header>
 
@@ -93,7 +93,7 @@
       <pre class="quickstart"><span class="comment"># verify prerequisites (inquiry, git, gh, gh auth)</span>
 <span class="cmd">iq doctor</span>
 
-<span class="comment"># deploy APE agent + skills to your AI tool (Copilot today)</span>
+<span class="comment"># deploy Inquiry agent + skills to your AI tool (Copilot today)</span>
 <span class="cmd">iq target get</span>
 
 <span class="comment"># scaffold .inquiry/ in your repo</span>
@@ -115,7 +115,7 @@
 
     <section id="targets">
       <h2>Targets</h2>
-      <p>APE deploys agent prompts and skills to the global configuration of your AI coding tool.</p>
+      <p>Inquiry deploys agent prompts and skills to the global configuration of your AI coding tool.</p>
       <ul class="targets">
         <li class="target-badge"><span class="dot"></span>GitHub Copilot</li>
         <li class="target-badge future"><span class="dot"></span>Claude Code</li>
@@ -130,7 +130,7 @@
       <h2>Go deeper</h2>
       <div class="deeper">
         <a href="agents.html" class="deeper-card">
-          <h3>Meet the APEs →</h3>
+          <h3>Meet the agents →</h3>
           <p>Four active agents — SOCRATES, DESCARTES, BASHŌ, DARWIN — and the honest story of five that collapsed.</p>
         </a>
         <a href="methodology.html" class="deeper-card">
@@ -138,14 +138,14 @@
           <p>The FSM, the transition contract, memory-as-code, and the semantic risk matrix.</p>
         </a>
         <a href="ape-builds-ape.html" class="deeper-card">
-          <h3>APE builds APE →</h3>
+          <h3>Inquiry builds Inquiry →</h3>
           <p>The empirical bootstrap: APE is being built using APE. Each cycle is evidence.</p>
         </a>
       </div>
     </section>
 
     <aside class="evolution-note" aria-label="Evolution">
-      <strong>Evolution is opt-in.</strong> After each cycle, DARWIN can propose mutations to APE itself as issues in this repo. Your code never leaves your machine. Off by default. <a href="evolution.html">How it works →</a>
+      <strong>Evolution is opt-in.</strong> After each cycle, DARWIN can propose mutations to Inquiry itself as issues in this repo. Your code never leaves your machine. Off by default. <a href="evolution.html">How it works →</a>
     </aside>
 
     <footer>

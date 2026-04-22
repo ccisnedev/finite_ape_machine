@@ -1,19 +1,19 @@
-# Inquiry CLI
+# Inquiry
 
-**Powered by the Finite APE Machine** — Analyze. Plan. Execute.
+**Analyze. Plan. Execute.**
 
 A methodology for AI-assisted software development that models coding agents as a cooperative finite state machine — **Analyze → Plan → Execute → End → [Evolution] → Idle** — where the value is in the process, not the model.
 
 **Status:** `v0.1.0` · 131 tests · 12 GitHub releases · Windows + Linux · Single-target MVP (Copilot)
 
-## What is APE?
+## What is Inquiry?
 
-APE treats coding agents ("apes") as states of a finite state machine. Each state has one specialized agent in charge, a declarative transition contract, and pre/post-conditions enforced by the CLI. Intelligence emerges from orchestration and memory, not from any single agent's capability.
+Inquiry treats coding agents ("apes") as states of a finite state machine. Each state has one specialized agent in charge, a declarative transition contract, and pre/post-conditions enforced by the CLI. Intelligence emerges from orchestration and memory, not from any single agent's capability.
 
 **Core ideas:**
 
 - **Agents as FSM states** — each phase has one ape; transitions are declarative, total, and validated (`code/cli/assets/transition_contract.yaml`)
-- **Methodology over model** — a smaller model following APE's runbook beats a frontier model freestyling
+- **Methodology over model** — a smaller model following Inquiry's runbook beats a frontier model freestyling
 - **Memory as Code** — project memory as version-controlled markdown in `.inquiry/` and `docs/`. No vector DB, no cloud dependency
 - **DARWIN** — an evolutionary meta-agent that proposes mutations to APE itself after each cycle
 - **Semantic risk matrix** — human approval only when engineering judgment matters
@@ -38,7 +38,7 @@ The installer downloads the latest release, places `inquiry` (aliased as `iq`) o
 
 ```bash
 iq doctor               # verify inquiry, git, gh, gh auth
-iq target get           # deploy APE agent + skills to ~/.copilot
+iq target get           # deploy Inquiry agent + skills to ~/.copilot
 cd your-repo
 iq init                 # create .inquiry/{state,config,mutations}
 iq                      # show TUI banner with current FSM state
@@ -54,8 +54,8 @@ iq                      # show TUI banner with current FSM state
 | `iq version` | Print CLI version |
 | `iq upgrade` | Download and install latest release |
 | `iq uninstall` | Remove `inquiry` binary and deployed assets |
-| `iq target get` | Deploy APE agent and skills to active AI tool (Copilot) |
-| `iq target clean` | Remove deployed APE files from all known targets |
+| `iq target get` | Deploy Inquiry agent and skills to active AI tool (Copilot) |
+| `iq target clean` | Remove deployed Inquiry files from all known targets |
 | `iq state transition --event <e>` | Execute a deterministic FSM transition with prechecks/effects |
 
 ## The APE cycle
@@ -68,7 +68,7 @@ iq                      # show TUI banner with current FSM state
 | **PLAN** | DESCARTES | Method — divide, order, verify, enumerate | `plan.md` |
 | **EXECUTE** | BASHŌ | Techne — minimal, beautiful implementation under tests | code + commits |
 | **END** | — | PR gate — `gh pr create` + `gh pr merge` | merged PR |
-| **EVOLUTION** | DARWIN | Natural selection — propose APE mutations | issues in this repo |
+| **EVOLUTION** | DARWIN | Natural selection — propose Inquiry mutations | issues in this repo |
 
 EVOLUTION is opt-in (`evolution.enabled` in `.inquiry/config.yaml`) and one-shot: if interrupted, the cycle simply returns to IDLE.
 
@@ -83,9 +83,9 @@ EVOLUTION is opt-in (`evolution.enabled` in `.inquiry/config.yaml`) and one-shot
 ## Documentation
 
 - **[`docs/architecture.md`](docs/architecture.md)** — how the CLI is built (repo layout, modules, data flows, dependencies)
-- **[`docs/roadmap.md`](docs/roadmap.md)** — where APE is going next (near/mid/long-term, lore vs reality)
+- **[`docs/roadmap.md`](docs/roadmap.md)** — where Inquiry is going next (near/mid/long-term, lore vs reality)
 - **[`docs/spec/`](docs/spec/index.md)** — canonical specifications (FSM, CLI, Memory as Code, orchestrator, target-specific agents)
-- **[`docs/research/ape_builds_ape/`](docs/research/ape_builds_ape/index.md)** — research papers and methodology (APE building APE — empirical bootstrap)
+- **[`docs/research/ape_builds_ape/`](docs/research/ape_builds_ape/index.md)** — research papers and methodology (Inquiry building Inquiry — empirical bootstrap)
 - **[`docs/adr/`](docs/adr/)** — Architecture Decision Records
 - **[`docs/issues/`](docs/issues/)** — per-cycle work artifacts (analysis, plan, metrics)
 - **[`docs/lore.md`](docs/lore.md)** — the apes' nomenclature and historical vision

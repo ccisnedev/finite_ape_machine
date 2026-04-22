@@ -2,7 +2,7 @@
 ///
 /// Seven idempotent steps:
 /// 1. Detect docs directory (doc/ or docs/, prefer docs/)
-/// 2. Create {docs}/issues/ if missing
+/// 2. Create {docs}/cleanrooms/ if missing
 /// 3. Add .inquiry/ to .gitignore
 /// 4. Create .inquiry/state.yaml with IDLE state
 /// 5. Create .inquiry/config.yaml with defaults
@@ -71,8 +71,8 @@ class InitCommand implements Command<InitInput, InitOutput> {
     // Step 1: Detect docs directory
     final docsDir = _detectDocsDirectory(root);
 
-    // Step 2: Create {docs}/issues/ if missing
-    final issuesDir = Directory('$docsDir/issues');
+    // Step 2: Create {docs}/cleanrooms/ if missing
+    final issuesDir = Directory('$docsDir/cleanrooms');
     if (!issuesDir.existsSync()) {
       issuesDir.createSync(recursive: true);
       steps.add('Created ${_relative(root, issuesDir.path)}');
@@ -123,11 +123,15 @@ class InitCommand implements Command<InitInput, InitOutput> {
     if (gitignore.existsSync()) {
       final content = gitignore.readAsStringSync();
       if (!content.contains('.inquiry/')) {
-        gitignore.writeAsStringSync('$content.inquiry/\n');
+        gitignore.writeAsStringSync(
+          '$content\n# Inquiry — local cycle state\n.inquiry/\n',
+        );
         steps.add('Added .inquiry/ to .gitignore');
       }
     } else {
-      gitignore.writeAsStringSync('.inquiry/\n');
+      gitignore.writeAsStringSync(
+        '# Inquiry — local cycle state\n.inquiry/\n',
+      );
       steps.add('Created .gitignore with .inquiry/');
     }
   }

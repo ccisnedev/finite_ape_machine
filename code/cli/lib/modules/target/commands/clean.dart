@@ -47,6 +47,6 @@ class TargetCleanCommand
   @override
   Future<TargetCleanOutput> execute() async {
     deployer.clean();
-    return TargetCleanOutput(message: 'APE cleaned from all targets');
+    return TargetCleanOutput(message: 'Inquiry cleaned from all targets');
   }
 }

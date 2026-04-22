@@ -48,6 +48,6 @@ void buildGlobalModule(
       UninstallInput.fromCliRequest(req),
       deployer: cleaner,
     ),
-    description: 'Remove APE CLI from the system',
+    description: 'Remove Inquiry CLI from the system',
   );
 }

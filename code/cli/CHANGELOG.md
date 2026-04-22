@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.1.2]
+### Changed
+- **Identity unification** (#122): canonical title+subtitle `Inquiry — Analyze. Plan. Execute.` applied uniformly across README, CLI README, agent definition, and site
+- **Agent paths** (#122): all `docs/issues/` references in `inquiry.agent.md` updated to `docs/cleanrooms/`
+- **Site architecture** (#122): `site/CNAME` removed from repo; `www.si14bm.com` domain transferred to org repo `SiliconBrainedMachines/siliconbrainedmachines`
+- **Site content** (#122): `index.html` double-DOCTYPE bug fixed; product site copy updated to Inquiry branding across `index.html`, `agents.html`, `methodology.html`
+- **issue-start skill** (#122): `docs/issues/` → `docs/cleanrooms/` path updated
+
 ## [0.1.0]
 ### Changed
 - **Rebrand**: APE CLI renamed to Inquiry CLI (`inquiry` binary, `iq` alias)
