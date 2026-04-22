@@ -7,10 +7,10 @@ export function getPlatform(): string {
 
 export function getInquiryBinaryPath(platform: string): string {
   if (platform === 'win32') {
-    return path.join(process.env.LOCALAPPDATA!, 'inquiry', 'bin', 'inquiry.exe');
+    return path.join(process.env.LOCALAPPDATA ?? '', 'inquiry', 'bin', 'inquiry.exe');
   }
   if (platform === 'linux') {
-    return path.join(process.env.HOME!, '.inquiry', 'bin', 'inquiry');
+    return path.join(process.env.HOME ?? '', '.inquiry', 'bin', 'inquiry');
   }
   throw new Error(`Unsupported platform: ${platform}`);
 }

@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import { EventEmitter } from 'events';
+import * as path from 'path';
 import { getInstallScriptUrl, getRunCommand, installInquiryCli, InstallerDeps } from '../../src/installer';
 
 function createMockProcess() {
@@ -88,10 +89,10 @@ describe('installInquiryCli', () => {
 
     await installInquiryCli(deps);
     assert.strictEqual(downloadedUrl, 'https://www.si14bm.com/inquiry/install.ps1');
-    assert.strictEqual(downloadedDest, 'C:\\temp\\inquiry-install.ps1');
+    assert.strictEqual(downloadedDest, path.join('C:\\temp', 'inquiry-install.ps1'));
     assert.strictEqual(spawnedCmd, 'powershell');
     assert.deepStrictEqual(spawnedArgs, [
-      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'C:\\temp\\inquiry-install.ps1',
+      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join('C:\\temp', 'inquiry-install.ps1'),
     ]);
   });
 
