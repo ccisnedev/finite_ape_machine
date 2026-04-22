@@ -89,7 +89,7 @@ class WindowsPlatformOps implements PlatformOps {
   }
 
   @override
-  void scheduleDeletion(String dir) {
+  Future<void> scheduleDeletion(String dir) async {
     // Rename the running exe so the directory can be deleted.
     final currentExe = File(Platform.resolvedExecutable);
     final bakPath = '${Platform.resolvedExecutable}.bak';
@@ -99,10 +99,20 @@ class WindowsPlatformOps implements PlatformOps {
       // Best effort — may already be renamed
     }
 
-    // Spawn a detached cmd process that waits 2 seconds then deletes.
-    Process.start('cmd', [
-      '/c',
-      'timeout /t 2 /nobreak >nul & rmdir /s /q "$dir"',
-    ], mode: ProcessStartMode.detached);
+    // Write a temp batch script to avoid cmd.exe quoting issues
+    // (Dart escapes " in Process.start args, but cmd doesn't understand \")
+    final bat = File(p.join(Directory.systemTemp.path, 'inquiry_cleanup.cmd'));
+    bat.writeAsStringSync(
+      '@echo off\r\n'
+      'timeout /t 2 /nobreak >nul\r\n'
+      'rmdir /s /q "$dir"\r\n'
+      'del "%~f0"\r\n',
+    );
+
+    await Process.start(
+      'cmd.exe',
+      ['/c', bat.path],
+      mode: ProcessStartMode.detached,
+    );
   }
 }

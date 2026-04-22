@@ -77,8 +77,8 @@ class LinuxPlatformOps implements PlatformOps {
   }
 
   @override
-  void scheduleDeletion(String dir) {
+  Future<void> scheduleDeletion(String dir) async {
     // On Linux, the running binary is not locked — delete directly.
-    Process.start('rm', ['-rf', dir], mode: ProcessStartMode.detached);
+    await Process.start('rm', ['-rf', dir], mode: ProcessStartMode.detached);
   }
 }

@@ -70,7 +70,7 @@ class UninstallCommand implements Command<UninstallInput, UninstallOutput> {
     _removeFromPath(p.join(input.installDir, 'bin'));
 
     // 3. Spawn background process to delete install directory
-    platformOps.scheduleDeletion(input.installDir);
+    await platformOps.scheduleDeletion(input.installDir);
 
     return UninstallOutput(
       message: 'Inquiry uninstalled. Restart your terminal to apply PATH changes.',

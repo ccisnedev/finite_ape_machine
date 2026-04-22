@@ -100,5 +100,57 @@ void main() {
       final output = await command.execute();
       expect(output.exitCode, ExitCode.ok);
     });
+
+    test('removes bin dir from PATH via platformOps', () async {
+      final binDir = p.join(tempDir.path, 'bin');
+      final fakePath = 'C:\\other;$binDir;C:\\more';
+      final ops = FakePlatformOps(fakeEnvValue: fakePath);
+
+      final command = UninstallCommand(
+        UninstallInput(installDir: tempDir.path),
+        deployer: deployer,
+        platformOps: ops,
+      );
+
+      await command.execute();
+
+      expect(ops.calls, contains('getEnvVariable(PATH)'));
+      expect(
+        ops.calls,
+        contains('setEnvVariable(PATH, C:\\other;C:\\more)'),
+      );
+    });
+
+    test('does not call setEnvVariable when bin dir is not in PATH', () async {
+      final ops = FakePlatformOps(fakeEnvValue: 'C:\\other;C:\\more');
+
+      final command = UninstallCommand(
+        UninstallInput(installDir: tempDir.path),
+        deployer: deployer,
+        platformOps: ops,
+      );
+
+      await command.execute();
+
+      expect(ops.calls, contains('getEnvVariable(PATH)'));
+      expect(
+        ops.calls.where((c) => c.startsWith('setEnvVariable')),
+        isEmpty,
+      );
+    });
+
+    test('schedules deletion of install directory', () async {
+      final ops = FakePlatformOps();
+
+      final command = UninstallCommand(
+        UninstallInput(installDir: tempDir.path),
+        deployer: deployer,
+        platformOps: ops,
+      );
+
+      await command.execute();
+
+      expect(ops.calls, contains('scheduleDeletion(${tempDir.path})'));
+    });
   });
 }

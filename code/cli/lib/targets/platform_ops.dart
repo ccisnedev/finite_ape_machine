@@ -46,7 +46,7 @@ abstract class PlatformOps {
   ///
   /// Windows: rename running exe, spawn detached `cmd /c timeout ... rmdir`.
   /// Linux: spawn detached `rm -rf`.
-  void scheduleDeletion(String dir);
+  Future<void> scheduleDeletion(String dir);
 
   /// Factory that returns the correct implementation for the current OS.
   factory PlatformOps.current() {

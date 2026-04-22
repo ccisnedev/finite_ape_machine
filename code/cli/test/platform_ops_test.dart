@@ -53,7 +53,7 @@ class FakePlatformOps implements PlatformOps {
   }
 
   @override
-  void scheduleDeletion(String dir) {
+  Future<void> scheduleDeletion(String dir) async {
     calls.add('scheduleDeletion($dir)');
   }
 }
