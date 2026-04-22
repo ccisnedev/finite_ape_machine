@@ -2,7 +2,7 @@
   "name": "inquiry-vscode",
   "displayName": "Inquiry",
   "publisher": "siliconbrainedmachines",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Inquiry CLI — structured development through the APE methodology for GitHub Copilot.",
   "license": "MIT",
   "icon": "assets/icon.png",

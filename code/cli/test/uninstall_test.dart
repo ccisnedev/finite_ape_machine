@@ -103,7 +103,10 @@ void main() {
 
     test('removes bin dir from PATH via platformOps', () async {
       final binDir = p.join(tempDir.path, 'bin');
-      final fakePath = 'C:\\other;$binDir;C:\\more';
+      final sep = Platform.isWindows ? ';' : ':';
+      final otherA = Platform.isWindows ? r'C:\other' : '/other';
+      final otherB = Platform.isWindows ? r'C:\more' : '/more';
+      final fakePath = '$otherA$sep$binDir$sep$otherB';
       final ops = FakePlatformOps(fakeEnvValue: fakePath);
 
       final command = UninstallCommand(
@@ -115,14 +118,18 @@ void main() {
       await command.execute();
 
       expect(ops.calls, contains('getEnvVariable(PATH)'));
+      final expectedNew = '$otherA$sep$otherB';
       expect(
         ops.calls,
-        contains('setEnvVariable(PATH, C:\\other;C:\\more)'),
+        contains('setEnvVariable(PATH, $expectedNew)'),
       );
     });
 
     test('does not call setEnvVariable when bin dir is not in PATH', () async {
-      final ops = FakePlatformOps(fakeEnvValue: 'C:\\other;C:\\more');
+      final sep = Platform.isWindows ? ';' : ':';
+      final otherA = Platform.isWindows ? r'C:\other' : '/other';
+      final otherB = Platform.isWindows ? r'C:\more' : '/more';
+      final ops = FakePlatformOps(fakeEnvValue: '$otherA$sep$otherB');
 
       final command = UninstallCommand(
         UninstallInput(installDir: tempDir.path),
