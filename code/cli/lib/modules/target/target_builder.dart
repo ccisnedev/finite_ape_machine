@@ -15,7 +15,7 @@ void buildTargetModule(
       TargetGetInput.fromCliRequest(req),
       deployer: deployer,
     ),
-    description: 'Deploy APE agents and skills to Copilot',
+    description: 'Deploy Inquiry agents and skills to Copilot',
   );
 
   m.command<TargetCleanInput, TargetCleanOutput>(
@@ -24,6 +24,6 @@ void buildTargetModule(
       TargetCleanInput.fromCliRequest(req),
       deployer: cleaner,
     ),
-    description: 'Remove deployed APE files from all targets',
+    description: 'Remove deployed Inquiry files from all targets',
   );
 }

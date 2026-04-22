@@ -48,6 +48,6 @@ class TargetGetCommand implements Command<TargetGetInput, TargetGetOutput> {
   @override
   Future<TargetGetOutput> execute() async {
     deployer.deploy();
-    return TargetGetOutput(message: 'APE deployed to Github Copilot');
+    return TargetGetOutput(message: 'Inquiry deployed to GitHub Copilot');
   }
 }
