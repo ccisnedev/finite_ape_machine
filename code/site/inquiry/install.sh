@@ -100,6 +100,16 @@ else
   echo ">>> PATH already includes $LINK_DIR"
 fi
 
+# Persist PATH in shell profiles (.bashrc / .zshrc) for future sessions
+# (.profile is only sourced by login shells; interactive shells need rc files)
+for RC_FILE in "$HOME/.bashrc" "$HOME/.zshrc"; do
+  [ -f "$RC_FILE" ] || continue
+  if ! grep -q '\.local/bin' "$RC_FILE"; then
+    printf '\n# Added by Inquiry CLI installer\nexport PATH="$HOME/.local/bin:$PATH"\n' >> "$RC_FILE"
+    echo ">>> Added ~/.local/bin to PATH in $(basename "$RC_FILE")"
+  fi
+done
+
 # ─── Deploy and verify ───────────────────────────────────────────────────────
 
 echo ">>> Deploying Inquiry to all targets..."
