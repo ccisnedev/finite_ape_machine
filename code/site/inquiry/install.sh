@@ -2,7 +2,7 @@
 # install.sh — Downloads and installs the latest Inquiry CLI release on Linux.
 #
 # Usage:
-#   curl -fsSL https://www.si14bm.com/inquiry/install.sh | bash
+#   curl -fsSL https://inquiry.si14bm.com/install.sh | bash
 #
 # What it does:
 #   1. Detects Linux x64

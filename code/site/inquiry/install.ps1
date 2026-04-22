@@ -1,7 +1,7 @@
 # install.ps1 — Downloads and installs the latest Inquiry CLI release.
 #
 # Usage:
-#   irm https://www.si14bm.com/inquiry/install.ps1 | iex
+#   irm https://inquiry.si14bm.com/install.ps1 | iex
 #
 # What it does:
 #   1. Detects Windows x64
