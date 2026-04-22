@@ -3,7 +3,7 @@
   "displayName": "Inquiry",
   "publisher": "siliconbrainedmachines",
   "version": "0.1.1",
-  "description": "Inquiry CLI — structured development through the APE methodology for GitHub Copilot.",
+  "description": "Inquiry — Analyze. Plan. Execute. Structured AI-assisted development for GitHub Copilot.",
   "license": "MIT",
   "icon": "assets/icon.png",
   "repository": {

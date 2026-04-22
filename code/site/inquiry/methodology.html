@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Methodology — Finite APE Machine</title>
-  <meta name="description" content="How APE works: a five-state finite machine, a declarative transition contract, memory as code, and the antifragility thesis.">
+  <title>Methodology — Inquiry</title>
+  <meta name="description" content="How Inquiry works: a five-state finite machine, a declarative transition contract, memory as code, and the antifragility thesis.">
   <meta name="theme-color" content="#0a0e1a">
 
-  <meta property="og:title" content="Methodology — Finite APE Machine">
+  <meta property="og:title" content="Methodology — Inquiry">
   <meta property="og:description" content="A five-state FSM, a declarative transition contract, memory as code.">
   <meta property="og:type" content="article">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Methodology — Finite APE Machine">
+  <meta name="twitter:title" content="Methodology — Inquiry">
   <meta name="twitter:description" content="A five-state FSM, a declarative transition contract, memory as code.">
 
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
@@ -27,13 +27,13 @@
 <body>
   <div class="container">
     <nav class="page-nav" aria-label="Breadcrumb">
-      <a href="index.html">← Finite <span class="ape">APE</span> Machine</a>
+      <a href="index.html">← Inquiry</a>
     </nav>
 
     <header class="page-hero">
       <h1>Methodology over model.</h1>
       <p class="page-subhead">
-        APE treats your AI coding assistant as a finite state machine with a declarative transition contract. The CLI enforces pre- and post-conditions. Intelligence emerges from orchestration and memory — not from any single agent's capability.
+        Inquiry treats your AI coding assistant as a finite state machine with a declarative transition contract. The CLI enforces pre- and post-conditions. Intelligence emerges from orchestration and memory — not from any single agent's capability.
       </p>
     </header>
 
@@ -43,7 +43,7 @@
         Six states if you count rest. <code>IDLE</code> is the entry and exit. <code>ANALYZE</code>, <code>PLAN</code>, <code>EXECUTE</code> are the core. <code>END</code> is the PR gate. <code>EVOLUTION</code> is opt-in. The forward flow is linear; backward edges from <code>PLAN</code> and <code>EXECUTE</code> to <code>ANALYZE</code> exist because re-analysis is legal, not a recovery hack.
       </p>
       <figure class="fsm-diagram">
-        <img src="img/fsm.svg" alt="APE finite state machine diagram showing IDLE → ANALYZE → PLAN → EXECUTE → END → IDLE cycle, with backward transitions from PLAN and EXECUTE to ANALYZE, and an opt-in EVOLUTION state after END.">
+        <img src="img/fsm.svg" alt="Inquiry finite state machine diagram showing IDLE → ANALYZE → PLAN → EXECUTE → END → IDLE cycle, with backward transitions from PLAN and EXECUTE to ANALYZE, and an opt-in EVOLUTION state after END.">
       </figure>
       <div class="state-list">
         <dl>
@@ -63,7 +63,7 @@
           <dd>Opens and merges the pull request via <code>gh</code>. No agent; the CLI orchestrates.</dd>
 
           <dt><code>EVOLUTION</code> · DARWIN <span class="opt-pill">opt-in</span></dt>
-          <dd>Reads the cycle's artifacts and proposes mutations to APE itself. Off by default.</dd>
+          <dd>Reads the cycle's artifacts and proposes mutations to Inquiry itself. Off by default.</dd>
         </dl>
       </div>
     </section>
@@ -92,7 +92,7 @@
     <span class="key">prechecks</span>:
       - human_approval</pre>
       <p>
-        This is the core artifact. It's what makes APE reproducible across models: every ape reads the same contract and can only produce the transitions it permits. If a future target (Claude, Codex, Gemini) processes a different prompt, the contract constrains the output shape identically.
+        This is the core artifact. It's what makes Inquiry reproducible across models: every agent reads the same contract and can only produce the transitions it permits. If a future target (Claude, Codex, Gemini) processes a different prompt, the contract constrains the output shape identically.
       </p>
     </section>
 
@@ -142,10 +142,10 @@
         If the framework carries the weight, the model gets lighter.
       </blockquote>
       <p>
-        Three scenarios, same conclusion. Cloud models get expensive? APE works with local ones. Frontier models plateau? DARWIN becomes the only improvement mechanism left. Models keep improving? APE amplifies the gains without rewriting the runbook. The framework benefits from disorder — antifragile across the AI market.
+        Three scenarios, same conclusion. Cloud models get expensive? Inquiry works with local ones. Frontier models plateau? DARWIN becomes the only improvement mechanism left. Models keep improving? Inquiry amplifies the gains without rewriting the runbook. The framework benefits from disorder — antifragile across the AI market.
       </p>
       <p>
-        The thesis APE exists to test: given an identical task, a smaller model running APE outperforms a frontier model freestyling. The evidence lives in a <code>metrics.yaml</code> dataset that doesn't fully exist yet — the reproducibility score sits at 2/10 until 30 clean cycles and a multi-target test matrix land. See <a href="ape-builds-ape.html">APE builds APE →</a>.
+        The thesis Inquiry exists to test: given an identical task, a smaller model running Inquiry outperforms a frontier model freestyling. The evidence lives in a <code>metrics.yaml</code> dataset that doesn't fully exist yet — the reproducibility score sits at 2/10 until 30 clean cycles and a multi-target test matrix land. See <a href="ape-builds-ape.html">Inquiry builds Inquiry →</a>.
       </p>
     </section>
 
@@ -153,11 +153,11 @@
       <h2 id="deeper-heading">Go deeper</h2>
       <div class="deeper">
         <a href="agents.html" class="deeper-card">
-          <h3>Meet the APEs →</h3>
+          <h3>Meet the agents →</h3>
           <p>The four agents that run each phase, and the five that collapsed.</p>
         </a>
         <a href="ape-builds-ape.html" class="deeper-card">
-          <h3>APE builds APE →</h3>
+          <h3>Inquiry builds Inquiry →</h3>
           <p>The empirical bootstrap. Evidence that the methodology works — or what's still missing.</p>
         </a>
         <a href="https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/spec/finite-ape-machine.md" class="deeper-card">

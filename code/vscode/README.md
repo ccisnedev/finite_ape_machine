@@ -10,7 +10,7 @@
 
 ## How it works
 
-![APE finite state machine](https://raw.githubusercontent.com/siliconbrainedmachines/inquiry/main/code/site/img/fsm.png)
+![Inquiry finite state machine](https://raw.githubusercontent.com/siliconbrainedmachines/inquiry/main/code/site/img/fsm.png)
 
 | Phase | What happens | Output |
 |-------|-------------|--------|
