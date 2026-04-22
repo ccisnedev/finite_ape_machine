@@ -1,12 +1,12 @@
-import { isApeInstalled, isApeWorkspace } from './guard';
+import { isInquiryInstalled, isInquiryWorkspace } from './guard';
 
 export interface GuardOptions {
   skipWorkspaceCheck?: boolean;
 }
 
 export interface GuardDeps {
-  isApeInstalled: () => boolean;
-  isApeWorkspace: (folder: string) => boolean;
+  isInquiryInstalled: () => boolean;
+  isInquiryWorkspace: (folder: string) => boolean;
   showMessage: (msg: string, ...items: string[]) => Thenable<string | undefined>;
   executeCommand: (cmd: string) => Thenable<unknown>;
 }
@@ -17,8 +17,8 @@ export async function withGuard(
   fn: () => Promise<void>,
   deps?: Partial<GuardDeps>,
 ): Promise<void> {
-  const installed = deps?.isApeInstalled ?? (() => isApeInstalled());
-  const workspace = deps?.isApeWorkspace ?? ((f: string) => isApeWorkspace(f));
+  const installed = deps?.isInquiryInstalled ?? (() => isInquiryInstalled());
+  const workspace = deps?.isInquiryWorkspace ?? ((f: string) => isInquiryWorkspace(f));
 
   let showMessage = deps?.showMessage;
   let executeCommand = deps?.executeCommand;
@@ -30,17 +30,17 @@ export async function withGuard(
   }
 
   if (!installed()) {
-    const action = await showMessage!('APE CLI not found. Install it?', 'Install');
+    const action = await showMessage!('Inquiry CLI not found. Install it?', 'Install');
     if (action === 'Install') {
-      await executeCommand!('ape.init');
+      await executeCommand!('inquiry.init');
     }
     return;
   }
 
   if (!options.skipWorkspaceCheck && !workspace(workspaceFolder)) {
-    const action = await showMessage!('No APE workspace detected. Run ape init?', 'Init');
+    const action = await showMessage!('No Inquiry workspace detected. Run inquiry init?', 'Init');
     if (action === 'Init') {
-      await executeCommand!('ape.init');
+      await executeCommand!('inquiry.init');
     }
     return;
   }

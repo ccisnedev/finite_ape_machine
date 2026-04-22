@@ -1,14 +1,14 @@
-import { isApeInstalled, getApeBinaryPath, getPlatform } from './guard';
+import { isInquiryInstalled, getInquiryBinaryPath, getPlatform } from './guard';
 
 export interface InitDeps {
-  isApeInstalled: () => boolean;
-  getApeBinaryPath: () => string;
+  isInquiryInstalled: () => boolean;
+  getInquiryBinaryPath: () => string;
   showErrorMessage: (msg: string) => Thenable<string | undefined>;
   showInformationMessage: (msg: string, ...items: string[]) => Thenable<string | undefined>;
   createTerminal: (name: string) => { show: () => void; sendText: (text: string) => void };
 }
 
-export async function apeInit(
+export async function inquiryInit(
   workspaceFolder: string | undefined,
   deps?: Partial<InitDeps>,
   onInstallNeeded?: () => Promise<void>,
@@ -19,12 +19,12 @@ export async function apeInit(
     ?? vscode.window.showErrorMessage.bind(vscode.window);
   const showInformationMessage = deps?.showInformationMessage
     ?? vscode.window.showInformationMessage.bind(vscode.window);
-  const installed = deps?.isApeInstalled ?? (() => isApeInstalled());
-  const binaryPath = deps?.getApeBinaryPath ?? (() => getApeBinaryPath(getPlatform()));
+  const installed = deps?.isInquiryInstalled ?? (() => isInquiryInstalled());
+  const binaryPath = deps?.getInquiryBinaryPath ?? (() => getInquiryBinaryPath(getPlatform()));
   const createTerminal = deps?.createTerminal ?? vscode.window.createTerminal.bind(vscode.window);
 
   if (!workspaceFolder) {
-    showErrorMessage('APE: Open a workspace folder first.');
+    showErrorMessage('Inquiry: Open a workspace folder first.');
     return;
   }
 
@@ -32,12 +32,12 @@ export async function apeInit(
     if (onInstallNeeded) {
       await onInstallNeeded();
     } else {
-      showInformationMessage('APE CLI not found. Install it manually or wait for a future update.');
+      showInformationMessage('Inquiry CLI not found. Install it manually or wait for a future update.');
     }
     return;
   }
 
-  const terminal = createTerminal('APE Init');
+  const terminal = createTerminal('Inquiry Init');
   terminal.show();
   terminal.sendText(`"${binaryPath()}" init`);
 }

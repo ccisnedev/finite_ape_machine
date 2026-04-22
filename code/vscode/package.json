@@ -1,31 +1,31 @@
 {
-  "name": "ape-vscode",
-  "displayName": "APE",
-  "publisher": "ccisnedev",
-  "version": "0.0.6",
-  "description": "Analyze. Plan. Execute. AI-aided development methodology for GitHub Copilot (more targets coming soon).",
+  "name": "inquiry-vscode",
+  "displayName": "Inquiry",
+  "publisher": "siliconbrainedmachines",
+  "version": "0.1.0",
+  "description": "Inquiry CLI — structured development through the APE methodology for GitHub Copilot.",
   "license": "MIT",
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ccisne-dev/finite_ape_machine"
+    "url": "https://github.com/siliconbrainedmachines/inquiry"
   },
-  "bugs": { "url": "https://github.com/ccisne-dev/finite_ape_machine/issues" },
-  "homepage": "https://github.com/ccisne-dev/finite_ape_machine",
+  "bugs": { "url": "https://github.com/siliconbrainedmachines/inquiry/issues" },
+  "homepage": "https://github.com/siliconbrainedmachines/inquiry",
   "categories": ["Other"],
-  "keywords": ["agent", "github-copilot", "copilot", "ai", "methodology"],
+  "keywords": ["inquiry", "agent", "github-copilot", "copilot", "ai", "methodology"],
   "engines": {
     "vscode": "^1.85.0"
   },
   "main": "./out/extension.js",
   "activationEvents": [
-    "workspaceContains:.ape/"
+    "workspaceContains:.inquiry/"
   ],
   "contributes": {
     "commands": [
-      { "command": "ape.init", "title": "APE: Init" },
-      { "command": "ape.toggleEvolution", "title": "APE: Toggle Evolution" },
-      { "command": "ape.addMutation", "title": "APE: Add Mutation Note" }
+      { "command": "inquiry.init", "title": "Inquiry: Init" },
+      { "command": "inquiry.toggleEvolution", "title": "Inquiry: Toggle Evolution" },
+      { "command": "inquiry.addMutation", "title": "Inquiry: Add Mutation Note" }
     ]
   },
   "scripts": {

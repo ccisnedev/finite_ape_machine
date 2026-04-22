@@ -18,7 +18,7 @@ export async function toggleEvolution(apeFolderPath: string): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const vscode = require('vscode');
   vscode.window.showInformationMessage(
-    `APE: Evolution ${config.evolutionEnabled ? 'enabled' : 'disabled'}`,
+    `Inquiry: Evolution ${config.evolutionEnabled ? 'enabled' : 'disabled'}`,
   );
 }
 
@@ -34,5 +34,5 @@ export async function addMutation(apeFolderPath: string): Promise<void> {
   const mutationsPath = path.join(apeFolderPath, 'mutations.md');
   const entry = formatMutation(text, true);
   fs.appendFileSync(mutationsPath, entry, 'utf-8');
-  vscode.window.showInformationMessage('APE: Mutation note added');
+  vscode.window.showInformationMessage('Inquiry: Mutation note added');
 }

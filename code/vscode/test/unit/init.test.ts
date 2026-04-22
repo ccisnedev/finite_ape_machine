@@ -1,27 +1,27 @@
 import * as assert from 'assert';
-import { apeInit, InitDeps } from '../../src/init';
+import { inquiryInit, InitDeps } from '../../src/init';
 
-describe('apeInit', () => {
+describe('inquiryInit', () => {
   it('shows error when no workspace folder', async () => {
     let errorMsg = '';
     const deps: InitDeps = {
-      isApeInstalled: () => true,
-      getApeBinaryPath: () => '/usr/bin/ape',
+      isInquiryInstalled: () => true,
+      getInquiryBinaryPath: () => '/usr/bin/inquiry',
       showErrorMessage: (msg) => { errorMsg = msg; return Promise.resolve(undefined); },
       showInformationMessage: () => Promise.resolve(undefined),
       createTerminal: () => ({ show: () => {}, sendText: () => {} }),
     };
 
-    await apeInit(undefined, deps);
-    assert.strictEqual(errorMsg, 'APE: Open a workspace folder first.');
+    await inquiryInit(undefined, deps);
+    assert.strictEqual(errorMsg, 'Inquiry: Open a workspace folder first.');
   });
 
-  it('runs ape init in terminal when CLI exists', async () => {
+  it('runs inquiry init in terminal when CLI exists', async () => {
     let terminalName = '';
     let sentText = '';
     const deps: InitDeps = {
-      isApeInstalled: () => true,
-      getApeBinaryPath: () => '/home/user/.ape/bin/ape',
+      isInquiryInstalled: () => true,
+      getInquiryBinaryPath: () => '/home/user/.inquiry/bin/inquiry',
       showErrorMessage: () => Promise.resolve(undefined),
       showInformationMessage: () => Promise.resolve(undefined),
       createTerminal: (name) => {
@@ -33,36 +33,36 @@ describe('apeInit', () => {
       },
     };
 
-    await apeInit('/workspace', deps);
-    assert.strictEqual(terminalName, 'APE Init');
-    assert.strictEqual(sentText, '"/home/user/.ape/bin/ape" init');
+    await inquiryInit('/workspace', deps);
+    assert.strictEqual(terminalName, 'Inquiry Init');
+    assert.strictEqual(sentText, '"/home/user/.inquiry/bin/inquiry" init');
   });
 
   it('delegates to install flow when CLI missing', async () => {
     let installCalled = false;
     const deps: InitDeps = {
-      isApeInstalled: () => false,
-      getApeBinaryPath: () => '/usr/bin/ape',
+      isInquiryInstalled: () => false,
+      getInquiryBinaryPath: () => '/usr/bin/inquiry',
       showErrorMessage: () => Promise.resolve(undefined),
       showInformationMessage: () => Promise.resolve(undefined),
       createTerminal: () => ({ show: () => {}, sendText: () => {} }),
     };
 
-    await apeInit('/workspace', deps, async () => { installCalled = true; });
+    await inquiryInit('/workspace', deps, async () => { installCalled = true; });
     assert.strictEqual(installCalled, true);
   });
 
   it('shows info message when CLI missing and no install callback', async () => {
     let infoMsg = '';
     const deps: InitDeps = {
-      isApeInstalled: () => false,
-      getApeBinaryPath: () => '/usr/bin/ape',
+      isInquiryInstalled: () => false,
+      getInquiryBinaryPath: () => '/usr/bin/inquiry',
       showErrorMessage: () => Promise.resolve(undefined),
       showInformationMessage: (msg) => { infoMsg = msg; return Promise.resolve(undefined); },
       createTerminal: () => ({ show: () => {}, sendText: () => {} }),
     };
 
-    await apeInit('/workspace', deps);
-    assert.strictEqual(infoMsg, 'APE CLI not found. Install it manually or wait for a future update.');
+    await inquiryInit('/workspace', deps);
+    assert.strictEqual(infoMsg, 'Inquiry CLI not found. Install it manually or wait for a future update.');
   });
 });

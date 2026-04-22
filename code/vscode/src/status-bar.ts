@@ -18,10 +18,10 @@ const DEFAULT_ICON = '$(question)';
 export function formatStatus(phase: string, task: string): StatusBarData {
   const icon = PHASE_ICONS[phase] ?? DEFAULT_ICON;
   const taskSuffix = task ? ` #${task}` : '';
-  const text = `${icon} APE: ${phase}${taskSuffix}`;
+  const text = `${icon} Inquiry: ${phase}${taskSuffix}`;
   const tooltip = task
-    ? `APE: ${phase} — Task #${task}`
-    : `APE: ${phase}`;
+    ? `Inquiry: ${phase} — Task #${task}`
+    : `Inquiry: ${phase}`;
   return { text, tooltip };
 }
 
@@ -40,7 +40,7 @@ export function createStatusBar(
     100,
   );
 
-  const stateFile = '.ape/state.yaml';
+  const stateFile = '.inquiry/state.yaml';
   const absPath = join(workspaceFolder, stateFile);
 
   async function refresh(): Promise<void> {

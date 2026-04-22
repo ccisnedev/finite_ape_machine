@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { EventEmitter } from 'events';
-import { getInstallScriptUrl, getRunCommand, installApeCli, InstallerDeps } from '../../src/installer';
+import { getInstallScriptUrl, getRunCommand, installInquiryCli, InstallerDeps } from '../../src/installer';
 
 function createMockProcess() {
   const proc = {
@@ -22,13 +22,13 @@ describe('getInstallScriptUrl', () => {
   it('returns ps1 URL on win32', () => {
     const result = getInstallScriptUrl('win32');
     assert.strictEqual(result.url, 'https://www.si14bm.com/inquiry/install.ps1');
-    assert.strictEqual(result.filename, 'ape-install.ps1');
+    assert.strictEqual(result.filename, 'inquiry-install.ps1');
   });
 
   it('returns sh URL on linux', () => {
     const result = getInstallScriptUrl('linux');
     assert.strictEqual(result.url, 'https://www.si14bm.com/inquiry/install.sh');
-    assert.strictEqual(result.filename, 'ape-install.sh');
+    assert.strictEqual(result.filename, 'inquiry-install.sh');
   });
 
   it('throws on unsupported platform', () => {
@@ -38,17 +38,17 @@ describe('getInstallScriptUrl', () => {
 
 describe('getRunCommand', () => {
   it('returns powershell -File on win32', () => {
-    const cmd = getRunCommand('win32', 'C:\\temp\\ape-install.ps1');
+    const cmd = getRunCommand('win32', 'C:\\temp\\inquiry-install.ps1');
     assert.strictEqual(cmd.shell, 'powershell');
     assert.deepStrictEqual(cmd.args, [
-      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'C:\\temp\\ape-install.ps1',
+      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'C:\\temp\\inquiry-install.ps1',
     ]);
   });
 
   it('returns bash on linux', () => {
-    const cmd = getRunCommand('linux', '/tmp/ape-install.sh');
+    const cmd = getRunCommand('linux', '/tmp/inquiry-install.sh');
     assert.strictEqual(cmd.shell, 'bash');
-    assert.deepStrictEqual(cmd.args, ['/tmp/ape-install.sh']);
+    assert.deepStrictEqual(cmd.args, ['/tmp/inquiry-install.sh']);
   });
 
   it('throws on unsupported platform', () => {
@@ -56,7 +56,7 @@ describe('getRunCommand', () => {
   });
 });
 
-describe('installApeCli', () => {
+describe('installInquiryCli', () => {
   const tick = () => new Promise(r => setTimeout(r, 0));
 
   it('downloads then spawns powershell -File on win32', async () => {
@@ -86,12 +86,12 @@ describe('installApeCli', () => {
       },
     };
 
-    await installApeCli(deps);
+    await installInquiryCli(deps);
     assert.strictEqual(downloadedUrl, 'https://www.si14bm.com/inquiry/install.ps1');
-    assert.strictEqual(downloadedDest, 'C:\\temp\\ape-install.ps1');
+    assert.strictEqual(downloadedDest, 'C:\\temp\\inquiry-install.ps1');
     assert.strictEqual(spawnedCmd, 'powershell');
     assert.deepStrictEqual(spawnedArgs, [
-      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'C:\\temp\\ape-install.ps1',
+      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'C:\\temp\\inquiry-install.ps1',
     ]);
   });
 
@@ -115,7 +115,7 @@ describe('installApeCli', () => {
       },
     };
 
-    await installApeCli(deps);
+    await installInquiryCli(deps);
     assert.strictEqual(downloadedUrl, 'https://www.si14bm.com/inquiry/install.sh');
     assert.strictEqual(spawnedCmd, 'bash');
   });
@@ -138,7 +138,7 @@ describe('installApeCli', () => {
       },
     };
 
-    await assert.rejects(() => installApeCli(deps), /Install failed \(exit 1\)/);
+    await assert.rejects(() => installInquiryCli(deps), /Install failed \(exit 1\)/);
   });
 
   it('rejects on download failure', async () => {
@@ -154,7 +154,7 @@ describe('installApeCli', () => {
       },
     };
 
-    await assert.rejects(() => installApeCli(deps), /Network error/);
+    await assert.rejects(() => installInquiryCli(deps), /Network error/);
   });
 
   it('kills process on cancellation', async () => {
@@ -177,7 +177,7 @@ describe('installApeCli', () => {
     };
 
     try {
-      await installApeCli(deps);
+      await installInquiryCli(deps);
     } catch {
       // expected rejection from cancellation
     }
@@ -204,7 +204,7 @@ describe('installApeCli', () => {
       },
     };
 
-    await installApeCli(deps);
+    await installInquiryCli(deps);
     // 2 built-in reports (Downloading installer..., Running installer...) + 3 from stdout
     assert.ok(reports.some(r => r.message === 'Fetching...'));
     assert.ok(reports.some(r => r.message === 'Downloading...'));

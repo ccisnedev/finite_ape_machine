@@ -6,10 +6,10 @@ const INSTALL_BASE_URL = 'https://www.si14bm.com/inquiry';
 
 export function getInstallScriptUrl(platform: string): { url: string; filename: string } {
   if (platform === 'win32') {
-    return { url: `${INSTALL_BASE_URL}/install.ps1`, filename: 'ape-install.ps1' };
+    return { url: `${INSTALL_BASE_URL}/install.ps1`, filename: 'inquiry-install.ps1' };
   }
   if (platform === 'linux') {
-    return { url: `${INSTALL_BASE_URL}/install.sh`, filename: 'ape-install.sh' };
+    return { url: `${INSTALL_BASE_URL}/install.sh`, filename: 'inquiry-install.sh' };
   }
   throw new Error(`Unsupported platform: ${platform}`);
 }
@@ -74,7 +74,7 @@ function defaultDownloadFile(url: string, destPath: string): Promise<void> {
   });
 }
 
-export async function installApeCli(deps?: Partial<InstallerDeps>): Promise<void> {
+export async function installInquiryCli(deps?: Partial<InstallerDeps>): Promise<void> {
   const platform = deps?.platform ?? process.platform;
   const spawn = deps?.spawn ?? ((cmd: string, args: string[]) => {
     const cp = require('child_process');
@@ -91,7 +91,7 @@ export async function installApeCli(deps?: Partial<InstallerDeps>): Promise<void
   const scriptPath = path.join(tmpdir(), filename);
 
   await withProgress(
-    { location: 15, title: 'Installing APE CLI...', cancellable: true },
+    { location: 15, title: 'Installing Inquiry CLI...', cancellable: true },
     async (progress: { report(value: { message?: string }): void }, token: CancellationTokenLike) => {
       progress.report({ message: 'Downloading installer...' });
       await downloadFile(url, scriptPath);

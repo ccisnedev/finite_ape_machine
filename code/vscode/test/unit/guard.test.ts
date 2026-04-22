@@ -1,43 +1,43 @@
 import * as assert from 'assert';
 import * as path from 'path';
-import { getApeBinaryPath, isApeInstalled, isApeWorkspace, getPlatform } from '../../src/guard';
+import { getInquiryBinaryPath, isInquiryInstalled, isInquiryWorkspace, getPlatform } from '../../src/guard';
 
-describe('getApeBinaryPath', () => {
+describe('getInquiryBinaryPath', () => {
   it('returns LOCALAPPDATA path on win32', () => {
-    const result = getApeBinaryPath('win32');
-    const expected = path.join(process.env.LOCALAPPDATA!, 'ape', 'bin', 'ape.exe');
+    const result = getInquiryBinaryPath('win32');
+    const expected = path.join(process.env.LOCALAPPDATA!, 'inquiry', 'bin', 'inquiry.exe');
     assert.strictEqual(result, expected);
   });
 
   it('returns HOME path on linux', () => {
-    const result = getApeBinaryPath('linux');
-    const expected = path.join(process.env.HOME!, '.ape', 'bin', 'ape');
+    const result = getInquiryBinaryPath('linux');
+    const expected = path.join(process.env.HOME!, '.inquiry', 'bin', 'inquiry');
     assert.strictEqual(result, expected);
   });
 
   it('throws on unsupported platform', () => {
-    assert.throws(() => getApeBinaryPath('darwin'), /Unsupported platform: darwin/);
+    assert.throws(() => getInquiryBinaryPath('darwin'), /Unsupported platform: darwin/);
   });
 });
 
-describe('isApeInstalled', () => {
+describe('isInquiryInstalled', () => {
   it('returns true when binary exists', () => {
-    assert.strictEqual(isApeInstalled('win32', () => true), true);
+    assert.strictEqual(isInquiryInstalled('win32', () => true), true);
   });
 
   it('returns false when binary missing', () => {
-    assert.strictEqual(isApeInstalled('linux', () => false), false);
+    assert.strictEqual(isInquiryInstalled('linux', () => false), false);
   });
 });
 
-describe('isApeWorkspace', () => {
-  it('returns true when .ape/ exists', () => {
-    const stub = (p: any) => p === path.join('/workspace', '.ape');
-    assert.strictEqual(isApeWorkspace('/workspace', stub), true);
+describe('isInquiryWorkspace', () => {
+  it('returns true when .inquiry/ exists', () => {
+    const stub = (p: any) => p === path.join('/workspace', '.inquiry');
+    assert.strictEqual(isInquiryWorkspace('/workspace', stub), true);
   });
 
-  it('returns false when .ape/ missing', () => {
-    assert.strictEqual(isApeWorkspace('/workspace', () => false), false);
+  it('returns false when .inquiry/ missing', () => {
+    assert.strictEqual(isInquiryWorkspace('/workspace', () => false), false);
   });
 });
 
