@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.2] - 2026-04-22
+
+### Changed
+- Description updated to canonical `Inquiry — Analyze. Plan. Execute.` subtitle (#122)
+- README alt text updated: `Inquiry finite state machine` (#122)
+
 ## [0.0.6] - 2026-04-20
 
 ### Changed
