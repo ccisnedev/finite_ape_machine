@@ -9,6 +9,10 @@ author: copilot
 
 # APE VS Code Extension — Architecture & Specification
 
+> Status note: This document is a historical and aspirational design draft. It does not match the currently published extension manifest in [../package.json](../package.json), which today exposes only `inquiry.init`, `inquiry.toggleEvolution`, and `inquiry.addMutation`, activates on `workspaceContains:.inquiry/`, and publishes the extension under the Inquiry name.
+>
+> Treat this file as a design archive, not as the authoritative description of current extension behavior. Internal examples here that mention broader command inventories, `ape` vocabulary, or `docs/issues/*/plan.md` paths are historical design assumptions, not current implementation guidance. For the current public entry surface, see [../README.md](../README.md). For the canonical repository doctrine, see [../../docs/index.md](../../docs/index.md), [../../docs/architecture.md](../../docs/architecture.md), and [../../docs/spec/finite-ape-machine.md](../../docs/spec/finite-ape-machine.md).
+
 > Extensión de VS Code para el framework APE (Finite APE Machine).
 > Basada en el análisis de la extensión Flutter/Dart-Code (ver `flutter_vscode_extension.md`).
 > Lenguaje: TypeScript, empaquetado con webpack, publicada como `.vsix`.

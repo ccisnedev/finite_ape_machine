@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.3] - 2026-04-23
+
+### Changed
+- Marketplace metadata aligned with the current Inquiry documentation map: description now includes the explicit END gate and homepage points to the public Inquiry site
+- README and internal extension docs now route readers to canonical repository docs instead of acting like primary doctrine
+- Integration coverage is now exercised inside the VS Code host for activation, mutation notes, evolution toggling, and status-bar behavior instead of remaining as skipped placeholders
+
+### Fixed
+- Historical design notes now explicitly mark old `ape` vocabulary and `docs/issues/*/plan.md` examples as archive-only guidance
+- The integration suite no longer reports skipped placeholder cases for the currently shipped extension features
+
 ## [0.1.2] - 2026-04-22
 
 ### Changed

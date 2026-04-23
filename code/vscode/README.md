@@ -3,8 +3,10 @@
 **Analyze. Plan. Execute.**
 
 > Select **@inquiry** as your GitHub Copilot custom agent.
-> Every task follows a strict cycle: **ANALYZE → PLAN → EXECUTE**.
+> Every task follows a strict cycle: **ANALYZE → PLAN → EXECUTE → END**.
 > No freestyling. No hallucinated plans. Structure from analysis to PR.
+
+This README is the extension's public entry surface. For the canonical repository documentation map, start at [../docs/index.md](../docs/index.md).
 
 ---
 
@@ -18,7 +20,7 @@
 | **PLAN** | Decomposes into checkable steps with tests | `plan.md` |
 | **EXECUTE** | Implements exactly what the plan says | code + commits |
 
-Each phase has a dedicated agent. Transitions are enforced — no skipping steps.
+The extension is a lightweight integration surface around the Inquiry CLI and the Inquiry custom agent for GitHub Copilot. The canonical explanations of Inquiry, APE, the Finite APE Machine, and Thinking Tools live in the repository documentation, not in this README.
 
 ---
 
@@ -29,7 +31,7 @@ Each phase has a dedicated agent. Transitions are enforced — no skipping steps
 3. The extension installs the CLI if missing, runs `iq init`, creates `.inquiry/`
 4. Open Copilot Chat → select **@inquiry** → describe your task
 
-That's it. APE takes over: analysis first, then plan, then execute.
+That's it. The Inquiry agent takes over inside Copilot Chat: analysis first, then plan, then execute.
 
 ---
 
@@ -55,13 +57,14 @@ The status bar shows the current FSM phase in real time:
 
 - VS Code ≥ 1.85
 - Windows or Linux
-- GitHub Copilot (required) — APE ships as a custom agent
+- GitHub Copilot (required) — Inquiry ships as a custom agent
 
 ---
 
 ## Links
 
 - [Website](https://www.si14bm.com/inquiry/) · [GitHub](https://github.com/siliconbrainedmachines/inquiry) · [Issues](https://github.com/siliconbrainedmachines/inquiry/issues)
+- [Docs map](https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/index.md) · [Architecture](https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/architecture.md) · [Finite APE Machine spec](https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/spec/finite-ape-machine.md)
 
 For the full methodology, see [si14bm.com/inquiry](https://www.si14bm.com/inquiry/).
 

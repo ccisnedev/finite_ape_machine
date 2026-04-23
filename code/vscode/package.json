@@ -2,8 +2,8 @@
   "name": "inquiry-vscode",
   "displayName": "Inquiry",
   "publisher": "siliconbrainedmachines",
-  "version": "0.1.2",
-  "description": "Inquiry — Analyze. Plan. Execute. Structured AI-assisted development for GitHub Copilot.",
+  "version": "0.1.3",
+  "description": "Inquiry — Analyze. Plan. Execute. End. Structured AI-assisted development for GitHub Copilot.",
   "license": "MIT",
   "icon": "assets/icon.png",
   "repository": {
@@ -11,7 +11,7 @@
     "url": "https://github.com/siliconbrainedmachines/inquiry"
   },
   "bugs": { "url": "https://github.com/siliconbrainedmachines/inquiry/issues" },
-  "homepage": "https://github.com/siliconbrainedmachines/inquiry",
+  "homepage": "https://www.si14bm.com/inquiry/",
   "categories": ["Other"],
   "keywords": ["inquiry", "agent", "github-copilot", "copilot", "ai", "methodology"],
   "engines": {
