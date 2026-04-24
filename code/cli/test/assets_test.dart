@@ -102,7 +102,7 @@ void main() {
 
     test('reads skills/issue-start/SKILL.md with cleanrooms paths', () {
       final content = assets.loadString('skills/issue-start/SKILL.md');
-      expect(content, contains('docs/cleanrooms/<NNN>-<slug>/analyze/'));
+      expect(content, contains('cleanrooms/<NNN>-<slug>/analyze/'));
       expect(content, isNot(contains('docs/issues/<NNN>-<slug>/analyze/')));
       expect(content, isNotEmpty);
     });

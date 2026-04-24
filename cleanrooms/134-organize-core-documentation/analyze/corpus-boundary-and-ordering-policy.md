@@ -1,4 +1,4 @@
----
+﻿---
 id: corpus-boundary-and-ordering-policy
 title: "Corpus boundary, directory-order traversal, and minimal-definition glossary policy for issue #134"
 date: 2026-04-22
@@ -79,9 +79,9 @@ Issue #134 now has three additional operating policies that materially constrain
 
 [5] Finite APE Machine repository. "Inquiry." `README.md`.
 
-[6] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
+[6] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
 
-[7] Finite APE Machine repository. "Glossary direct-definition and audit navigation requirements for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/glossary-and-audit-navigation-requirements.md`.
+[7] Finite APE Machine repository. "Glossary direct-definition and audit navigation requirements for issue #134." `cleanrooms/134-organize-core-documentation/analyze/glossary-and-audit-navigation-requirements.md`.
 
 [8] Finite APE Machine repository. "Finite APE Machine Banner Specification." `code/site/docs/spec/banner.md`; "APE VS Code Extension - Architecture & Specification." `code/vscode/docs/ape_vscode_extension.md`.
 

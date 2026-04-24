@@ -129,7 +129,7 @@ All APE state transitions are mechanical, executed via skill → CLI chain:
 ## Artifacts per State
 
 ```
-docs/cleanrooms/NNN-<slug>/
+cleanrooms/NNN-<slug>/
 ├── analyze/
 │   ├── index.md              ← navigation
 │   ├── *.md                  ← working documents (exploration, discards)

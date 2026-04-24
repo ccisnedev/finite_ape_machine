@@ -1,4 +1,4 @@
----
+﻿---
 id: obsolescence-and-canonicity-criteria
 title: "Obsolescence and canonicity criteria for issue #134"
 date: 2026-04-22
@@ -91,6 +91,6 @@ Issue #134 requires a stricter analytical vocabulary before any consolidation ju
 
 [4] Finite APE Machine repository. "The Apes — Lore." `docs/lore.md`.
 
-[5] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
+[5] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
 
 [6] Analysis-session clarifications with the user regarding issue #134, dated 2026-04-22.

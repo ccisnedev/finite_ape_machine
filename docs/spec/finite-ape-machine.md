@@ -28,8 +28,8 @@ If evolution is disabled in `.inquiry/config.yaml`, the cycle returns directly f
 | State | Operator | Purpose | Primary artifact |
 |---|---|---|---|
 | IDLE | APE | Triage, readiness, and infrastructure preparation | `.inquiry/state.yaml` |
-| ANALYZE | SOCRATES | Clarify the problem and produce a rigorous diagnosis | `docs/cleanrooms/<issue>/analyze/diagnosis.md` |
-| PLAN | DESCARTES | Design the execution sequence and verification strategy | `docs/cleanrooms/<issue>/plan.md` |
+| ANALYZE | SOCRATES | Clarify the problem and produce a rigorous diagnosis | `cleanrooms/<issue>/analyze/diagnosis.md` |
+| PLAN | DESCARTES | Design the execution sequence and verification strategy | `cleanrooms/<issue>/plan.md` |
 | EXECUTE | BASHO | Implement phase by phase under the plan's constraints | code + commits |
 | END | APE + human gate | Create and merge the PR through an explicit closure gate | PR |
 | EVOLUTION | DARWIN | Propose improvements to the framework itself | issues/comments in the Inquiry repository |
@@ -62,8 +62,8 @@ The system coordinates through persisted artifacts rather than agent-to-agent hi
 - `.inquiry/state.yaml` for current phase and task identity
 - `.inquiry/config.yaml` for cycle options such as evolution enablement
 - `.inquiry/mutations.md` for human observations relevant to DARWIN
-- `docs/cleanrooms/<issue>/analyze/diagnosis.md` as the contract between ANALYZE and PLAN
-- `docs/cleanrooms/<issue>/plan.md` as the contract between PLAN and EXECUTE
+- `cleanrooms/<issue>/analyze/diagnosis.md` as the contract between ANALYZE and PLAN
+- `cleanrooms/<issue>/plan.md` as the contract between PLAN and EXECUTE
 
 This keeps the orchestration inspectable from the repository itself. [2][5][7]
 
@@ -111,4 +111,4 @@ Earlier repository documents described a larger and more granular roster includi
 
 [6] Finite APE Machine repository. "The Apes — Lore." `docs/lore.md`.
 
-[7] Finite APE Machine repository. "Diagnosis for issue #134: justified documentation status map and canonical-home recommendations." `docs/cleanrooms/134-organize-core-documentation/analyze/diagnosis.md`.
+[7] Finite APE Machine repository. "Diagnosis for issue #134: justified documentation status map and canonical-home recommendations." `cleanrooms/134-organize-core-documentation/analyze/diagnosis.md`.

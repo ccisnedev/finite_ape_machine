@@ -1,4 +1,4 @@
----
+﻿---
 id: expanded-entry-surface-findings
 title: "Expanded entry-surface findings and contradiction synthesis for issue #134"
 date: 2026-04-22
@@ -29,7 +29,7 @@ Despite that alignment, both surfaces are derivative rather than authoritative. 
 
 ### 2.3 Both surfaces still contain stale or contradictory operational detail
 
-The README declares status `v0.1.0`, while the site badge shows `v0.1.2`, the CLI package version is `0.1.2`, and the VS Code extension manifest is also `0.1.2`. The README also continues to describe per-cycle artifacts under `docs/issues/NNN-slug/`, even though the current repository workflow has moved analysis artifacts into `docs/cleanrooms/`. These defects do not make the README useless. They do mean it cannot be treated as the authoritative operational source for current documentation structure. [1][3][5][6]
+The README declares status `v0.1.0`, while the site badge shows `v0.1.2`, the CLI package version is `0.1.2`, and the VS Code extension manifest is also `0.1.2`. The README also continues to describe per-cycle artifacts under `docs/issues/NNN-slug/`, even though the current repository workflow has moved analysis artifacts into `cleanrooms/`. These defects do not make the README useless. They do mean it cannot be treated as the authoritative operational source for current documentation structure. [1][3][5][6]
 
 ## 3. The Roadmap Remains Strategically Valuable but Operationally Mixed
 
@@ -49,7 +49,7 @@ The extension document is explicitly a draft and still names the product as an A
 
 ### 4.2 The draft also preserves outdated artifact-path assumptions
 
-The extension draft still proposes a `plan-watcher.ts` that watches `docs/issues/*/plan.md`. That assumption no longer matches the present analysis workflow centered on `docs/cleanrooms/`. This reproduces the same path drift already found elsewhere, but here the risk is greater because the document presents itself as an architectural specification for an implementation surface. If followed literally, it would direct work toward outdated file locations and command names. [4][7]
+The extension draft still proposes a `plan-watcher.ts` that watches `docs/issues/*/plan.md`. That assumption no longer matches the present analysis workflow centered on `cleanrooms/`. This reproduces the same path drift already found elsewhere, but here the risk is greater because the document presents itself as an architectural specification for an implementation surface. If followed literally, it would direct work toward outdated file locations and command names. [4][7]
 
 ### 4.3 Analytical consequence
 
@@ -73,6 +73,6 @@ The expanded read sharpens the repository map in three ways. First, README and s
 
 [6] Finite APE Machine repository. `code/vscode/package.json`.
 
-[7] Finite APE Machine repository. "First-pass findings on current documentation strata for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/first-pass-findings-on-current-document-strata.md`.
+[7] Finite APE Machine repository. "First-pass findings on current documentation strata for issue #134." `cleanrooms/134-organize-core-documentation/analyze/first-pass-findings-on-current-document-strata.md`.
 
-[8] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
+[8] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.

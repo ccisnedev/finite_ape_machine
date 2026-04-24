@@ -68,7 +68,7 @@
 │  .inquiry/state.yaml        ← current FSM state (IDLE, ANALYZE, etc.)   │
 │  .inquiry/config.yaml       ← cycle config (evolution.enabled, etc.)    │
 │  .inquiry/mutations.md      ← human notes for DARWIN                    │
-│  docs/cleanrooms/NNN-slug/ ← per-cycle artifacts (analyze/, plan.md, metrics.yaml) │
+│  cleanrooms/NNN-slug/ ← per-cycle artifacts (analyze/, plan.md, metrics.yaml) │
 │  docs/spec/             ← canonical specifications                  │
 └─────────────────────────────────────────────────────────────────────┘
 ```

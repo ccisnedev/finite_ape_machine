@@ -82,7 +82,7 @@ EVOLUTION is opt-in (`evolution.enabled` in `.inquiry/config.yaml`) and one-shot
 - **Modules:** `global` (init, doctor, version, upgrade, uninstall, tui), `target` (get, clean), `state` (transition)
 - **FSM:** declarative `transition_contract.yaml` parsed into `FsmContract` — every (state, event) pair is total (allowed or explicitly illegal)
 - **Targets:** Copilot only at present per [ADR D20](docs/spec/target-specific-agents.md). Adapters for Claude/Codex/Crush/Gemini exist for cleanup but are deferred until multi-target reactivation
-- **Memory:** `.inquiry/` (per-cycle runtime), `docs/cleanrooms/NNN-slug/` (per-cycle artifacts), `docs/spec/` (technical specifications)
+- **Memory:** `.inquiry/` (per-cycle runtime), `cleanrooms/NNN-slug/` (per-cycle artifacts), `docs/spec/` (technical specifications)
 
 ## Documentation
 
@@ -92,7 +92,7 @@ EVOLUTION is opt-in (`evolution.enabled` in `.inquiry/config.yaml`) and one-shot
 - **[`docs/spec/finite-ape-machine.md`](docs/spec/finite-ape-machine.md)** — canonical technical overview of the Finite APE Machine
 - **[`docs/thinking-tools.md`](docs/thinking-tools.md)** — canonical explanation of Thinking Tools in the current model
 - **[`docs/spec/index.md`](docs/spec/index.md)** — status-aware navigation across technical specifications
-- **[`docs/cleanrooms/`](docs/cleanrooms/)** — per-issue working artifacts (analysis, plan, metrics)
+- **[`cleanrooms/`](cleanrooms/)** — per-issue working artifacts (analysis, plan, metrics)
 - **[`docs/roadmap.md`](docs/roadmap.md)** — strategic direction and long-term theses
 - **[`docs/lore.md`](docs/lore.md)** — nomenclature, allegory, and historical context for the named agents
 - **[`docs/adr/`](docs/adr/)** — Architecture Decision Records

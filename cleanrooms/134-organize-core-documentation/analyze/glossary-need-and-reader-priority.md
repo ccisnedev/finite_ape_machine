@@ -1,4 +1,4 @@
----
+﻿---
 id: glossary-need-and-reader-priority
 title: "Glossary necessity and reader-priority clarification for issue #134"
 date: 2026-04-22
@@ -69,8 +69,8 @@ Issue #134 now requires three additional analytical constraints. An explicit glo
 
 [4] Finite APE Machine repository. "The Apes - Lore." `docs/lore.md`.
 
-[5] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
+[5] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
 
-[6] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
+[6] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
 
 [7] Primary-source analysis-session clarifications dated 2026-04-22 for issue #134: explicit glossary required; dominant reader is the reader seeking philosophical and technological foundations; risky current documents cannot yet be pre-identified and therefore must be read individually.

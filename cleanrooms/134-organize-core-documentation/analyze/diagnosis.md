@@ -1,4 +1,4 @@
----
+﻿---
 id: diagnosis
 title: "Diagnosis for issue #134: justified documentation status map and canonical-home recommendations"
 date: 2026-04-22
@@ -85,15 +85,15 @@ Issue #134 should end not with a cosmetic redistribution of names, but with a cl
 
 ## References
 
-[1] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
+[1] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
 
-[2] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
+[2] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
 
-[3] Finite APE Machine repository. "First-pass findings on current documentation strata for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/first-pass-findings-on-current-document-strata.md`.
+[3] Finite APE Machine repository. "First-pass findings on current documentation strata for issue #134." `cleanrooms/134-organize-core-documentation/analyze/first-pass-findings-on-current-document-strata.md`.
 
-[4] Finite APE Machine repository. "Expanded entry-surface findings and contradiction synthesis for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/expanded-entry-surface-findings.md`.
+[4] Finite APE Machine repository. "Expanded entry-surface findings and contradiction synthesis for issue #134." `cleanrooms/134-organize-core-documentation/analyze/expanded-entry-surface-findings.md`.
 
-[5] Finite APE Machine repository. "Expansion triggers, initial-pass inclusion of architecture and lore, and independent glossary definitions for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/expansion-triggers-and-independent-glossary-definitions.md`.
+[5] Finite APE Machine repository. "Expansion triggers, initial-pass inclusion of architecture and lore, and independent glossary definitions for issue #134." `cleanrooms/134-organize-core-documentation/analyze/expansion-triggers-and-independent-glossary-definitions.md`.
 
 [6] Finite APE Machine repository. "Inquiry as Epistemic Foundation of APE." `docs/research/inquiry/index.md`.
 

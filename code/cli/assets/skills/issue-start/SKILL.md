@@ -81,14 +81,14 @@ Note: Pad issue numbers less than 100 with leading zeros for sort consistency.
 ### Step 5: Create Working Directory
 
 ```bash
-mkdir -p docs/cleanrooms/<NNN>-<slug>/analyze/
+mkdir -p cleanrooms/<NNN>-<slug>/analyze/
 ```
 
 This creates the analysis directory for SOCRATES to work in during ANALYZE phase.
 
 ### Step 6: Create index.md
 
-Create `docs/cleanrooms/<NNN>-<slug>/analyze/index.md` with this template:
+Create `cleanrooms/<NNN>-<slug>/analyze/index.md` with this template:
 
 ```markdown
 # Analyze Phase — Index
@@ -137,7 +137,7 @@ The scheduler is now in ANALYZE state and should invoke SOCRATES for analysis wo
 After completing all steps, verify:
 
 - [ ] Branch exists: `git branch --show-current` returns `<NNN>-<slug>`
-- [ ] Directory exists: `docs/cleanrooms/<NNN>-<slug>/analyze/index.md`
+- [ ] Directory exists: `cleanrooms/<NNN>-<slug>/analyze/index.md`
 - [ ] State updated: `.inquiry/state.yaml` shows `phase: ANALYZE`
 
 ## Notes

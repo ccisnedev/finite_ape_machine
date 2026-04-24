@@ -1,4 +1,4 @@
----
+﻿---
 id: staged-corpus-entry-and-minimal-glossary-policy
 title: "Staged corpus entry and what-it-is-only glossary policy for issue #134"
 date: 2026-04-22
@@ -81,12 +81,12 @@ The current session requires a more disciplined policy than the earlier whole-wo
 
 [5] Finite APE Machine repository. "Inquiry." `README.md`.
 
-[6] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
+[6] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
 
-[7] Finite APE Machine repository. "Glossary necessity and reader-priority clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/glossary-need-and-reader-priority.md`.
+[7] Finite APE Machine repository. "Glossary necessity and reader-priority clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/glossary-need-and-reader-priority.md`.
 
-[8] Finite APE Machine repository. "Glossary direct-definition and audit navigation requirements for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/glossary-and-audit-navigation-requirements.md`.
+[8] Finite APE Machine repository. "Glossary direct-definition and audit navigation requirements for issue #134." `cleanrooms/134-organize-core-documentation/analyze/glossary-and-audit-navigation-requirements.md`.
 
-[9] Finite APE Machine repository. "Corpus boundary, directory-order traversal, and minimal-definition glossary policy for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/corpus-boundary-and-ordering-policy.md`.
+[9] Finite APE Machine repository. "Corpus boundary, directory-order traversal, and minimal-definition glossary policy for issue #134." `cleanrooms/134-organize-core-documentation/analyze/corpus-boundary-and-ordering-policy.md`.
 
 [10] Primary-source analysis-session clarifications dated 2026-04-22 for issue #134: use common sense; start with `docs/research/` and `docs/spec/`; expand to the rest of the workspace only when necessary; reading order follows that staged starting point; first glossary definitions should answer only "what it is."

@@ -1,4 +1,4 @@
----
+﻿---
 id: first-pass-findings-on-current-document-strata
 title: "First-pass findings on current documentation strata for issue #134"
 date: 2026-04-22
@@ -27,7 +27,7 @@ This matters for issue #134 because it weakens any assumption that a new top-lev
 
 Several documents outside `docs/research/inquiry/` align strongly with the current active model. `docs/spec/agent-lifecycle.md` presents a five-state cycle with SOCRATES, DESCARTES, BASHŌ, and DARWIN as the confirmed agents, while explicitly stating that APE is not an ape but the scheduler. `docs/spec/cooperative-multitasking-model.md` reinforces the same scheduler/task distinction and frames APE as the finite machine, not one peer agent among others. `docs/spec/signal-based-coordination.md` likewise describes the five-state cycle and the mechanical signal-driven transition model. `docs/architecture.md` explains the system as a finite-state orchestration model with one orchestrator file and current target deployment. `docs/lore.md` aligns the active model with four operative sub-agents while relegating other named agents to extended lore or future/reference status. [5][6][7][8][9]
 
-This cluster is important because it appears to contain the repository's strongest current articulation of APE as an orchestrating system, Finite APE Machine as an engineered scheduler/event-loop architecture, and Thinking Tools as methods embodied by active or historical agents. However, the cluster is not yet documentary clean. Several of these documents still reference `docs/issues/` rather than `docs/cleanrooms/`, even though the current codebase and agent assets have already moved toward `docs/cleanrooms/`. That means a document can be current in model but stale in implementation detail. [5][6][7][8][9][10]
+This cluster is important because it appears to contain the repository's strongest current articulation of APE as an orchestrating system, Finite APE Machine as an engineered scheduler/event-loop architecture, and Thinking Tools as methods embodied by active or historical agents. However, the cluster is not yet documentary clean. Several of these documents still reference `docs/issues/` rather than `cleanrooms/`, even though the current codebase and agent assets have already moved toward `cleanrooms/`. That means a document can be current in model but stale in implementation detail. [5][6][7][8][9][10]
 
 ## 4. A Legacy-or-Expansive Cluster Persists Inside `docs/spec/`
 
@@ -43,7 +43,7 @@ The `docs/research/swebok/` corpus similarly reads as an external reference laye
 
 ## 6. Path Drift Is a Concrete Obsolescence Signal
 
-One concrete signal of documentation drift now appears repeatedly enough to matter analytically: the mismatch between `docs/issues/` and `docs/cleanrooms/`. The current runtime, tests, changelog, and deployed agent assets have already moved toward `docs/cleanrooms/`, yet multiple first-pass documents still explain artifacts under `docs/issues/`. This does not automatically make those documents obsolete in full. It does, however, provide evidence that at least some portions of them risk inducing false understanding in present readers, especially those trying to infer where current analysis and planning artifacts actually live. [5][8][9][10][22]
+One concrete signal of documentation drift now appears repeatedly enough to matter analytically: the mismatch between `docs/issues/` and `cleanrooms/`. The current runtime, tests, changelog, and deployed agent assets have already moved toward `cleanrooms/`, yet multiple first-pass documents still explain artifacts under `docs/issues/`. This does not automatically make those documents obsolete in full. It does, however, provide evidence that at least some portions of them risk inducing false understanding in present readers, especially those trying to infer where current analysis and planning artifacts actually live. [5][8][9][10][22]
 
 ## 7. Provisional Implications for the Core Terms
 

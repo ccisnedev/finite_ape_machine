@@ -1,13 +1,12 @@
 /// `inquiry init` — initializes Inquiry in the working directory.
 ///
-/// Seven idempotent steps:
-/// 1. Detect docs directory (doc/ or docs/, prefer docs/)
-/// 2. Create {docs}/cleanrooms/ if missing
-/// 3. Add .inquiry/ to .gitignore
-/// 4. Create .inquiry/state.yaml with IDLE state
-/// 5. Create .inquiry/config.yaml with defaults
-/// 6. Create .inquiry/mutations.md with header template
-/// 7. Deploy inquiry.agent.md to active target
+/// Six idempotent steps:
+/// 1. Create cleanrooms/ at project root if missing
+/// 2. Add .inquiry/ to .gitignore
+/// 3. Create .inquiry/state.yaml with IDLE state
+/// 4. Create .inquiry/config.yaml with defaults
+/// 5. Create .inquiry/mutations.md with header template
+/// 6. Deploy inquiry.agent.md to active target
 library;
 
 import 'dart:io';
@@ -68,29 +67,26 @@ class InitCommand implements Command<InitInput, InitOutput> {
     final root = input.workingDirectory;
     final steps = <String>[];
 
-    // Step 1: Detect docs directory
-    final docsDir = _detectDocsDirectory(root);
-
-    // Step 2: Create {docs}/cleanrooms/ if missing
-    final issuesDir = Directory('$docsDir/cleanrooms');
+    // Step 1: Create cleanrooms/ at project root if missing
+    final issuesDir = Directory('$root/cleanrooms');
     if (!issuesDir.existsSync()) {
       issuesDir.createSync(recursive: true);
       steps.add('Created ${_relative(root, issuesDir.path)}');
     }
 
-    // Step 3: Add .inquiry/ to .gitignore
+    // Step 2: Add .inquiry/ to .gitignore
     _ensureGitignore(root, steps);
 
-    // Step 4: Create .inquiry/state.yaml with IDLE state
+    // Step 3: Create .inquiry/state.yaml with IDLE state
     _ensureStateYaml(root, steps);
 
-    // Step 5: Create .inquiry/config.yaml with defaults
+    // Step 4: Create .inquiry/config.yaml with defaults
     _ensureConfigYaml(root, steps);
 
-    // Step 6: Create .inquiry/mutations.md with header template
+    // Step 5: Create .inquiry/mutations.md with header template
     _ensureMutationsMd(root, steps);
 
-    // Step 7: Deploy is handled by `inquiry target get` — not duplicated here.
+    // Step 6: Deploy is handled by `inquiry target get` — not duplicated here.
 
     if (steps.isEmpty) {
       return InitOutput(
@@ -100,20 +96,6 @@ class InitCommand implements Command<InitInput, InitOutput> {
     }
 
     return InitOutput(message: steps.join('\n'), isCreated: true);
-  }
-
-  /// Detects whether `doc/` or `docs/` exists. Prefers `docs/`.
-  /// If neither exists, creates `docs/`.
-  String _detectDocsDirectory(String root) {
-    final docs = Directory('$root/docs');
-    final doc = Directory('$root/doc');
-
-    if (docs.existsSync()) return docs.path;
-    if (doc.existsSync()) return doc.path;
-
-    // Neither exists — create docs/
-    docs.createSync();
-    return docs.path;
   }
 
   /// Ensures `.inquiry/` is in `.gitignore`.

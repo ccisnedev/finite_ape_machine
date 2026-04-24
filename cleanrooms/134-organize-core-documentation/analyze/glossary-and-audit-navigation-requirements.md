@@ -1,4 +1,4 @@
----
+﻿---
 id: glossary-and-audit-navigation-requirements
 title: "Glossary direct-definition and audit navigation requirements for issue #134"
 date: 2026-04-22
@@ -79,10 +79,10 @@ Issue #134 now requires a specific policy for both lexical control and evidence 
 
 [4] Finite APE Machine repository. "The Apes - Lore." `docs/lore.md`.
 
-[5] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
+[5] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
 
-[6] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
+[6] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
 
-[7] Finite APE Machine repository. "Glossary necessity and reader-priority clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/glossary-need-and-reader-priority.md`.
+[7] Finite APE Machine repository. "Glossary necessity and reader-priority clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/glossary-need-and-reader-priority.md`.
 
 [8] Primary-source analysis-session clarifications dated 2026-04-22 for issue #134: the glossary should define terms directly rather than primarily defer; the glossary may begin with the already named terms and expand later; all relevant documents must be read in order; a general index is needed to help navigate them.

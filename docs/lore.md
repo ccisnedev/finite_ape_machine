@@ -30,7 +30,7 @@ APE is NOT an ape — it is the Finite APE Machine, the scheduler, the RTOS even
 
 **The ape.** SOCRATES explores problems through conversation. It asks questions, identifies ambiguities, maps the domain, challenges assumptions. It produces `diagnosis.md` — a rigorous paper with references that serves as the sole input for the planning phase. Like its namesake, it does not tell the human what the requirements are — it asks until the human discovers them.
 
-**Key artifact:** `docs/cleanrooms/<task>/analyze/diagnosis.md`
+**Key artifact:** `cleanrooms/<task>/analyze/diagnosis.md`
 
 ---
 
@@ -44,7 +44,7 @@ APE is NOT an ape — it is the Finite APE Machine, the scheduler, the RTOS even
 
 **The ape.** DESCARTES takes `diagnosis.md` and designs an experiment. The plan is a hypothesis: "if we implement these phases in this order, we will solve the diagnosed problem." It decomposes complexity into a WBS with checkable phases, defines tests in pseudocode as verification criteria, and sequences by dependency. The plan must be detailed enough that EXECUTE is mechanical — following instructions, not inventing them. If EXECUTE detects a deviation, the system returns to ANALYZE — like falsifying a hypothesis in the scientific method. Like its namesake, DESCARTES does not build — it designs the experiment from which others build.
 
-**Key artifact:** `docs/cleanrooms/<task>/plan.md`
+**Key artifact:** `cleanrooms/<task>/plan.md`
 
 ---
 

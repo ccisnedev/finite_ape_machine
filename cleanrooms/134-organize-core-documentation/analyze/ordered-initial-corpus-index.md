@@ -1,4 +1,4 @@
----
+﻿---
 id: ordered-initial-corpus-index
 title: "Ordered initial corpus index for issue #134"
 date: 2026-04-22
@@ -84,6 +84,6 @@ This ordered corpus index supplies the minimum procedural scaffold for the first
 
 [6] Finite APE Machine repository. "The Apes — Lore." `docs/lore.md`.
 
-[7] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`; "Obsolescence and canonicity criteria for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
+[7] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`; "Obsolescence and canonicity criteria for issue #134." `cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
 
 [8] Primary-source analysis-session clarifications dated 2026-04-22 for issue #134: force a single canonical home with references from other documents; keep the glossary neutral; analysis is complete when a fully justified mapping and documentation clarity are achieved; begin with `docs/research/` and `docs/spec/`; include `docs/architecture.md` and `docs/lore.md` in the initial pass; expand outward when a definitional gap, explicit outward reference, material contradiction, or canonicity conflict appears; first glossary entries should be clear, independent definitions answering what a term is.

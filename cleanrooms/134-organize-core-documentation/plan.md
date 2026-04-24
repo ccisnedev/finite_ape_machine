@@ -1,4 +1,4 @@
----
+﻿---
 id: plan
 title: "Plan for issue #134: reorganize documentation authority inside docs/"
 date: 2026-04-22
@@ -108,7 +108,7 @@ author: descartes
 
 ### Changes
 
-- [x] Update `docs/architecture.md` so it explicitly owns APE as the orchestrating methodology and uses current artifact paths under `docs/cleanrooms/` where it is describing current workflow.
+- [x] Update `docs/architecture.md` so it explicitly owns APE as the orchestrating methodology and uses current artifact paths under `cleanrooms/` where it is describing current workflow.
 - [x] Update current-supporting docs as needed for consistency and path drift:
   - `docs/spec/agent-lifecycle.md`
   - `docs/spec/cooperative-multitasking-model.md`
@@ -176,8 +176,8 @@ These surfaces were classified during analysis and may need later follow-up, but
 
 ## References
 
-[1] Finite APE Machine repository. "Diagnosis for issue #134: justified documentation status map and canonical-home recommendations." `docs/cleanrooms/134-organize-core-documentation/analyze/diagnosis.md`.
+[1] Finite APE Machine repository. "Diagnosis for issue #134: justified documentation status map and canonical-home recommendations." `cleanrooms/134-organize-core-documentation/analyze/diagnosis.md`.
 
-[2] Finite APE Machine repository. "Expanded entry-surface findings and contradiction synthesis for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/expanded-entry-surface-findings.md`.
+[2] Finite APE Machine repository. "Expanded entry-surface findings and contradiction synthesis for issue #134." `cleanrooms/134-organize-core-documentation/analyze/expanded-entry-surface-findings.md`.
 
-[3] Finite APE Machine repository. "Baseline glossary for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/glossary-baseline.md`.
+[3] Finite APE Machine repository. "Baseline glossary for issue #134." `cleanrooms/134-organize-core-documentation/analyze/glossary-baseline.md`.

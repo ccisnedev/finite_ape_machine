@@ -59,7 +59,7 @@ The current Inquiry CLI already enforces the runtime FSM and deployment operatio
 | triage | `gh issue list`, `gh issue create`, issue-start protocol | Issue + branch + cleanroom folder | IDLE |
 | memory-write | `iq memory write` (planned) | `docs/` (persistent) | ANALYZE |
 | memory-read | `iq memory read` (planned) | stdout (query) | ANALYZE |
-| planning | (via DESCARTES sub-agent) | `docs/cleanrooms/{task}/plan.md` | PLAN |
+| planning | (via DESCARTES sub-agent) | `cleanrooms/{task}/plan.md` | PLAN |
 | tdd | (domain skill for BASHŌ) | Source code + tests | EXECUTE |
 | api-design | (domain skill for BASHŌ) | Source code | EXECUTE |
 | db-as-code | (domain skill for BASHŌ) | Migration files | EXECUTE |

@@ -51,7 +51,7 @@ The project's broader lore includes additional named figures such as MARCOPOLO, 
 
 ## References
 
-[1] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
+[1] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
 
 [2] Finite APE Machine repository. "Architecture." `docs/architecture.md`.
 

@@ -1,4 +1,4 @@
----
+﻿---
 id: expansion-triggers-and-independent-glossary-definitions
 title: "Expansion triggers, initial-pass inclusion of architecture and lore, and independent glossary definitions for issue #134"
 date: 2026-04-22
@@ -83,12 +83,12 @@ The staged evidentiary policy for issue #134 now has a more precise form. Expans
 
 [4] Finite APE Machine repository. "The Apes - Lore." `docs/lore.md`.
 
-[5] Finite APE Machine repository. "Glossary direct-definition and audit navigation requirements for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/glossary-and-audit-navigation-requirements.md`.
+[5] Finite APE Machine repository. "Glossary direct-definition and audit navigation requirements for issue #134." `cleanrooms/134-organize-core-documentation/analyze/glossary-and-audit-navigation-requirements.md`.
 
-[6] Finite APE Machine repository. "Staged corpus entry and what-it-is-only glossary policy for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/staged-corpus-entry-and-minimal-glossary-policy.md`.
+[6] Finite APE Machine repository. "Staged corpus entry and what-it-is-only glossary policy for issue #134." `cleanrooms/134-organize-core-documentation/analyze/staged-corpus-entry-and-minimal-glossary-policy.md`.
 
-[7] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
+[7] Finite APE Machine repository. "Obsolescence and canonicity criteria for issue #134." `cleanrooms/134-organize-core-documentation/analyze/obsolescence-and-canonicity-criteria.md`.
 
-[8] Finite APE Machine repository. "Glossary necessity and reader-priority clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/glossary-need-and-reader-priority.md`.
+[8] Finite APE Machine repository. "Glossary necessity and reader-priority clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/glossary-need-and-reader-priority.md`.
 
 [9] Primary-source analysis-session clarifications dated 2026-04-22 for issue #134: expansion beyond the first pass may be triggered by definitional gap, explicit outward reference, material contradiction, or canonicity conflict; `docs/architecture.md` and `docs/lore.md` count as part of the initial evidentiary pass; first glossary entries may and should be clear, independent definitions.

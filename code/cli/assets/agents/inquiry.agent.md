@@ -46,10 +46,10 @@ Use practical wisdom (Aristotle's **phronesis**) to determine the course of acti
    - Verify prerequisites: `iq doctor` (all checks must pass)
    - Generate slug from issue title
    - Create branch: `git checkout -b <NNN>-<slug>`
-   - Create folder: `mkdir -p docs/cleanrooms/<NNN>-<slug>/analyze/`
+   - Create folder: `mkdir -p cleanrooms/<NNN>-<slug>/analyze/`
    - Create `index.md` with standard header
    - Update `.inquiry/state.yaml` with `phase: ANALYZE` and `task: "<NNN>"`
-5. When infrastructure is ready (issue + branch + `docs/cleanrooms/NNN-slug/analyze/`), suggest transitioning to ANALYZE.
+5. When infrastructure is ready (issue + branch + `cleanrooms/NNN-slug/analyze/`), suggest transitioning to ANALYZE.
 6. If `.inquiry/config.yaml` exists AND `evolution.enabled: true`, capture a metrics snapshot before transitioning. If `.inquiry/config.yaml` does not exist, skip this step (assume evolution disabled).
    - Count current tests: `cd code/cli && dart test 2>&1 | tail -1 | grep -oP '\+\K\d+'` (exact count from test runner). Fallback: `grep -rc 'test(' code/cli/test/ | tail -1` (approximate).
    - Record snapshot timestamp: `date -u +"%Y-%m-%dT%H:%M:%SZ"` (or PowerShell: `Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"`)
@@ -69,7 +69,7 @@ SOCRATES uses the **Socratic method** (mayéutica): questions, not answers. It d
 
 On each user interaction in ANALYZE:
 
-1. Read `docs/cleanrooms/<task>/analyze/index.md` to understand accumulated context.
+1. Read `cleanrooms/<task>/analyze/index.md` to understand accumulated context.
 2. Determine the appropriate Socratic phase based on the analysis state (see SOCRATES Prompt section).
 3. Invoke SOCRATES via `runSubagent` with:
    - The user's input
@@ -95,12 +95,12 @@ DESCARTES uses the **scientific method** (Cartesian method): the plan is an expe
 On each user interaction in PLAN:
 
 1. Invoke DESCARTES via `runSubagent` with:
-   - `docs/cleanrooms/<task>/analyze/diagnosis.md` (the sole required input)
+   - `cleanrooms/<task>/analyze/diagnosis.md` (the sole required input)
    - Access to all analysis documents for deeper reference
    - The DESCARTES prompt (see section below)
 2. Present DESCARTES' proposal to the user.
 3. The user reviews and requests changes or approves.
-4. Write the approved plan in `docs/cleanrooms/<task>/plan.md`.
+4. Write the approved plan in `cleanrooms/<task>/plan.md`.
 
 **Rules:**
 - Do not create deliverables or execute any part of the plan.
@@ -118,7 +118,7 @@ BASHŌ embodies **techne** and **用の美** (yō no bi, the beauty of use): imp
 On each phase of the plan:
 
 1. Invoke BASHŌ via `runSubagent` with:
-   - The current phase from `docs/cleanrooms/<task>/plan.md`
+   - The current phase from `cleanrooms/<task>/plan.md`
    - The relevant codebase context
    - Domain-specific skills as needed (TDD, API design, DB-as-code, etc.)
 2. BASHŌ implements the phase and reports results.
@@ -171,7 +171,7 @@ DARWIN uses **natural selection**: observe what worked, what failed, what mutate
 4. If match found → `gh issue comment NNN --body "..."`.
 5. If no match → `gh issue create --repo siliconbrainedmachines/inquiry --title "..."`.
 6. DARWIN generates `.inquiry/metrics.yaml` using cycle artifacts (see DARWIN prompt below for field mapping).
-7. After DARWIN completes, **APE** (not DARWIN) performs the conditional copy: if `git remote get-url origin` contains `siliconbrainedmachines/inquiry`, copy `.inquiry/metrics.yaml` to `docs/cleanrooms/<slug>/metrics.yaml` and `git add` it.
+7. After DARWIN completes, **APE** (not DARWIN) performs the conditional copy: if `git remote get-url origin` contains `siliconbrainedmachines/inquiry`, copy `.inquiry/metrics.yaml` to `cleanrooms/<slug>/metrics.yaml` and `git add` it.
 8. Transition to IDLE automatically (no user gate).
 
 **Rules:**
@@ -231,7 +231,7 @@ Do not interpret ambiguous signals as transitions. Being helpful means staying i
 Every task gets a numbered directory. Create it by following the `issue-start` skill.
 
 ```
-docs/cleanrooms/NNN-<slug>/
+cleanrooms/NNN-<slug>/
 ├── analyze/
 │   ├── index.md          ← navigation index
 │   ├── *.md              ← working documents (exploration, discards)
@@ -506,9 +506,9 @@ After evaluating the cycle, generate `.inquiry/metrics.yaml` with these fields:
 | `cycle.darwin_issue` | Your output | Issue # you created/commented |
 | `timing.branch_created` | `.inquiry/metrics_snapshot.yaml` | Read file (snapshot timestamp at cycle start) |
 | `timing.pr_merged` | `gh pr view --json mergedAt` | May be empty if PR not yet merged |
-| `plan.total_phases` | `docs/cleanrooms/<slug>/plan.md` | `grep -c "^## Fase\|^### Fase\|^## Phase" plan.md` |
-| `plan.completed_phases` | `docs/cleanrooms/<slug>/plan.md` | `grep -c "\[x\]" plan.md` |
-| `plan.deviations` | `docs/cleanrooms/<slug>/plan.md` | Count deviation annotations |
+| `plan.total_phases` | `cleanrooms/<slug>/plan.md` | `grep -c "^## Fase\|^### Fase\|^## Phase" plan.md` |
+| `plan.completed_phases` | `cleanrooms/<slug>/plan.md` | `grep -c "\[x\]" plan.md` |
+| `plan.deviations` | `cleanrooms/<slug>/plan.md` | Count deviation annotations |
 | `tests.before` | `.inquiry/metrics_snapshot.yaml` | Read file (captured at cycle start) |
 | `tests.after` | Current test count | `cd code/cli && dart test 2>&1 \| tail -1 \| grep -oP '\+\K\d+'` (exact). Fallback: `grep -rc 'test(' code/cli/test/ \| tail -1` |
 | `tests.delta` | Derived | `tests.after - tests.before` |

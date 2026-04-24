@@ -1,4 +1,4 @@
----
+﻿---
 id: glossary-baseline
 title: "Baseline glossary for issue #134"
 date: 2026-04-22
@@ -30,11 +30,11 @@ These definitions are first-pass controls, not final doctrinal prose. They shoul
 
 ## References
 
-[1] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
+[1] Finite APE Machine repository. "Taxonomy and scope clarification for issue #134." `cleanrooms/134-organize-core-documentation/analyze/taxonomy-and-scope-clarification.md`.
 
-[2] Finite APE Machine repository. "Expansion triggers, initial-pass inclusion of architecture and lore, and independent glossary definitions for issue #134." `docs/cleanrooms/134-organize-core-documentation/analyze/expansion-triggers-and-independent-glossary-definitions.md`.
+[2] Finite APE Machine repository. "Expansion triggers, initial-pass inclusion of architecture and lore, and independent glossary definitions for issue #134." `cleanrooms/134-organize-core-documentation/analyze/expansion-triggers-and-independent-glossary-definitions.md`.
 
-[3] Finite APE Machine repository. "Diagnosis for issue #134: justified documentation status map and canonical-home recommendations." `docs/cleanrooms/134-organize-core-documentation/analyze/diagnosis.md`.
+[3] Finite APE Machine repository. "Diagnosis for issue #134: justified documentation status map and canonical-home recommendations." `cleanrooms/134-organize-core-documentation/analyze/diagnosis.md`.
 
 [4] Finite APE Machine repository. "Inquiry as Epistemic Foundation of APE." `docs/research/inquiry/index.md`; "Architecture." `docs/architecture.md`; "The Apes — Lore." `docs/lore.md`.
 
