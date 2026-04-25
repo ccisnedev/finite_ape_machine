@@ -13,13 +13,13 @@ Inquiry names the cycle-level process. APE names the orchestrating methodology. 
 **Windows:**
 
 ```powershell
-irm https://www.si14bm.com/inquiry/install.ps1 | iex
+irm https://inquiry.si14bm.com/install.ps1 | iex
 ```
 
 **Linux:**
 
 ```bash
-curl -fsSL https://www.si14bm.com/inquiry/install.sh | bash
+curl -fsSL https://inquiry.si14bm.com/install.sh | bash
 ```
 
 ## Commands

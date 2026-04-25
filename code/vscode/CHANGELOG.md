@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.4] - 2026-04-24
+
+### Fixed
+- Install script URL corrected from `www.si14bm.com/inquiry/` to `inquiry.si14bm.com` — the Init command no longer fails with HTTP 404 when auto-installing the CLI (#143)
+- README and website links updated to match the actual CNAME domain
+
 ## [0.1.3] - 2026-04-23
 
 ### Changed

@@ -22,13 +22,13 @@ function createMockProcess() {
 describe('getInstallScriptUrl', () => {
   it('returns ps1 URL on win32', () => {
     const result = getInstallScriptUrl('win32');
-    assert.strictEqual(result.url, 'https://www.si14bm.com/inquiry/install.ps1');
+    assert.strictEqual(result.url, 'https://inquiry.si14bm.com/install.ps1');
     assert.strictEqual(result.filename, 'inquiry-install.ps1');
   });
 
   it('returns sh URL on linux', () => {
     const result = getInstallScriptUrl('linux');
-    assert.strictEqual(result.url, 'https://www.si14bm.com/inquiry/install.sh');
+    assert.strictEqual(result.url, 'https://inquiry.si14bm.com/install.sh');
     assert.strictEqual(result.filename, 'inquiry-install.sh');
   });
 
@@ -88,7 +88,7 @@ describe('installInquiryCli', () => {
     };
 
     await installInquiryCli(deps);
-    assert.strictEqual(downloadedUrl, 'https://www.si14bm.com/inquiry/install.ps1');
+    assert.strictEqual(downloadedUrl, 'https://inquiry.si14bm.com/install.ps1');
     assert.strictEqual(downloadedDest, path.join('C:\\temp', 'inquiry-install.ps1'));
     assert.strictEqual(spawnedCmd, 'powershell');
     assert.deepStrictEqual(spawnedArgs, [
@@ -117,7 +117,7 @@ describe('installInquiryCli', () => {
     };
 
     await installInquiryCli(deps);
-    assert.strictEqual(downloadedUrl, 'https://www.si14bm.com/inquiry/install.sh');
+    assert.strictEqual(downloadedUrl, 'https://inquiry.si14bm.com/install.sh');
     assert.strictEqual(spawnedCmd, 'bash');
   });
 

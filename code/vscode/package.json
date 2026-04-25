@@ -2,7 +2,7 @@
   "name": "inquiry-vscode",
   "displayName": "Inquiry",
   "publisher": "siliconbrainedmachines",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Inquiry — Analyze. Plan. Execute. End. Structured AI-assisted development for GitHub Copilot.",
   "license": "MIT",
   "icon": "assets/icon.png",

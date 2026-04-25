@@ -3,7 +3,7 @@
 **Analyze. Plan. Execute.**
 
 > Select **@inquiry** as your GitHub Copilot custom agent.
-> Every task follows a strict cycle: **ANALYZE → PLAN → EXECUTE → END**.
+> Every task follows a strict cycle: **ANALYZE → PLAN → EXECUTE**.
 > No freestyling. No hallucinated plans. Structure from analysis to PR.
 
 This README is the extension's public entry surface. For the canonical repository documentation map, start at [../docs/index.md](../docs/index.md).
@@ -63,9 +63,9 @@ The status bar shows the current FSM phase in real time:
 
 ## Links
 
-- [Website](https://www.si14bm.com/inquiry/) · [GitHub](https://github.com/siliconbrainedmachines/inquiry) · [Issues](https://github.com/siliconbrainedmachines/inquiry/issues)
+- [Website](https://inquiry.si14bm.com/) · [GitHub](https://github.com/siliconbrainedmachines/inquiry) · [Issues](https://github.com/siliconbrainedmachines/inquiry/issues)
 - [Docs map](https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/index.md) · [Architecture](https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/architecture.md) · [Finite APE Machine spec](https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/spec/finite-ape-machine.md)
 
-For the full methodology, see [si14bm.com/inquiry](https://www.si14bm.com/inquiry/).
+For the full methodology, see [inquiry.si14bm.com](https://inquiry.si14bm.com/).
 
 MIT © 2026 Cristian Cisneros

@@ -27,13 +27,13 @@ Historical naming note: APE was the system's initial working name. The individua
 ### Install (Windows)
 
 ```powershell
-irm https://www.si14bm.com/inquiry/install.ps1 | iex
+irm https://inquiry.si14bm.com/install.ps1 | iex
 ```
 
 ### Install (Linux)
 
 ```bash
-curl -fsSL https://www.si14bm.com/inquiry/install.sh | bash
+curl -fsSL https://inquiry.si14bm.com/install.sh | bash
 ```
 
 The installer downloads the latest release, places `inquiry` (aliased as `iq`) on `PATH`, and verifies prerequisites.
