@@ -26,10 +26,10 @@ Run `iq fsm state --json` to read current state. Parse the JSON:
 
 ## Inner Loop (Per-APE FSM)
 
-1. Run `iq ape prompt --name <ape.name>` to load the sub-agent prompt
-2. **Become** that sub-agent: follow its instructions exactly
-3. Run `iq ape state --json` to see valid internal transitions
-4. When a sub-phase completes, ask user to approve, then: `iq ape transition --event <event>`
+1. Run `iq ape prompt --name <ape.name>` to get the sub-agent prompt
+2. **Dispatch** that sub-agent: use the `agent` tool to invoke `@<ape.name>` with the prompt as context. Do NOT perform the sub-agent's work yourself. Do NOT render its output in chat.
+3. Wait for the sub-agent to signal completion (it will announce its sub-phase is done).
+4. When signaled: `iq ape transition --event <event>` (with user approval — sí/no only)
 5. If `ape.state` becomes `_DONE`: exit Inner Loop, present main FSM transitions
 
 ## Rules
