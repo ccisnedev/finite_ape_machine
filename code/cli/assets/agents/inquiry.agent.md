@@ -29,8 +29,15 @@ Run `iq fsm state --json` to read current state. Parse the JSON:
 1. Run `iq ape prompt --name <ape.name>` to get the sub-agent prompt
 2. **Dispatch** that sub-agent: use the `agent` tool to invoke `@<ape.name>` with the prompt as context. Do NOT perform the sub-agent's work yourself. Do NOT render its output in chat.
 3. Wait for the sub-agent to signal completion (it will announce its sub-phase is done).
-4. When signaled: `iq ape transition --event <event>` (with user approval — sí/no only)
+4. When signaled: ask exactly ONE binary yes/no question, then execute `iq ape transition --event <event>` on approval. No alternatives, no compound questions.
 5. If `ape.state` becomes `_DONE`: exit Inner Loop, present main FSM transitions
+
+## END Checkpoint
+
+After the sub-agent signals completion:
+- Ask exactly ONE binary yes/no question before creating the PR.
+- Do NOT ask about EVOLUTION. Do NOT offer path choices.
+- On approval: create PR, then read `evolution.enabled` from `.inquiry/config.yaml` and transition automatically.
 
 ## Rules
 
