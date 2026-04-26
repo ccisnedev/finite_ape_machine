@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.0]
+### Added
+- **FSM module** (`iq fsm`): renamed from `iq state`, new `iq fsm state --json` command returns full FSM context (state, issue, transitions, APEs, instructions) for machine consumption
+- **Effect execution**: `iq fsm transition` now executes CLI-side effects (update_state, reset_mutations, snapshot_metrics, close_cycle, collect_metrics) — skill-side effects reported for agent handling
+- **Sub-agent YAMLs**: four versioned APE definitions in `assets/apes/` (socrates, descartes, basho, darwin) with base_prompt + per-state prompts
+- **APE prompt assembly** (`iq ape prompt --name <name> [--state <sub_state>]`): reads YAML definition + FSM state, assembles context-aware prompt; auto-reads sub-state from `state.yaml` when `--state` omitted
+- **RTOS dual-FSM**: each APE has its own internal FSM with validated transitions, persistence in `state.yaml`, and `_DONE` sentinel for completion
+- **APE state** (`iq ape state`): reports active sub-agent's current state and valid internal transitions
+- **APE transition** (`iq ape transition --event <e>`): validates and executes internal APE transitions with semantic error codes
+- **Auto-activation**: main FSM transitions automatically activate the corresponding APE at its `initial_state`
+- **Firmware thin agent**: replaced 554-line monolith `inquiry.agent.md` with ~35-line dual-loop scheduler (outer=FSM, inner=per-APE)
+- **InquiryState helper**: centralized read/write of `state.yaml` including `ape:` field with backward compatibility
+- **Devcontainer**: `.devcontainer/devcontainer.json` with Dart SDK for Linux e2e testing
+
+### Changed
+- **state.yaml format**: now includes `ape: {name, state}` field (backward-compatible with old format)
+- **`iq init`**: generates `state.yaml` with `ape: null` field
+
+### Fixed
+- **doctor reports "0 skills deployed"** (#145): `Assets` now injected into `DoctorCommand` via `buildGlobalModule`
+- **APE domain errors**: `StateError`/`ArgumentError` replaced with `CommandException` using semantic exit codes (conflict=6, notFound=4, validationFailed=7)
+- **EXECUTE→END preserves APE state**: same-APE transitions no longer reset sub-state to `initial_state`
+
 ## [0.1.3]
 ### Changed
 - **Historical naming boundary** (#134): `APE builds APE` is now preserved only as the historical bootstrap thesis and lore wording from the period when APE was the system's working name; Inquiry remains the current system identity across README, lore, and site bootstrap surfaces

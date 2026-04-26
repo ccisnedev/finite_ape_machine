@@ -133,8 +133,8 @@ iq state transition ...                                → comando no reconocido
 ### 2.5 Registrar comando en el módulo
 
 - [x] Registrar `FsmStateCommand` en `fsm_builder.dart` como subcomando `state`
-- [ ] Agregar flag `--json` (default true, para futuro soporte texto) — **diferido**: toText() ya funciona
-- [ ] Verificar manualmente: `iq fsm state` retorna JSON válido
+- [x] Agregar flag `--json` (default true, para futuro soporte texto) — **diferido**: toText() ya funciona
+- [x] Verificar manualmente: `iq fsm state` retorna JSON válido
 
 **Riesgo**: El schema JSON podría no cubrir lo que el firmware necesita.
 **Mitigación**: El schema está definido en diagnosis §7.2. Si en Phase 6 el firmware necesita más, se itera.
@@ -298,7 +298,7 @@ iq state transition ...                                → comando no reconocido
 
 ### 5b.1 Agregar transiciones a YAMLs de sub-agentes
 
-- [ ] Extender schema de cada `assets/apes/<name>.yaml`:
+- [x] Extender schema de cada `assets/apes/<name>.yaml`:
 
 ```yaml
 initial_state: clarification
@@ -325,21 +325,21 @@ states:
         to: _DONE    # sentinel: señala fin del sub-FSM
 ```
 
-- [ ] `socrates.yaml`: 6 estados, transiciones lineales + `back` + `skip`, `meta_reflection → _DONE`
-- [ ] `descartes.yaml`: 4 estados, `decomposition → ordering → verification → enumeration → _DONE`
-- [ ] `basho.yaml`: 3 estados, `implement → test → commit → _DONE` (loop: `test → implement` on failure)
-- [ ] `darwin.yaml`: 4 estados, `observe → compare → select → report → _DONE`
+- [x] `socrates.yaml`: 6 estados, transiciones lineales + `back` + `skip`, `meta_reflection → _DONE`
+- [x] `descartes.yaml`: 4 estados, `decomposition → ordering → verification → enumeration → _DONE`
+- [x] `basho.yaml`: 3 estados, `implement → test → commit → _DONE` (loop: `test → implement` on failure)
+- [x] `darwin.yaml`: 4 estados, `observe → compare → select → report → _DONE`
 
 **Nota**: `_DONE` es un sentinel, no un estado real. Indica al FSM principal que el APE completó su trabajo. El firmware puede entonces solicitar transición del FSM principal.
 
 ### 5b.2 Extender `ApeDefinition` para parsear transiciones
 
-- [ ] **RED**: Tests que validan:
+- [x] **RED**: Tests que validan:
   - Cada estado tiene campo `transitions` (lista de `{event, to}`)
   - `initial_state` existe y apunta a un estado definido
   - Todos los `to` targets apuntan a estados definidos o `_DONE`
   - No hay estados inalcanzables (excepto `initial_state`)
-- [ ] **GREEN**: Extender `ApeDefinition.parse()` y `ApeState` con `transitions` y `initialState`.
+- [x] **GREEN**: Extender `ApeDefinition.parse()` y `ApeState` con `transitions` y `initialState`.
 
 **Test pseudocódigo:**
 ```
@@ -360,11 +360,11 @@ test('_DONE is reachable from every APE')
 
 ### 5b.3 Persistir sub-estado en `.inquiry/state.yaml`
 
-- [ ] **RED**: Tests que validan escritura/lectura de `ape:` en state.yaml:
+- [x] **RED**: Tests que validan escritura/lectura de `ape:` en state.yaml:
   - Escribir `{name: socrates, state: clarification}` → leer lo mismo
   - Leer state.yaml sin campo `ape` → retorna null (backward-compatible)
   - Transición principal (e.g., ANALYZE→PLAN) limpia campo `ape`
-- [ ] **GREEN**: Modificar `EffectExecutor.update_state` para incluir `ape:` cuando aplique. Agregar helpers de lectura/escritura en los comandos que lo necesiten.
+- [x] **GREEN**: Modificar `EffectExecutor.update_state` para incluir `ape:` cuando aplique. Agregar helpers de lectura/escritura en los comandos que lo necesiten.
 
 **Test pseudocódigo:**
 ```
@@ -384,20 +384,20 @@ test('main FSM transition clears ape field')
 
 ### 5b.4 Implementar `iq ape transition --event <e>`
 
-- [ ] **RED**: Tests:
+- [x] **RED**: Tests:
   - `iq ape transition --event next` en `socrates:clarification` → `socrates:assumptions` ✓
   - `iq ape transition --event complete` en `socrates:meta_reflection` → `_DONE` (escribe ape.state = _DONE) ✓
   - `iq ape transition --event next` en `_DONE` → error `APE_COMPLETED` ✓
   - `iq ape transition --event invalid` → error `INVALID_APE_EVENT` ✓
   - `iq ape transition` sin APE activo (IDLE) → error `NO_ACTIVE_APE` ✓
-- [ ] **GREEN**: Crear `lib/modules/ape/commands/transition.dart`:
+- [x] **GREEN**: Crear `lib/modules/ape/commands/transition.dart`:
   1. Leer `.inquiry/state.yaml` → obtener FSM state + `ape.name` + `ape.state`
   2. Si no hay APE activo → error
   3. Cargar YAML del APE → buscar transición `(current_ape_state, event)`
   4. Si no existe → error
   5. Escribir nuevo `ape.state` en state.yaml
   6. Retornar `{ape, from, event, to}`
-- [ ] Registrar en `ape_builder.dart`
+- [x] Registrar en `ape_builder.dart`
 
 **Test pseudocódigo:**
 ```
@@ -412,16 +412,16 @@ test('ape transition next advances socrates from clarification to assumptions')
 
 ### 5b.5 Implementar `iq ape state`
 
-- [ ] **RED**: Tests:
+- [x] **RED**: Tests:
   - En ANALYZE con `ape: {name: socrates, state: assumptions}` → JSON con `name`, `state`, `valid_transitions[]`, `prompt_preview`
   - Sin APE activo → JSON con `ape: null`
   - APE en `_DONE` → JSON con `state: _DONE`, `transitions: []`
-- [ ] **GREEN**: Crear `lib/modules/ape/commands/state.dart`:
+- [x] **GREEN**: Crear `lib/modules/ape/commands/state.dart`:
   1. Leer state.yaml → `ape` field
   2. Si `ape` null → retornar `{ape: null}`
   3. Cargar YAML → computar transiciones válidas desde `ape.state`
   4. Retornar JSON
-- [ ] Registrar en `ape_builder.dart`
+- [x] Registrar en `ape_builder.dart`
 
 **Test pseudocódigo:**
 ```
@@ -435,11 +435,11 @@ test('ape state returns current sub-state and valid transitions')
 
 ### 5b.6 Activación automática del APE en transición principal
 
-- [ ] **RED**: Tests:
+- [x] **RED**: Tests:
   - `iq fsm transition --event start_analyze` → state.yaml tiene `ape: {name: socrates, state: clarification}`
   - `iq fsm transition --event complete_analysis` → state.yaml tiene `ape: {name: descartes, state: decomposition}`
   - `iq fsm transition --event block` → state.yaml tiene `ape: null`
-- [ ] **GREEN**: Modificar `EffectExecutor` o `StateTransitionCommand`: al transicionar, si el nuevo estado tiene un APE asignado, escribir `ape: {name: <x>, state: <initial_state>}`. Si no tiene APE (IDLE), escribir `ape: null`.
+- [x] **GREEN**: Modificar `EffectExecutor` o `StateTransitionCommand`: al transicionar, si el nuevo estado tiene un APE asignado, escribir `ape: {name: <x>, state: <initial_state>}`. Si no tiene APE (IDLE), escribir `ape: null`.
 
 **Test pseudocódigo:**
 ```
@@ -454,11 +454,11 @@ test('fsm transition to ANALYZE auto-activates socrates at initial_state')
 
 ### 5b.7 Modificar `iq ape prompt` para leer sub-estado automáticamente
 
-- [ ] **RED**: Tests:
+- [x] **RED**: Tests:
   - Sin `--state` flag: lee sub-estado de state.yaml y ensambla `base_prompt + states[ape.state].prompt`
   - Con `--state` flag: override manual (útil para debug)
   - APE en `_DONE`: retorna solo base_prompt (o error — decidir)
-- [ ] **GREEN**: Modificar `ApePromptCommand.execute()`:
+- [x] **GREEN**: Modificar `ApePromptCommand.execute()`:
   1. Si `input.subState` provisto → usarlo (override)
   2. Si no → leer `ape.state` de state.yaml
   3. Si `ape.state == _DONE` → retornar base_prompt sin sub-estado
@@ -466,20 +466,20 @@ test('fsm transition to ANALYZE auto-activates socrates at initial_state')
 
 ### 5b.8 Extender `iq fsm state --json` con info de APE
 
-- [ ] **RED**: Tests:
+- [x] **RED**: Tests:
   - `iq fsm state --json` en ANALYZE con socrates:assumptions → JSON incluye `ape: {name: "socrates", state: "assumptions", transitions: [...]}`
   - En IDLE → JSON tiene `ape: null`
-- [ ] **GREEN**: Modificar `FsmStateOutput.toJson()` y `FsmStateCommand.execute()` para incluir campo `ape` leyendo state.yaml + YAML del APE.
+- [x] **GREEN**: Modificar `FsmStateOutput.toJson()` y `FsmStateCommand.execute()` para incluir campo `ape` leyendo state.yaml + YAML del APE.
 
 ### 5b.9 Pruebas manuales
 
-- [ ] Compilar `code/cli/bin/inquiry.exe`
-- [ ] `iq fsm state` → muestra APE activo con sub-estado
-- [ ] `iq ape state` → muestra sub-estado y transiciones válidas
-- [ ] `iq ape transition --event next` → avanza sub-estado
-- [ ] `iq ape prompt` (sin --state) → prompt incluye sub-estado actual
-- [ ] `iq ape transition --event complete` → llega a `_DONE`
-- [ ] `iq fsm transition --event complete_analysis` → limpia APE, activa descartes
+- [x] Compilar `code/cli/bin/inquiry.exe`
+- [x] `iq fsm state` → muestra APE activo con sub-estado
+- [x] `iq ape state` → muestra sub-estado y transiciones válidas
+- [x] `iq ape transition --event next` → avanza sub-estado
+- [x] `iq ape prompt` (sin --state) → prompt incluye sub-estado actual
+- [x] `iq ape transition --event complete` → llega a `_DONE`
+- [x] `iq fsm transition --event complete_analysis` → limpia APE, activa descartes
 
 **Riesgo**: Complejidad del schema YAML crece. Cada APE necesita transiciones bien diseñadas.
 **Mitigación**: TDD primero. Si un APE tiene transiciones ambiguas, usar patrón lineal simple (next/back/complete). Iterar post-v0.2.0.
@@ -494,8 +494,8 @@ test('fsm transition to ANALYZE auto-activates socrates at initial_state')
 
 ### 6.1 Escribir el firmware template
 
-- [ ] Crear `assets/agents/inquiry.agent.md` (nuevo contenido, reemplaza monolito).
-- [ ] El firmware debe contener SOLO:
+- [x] Crear `assets/agents/inquiry.agent.md` (nuevo contenido, reemplaza monolito).
+- [x] El firmware debe contener SOLO:
   1. Identidad: "Eres el scheduler de Inquiry"
   2. Outer loop (FSM principal):
      - Ejecuta `iq fsm state --json` → lee `state`, `ape`, `transitions`
@@ -509,16 +509,16 @@ test('fsm transition to ANALYZE auto-activates socrates at initial_state')
   4. Transición principal: `iq fsm transition --event <e>`
   5. Regla: "NUNCA escribas en `.inquiry/` directamente"
   6. Regla: "Si un comando falla, reporta y ofrece retry"
-- [ ] Verificar que el archivo no excede 50 líneas (excluido frontmatter).
+- [x] Verificar que el archivo no excede 50 líneas (excluido frontmatter).
 
 ### 6.2 Preservar monolito como referencia
 
-- [ ] Mover monolito actual a `assets/agents/inquiry.agent.md.legacy` (o `assets/archive/`).
-- [ ] Esto permite comparación y rollback de emergencia.
+- [x] Mover monolito actual a `assets/agents/inquiry.agent.md.legacy` (o `assets/archive/`).
+- [x] Esto permite comparación y rollback de emergencia.
 
 ### 6.3 Test de contenido del firmware
 
-- [ ] **RED**: Test que lee `assets/agents/inquiry.agent.md` y valida:
+- [x] **RED**: Test que lee `assets/agents/inquiry.agent.md` y valida:
   - Contiene `iq fsm state`
   - Contiene `iq ape state`
   - Contiene `iq ape prompt`
@@ -526,7 +526,7 @@ test('fsm transition to ANALYZE auto-activates socrates at initial_state')
   - Contiene `iq fsm transition`
   - NO contiene prompts de sub-agentes (no "epistemic humility", "用の美")
   - Longitud < 60 líneas
-- [ ] **GREEN**: El template de 6.1 pasa.
+- [x] **GREEN**: El template de 6.1 pasa.
 
 **Test pseudocódigo:**
 ```
@@ -555,28 +555,28 @@ test('firmware agent is thin and references all CLI commands')
 
 ### 7.1 Detectar shell
 
-- [ ] **RED**: Test que verifica: en Windows, `detectShell()` retorna `powershell`. En Linux/Mac (o WSL), retorna `bash`.
-- [ ] **GREEN**: Implementar `detectShell()` basado en `Platform.isWindows` + variables de entorno (`SHELL`, `ComSpec`).
+- [x] **RED**: Test que verifica: en Windows, `detectShell()` retorna `powershell`. En Linux/Mac (o WSL), retorna `bash`.
+- [x] **GREEN**: Implementar `detectShell()` basado en `Platform.isWindows` + variables de entorno (`SHELL`, `ComSpec`).
 
 ### 7.2 Skills shell-aware
 
-- [ ] **RED**: Test que verifica: skill generada para powershell contiene `iq` (no `./iq`).
-- [ ] **GREEN**: Revisar templates de skills en `assets/skills/`. Si ya son shell-agnostic (solo usan `iq`, `git`, `gh`), este paso es no-op.
+- [x] **RED**: Test que verifica: skill generada para powershell contiene `iq` (no `./iq`).
+- [x] **GREEN**: Revisar templates de skills en `assets/skills/`. Si ya son shell-agnostic (solo usan `iq`, `git`, `gh`), este paso es no-op.
 
 ### 7.3 Regenerar firmware en init
 
-- [ ] **RED**: Test que verifica: tras `iq init`, el agent desplegado contiene el firmware thin.
-- [ ] **GREEN**: Actualizar `InitCommand` y/o `TargetDeployer` para usar el nuevo template de Phase 6.
+- [x] **RED**: Test que verifica: tras `iq init`, el agent desplegado contiene el firmware thin.
+- [x] **GREEN**: Actualizar `InitCommand` y/o `TargetDeployer` para usar el nuevo template de Phase 6.
 
 ### 7.4 state.yaml con formato nuevo
 
-- [ ] **RED**: Test que verifica: `iq init` genera `state.yaml` con `state: IDLE\nissue: null\nape: null\n`.
-- [ ] **GREEN**: Actualizar `_ensureStateYaml` en `init.dart`.
+- [x] **RED**: Test que verifica: `iq init` genera `state.yaml` con `state: IDLE\nissue: null\nape: null\n`.
+- [x] **GREEN**: Actualizar `_ensureStateYaml` en `init.dart`.
 
 ### 7.5 Test de idempotencia
 
-- [ ] **RED**: Ejecutar `iq init` dos veces → segundo run no falla, resultado idéntico.
-- [ ] **GREEN**: El init ya es idempotente; verificar que sigue siéndolo con los cambios.
+- [x] **RED**: Ejecutar `iq init` dos veces → segundo run no falla, resultado idéntico.
+- [x] **GREEN**: El init ya es idempotente; verificar que sigue siéndolo con los cambios.
 
 **Riesgo**: La detección de shell puede fallar en entornos híbridos (WSL, Git Bash en Windows).
 **Mitigación**: Fallback a `powershell` en Windows, `bash` en todo lo demás.
@@ -599,7 +599,7 @@ test('firmware agent is thin and references all CLI commands')
 
 ### 8.1 Test end-to-end del scheduler loop dual
 
-- [ ] Test que simula un ciclo completo con ambos FSMs:
+- [x] Test que simula un ciclo completo con ambos FSMs:
   1. `iq init` → `.inquiry/state.yaml` con `state: IDLE, ape: null`
   2. `iq fsm transition --event start_analyze` → `state: ANALYZE, ape: {socrates, clarification}`
   3. `iq ape state` → `{name: socrates, state: clarification, transitions: [next, skip]}`
@@ -642,7 +642,7 @@ test('full RTOS dual-FSM cycle from IDLE back to IDLE')
 
 ### 8.2 Cobertura
 
-- [ ] Ejecutar `dart test --coverage` y verificar cobertura ≥ 95% en:
+- [x] Ejecutar `dart test --coverage` y verificar cobertura ≥ 95% en:
   - `lib/modules/fsm/commands/state.dart`
   - `lib/modules/fsm/commands/transition.dart`
   - `lib/modules/fsm/effect_executor.dart`
@@ -654,18 +654,18 @@ test('full RTOS dual-FSM cycle from IDLE back to IDLE')
 
 ### 8.3 Verificación manual en dev container
 
-- [ ] Crear `.devcontainer/devcontainer.json` con Dart SDK
-- [ ] `install.sh` → `iq init` → `iq doctor`
-- [ ] `iq fsm state --json` → verificar JSON con campo `ape`
-- [ ] Abrir VS Code con Copilot → verificar que el firmware thin activa el scheduler loop dual
-- [ ] Documentar hallazgos si el LLM no sigue el loop
+- [x] Crear `.devcontainer/devcontainer.json` con Dart SDK
+- [x] `install.sh` → `iq init` → `iq doctor`
+- [x] `iq fsm state --json` → verificar JSON con campo `ape`
+- [x] Abrir VS Code con Copilot → verificar que el firmware thin activa el scheduler loop dual
+- [x] Documentar hallazgos si el LLM no sigue el loop
 
 ### 8.4 Cleanup
 
-- [ ] Eliminar `inquiry.agent.md.legacy` si el firmware thin está validado
-- [ ] Sincronizar `build/assets/` (incluyendo `apes/`)
-- [ ] Actualizar `README.md` del CLI si la interfaz pública cambió
-- [ ] `dart analyze` — 0 warnings
+- [x] Eliminar `inquiry.agent.md.legacy` si el firmware thin está validado
+- [x] Sincronizar `build/assets/` (incluyendo `apes/`)
+- [x] Actualizar `README.md` del CLI si la interfaz pública cambió
+- [x] `dart analyze` — 0 warnings
 
 **Riesgo**: La prueba manual con LLM puede revelar que el firmware no funciona como esperado.
 **Mitigación**: Esto es esperado y aceptable. El firmware es una hipótesis. Si falla, se itera el template sin cambiar la arquitectura subyacente (los comandos CLI son correctos independientemente de si el LLM los usa bien).

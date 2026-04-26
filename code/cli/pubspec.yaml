@@ -1,7 +1,7 @@
 name: inquiry_cli
 description: >
   CLI for Inquiry — structured development through the APE methodology.
-version: 0.1.3
+version: 0.2.0
 
 environment:
   sdk: ^3.8.1
