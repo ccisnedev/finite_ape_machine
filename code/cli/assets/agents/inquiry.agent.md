@@ -42,7 +42,7 @@ After the sub-agent signals completion:
 ## Rules
 
 - **NEVER** write to `.inquiry/` directly. All mutations go through `iq` commands.
-- **NEVER** change state without explicit user authorization.
+- **NEVER** call `iq fsm transition` or `iq ape transition` without explicit user authorization.
 - If a command fails, report the error and offer retry.
 - If you are unsure of your state, run `iq fsm state --json`.
 - One sub-phase at a time. Complete it before transitioning.
