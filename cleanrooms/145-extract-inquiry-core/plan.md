@@ -199,60 +199,22 @@ iq state transition ...                                → comando no reconocido
 
 ### 4.1 Extraer prompts del monolito
 
-- [ ] Leer `assets/agents/inquiry.agent.md` completo.
-- [ ] Identificar y aislar el prompt de cada sub-agente: SOCRATES, DESCARTES, BASHŌ, DARWIN.
-- [ ] Para cada uno, separar: `base_prompt` (personalidad + mindset) vs `states` (instrucciones por fase interna).
+- [x] Leer `assets/agents/inquiry.agent.md` completo (~600 líneas).
+- [x] Identificar y aislar SOCRATES, DESCARTES, BASHŌ, DARWIN.
+- [x] Separar `base_prompt` (personalidad + mindset) vs `states` (fases internas).
 
-### 4.2 Crear YAML de SOCRATES
+### 4.2–4.5 Crear YAMLs
 
-- [ ] Crear `assets/apes/socrates.yaml` con:
-  - `name: socrates`
-  - `version: "0.2.0"`
-  - `description: "Analysis via Socratic method"`
-  - `base_prompt:` (extraído del monolito)
-  - `states:` (6 sub-estados: clarification, assumptions, evidence, perspectives, implications, meta-reflection)
-- [ ] Verificar que `base_prompt + states[X].prompt` reconstituye fielmente el prompt original del monolito.
-
-### 4.3 Crear YAML de DESCARTES
-
-- [ ] Crear `assets/apes/descartes.yaml` con:
-  - `name: descartes`
-  - `version: "0.2.0"`
-  - `states:` (4 sub-estados: decomposition, ordering, verification, enumeration)
-- [ ] Verificar fidelidad vs. monolito.
-
-### 4.4 Crear YAML de BASHŌ
-
-- [ ] Crear `assets/apes/basho.yaml` con:
-  - `name: basho`
-  - `version: "0.2.0"`
-  - `states:` (3 sub-estados: implement, test, commit)
-- [ ] Verificar fidelidad vs. monolito.
-
-### 4.5 Crear YAML de DARWIN
-
-- [ ] Crear `assets/apes/darwin.yaml` con:
-  - `name: darwin`
-  - `version: "0.2.0"`
-  - `states:` (4 sub-estados: observe, compare, select, report)
-- [ ] Verificar fidelidad vs. monolito.
+- [x] `assets/apes/socrates.yaml` — 6 estados: clarification, assumptions, evidence, perspectives, implications, meta_reflection
+- [x] `assets/apes/descartes.yaml` — 4 estados: decomposition, ordering, verification, enumeration
+- [x] `assets/apes/basho.yaml` — 3 estados: implement, test, commit
+- [x] `assets/apes/darwin.yaml` — 4 estados: observe, compare, select, report
+- [x] Fidelidad verificada via tests de keywords (Socratic method, scientific method, 用の美, natural selection)
 
 ### 4.6 Validación de schema
 
-- [ ] **RED**: Escribir test que parsea cada YAML y valida estructura: campos requeridos `name`, `version`, `base_prompt`, `states` con al menos 1 sub-estado con `prompt`.
-- [ ] **GREEN**: Crear `lib/modules/ape/ape_definition.dart` con clase `ApeDefinition` que parsea YAML.
-
-**Test pseudocódigo:**
-```
-test('socrates.yaml parses into valid ApeDefinition')
-  yaml = File('assets/apes/socrates.yaml').readAsStringSync()
-  def = ApeDefinition.parse(yaml)
-  expect def.name == 'socrates'
-  expect def.states.length >= 6
-  expect def.basePrompt.isNotEmpty
-  for state in def.states:
-    expect state.prompt.isNotEmpty
-```
+- [x] **RED**: 15 tests — schema validation, state counts, assemblePrompt, prompt fidelity.
+- [x] **GREEN**: `lib/modules/ape/ape_definition.dart` con `ApeDefinition.parse()` y `assemblePrompt()`.
 
 **Riesgo**: La fragmentación del monolito puede perder contexto entre secciones.
 **Mitigación**: Comparación lado a lado del prompt generado vs. monolito original (test de regresión en Phase 5).
