@@ -7,6 +7,7 @@ import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+import '../../../assets.dart';
 import '../../../fsm_contract.dart';
 
 typedef BranchProvider = Future<String> Function(String workingDirectory);
@@ -88,9 +89,11 @@ class StateTransitionCommand
   @override
   final StateTransitionInput input;
   final BranchProvider branchProvider;
+  final Assets? _assets;
 
-  StateTransitionCommand(this.input, {BranchProvider? branchProvider})
-    : branchProvider = branchProvider ?? _defaultBranchProvider;
+  StateTransitionCommand(this.input, {BranchProvider? branchProvider, Assets? assets})
+    : branchProvider = branchProvider ?? _defaultBranchProvider,
+      _assets = assets;
 
   @override
   String? validate() => null;
@@ -105,12 +108,9 @@ class StateTransitionCommand
       );
     }
 
-    final contractPath = p.join(
-      input.workingDirectory,
-      'assets',
-      'fsm',
-      'transition_contract.yaml',
-    );
+    final contractPath = _assets != null
+        ? _assets.path('fsm/transition_contract.yaml')
+        : p.join(input.workingDirectory, 'assets', 'fsm', 'transition_contract.yaml');
     final contract = parseFsmContract(File(contractPath).readAsStringSync());
 
     final current =

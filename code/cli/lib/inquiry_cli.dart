@@ -45,7 +45,7 @@ Future<int> runInquiry(List<String> args) async {
 
   cli.module('', (m) => buildGlobalModule(m, cleaner: cleaner, assets: assets));
   cli.module('target', (m) => buildTargetModule(m, deployer: deployer, cleaner: cleaner));
-  cli.module('fsm', (m) => buildFsmModule(m));
+  cli.module('fsm', (m) => buildFsmModule(m, assets: assets));
 
   return cli.run(args);
 }

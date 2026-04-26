@@ -8,6 +8,7 @@ import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+import '../../../assets.dart';
 import '../../../fsm_contract.dart';
 
 class FsmStateInput extends Input {
@@ -75,8 +76,9 @@ class FsmStateOutput extends Output {
 class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
   @override
   final FsmStateInput input;
+  final Assets? _assets;
 
-  FsmStateCommand(this.input);
+  FsmStateCommand(this.input, {Assets? assets}) : _assets = assets;
 
   @override
   String? validate() => null;
@@ -86,12 +88,9 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
     final currentState = _loadCurrentState(input.workingDirectory);
     final issue = _loadIssue(input.workingDirectory);
 
-    final contractPath = p.join(
-      input.workingDirectory,
-      'assets',
-      'fsm',
-      'transition_contract.yaml',
-    );
+    final contractPath = _assets != null
+        ? _assets.path('fsm/transition_contract.yaml')
+        : p.join(input.workingDirectory, 'assets', 'fsm', 'transition_contract.yaml');
     final contract = parseFsmContract(File(contractPath).readAsStringSync());
 
     final validTransitions = _computeTransitions(contract, currentState);
