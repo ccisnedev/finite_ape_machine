@@ -19,18 +19,39 @@ void main() {
   void setupWorkspace({
     required String state,
     String? issue,
+    String? apeName,
+    String? apeState,
   }) {
     // .inquiry/state.yaml
     Directory('${tempDir.path}/.inquiry').createSync(recursive: true);
-    File('${tempDir.path}/.inquiry/state.yaml').writeAsStringSync(
-      'state: $state\nissue: ${issue != null ? '"$issue"' : 'null'}\n',
-    );
+    final buf = StringBuffer();
+    buf.writeln('state: $state');
+    buf.writeln('issue: ${issue != null ? '"$issue"' : 'null'}');
+    if (apeName != null) {
+      buf.writeln('ape:');
+      buf.writeln('  name: $apeName');
+      buf.writeln('  state: ${apeState ?? 'null'}');
+    } else {
+      buf.writeln('ape: null');
+    }
+    File('${tempDir.path}/.inquiry/state.yaml')
+        .writeAsStringSync(buf.toString());
 
     // Copy real contract from project assets
     final contractSource = File('assets/fsm/transition_contract.yaml');
     final contractDir = Directory('${tempDir.path}/assets/fsm');
     contractDir.createSync(recursive: true);
     contractSource.copySync('${contractDir.path}/transition_contract.yaml');
+
+    // Copy APE YAMLs
+    final apesDir = Directory('${tempDir.path}/assets/apes');
+    apesDir.createSync(recursive: true);
+    for (final name in ['socrates', 'descartes', 'basho', 'darwin']) {
+      final src = File('assets/apes/$name.yaml');
+      if (src.existsSync()) {
+        src.copySync('${apesDir.path}/$name.yaml');
+      }
+    }
   }
 
   group('FsmStateCommand', () {
@@ -232,6 +253,79 @@ void main() {
 
         expect(text, isNotNull);
         expect(text, contains('ANALYZE'));
+      });
+    });
+
+    group('ape field in JSON', () {
+      test('includes ape info when APE is active', () async {
+        setupWorkspace(
+          state: 'ANALYZE',
+          issue: '145',
+          apeName: 'socrates',
+          apeState: 'clarification',
+        );
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final json = result.toJson();
+
+        expect(json['ape'], isNotNull);
+        expect(json['ape']['name'], equals('socrates'));
+        expect(json['ape']['state'], equals('clarification'));
+        expect(json['ape']['transitions'], isList);
+      });
+
+      test('ape transitions match current sub-state', () async {
+        setupWorkspace(
+          state: 'PLAN',
+          issue: '145',
+          apeName: 'descartes',
+          apeState: 'decomposition',
+        );
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final ape = result.toJson()['ape'] as Map<String, dynamic>;
+        final transitions = ape['transitions'] as List;
+        final events = transitions.map((t) => t['event']).toList();
+
+        expect(events, contains('next'));
+      });
+
+      test('omits ape field when no APE active', () async {
+        setupWorkspace(state: 'IDLE');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final json = result.toJson();
+
+        expect(json.containsKey('ape'), isFalse);
+      });
+
+      test('ape _DONE has no transitions list', () async {
+        setupWorkspace(
+          state: 'ANALYZE',
+          issue: '145',
+          apeName: 'socrates',
+          apeState: '_DONE',
+        );
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final ape = result.toJson()['ape'] as Map<String, dynamic>;
+
+        expect(ape['name'], equals('socrates'));
+        expect(ape['state'], equals('_DONE'));
+        // _DONE should have no transitions (findState returns null for _DONE)
+        expect(ape.containsKey('transitions'), isFalse);
       });
     });
   });

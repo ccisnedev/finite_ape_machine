@@ -8,7 +8,10 @@ library;
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
-import 'package:yaml/yaml.dart';
+
+import '../ape/ape_definition.dart';
+import '../ape/inquiry_state.dart';
+import '../../assets.dart';
 
 /// CLI-side effects that modify `.inquiry/` files.
 const cliEffects = {
@@ -21,38 +24,51 @@ const cliEffects = {
 
 class EffectExecutor {
   final String workingDirectory;
+  final Assets? _assets;
 
-  EffectExecutor({required this.workingDirectory});
+  EffectExecutor({required this.workingDirectory, Assets? assets}) : _assets = assets;
 
   String get _inquiryDir => p.join(workingDirectory, '.inquiry');
 
-  /// Update `.inquiry/state.yaml` with [newState].
+  /// Maps FSM states to their active sub-agent names.
+  static const _stateApes = <String, String>{
+    'ANALYZE': 'socrates',
+    'PLAN': 'descartes',
+    'EXECUTE': 'basho',
+    'END': 'basho',
+    'EVOLUTION': 'darwin',
+  };
+
+  /// Update `.inquiry/state.yaml` with [newState], including APE auto-activation.
   ///
-  /// If [issue] is provided, updates the issue field.
-  /// If [newState] is `IDLE`, clears the issue.
-  /// Otherwise preserves the existing issue.
+  /// If the new state has an associated APE, loads its YAML to find `initial_state`
+  /// and writes `ape: {name, state}`. Otherwise clears the `ape:` field.
   void updateState(String newState, {String? issue}) {
-    final file = File(p.join(_inquiryDir, 'state.yaml'));
+    final currentState = InquiryState.load(workingDirectory);
     String? resolvedIssue = issue;
 
     if (newState == 'IDLE') {
       resolvedIssue = null;
-    } else if (resolvedIssue == null && file.existsSync()) {
-      // Preserve existing issue
-      final yaml = loadYaml(file.readAsStringSync());
-      if (yaml is YamlMap) {
-        final existing = yaml['issue'];
-        if (existing is String && existing.isNotEmpty) {
-          resolvedIssue = existing;
-        } else if (existing is int) {
-          resolvedIssue = existing.toString();
-        }
-      }
+    } else {
+      resolvedIssue ??= currentState.issue;
     }
 
-    final issueLine =
-        resolvedIssue != null ? 'issue: "$resolvedIssue"' : 'issue: null';
-    file.writeAsStringSync('state: $newState\n$issueLine\n');
+    // Auto-activate APE
+    String? apeName;
+    String? apeInitialState;
+    final ape = _stateApes[newState];
+    if (ape != null) {
+      apeName = ape;
+      apeInitialState = _resolveInitialState(ape);
+    }
+
+    final updated = InquiryState(
+      state: newState,
+      issue: resolvedIssue,
+      apeName: apeName,
+      apeState: apeInitialState,
+    );
+    updated.save(workingDirectory);
   }
 
   /// Reset `.inquiry/mutations.md` to empty template.
@@ -66,29 +82,30 @@ class EffectExecutor {
     );
   }
 
+  /// Resolve the initial_state for an APE by loading its YAML definition.
+  String? _resolveInitialState(String apeName) {
+    try {
+      final yamlPath = _assets != null
+          ? _assets.path('apes/$apeName.yaml')
+          : p.join(workingDirectory, 'assets', 'apes', '$apeName.yaml');
+      final content = File(yamlPath).readAsStringSync();
+      final def = ApeDefinition.parse(content);
+      return def.initialState;
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Create/overwrite `.inquiry/metrics_snapshot.yaml` with current state.
   void snapshotMetrics() {
-    final stateFile = File(p.join(_inquiryDir, 'state.yaml'));
-    String currentState = 'IDLE';
-    String? currentIssue;
-
-    if (stateFile.existsSync()) {
-      final yaml = loadYaml(stateFile.readAsStringSync());
-      if (yaml is YamlMap) {
-        final s = yaml['state'];
-        if (s is String) currentState = s;
-        final i = yaml['issue'];
-        if (i is String && i.isNotEmpty) currentIssue = i;
-        if (i is int) currentIssue = i.toString();
-      }
-    }
+    final current = InquiryState.load(workingDirectory);
 
     final issueLine =
-        currentIssue != null ? 'issue: "$currentIssue"' : 'issue: null';
+        current.issue != null ? 'issue: "${current.issue}"' : 'issue: null';
     final snapshot = File(p.join(_inquiryDir, 'metrics_snapshot.yaml'));
     snapshot.writeAsStringSync(
       'snapshot_at: "${DateTime.now().toUtc().toIso8601String()}"\n'
-      'state: $currentState\n'
+      'state: ${current.state}\n'
       '$issueLine\n',
     );
   }
@@ -100,20 +117,10 @@ class EffectExecutor {
 
   /// Append a cycle completion entry to `.inquiry/metrics.yaml`.
   void collectMetrics() {
-    final stateFile = File(p.join(_inquiryDir, 'state.yaml'));
-    String? currentIssue;
-
-    if (stateFile.existsSync()) {
-      final yaml = loadYaml(stateFile.readAsStringSync());
-      if (yaml is YamlMap) {
-        final i = yaml['issue'];
-        if (i is String && i.isNotEmpty) currentIssue = i;
-        if (i is int) currentIssue = i.toString();
-      }
-    }
+    final current = InquiryState.load(workingDirectory);
 
     final issueLine =
-        currentIssue != null ? 'issue: "$currentIssue"' : 'issue: null';
+        current.issue != null ? 'issue: "${current.issue}"' : 'issue: null';
     final entry =
         '  - $issueLine\n'
         '    completed_at: "${DateTime.now().toUtc().toIso8601String()}"\n';

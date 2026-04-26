@@ -15,12 +15,27 @@ void main() {
           expect(def.version, equals('0.2.0'));
           expect(def.description, isNotEmpty);
           expect(def.basePrompt, isNotEmpty);
+          expect(def.initialState, isNotEmpty);
           expect(def.states, isNotEmpty);
+
+          // initial_state must reference a defined state
+          expect(def.findState(def.initialState), isNotNull,
+              reason: '$apeName.initial_state "${def.initialState}" not found in states');
 
           for (final state in def.states) {
             expect(state.name, isNotEmpty, reason: '$apeName has empty state name');
             expect(state.description, isNotEmpty, reason: '$apeName.${state.name} has empty description');
             expect(state.prompt, isNotEmpty, reason: '$apeName.${state.name} has empty prompt');
+            expect(state.transitions, isNotEmpty, reason: '$apeName.${state.name} has no transitions');
+
+            // All transition targets must be defined states or _DONE
+            for (final t in state.transitions) {
+              expect(
+                t.to == '_DONE' || def.findState(t.to) != null,
+                isTrue,
+                reason: '$apeName.${state.name} transition "${t.event}" targets unknown state "${t.to}"',
+              );
+            }
           }
         });
       }
@@ -137,6 +152,82 @@ void main() {
         expect(def.basePrompt, contains('natural selection'));
         expect(def.basePrompt, contains('mutations.md'));
         expect(def.basePrompt, contains('metrics.yaml'));
+      });
+    });
+
+    group('initial_state', () {
+      test('socrates starts at clarification', () {
+        final def = ApeDefinition.parse(
+          File('assets/apes/socrates.yaml').readAsStringSync(),
+        );
+        expect(def.initialState, equals('clarification'));
+      });
+
+      test('descartes starts at decomposition', () {
+        final def = ApeDefinition.parse(
+          File('assets/apes/descartes.yaml').readAsStringSync(),
+        );
+        expect(def.initialState, equals('decomposition'));
+      });
+
+      test('basho starts at implement', () {
+        final def = ApeDefinition.parse(
+          File('assets/apes/basho.yaml').readAsStringSync(),
+        );
+        expect(def.initialState, equals('implement'));
+      });
+
+      test('darwin starts at observe', () {
+        final def = ApeDefinition.parse(
+          File('assets/apes/darwin.yaml').readAsStringSync(),
+        );
+        expect(def.initialState, equals('observe'));
+      });
+    });
+
+    group('transitions', () {
+      test('_DONE is reachable from every APE', () {
+        for (final apeName in ['socrates', 'descartes', 'basho', 'darwin']) {
+          final def = ApeDefinition.parse(
+            File('assets/apes/$apeName.yaml').readAsStringSync(),
+          );
+          final hasDone = def.states.any(
+            (s) => s.transitions.any((t) => t.to == '_DONE'),
+          );
+          expect(hasDone, isTrue, reason: '$apeName has no transition to _DONE');
+        }
+      });
+
+      test('socrates has linear next chain ending at _DONE', () {
+        final def = ApeDefinition.parse(
+          File('assets/apes/socrates.yaml').readAsStringSync(),
+        );
+        // Walk the chain: clarification → assumptions → ... → meta_reflection → _DONE
+        var current = def.initialState;
+        final visited = <String>{};
+        while (current != '_DONE') {
+          expect(visited.add(current), isTrue, reason: 'cycle detected at $current');
+          final state = def.findState(current)!;
+          final next = state.transitions.firstWhere((t) => t.event == 'next' || t.event == 'complete');
+          current = next.to;
+        }
+        expect(visited.length, equals(6)); // all 6 states visited
+      });
+
+      test('basho has fail loop from test back to implement', () {
+        final def = ApeDefinition.parse(
+          File('assets/apes/basho.yaml').readAsStringSync(),
+        );
+        final testState = def.findState('test')!;
+        final failTransition = testState.transitions.firstWhere((t) => t.event == 'fail');
+        expect(failTransition.to, equals('implement'));
+      });
+
+      test('findState returns null for unknown state', () {
+        final def = ApeDefinition.parse(
+          File('assets/apes/socrates.yaml').readAsStringSync(),
+        );
+        expect(def.findState('nonexistent'), isNull);
       });
     });
   });

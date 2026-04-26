@@ -161,7 +161,7 @@ class StateTransitionCommand
         promptId != null ? contract.promptFragments[promptId] : null;
 
     // Execute CLI-side effects
-    final executor = EffectExecutor(workingDirectory: input.workingDirectory);
+    final executor = EffectExecutor(workingDirectory: input.workingDirectory, assets: _assets);
     final executedEffects = executor.executeAll(
       effects: operations?.effects ?? const <String>[],
       newState: transition.to?.value ?? current.value,

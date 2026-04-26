@@ -10,11 +10,11 @@ import 'dart:io';
 import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
-import 'package:yaml/yaml.dart';
 
 import '../../../assets.dart';
 import '../../../fsm_contract.dart';
 import '../ape_definition.dart';
+import '../inquiry_state.dart';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 
@@ -109,7 +109,10 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
 
   @override
   Future<ApePromptOutput> execute() async {
-    final currentState = _loadCurrentState(input.workingDirectory);
+    final inquiry = InquiryState.load(input.workingDirectory);
+    final currentState = FsmState.fromValue(
+      inquiry.state.trim().toUpperCase(),
+    );
 
     // Verify the APE exists
     final yamlPath = _resolveApePath(input.name);
@@ -130,14 +133,17 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
       );
     }
 
+    // Resolve sub-state: explicit flag > state.yaml > null
+    final resolvedSubState = input.subState ?? inquiry.apeState;
+
     // Parse and assemble
     final definition = ApeDefinition.parse(yamlFile.readAsStringSync());
-    final prompt = definition.assemblePrompt(stateName: input.subState);
+    final prompt = definition.assemblePrompt(stateName: resolvedSubState);
 
     return ApePromptOutput(
       apeName: input.name,
       fsmState: currentState.value,
-      subState: input.subState,
+      subState: resolvedSubState,
       prompt: prompt,
     );
   }
@@ -149,15 +155,4 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
     return p.join(input.workingDirectory, 'assets', 'apes', '$name.yaml');
   }
 
-  FsmState _loadCurrentState(String workingDirectory) {
-    final statePath = p.join(workingDirectory, '.inquiry', 'state.yaml');
-    final file = File(statePath);
-    if (!file.existsSync()) return FsmState.idle;
-
-    final yaml = loadYaml(file.readAsStringSync());
-    if (yaml is! YamlMap) return FsmState.idle;
-    final state = yaml['state'];
-    if (state is! String || state.trim().isEmpty) return FsmState.idle;
-    return FsmState.fromValue(state.trim().toUpperCase());
-  }
 }

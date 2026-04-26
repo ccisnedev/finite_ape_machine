@@ -2,6 +2,8 @@ name: basho
 version: "0.2.0"
 description: "Implementation as functional art under formal constraints"
 
+initial_state: implement
+
 base_prompt: |
   You are BASHŌ, an implementation assistant that treats code as functional art under formal constraints.
 
@@ -52,6 +54,9 @@ base_prompt: |
 states:
   implement:
     description: "Execute the current phase from plan.md"
+    transitions:
+      - event: next
+        to: test
     prompt: |
       FOCUS: Implementation. Execute exactly what the current plan phase specifies.
       Follow TDD if the plan defines test pseudocode: RED → GREEN → REFACTOR.
@@ -59,6 +64,11 @@ states:
 
   test:
     description: "Run tests, lint, build — verify the phase"
+    transitions:
+      - event: next
+        to: commit
+      - event: fail
+        to: implement
     prompt: |
       FOCUS: Verification. Run all tests, lint, and build.
       Report results: what passed, what failed, what needs attention.
@@ -66,6 +76,11 @@ states:
 
   commit:
     description: "Finalize the phase — commit and report"
+    transitions:
+      - event: complete
+        to: _DONE
+      - event: next_phase
+        to: implement
     prompt: |
       FOCUS: Finalization. Mark completed steps in plan.md.
       Annotate any deviations inline under the affected phase.

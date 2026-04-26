@@ -6,10 +6,11 @@ import 'dart:io';
 import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
-import 'package:yaml/yaml.dart';
 
 import '../../../assets.dart';
 import '../../../fsm_contract.dart';
+import '../../ape/ape_definition.dart';
+import '../../ape/inquiry_state.dart';
 
 class FsmStateInput extends Input {
   final String workingDirectory;
@@ -30,6 +31,7 @@ class FsmStateOutput extends Output {
   final List<Map<String, String>> transitions;
   final List<Map<String, String>> apes;
   final String instructions;
+  final Map<String, dynamic>? ape;
 
   FsmStateOutput({
     required this.state,
@@ -37,6 +39,7 @@ class FsmStateOutput extends Output {
     required this.transitions,
     required this.apes,
     required this.instructions,
+    this.ape,
   });
 
   @override
@@ -46,6 +49,7 @@ class FsmStateOutput extends Output {
     'transitions': transitions,
     'apes': apes,
     'instructions': instructions,
+    if (ape != null) 'ape': ape,
   };
 
   @override
@@ -85,8 +89,10 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
 
   @override
   Future<FsmStateOutput> execute() async {
-    final currentState = _loadCurrentState(input.workingDirectory);
-    final issue = _loadIssue(input.workingDirectory);
+    final inquiry = InquiryState.load(input.workingDirectory);
+    final currentState = FsmState.fromValue(
+      inquiry.state.trim().toUpperCase(),
+    );
 
     final contractPath = _assets != null
         ? _assets.path('fsm/transition_contract.yaml')
@@ -96,13 +102,15 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
     final validTransitions = _computeTransitions(contract, currentState);
     final activeApes = _computeApes(currentState);
     final instructions = _computeInstructions(currentState);
+    final apeInfo = _computeApeInfo(inquiry);
 
     return FsmStateOutput(
       state: currentState.value,
-      issue: issue,
+      issue: inquiry.issue,
       transitions: validTransitions,
       apes: activeApes,
       instructions: instructions,
+      ape: apeInfo,
     );
   }
 
@@ -155,28 +163,32 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
     return _stateInstructions[state] ?? 'Unknown state: ${state.value}';
   }
 
-  FsmState _loadCurrentState(String workingDirectory) {
-    final statePath = p.join(workingDirectory, '.inquiry', 'state.yaml');
-    final file = File(statePath);
-    if (!file.existsSync()) return FsmState.idle;
+  /// Build `ape` info from InquiryState + APE YAML definition.
+  Map<String, dynamic>? _computeApeInfo(InquiryState inquiry) {
+    if (inquiry.apeName == null) return null;
 
-    final yaml = loadYaml(file.readAsStringSync());
-    if (yaml is! YamlMap) return FsmState.idle;
-    final phase = yaml['state'];
-    if (phase is! String || phase.trim().isEmpty) return FsmState.idle;
-    return FsmState.fromValue(phase.trim().toUpperCase());
-  }
+    final name = inquiry.apeName!;
+    final subState = inquiry.apeState;
+    final result = <String, dynamic>{'name': name, 'state': subState};
 
-  String? _loadIssue(String workingDirectory) {
-    final statePath = p.join(workingDirectory, '.inquiry', 'state.yaml');
-    final file = File(statePath);
-    if (!file.existsSync()) return null;
+    try {
+      final yamlPath = _assets != null
+          ? _assets.path('apes/$name.yaml')
+          : p.join(input.workingDirectory, 'assets', 'apes', '$name.yaml');
+      final content = File(yamlPath).readAsStringSync();
+      final def = ApeDefinition.parse(content);
+      if (subState != null) {
+        final apeState = def.findState(subState);
+        if (apeState != null) {
+          result['transitions'] = apeState.transitions
+              .map((t) => {'event': t.event, 'to': t.to})
+              .toList();
+        }
+      }
+    } catch (_) {
+      // APE YAML not found — return partial info
+    }
 
-    final yaml = loadYaml(file.readAsStringSync());
-    if (yaml is! YamlMap) return null;
-    final task = yaml['issue'];
-    if (task == null) return null;
-    if (task is String) return task.isEmpty ? null : task;
-    return task.toString();
+    return result;
   }
 }

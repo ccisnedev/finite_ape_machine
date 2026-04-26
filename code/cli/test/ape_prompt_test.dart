@@ -33,6 +33,20 @@ void main() {
     );
   }
 
+  void writeStateWithApe(String state, {
+    String? issue,
+    required String apeName,
+    required String apeState,
+  }) {
+    File(p.join(tmpDir.path, '.inquiry', 'state.yaml')).writeAsStringSync(
+      'state: $state\n'
+      'issue: ${issue != null ? '"$issue"' : 'null'}\n'
+      'ape:\n'
+      '  name: $apeName\n'
+      '  state: $apeState\n',
+    );
+  }
+
   group('ApePromptCommand', () {
     group('successful prompt assembly', () {
       test('socrates in ANALYZE returns base prompt', () async {
@@ -342,6 +356,60 @@ void main() {
         expect(result.prompt, contains('natural selection'));
         expect(result.prompt, contains('mutations.md'));
         expect(result.prompt, contains('Observation'));
+      });
+    });
+
+    group('auto-read sub-state from state.yaml', () {
+      test('reads ape.state when no --state flag', () async {
+        writeStateWithApe('ANALYZE',
+          issue: '145',
+          apeName: 'socrates',
+          apeState: 'evidence',
+        );
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(name: 'socrates', workingDirectory: tmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.subState, equals('evidence'));
+        expect(result.prompt, contains('Evidence'));
+      });
+
+      test('--state flag overrides ape.state from state.yaml', () async {
+        writeStateWithApe('ANALYZE',
+          issue: '145',
+          apeName: 'socrates',
+          apeState: 'evidence',
+        );
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(
+            name: 'socrates',
+            subState: 'clarification',
+            workingDirectory: tmpDir.path,
+          ),
+        );
+        final result = await cmd.execute();
+
+        expect(result.subState, equals('clarification'));
+        expect(result.prompt, contains('Clarification'));
+      });
+
+      test('works with basho ape sub-state', () async {
+        writeStateWithApe('EXECUTE',
+          issue: '145',
+          apeName: 'basho',
+          apeState: 'test',
+        );
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(name: 'basho', workingDirectory: tmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.subState, equals('test'));
+        expect(result.prompt, contains('Verification'));
       });
     });
   });

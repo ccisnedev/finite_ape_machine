@@ -1,3 +1,12 @@
 {
-  "cSpell.enabled": false
+  "cSpell.enabled": false,
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#6b6d48",
+    "activityBar.background": "#6b6d48",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#26393a",
+    "activityBarBadge.foreground": "#e7e7e7"
+  },
+  "peacock.color": "#4d4e34"
 }

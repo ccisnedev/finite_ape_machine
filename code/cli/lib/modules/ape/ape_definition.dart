@@ -3,15 +3,24 @@ library;
 
 import 'package:yaml/yaml.dart';
 
+class ApeTransition {
+  final String event;
+  final String to;
+
+  const ApeTransition({required this.event, required this.to});
+}
+
 class ApeState {
   final String name;
   final String description;
   final String prompt;
+  final List<ApeTransition> transitions;
 
   const ApeState({
     required this.name,
     required this.description,
     required this.prompt,
+    required this.transitions,
   });
 }
 
@@ -20,6 +29,7 @@ class ApeDefinition {
   final String version;
   final String description;
   final String basePrompt;
+  final String initialState;
   final List<ApeState> states;
 
   const ApeDefinition({
@@ -27,8 +37,17 @@ class ApeDefinition {
     required this.version,
     required this.description,
     required this.basePrompt,
+    required this.initialState,
     required this.states,
   });
+
+  /// Look up a state by name. Returns null if not found.
+  ApeState? findState(String stateName) {
+    for (final s in states) {
+      if (s.name == stateName) return s;
+    }
+    return null;
+  }
 
   /// Assemble the full prompt for a given sub-state.
   ///
@@ -53,16 +72,31 @@ class ApeDefinition {
     final version = root['version'] as String;
     final description = root['description'] as String;
     final basePrompt = root['base_prompt'] as String;
+    final initialState = root['initial_state'] as String;
 
     final statesMap = root['states'] as YamlMap;
     final states = <ApeState>[];
     for (final entry in statesMap.entries) {
       final stateName = entry.key as String;
       final stateMap = entry.value as YamlMap;
+
+      final transitionsList = <ApeTransition>[];
+      final rawTransitions = stateMap['transitions'] as YamlList?;
+      if (rawTransitions != null) {
+        for (final t in rawTransitions) {
+          final tMap = t as YamlMap;
+          transitionsList.add(ApeTransition(
+            event: tMap['event'] as String,
+            to: tMap['to'] as String,
+          ));
+        }
+      }
+
       states.add(ApeState(
         name: stateName,
         description: stateMap['description'] as String,
         prompt: stateMap['prompt'] as String,
+        transitions: transitionsList,
       ));
     }
 
@@ -71,6 +105,7 @@ class ApeDefinition {
       version: version,
       description: description,
       basePrompt: basePrompt,
+      initialState: initialState,
       states: states,
     );
   }

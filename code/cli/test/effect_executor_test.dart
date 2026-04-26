@@ -201,5 +201,110 @@ void main() {
         expect(executed, isNot(contains('open_analysis_context')));
       });
     });
+
+    group('APE auto-activation', () {
+      test('writes ape field when transitioning to ANALYZE', () {
+        File('${tempDir.path}/.inquiry/state.yaml')
+            .writeAsStringSync('state: IDLE\nissue: null\n');
+
+        // Copy APE assets so _resolveInitialState can find them
+        final apesDir = Directory('${tempDir.path}/assets/apes');
+        apesDir.createSync(recursive: true);
+        File('assets/apes/socrates.yaml')
+            .copySync('${apesDir.path}/socrates.yaml');
+
+        final executor = EffectExecutor(workingDirectory: tempDir.path);
+        executor.updateState('ANALYZE', issue: '145');
+
+        final content =
+            File('${tempDir.path}/.inquiry/state.yaml').readAsStringSync();
+        expect(content, contains('state: ANALYZE'));
+        expect(content, contains('ape:'));
+        expect(content, contains('name: socrates'));
+        expect(content, contains('state: clarification'));
+      });
+
+      test('writes ape null when transitioning to IDLE', () {
+        File('${tempDir.path}/.inquiry/state.yaml')
+            .writeAsStringSync('state: EVOLUTION\nissue: "145"\n');
+
+        final executor = EffectExecutor(workingDirectory: tempDir.path);
+        executor.updateState('IDLE');
+
+        final content =
+            File('${tempDir.path}/.inquiry/state.yaml').readAsStringSync();
+        expect(content, contains('state: IDLE'));
+        expect(content, contains('ape: null'));
+      });
+
+      test('activates descartes when transitioning to PLAN', () {
+        File('${tempDir.path}/.inquiry/state.yaml')
+            .writeAsStringSync('state: ANALYZE\nissue: "145"\n');
+
+        final apesDir = Directory('${tempDir.path}/assets/apes');
+        apesDir.createSync(recursive: true);
+        File('assets/apes/descartes.yaml')
+            .copySync('${apesDir.path}/descartes.yaml');
+
+        final executor = EffectExecutor(workingDirectory: tempDir.path);
+        executor.updateState('PLAN');
+
+        final content =
+            File('${tempDir.path}/.inquiry/state.yaml').readAsStringSync();
+        expect(content, contains('name: descartes'));
+        expect(content, contains('state: decomposition'));
+      });
+
+      test('activates basho when transitioning to EXECUTE', () {
+        File('${tempDir.path}/.inquiry/state.yaml')
+            .writeAsStringSync('state: PLAN\nissue: "145"\n');
+
+        final apesDir = Directory('${tempDir.path}/assets/apes');
+        apesDir.createSync(recursive: true);
+        File('assets/apes/basho.yaml')
+            .copySync('${apesDir.path}/basho.yaml');
+
+        final executor = EffectExecutor(workingDirectory: tempDir.path);
+        executor.updateState('EXECUTE');
+
+        final content =
+            File('${tempDir.path}/.inquiry/state.yaml').readAsStringSync();
+        expect(content, contains('name: basho'));
+        expect(content, contains('state: implement'));
+      });
+
+      test('activates darwin when transitioning to EVOLUTION', () {
+        File('${tempDir.path}/.inquiry/state.yaml')
+            .writeAsStringSync('state: END\nissue: "145"\n');
+
+        final apesDir = Directory('${tempDir.path}/assets/apes');
+        apesDir.createSync(recursive: true);
+        File('assets/apes/darwin.yaml')
+            .copySync('${apesDir.path}/darwin.yaml');
+
+        final executor = EffectExecutor(workingDirectory: tempDir.path);
+        executor.updateState('EVOLUTION');
+
+        final content =
+            File('${tempDir.path}/.inquiry/state.yaml').readAsStringSync();
+        expect(content, contains('name: darwin'));
+        expect(content, contains('state: observe'));
+      });
+
+      test('graceful fallback when APE YAML not found', () {
+        File('${tempDir.path}/.inquiry/state.yaml')
+            .writeAsStringSync('state: IDLE\nissue: null\n');
+
+        // No APE assets copied
+        final executor = EffectExecutor(workingDirectory: tempDir.path);
+        executor.updateState('ANALYZE', issue: '145');
+
+        final content =
+            File('${tempDir.path}/.inquiry/state.yaml').readAsStringSync();
+        expect(content, contains('state: ANALYZE'));
+        expect(content, contains('name: socrates'));
+        // initialState is null when YAML not found — still writes the name
+      });
+    });
   });
 }

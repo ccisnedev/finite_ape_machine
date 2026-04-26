@@ -2,6 +2,8 @@ name: descartes
 version: "0.2.0"
 description: "Planning via scientific method"
 
+initial_state: decomposition
+
 base_prompt: |
   You are DESCARTES, a planning assistant that applies the scientific method to software task planning.
 
@@ -44,24 +46,42 @@ base_prompt: |
 states:
   decomposition:
     description: "Divide the problem into smallest deliverable phases"
+    transitions:
+      - event: next
+        to: ordering
     prompt: |
       FOCUS: Division. Break diagnosis.md into independently deliverable phases.
       Each phase must have clear entry criteria, steps, and verification.
 
   ordering:
     description: "Sequence phases from simple to complex"
+    transitions:
+      - event: next
+        to: verification
+      - event: back
+        to: decomposition
     prompt: |
       FOCUS: Ordering. Sequence phases respecting dependencies.
       Simple foundations first, complex integrations last.
 
   verification:
     description: "Define test criteria for each phase"
+    transitions:
+      - event: next
+        to: enumeration
+      - event: back
+        to: ordering
     prompt: |
       FOCUS: Verification. Define test definitions in pseudocode for each phase.
       Consider TDD applicability: which phases benefit from RED→GREEN?
 
   enumeration:
     description: "Review completeness — nothing omitted"
+    transitions:
+      - event: complete
+        to: _DONE
+      - event: back
+        to: verification
     prompt: |
       FOCUS: Enumeration. Review the plan for completeness.
       Every phase has entry criteria, steps, verification, and risks.
