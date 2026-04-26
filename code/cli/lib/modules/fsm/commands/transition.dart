@@ -16,11 +16,13 @@ typedef BranchProvider = Future<String> Function(String workingDirectory);
 class StateTransitionInput extends Input {
   final String? currentState;
   final String? event;
+  final String? issue;
   final String workingDirectory;
 
   StateTransitionInput({
     required this.currentState,
     required this.event,
+    this.issue,
     required this.workingDirectory,
   });
 
@@ -28,6 +30,7 @@ class StateTransitionInput extends Input {
     return StateTransitionInput(
       currentState: req.flagString('state', aliases: const ['s']),
       event: req.flagString('event', aliases: const ['e']),
+      issue: req.flagString('issue', aliases: const ['i']),
       workingDirectory: Directory.current.path,
     );
   }
@@ -36,6 +39,7 @@ class StateTransitionInput extends Input {
   Map<String, dynamic> toJson() => {
     'currentState': currentState,
     'event': event,
+    'issue': issue,
     'workingDirectory': workingDirectory,
   };
 }
@@ -165,6 +169,7 @@ class StateTransitionCommand
     final executedEffects = executor.executeAll(
       effects: operations?.effects ?? const <String>[],
       newState: transition.to?.value ?? current.value,
+      issue: input.issue,
     );
 
     return StateTransitionOutput(

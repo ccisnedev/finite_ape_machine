@@ -164,6 +164,57 @@ void main() {
       expect(output.promptFragmentId, 'end_to_evolution');
       expect(output.requiredRole, 'DARWIN');
     });
+
+    test('persists --issue flag in state.yaml on transition', () async {
+      _writeState(tempDir.path, 'IDLE');
+
+      final input = StateTransitionInput(
+        currentState: null,
+        event: 'start_analyze',
+        issue: '31',
+        workingDirectory: tempDir.path,
+      );
+      final command = StateTransitionCommand(
+        input,
+        branchProvider: (_) async => 'main',
+      );
+
+      final output = await command.execute();
+
+      expect(output.allowed, isTrue);
+      expect(output.nextState, 'ANALYZE');
+
+      // Verify issue was persisted in state.yaml
+      final stateContent = File(
+        p.join(tempDir.path, '.inquiry', 'state.yaml'),
+      ).readAsStringSync();
+      expect(stateContent, contains('issue: "31"'));
+    });
+
+    test('preserves existing issue when --issue not provided', () async {
+      _writeState(tempDir.path, 'ANALYZE', issue: '31');
+
+      final input = StateTransitionInput(
+        currentState: null,
+        event: 'complete_analysis',
+        workingDirectory: tempDir.path,
+      );
+      final command = StateTransitionCommand(
+        input,
+        branchProvider: (_) async => '31-fix-phase-not-saved',
+      );
+
+      final output = await command.execute();
+
+      expect(output.allowed, isTrue);
+      expect(output.nextState, 'PLAN');
+
+      // Issue should still be there
+      final stateContent = File(
+        p.join(tempDir.path, '.inquiry', 'state.yaml'),
+      ).readAsStringSync();
+      expect(stateContent, contains('issue: "31"'));
+    });
   });
 }
 
