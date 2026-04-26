@@ -25,14 +25,14 @@ class FsmStateInput extends Input {
 
 class FsmStateOutput extends Output {
   final String state;
-  final String? task;
+  final String? issue;
   final List<Map<String, String>> transitions;
   final List<Map<String, String>> apes;
   final String instructions;
 
   FsmStateOutput({
     required this.state,
-    required this.task,
+    required this.issue,
     required this.transitions,
     required this.apes,
     required this.instructions,
@@ -41,7 +41,7 @@ class FsmStateOutput extends Output {
   @override
   Map<String, dynamic> toJson() => {
     'state': state,
-    'task': task,
+    'issue': issue,
     'transitions': transitions,
     'apes': apes,
     'instructions': instructions,
@@ -54,7 +54,7 @@ class FsmStateOutput extends Output {
   String? toText() {
     final buf = StringBuffer();
     buf.writeln('State: $state');
-    if (task != null) buf.writeln('Task:  $task');
+    if (issue != null) buf.writeln('Issue: $issue');
 
     if (apes.isNotEmpty) {
       buf.writeln('APEs:  ${apes.map((a) => a['name']).join(', ')}');
@@ -84,7 +84,7 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
   @override
   Future<FsmStateOutput> execute() async {
     final currentState = _loadCurrentState(input.workingDirectory);
-    final task = _loadTask(input.workingDirectory);
+    final issue = _loadIssue(input.workingDirectory);
 
     final contractPath = p.join(
       input.workingDirectory,
@@ -100,7 +100,7 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
 
     return FsmStateOutput(
       state: currentState.value,
-      task: task,
+      issue: issue,
       transitions: validTransitions,
       apes: activeApes,
       instructions: instructions,
@@ -163,19 +163,19 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
 
     final yaml = loadYaml(file.readAsStringSync());
     if (yaml is! YamlMap) return FsmState.idle;
-    final phase = yaml['phase'];
+    final phase = yaml['state'];
     if (phase is! String || phase.trim().isEmpty) return FsmState.idle;
     return FsmState.fromValue(phase.trim().toUpperCase());
   }
 
-  String? _loadTask(String workingDirectory) {
+  String? _loadIssue(String workingDirectory) {
     final statePath = p.join(workingDirectory, '.inquiry', 'state.yaml');
     final file = File(statePath);
     if (!file.existsSync()) return null;
 
     final yaml = loadYaml(file.readAsStringSync());
     if (yaml is! YamlMap) return null;
-    final task = yaml['task'];
+    final task = yaml['issue'];
     if (task == null) return null;
     if (task is String) return task.isEmpty ? null : task;
     return task.toString();

@@ -11,9 +11,8 @@ void main() {
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('ape_state_integration_');
-      Directory(p.join(tempDir.path, '.ape')).createSync(recursive: true);
       _copyContractFromWorkspace(tempDir.path);
-      _writeContext(tempDir.path, 'issue: 51\n');
+      _writeState(tempDir.path, 'IDLE', issue: '51');
     });
 
     tearDown(() {
@@ -93,16 +92,11 @@ void main() {
   });
 }
 
-void _writeState(String root, String state) {
-  final file = File(p.join(root, '.ape', 'state.yaml'));
+void _writeState(String root, String state, {String? issue}) {
+  final file = File(p.join(root, '.inquiry', 'state.yaml'));
   file.createSync(recursive: true);
-  file.writeAsStringSync('cycle:\n  phase: $state\n');
-}
-
-void _writeContext(String root, String content) {
-  final file = File(p.join(root, '.ape', 'context.yaml'));
-  file.createSync(recursive: true);
-  file.writeAsStringSync(content);
+  final issueLine = issue != null ? 'issue: "$issue"' : 'issue: null';
+  file.writeAsStringSync('state: $state\n$issueLine\n');
 }
 
 void _copyContractFromWorkspace(String root) {

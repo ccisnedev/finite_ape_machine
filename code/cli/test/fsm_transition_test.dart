@@ -13,7 +13,6 @@ void main() {
       tempDir = Directory.systemTemp.createTempSync('ape_state_transition_');
       _writeContract(tempDir.path);
       _writeState(tempDir.path, 'IDLE');
-      Directory(p.join(tempDir.path, '.ape')).createSync(recursive: true);
     });
 
     tearDown(() {
@@ -41,8 +40,7 @@ void main() {
     });
 
     test('returns prompt descriptor for ANALYZE -> PLAN', () async {
-      _writeState(tempDir.path, 'ANALYZE');
-      _writeContext(tempDir.path, 'issue: 51\n');
+      _writeState(tempDir.path, 'ANALYZE', issue: '51');
 
       final input = StateTransitionInput(
         currentState: null,
@@ -106,8 +104,7 @@ void main() {
     });
 
     test('blocks commitment transition on main branch', () async {
-      _writeState(tempDir.path, 'PLAN');
-      _writeContext(tempDir.path, 'issue: 51\n');
+      _writeState(tempDir.path, 'PLAN', issue: '51');
 
       final input = StateTransitionInput(
         currentState: null,
@@ -127,8 +124,7 @@ void main() {
     });
 
     test('routes EXECUTE through END before PR creation', () async {
-      _writeState(tempDir.path, 'EXECUTE');
-      _writeContext(tempDir.path, 'issue: 51\n');
+      _writeState(tempDir.path, 'EXECUTE', issue: '51');
 
       final output = await StateTransitionCommand(
         StateTransitionInput(
@@ -146,8 +142,7 @@ void main() {
     });
 
     test('allows END to create PR and enter EVOLUTION', () async {
-      _writeState(tempDir.path, 'END');
-      _writeContext(tempDir.path, 'issue: 51\n');
+      _writeState(tempDir.path, 'END', issue: '51');
 
       final output = await StateTransitionCommand(
         StateTransitionInput(
@@ -166,16 +161,11 @@ void main() {
   });
 }
 
-void _writeState(String root, String state) {
-  final file = File(p.join(root, '.ape', 'state.yaml'));
+void _writeState(String root, String state, {String? issue}) {
+  final file = File(p.join(root, '.inquiry', 'state.yaml'));
   file.createSync(recursive: true);
-  file.writeAsStringSync('cycle:\n  phase: $state\n');
-}
-
-void _writeContext(String root, String content) {
-  final file = File(p.join(root, '.ape', 'context.yaml'));
-  file.createSync(recursive: true);
-  file.writeAsStringSync(content);
+  final issueLine = issue != null ? 'issue: "$issue"' : 'issue: null';
+  file.writeAsStringSync('state: $state\n$issueLine\n');
 }
 
 void _writeContract(String root) {

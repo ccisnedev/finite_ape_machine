@@ -103,15 +103,15 @@ void main() {
         expect(stateFile.existsSync(), isTrue);
 
         final content = stateFile.readAsStringSync();
-        expect(content, contains('phase: IDLE'));
-        expect(content, contains('task: null'));
+        expect(content, contains('state: IDLE'));
+        expect(content, contains('issue: null'));
       });
 
       test('skips .inquiry/state.yaml if already exists', () async {
         Directory('${tempDir.path}/.inquiry').createSync();
         File(
           '${tempDir.path}/.inquiry/state.yaml',
-        ).writeAsStringSync('phase: ANALYZE\ntask: "042-something"\n');
+        ).writeAsStringSync('state: ANALYZE\nissue: "042-something"\n');
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
@@ -119,7 +119,7 @@ void main() {
         final content = File(
           '${tempDir.path}/.inquiry/state.yaml',
         ).readAsStringSync();
-        expect(content, contains('phase: ANALYZE'));
+        expect(content, contains('state: ANALYZE'));
         expect(content, contains('042-something'));
       });
     });

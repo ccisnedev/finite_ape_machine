@@ -126,13 +126,8 @@ class InitCommand implements Command<InitInput, InitOutput> {
     if (!stateFile.existsSync()) {
       if (!inquiryDir.existsSync()) inquiryDir.createSync();
       stateFile.writeAsStringSync(
-        'cycle:\n'
-        '  phase: IDLE\n'
-        '  task: null\n'
-        '\n'
-        'ready: []\n'
-        'waiting: []\n'
-        'complete: []\n',
+        'state: IDLE\n'
+        'issue: null\n',
       );
       steps.add('Created .inquiry/state.yaml');
     }

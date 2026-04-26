@@ -201,11 +201,11 @@ class StateTransitionCommand
   }
 
   bool _isIssueSelected(String workingDirectory) {
-    final contextPath = p.join(workingDirectory, '.ape', 'context.yaml');
-    final contextFile = File(contextPath);
-    if (!contextFile.existsSync()) return false;
+    final statePath = p.join(workingDirectory, '.inquiry', 'state.yaml');
+    final stateFile = File(statePath);
+    if (!stateFile.existsSync()) return false;
 
-    final yaml = loadYaml(contextFile.readAsStringSync());
+    final yaml = loadYaml(stateFile.readAsStringSync());
     if (yaml is! YamlMap) return false;
 
     final issue = yaml['issue'];
@@ -223,7 +223,7 @@ class StateTransitionCommand
   }
 
   FsmState _loadCurrentState(String workingDirectory) {
-    final statePath = p.join(workingDirectory, '.ape', 'state.yaml');
+    final statePath = p.join(workingDirectory, '.inquiry', 'state.yaml');
     final file = File(statePath);
     if (!file.existsSync()) {
       return FsmState.idle;
@@ -231,9 +231,7 @@ class StateTransitionCommand
 
     final yaml = loadYaml(file.readAsStringSync());
     if (yaml is! YamlMap) return FsmState.idle;
-    final cycle = yaml['cycle'];
-    if (cycle is! YamlMap) return FsmState.idle;
-    final phase = cycle['phase'];
+    final phase = yaml['state'];
     if (phase is! String || phase.trim().isEmpty) return FsmState.idle;
     return FsmState.fromValue(phase.trim().toUpperCase());
   }
