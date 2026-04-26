@@ -148,46 +148,43 @@ iq state transition ...                                → comando no reconocido
 
 ### 3.1 Inventariar effects del contrato
 
-- [ ] Leer `transition_contract.yaml` completo y listar todos los effects únicos.
-- [ ] Clasificar cada effect: ¿toca `.inquiry/`? → lo ejecuta el CLI. ¿Toca git/repo? → lo documenta la skill.
+- [x] Leer `transition_contract.yaml` completo y listar todos los effects únicos.
+- [x] Clasificar cada effect:
 
-**Effects esperados que tocan `.inquiry/`:**
-- `open_analysis_context` → crea/actualiza `.inquiry/` metadata de análisis
-- `reset_mutations` → limpia `.inquiry/mutations.md`
-- `snapshot_metrics` → crea `.inquiry/metrics_snapshot.yaml`
-- `update_state` → escribe nuevo estado en `.inquiry/state.yaml`
-- (listar todos tras inventario)
+**CLI-side (ejecuta el CLI):**
+- `update_state` — siempre ejecutado en transición válida
+- `reset_mutations` — limpia `.inquiry/mutations.md`
+- `snapshot_metrics` — crea `.inquiry/metrics_snapshot.yaml`
+- `close_cycle` — reset state a IDLE
+- `collect_metrics` — append a `.inquiry/metrics.yaml`
+
+**Skill-side (CLI reporta, skill ejecuta):**
+- `open_analysis_context`, `continue_analysis`, `pause_analysis`, `reopen_analysis`
+- `generate_plan`, `prepare_execute`, `continue_execute`, `finalize_execution`
+- `push_branch`, `create_pull_request`
+- `noop`
 
 ### 3.2 Implementar effect executor
 
-- [ ] **RED**: Test que ejecuta transición `IDLE→ANALYZE` con event `start_analyze` → assert que `.inquiry/state.yaml` ahora contiene `state: ANALYZE`.
-- [ ] **GREEN**: Crear `lib/modules/fsm/effect_executor.dart` con clase `EffectExecutor` que recibe un effect name + workingDirectory y ejecuta la mutación.
-- [ ] **RED**: Test por cada effect que toca `.inquiry/`:
-  - `update_state`: escribe nuevo estado en `state.yaml`
-  - `reset_mutations`: limpia `mutations.md` a template vacío
-  - `snapshot_metrics`: crea/actualiza `metrics_snapshot.yaml`
-  - (uno por effect del inventario)
-- [ ] **GREEN**: Implementar cada handler en `EffectExecutor`.
-
-**Test pseudocódigo:**
-```
-test('effect update_state writes new state to state.yaml')
-  setup: crear tmpDir con .inquiry/state.yaml (state: IDLE)
-  executor = EffectExecutor(workingDirectory: tmpDir)
-  executor.execute('update_state', params: {newState: 'ANALYZE', task: '145'})
-  content = File('.inquiry/state.yaml').readAsStringSync()
-  expect content contains 'state: ANALYZE'
-```
+- [x] **RED**: 12 tests para EffectExecutor (update_state, reset_mutations, snapshot_metrics, close_cycle, collect_metrics, executeAll).
+- [x] **GREEN**: Creado `lib/modules/fsm/effect_executor.dart` con `EffectExecutor`.
 
 ### 3.3 Integrar executor en `StateTransitionCommand`
 
-- [ ] **RED**: Test de integración — ejecutar `StateTransitionCommand` con event `start_analyze` → `.inquiry/state.yaml` actualizado + effects realmente ejecutados.
-- [ ] **GREEN**: Inyectar `EffectExecutor` en `StateTransitionCommand`. Tras validación exitosa, ejecutar cada effect del contrato.
-- [ ] El Output ya incluye `operationsExecuted` — ahora refleja effects realmente ejecutados, no solo listados.
+- [x] **GREEN**: Inyectar `EffectExecutor` en `StateTransitionCommand.execute()`. Effects CLI-side ejecutados tras validación. `operationsExecuted` refleja lo realmente ejecutado.
+- [x] Test actualizado: `generate_plan` es skill-side, `update_state` verifica state.yaml actualizado.
 
 ### 3.4 Effects que NO ejecuta el CLI
 
-- [ ] Documentar en comentario/README: effects como `git commit analysis`, `gh pr create` son responsabilidad de las skills, no del CLI. El CLI solo reporta que son necesarios en el output.
+- [x] Documentado en `effect_executor.dart` library doc: effects como `push_branch`, `create_pull_request` son skill-side.
+
+### 3.5 Pruebas manuales
+
+- [x] `iq init` → `state: IDLE, issue: null` ✓
+- [x] `iq fsm transition --event start_analyze` → state.yaml=ANALYZE, mutations reset, snapshot creado ✓
+- [x] `iq fsm state` → `State: ANALYZE, APEs: socrates` ✓
+- [x] `iq fsm transition --event approve_plan` → ilegal, exit 64 ✓
+- [x] `iq fsm transition --event block` → `state: IDLE` ✓
 
 **Riesgo**: Los effects del contrato pueden ser ambiguos o incompletos.
 **Mitigación**: El inventario (3.1) resuelve ambigüedades antes de codificar. Si un effect no tiene semántica clara, se documenta como "skill-side" y no se implementa en el CLI.

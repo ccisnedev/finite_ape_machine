@@ -58,7 +58,13 @@ void main() {
       expect(output.nextState, 'PLAN');
       expect(output.promptFragmentId, 'analyze_to_plan');
       expect(output.requiredRole, 'DESCARTES');
-      expect(output.operationsExecuted, contains('generate_plan'));
+      expect(output.operationsExecuted, contains('update_state'));
+
+      // Verify state.yaml was actually updated
+      final stateContent = File(
+        p.join(tempDir.path, '.inquiry', 'state.yaml'),
+      ).readAsStringSync();
+      expect(stateContent, contains('state: PLAN'));
     });
 
     test('fails precheck when commitment needs issue/branch and issue missing',

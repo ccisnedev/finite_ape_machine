@@ -9,6 +9,7 @@ import 'package:yaml/yaml.dart';
 
 import '../../../assets.dart';
 import '../../../fsm_contract.dart';
+import '../effect_executor.dart';
 
 typedef BranchProvider = Future<String> Function(String workingDirectory);
 
@@ -159,6 +160,13 @@ class StateTransitionCommand
     final prompt =
         promptId != null ? contract.promptFragments[promptId] : null;
 
+    // Execute CLI-side effects
+    final executor = EffectExecutor(workingDirectory: input.workingDirectory);
+    final executedEffects = executor.executeAll(
+      effects: operations?.effects ?? const <String>[],
+      newState: transition.to?.value ?? current.value,
+    );
+
     return StateTransitionOutput(
       allowed: true,
       currentState: current.value,
@@ -167,7 +175,7 @@ class StateTransitionCommand
       operationsExecuted: <String>[
         'validate_transition',
         'validate_prechecks',
-        ...(operations?.effects ?? const <String>[]),
+        ...executedEffects,
       ],
       promptFragmentId: promptId,
       requiredRole: prompt?.role,
