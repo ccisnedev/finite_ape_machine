@@ -1,0 +1,17 @@
+{
+  "name": "Inquiry Dev",
+  "image": "dart:stable",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "postCreateCommand": "cd code/cli && dart pub get",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.dart-code",
+        "github.copilot",
+        "github.copilot-chat"
+      ]
+    }
+  }
+}

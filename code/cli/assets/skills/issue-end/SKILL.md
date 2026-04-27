@@ -16,8 +16,8 @@ description: 'Protocol for ending an APE cycle. Use when: all plan.md checkboxes
 
 - Phase must be EXECUTE
 - All plan.md checkboxes must be complete
-- All tests must pass (`dart test` or equivalent)
-- `dart analyze` must pass with no errors
+- All tests must pass
+- Static analysis must pass with no errors
 
 ## Steps
 
@@ -51,7 +51,7 @@ If incomplete checkboxes remain, list them and abort.
 
 ### Step 3: Determine Version Bump
 
-Ask user to confirm semver bump type:
+If the project uses semantic versioning, ask user to confirm bump type:
 
 | Type | When to Use |
 |------|-------------|
@@ -59,12 +59,7 @@ Ask user to confirm semver bump type:
 | MINOR | New features, backward compatible |
 | MAJOR | Breaking changes |
 
-Calculate new version from current `apeVersion` in `lib/src/version.dart`:
-
-```bash
-# Read current version
-grep "inquiryVersion" lib/src/version.dart
-```
+Locate the project's version file (e.g. `package.json`, `pubspec.yaml`, `pyproject.toml`, `Cargo.toml`) and read the current version.
 
 **Examples:**
 - Current: 0.0.8, PATCH → 0.0.9
@@ -73,17 +68,10 @@ grep "inquiryVersion" lib/src/version.dart
 
 ### Step 4: Update Version Files
 
-Update both files with the new version:
-
-**1. `pubspec.yaml`:**
-```yaml
-version: X.Y.Z
-```
-
-**2. `lib/src/version.dart`:**
-```dart
-const String inquiryVersion = 'X.Y.Z';
-```
+Update all project files that contain the version string. Common patterns:
+- Package manifest (`package.json`, `pubspec.yaml`, `pyproject.toml`)
+- Version constants in source code
+- Lock files (if applicable)
 
 ### Step 5: Update CHANGELOG
 
@@ -153,26 +141,9 @@ gh pr create \
 
 **Important:** PR creation completes the explicit END gate.
 
-- If `evolution.enabled: true`, the cycle advances from END to EVOLUTION after PR creation.
-- If `evolution.enabled: false`, the cycle returns directly from END to IDLE after PR creation.
 - PR merge is an **external event** (happens later, possibly with CI checks)
 - Do not wait for PR merge to leave END
-
-### Step 10: Transition to EVOLUTION or IDLE
-
-If evolution is enabled, update `.inquiry/state.yaml` (if using state tracking):
-
-```yaml
-phase: EVOLUTION
-issue: {issue-number}
-branch: {branch}
-version: X.Y.Z
-```
-
-Announce state change:
-> `[APE: EVOLUTION]`
-
-If evolution is disabled, update `.inquiry/state.yaml` directly to IDLE instead.
+- After PR creation, the scheduler transitions to the next state automatically.
 
 ## After PR Merge
 
@@ -187,11 +158,11 @@ When the PR is merged:
 1. Verify EXECUTE phase
 2. Verify plan completion (all checkboxes checked)
 3. Determine semver bump (PATCH/MINOR/MAJOR)
-4. Update version files (pubspec.yaml + lib/src/version.dart)
+4. Update version files (project-specific)
 5. Update CHANGELOG.md
 6. Commit: git add -A && git commit -m "vX.Y.Z: ..."
 7. Transition to END
 8. Push: git push -u origin {branch}
 9. Create PR: gh pr create --title "vX.Y.Z: ..."
-10. Transition to EVOLUTION or IDLE
+10. Scheduler transitions automatically after PR creation
 ```

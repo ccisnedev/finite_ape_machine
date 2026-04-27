@@ -4,7 +4,7 @@
 
 A methodology for AI-assisted software development that models coding agents as a cooperative finite state machine — **Analyze → Plan → Execute → End → [Evolution] → Idle** — where the value is in the process, not the model.
 
-**Status:** `v0.1.3` · Windows + Linux · Single-target MVP (Copilot)
+**Status:** `v0.2.1` · Windows + Linux · Single-target MVP (Copilot)
 
 This README is the public entry surface. For the repository's canonical documentation map, start at [`docs/index.md`](docs/index.md).
 
@@ -60,7 +60,11 @@ iq                      # show TUI banner with current FSM state
 | `iq uninstall` | Remove `inquiry` binary and deployed assets |
 | `iq target get` | Deploy Inquiry agent and skills to active AI tool (Copilot) |
 | `iq target clean` | Remove deployed Inquiry files from all known targets |
-| `iq state transition --event <e>` | Execute a deterministic FSM transition with prechecks/effects |
+| `iq fsm transition --event <e>` | Execute a deterministic FSM transition with prechecks/effects |
+| `iq fsm state [--json]` | Show current FSM state, transitions, and active APE |
+| `iq ape prompt --name <name>` | Assemble sub-agent prompt from YAML + current state |
+| `iq ape state` | Show active APE sub-state and valid transitions |
+| `iq ape transition --event <e>` | Advance the active APE's internal FSM |
 
 ## The APE cycle
 
@@ -79,7 +83,7 @@ EVOLUTION is opt-in (`evolution.enabled` in `.inquiry/config.yaml`) and one-shot
 ## Architecture
 
 - **CLI:** Dart, compiled to a single cross-platform binary, built on top of [`modular_cli_sdk`](https://github.com/siliconbrainedmachines/modular_cli_sdk)
-- **Modules:** `global` (init, doctor, version, upgrade, uninstall, tui), `target` (get, clean), `state` (transition)
+- **Modules:** `global` (init, doctor, version, upgrade, uninstall, tui), `target` (get, clean), `fsm` (state, transition), `ape` (state, transition, prompt)
 - **FSM:** declarative `transition_contract.yaml` parsed into `FsmContract` — every (state, event) pair is total (allowed or explicitly illegal)
 - **Targets:** Copilot only at present per [ADR D20](docs/spec/target-specific-agents.md). Adapters for Claude/Codex/Crush/Gemini exist for cleanup but are deferred until multi-target reactivation
 - **Memory:** `.inquiry/` (per-cycle runtime), `cleanrooms/NNN-slug/` (per-cycle artifacts), `docs/spec/` (technical specifications)

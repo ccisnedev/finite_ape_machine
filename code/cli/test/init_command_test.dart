@@ -26,6 +26,17 @@ void main() {
         expect(Directory('${tempDir.path}/cleanrooms').existsSync(), isTrue);
       });
 
+      test('creates cleanrooms/ at root, not under docs/', () async {
+        final command = InitCommand(InitInput(workingDirectory: tempDir.path));
+        await command.execute();
+
+        expect(Directory('${tempDir.path}/cleanrooms').existsSync(), isTrue);
+        expect(
+          Directory('${tempDir.path}/docs/cleanrooms').existsSync(),
+          isFalse,
+        );
+      });
+
       test('skips cleanrooms/ creation at root if already exists', () async {
         Directory('${tempDir.path}/cleanrooms').createSync(recursive: true);
         // Put a marker file to verify directory is not recreated/destroyed
@@ -84,7 +95,7 @@ void main() {
     // ─── Step 4: .inquiry/state.yaml ──────────────────────────────────────
 
     group('.inquiry/state.yaml', () {
-      test('creates .inquiry/state.yaml with initial IDLE state', () async {
+      test('creates .inquiry/state.yaml with initial IDLE state and ape: null', () async {
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
 
@@ -92,15 +103,16 @@ void main() {
         expect(stateFile.existsSync(), isTrue);
 
         final content = stateFile.readAsStringSync();
-        expect(content, contains('phase: IDLE'));
-        expect(content, contains('task: null'));
+        expect(content, contains('state: IDLE'));
+        expect(content, contains('issue: null'));
+        expect(content, contains('ape: null'));
       });
 
       test('skips .inquiry/state.yaml if already exists', () async {
         Directory('${tempDir.path}/.inquiry').createSync();
         File(
           '${tempDir.path}/.inquiry/state.yaml',
-        ).writeAsStringSync('phase: ANALYZE\ntask: "042-something"\n');
+        ).writeAsStringSync('state: ANALYZE\nissue: "042-something"\n');
 
         final command = InitCommand(InitInput(workingDirectory: tempDir.path));
         await command.execute();
@@ -108,7 +120,7 @@ void main() {
         final content = File(
           '${tempDir.path}/.inquiry/state.yaml',
         ).readAsStringSync();
-        expect(content, contains('phase: ANALYZE'));
+        expect(content, contains('state: ANALYZE'));
         expect(content, contains('042-something'));
       });
     });

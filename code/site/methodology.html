@@ -133,7 +133,7 @@
     <section aria-labelledby="risk-heading">
       <h2 id="risk-heading">The risk matrix</h2>
       <p class="section-intro">
-        Spec-only today. The idea: <code>iq state transition</code> should gate on human approval only when the engineering risk warrants it. Low-risk mechanical transitions (scaffolding, formatting, test scaffolding) proceed silently. High-risk ones (schema changes, production deploys, external API mutations) demand explicit approval.
+        Spec-only today. The idea: <code>iq fsm transition</code> should gate on human approval only when the engineering risk warrants it. Low-risk mechanical transitions (scaffolding, formatting, test scaffolding) proceed silently. High-risk ones (schema changes, production deploys, external API mutations) demand explicit approval.
       </p>
       <div class="callout callout--warn">
         <strong>Roadmap item.</strong> Until the matrix is implemented, every state transition requires operator confirmation. The default is safe but verbose. See the <a href="https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/roadmap.md">roadmap</a> under long-term items.

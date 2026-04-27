@@ -151,7 +151,7 @@ mizu no oto          sound of water
 ### HERMES
 
 **Original function:** `tracker` — Automatic State Update (hook, not an ape)
-**Current status:** Future — may become `iq state transition` command
+**Current status:** Materialized as `iq fsm transition` command
 
 **The allegory.** Hermes (Ἑρμῆς), messenger of the gods, moved between worlds carrying information without altering it. Pure communication: ensuring every realm knew the state of the others.
 
@@ -179,4 +179,4 @@ mizu no oto          sound of water
 | ADA | TDD implementation | Replaced by BASHŌ |
 | DIJKSTRA | Quality gate | Future (skill in EXECUTE) |
 | BORGES | Schema enforcement | Future (CLI validation) |
-| HERMES | State updates | Future (`iq state transition`) |
+| HERMES | State updates | Materialized (`iq fsm transition`) |

@@ -10,6 +10,14 @@ states:
   - END
   - EVOLUTION
 
+completion_authority:
+  IDLE: user
+  ANALYZE: user
+  PLAN: user
+  EXECUTE: user
+  END: automatic
+  EVOLUTION: automatic
+
 events:
   - start_analyze
   - complete_analysis

@@ -7,18 +7,22 @@ import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+import '../../../assets.dart';
 import '../../../fsm_contract.dart';
+import '../effect_executor.dart';
 
 typedef BranchProvider = Future<String> Function(String workingDirectory);
 
 class StateTransitionInput extends Input {
   final String? currentState;
   final String? event;
+  final String? issue;
   final String workingDirectory;
 
   StateTransitionInput({
     required this.currentState,
     required this.event,
+    this.issue,
     required this.workingDirectory,
   });
 
@@ -26,6 +30,7 @@ class StateTransitionInput extends Input {
     return StateTransitionInput(
       currentState: req.flagString('state', aliases: const ['s']),
       event: req.flagString('event', aliases: const ['e']),
+      issue: req.flagString('issue', aliases: const ['i']),
       workingDirectory: Directory.current.path,
     );
   }
@@ -34,6 +39,7 @@ class StateTransitionInput extends Input {
   Map<String, dynamic> toJson() => {
     'currentState': currentState,
     'event': event,
+    'issue': issue,
     'workingDirectory': workingDirectory,
   };
 }
@@ -88,9 +94,11 @@ class StateTransitionCommand
   @override
   final StateTransitionInput input;
   final BranchProvider branchProvider;
+  final Assets? _assets;
 
-  StateTransitionCommand(this.input, {BranchProvider? branchProvider})
-    : branchProvider = branchProvider ?? _defaultBranchProvider;
+  StateTransitionCommand(this.input, {BranchProvider? branchProvider, Assets? assets})
+    : branchProvider = branchProvider ?? _defaultBranchProvider,
+      _assets = assets;
 
   @override
   String? validate() => null;
@@ -105,12 +113,9 @@ class StateTransitionCommand
       );
     }
 
-    final contractPath = p.join(
-      input.workingDirectory,
-      'assets',
-      'fsm',
-      'transition_contract.yaml',
-    );
+    final contractPath = _assets != null
+        ? _assets.path('fsm/transition_contract.yaml')
+        : p.join(input.workingDirectory, 'assets', 'fsm', 'transition_contract.yaml');
     final contract = parseFsmContract(File(contractPath).readAsStringSync());
 
     final current =
@@ -159,6 +164,14 @@ class StateTransitionCommand
     final prompt =
         promptId != null ? contract.promptFragments[promptId] : null;
 
+    // Execute CLI-side effects
+    final executor = EffectExecutor(workingDirectory: input.workingDirectory, assets: _assets);
+    final executedEffects = executor.executeAll(
+      effects: operations?.effects ?? const <String>[],
+      newState: transition.to?.value ?? current.value,
+      issue: input.issue,
+    );
+
     return StateTransitionOutput(
       allowed: true,
       currentState: current.value,
@@ -167,7 +180,7 @@ class StateTransitionCommand
       operationsExecuted: <String>[
         'validate_transition',
         'validate_prechecks',
-        ...(operations?.effects ?? const <String>[]),
+        ...executedEffects,
       ],
       promptFragmentId: promptId,
       requiredRole: prompt?.role,
@@ -201,11 +214,11 @@ class StateTransitionCommand
   }
 
   bool _isIssueSelected(String workingDirectory) {
-    final contextPath = p.join(workingDirectory, '.ape', 'context.yaml');
-    final contextFile = File(contextPath);
-    if (!contextFile.existsSync()) return false;
+    final statePath = p.join(workingDirectory, '.inquiry', 'state.yaml');
+    final stateFile = File(statePath);
+    if (!stateFile.existsSync()) return false;
 
-    final yaml = loadYaml(contextFile.readAsStringSync());
+    final yaml = loadYaml(stateFile.readAsStringSync());
     if (yaml is! YamlMap) return false;
 
     final issue = yaml['issue'];
@@ -223,7 +236,7 @@ class StateTransitionCommand
   }
 
   FsmState _loadCurrentState(String workingDirectory) {
-    final statePath = p.join(workingDirectory, '.ape', 'state.yaml');
+    final statePath = p.join(workingDirectory, '.inquiry', 'state.yaml');
     final file = File(statePath);
     if (!file.existsSync()) {
       return FsmState.idle;
@@ -231,9 +244,7 @@ class StateTransitionCommand
 
     final yaml = loadYaml(file.readAsStringSync());
     if (yaml is! YamlMap) return FsmState.idle;
-    final cycle = yaml['cycle'];
-    if (cycle is! YamlMap) return FsmState.idle;
-    final phase = cycle['phase'];
+    final phase = yaml['state'];
     if (phase is! String || phase.trim().isEmpty) return FsmState.idle;
     return FsmState.fromValue(phase.trim().toUpperCase());
   }

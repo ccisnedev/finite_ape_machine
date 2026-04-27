@@ -107,7 +107,7 @@ Each allowed transition carries:
 | `commit_policy` | When to commit (none, after_effects, after_artifacts) |
 | `prompt_fragment_id` | Links to agent prompt section for this transition |
 
-The CLI enforces this via `iq state transition --event <e>`: reads `.inquiry/state.yaml`, looks up `(current_state, event)` in the contract, validates prechecks, applies effects, writes new state.
+The CLI enforces this via `iq fsm transition --event <e>`: reads `.inquiry/state.yaml`, looks up `(current_state, event)` in the contract, validates prechecks, applies effects, writes new state.
 
 ## Agent architecture
 

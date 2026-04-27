@@ -1,5 +1,6 @@
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 
+import '../../assets.dart';
 import 'commands/doctor.dart';
 import 'commands/init.dart';
 import 'commands/tui.dart';
@@ -11,6 +12,7 @@ import '../../targets/deployer.dart';
 void buildGlobalModule(
   ModuleBuilder m, {
   required TargetDeployer cleaner,
+  Assets? assets,
 }) {
   m.command<TuiInput, TuiOutput>(
     '',
@@ -32,7 +34,7 @@ void buildGlobalModule(
 
   m.command<DoctorInput, DoctorOutput>(
     'doctor',
-    (req) => DoctorCommand(DoctorInput.fromCliRequest(req)),
+    (req) => DoctorCommand(DoctorInput.fromCliRequest(req), assets: assets),
     description: 'Verify prerequisites (inquiry, git, gh, gh auth, gh copilot)',
   );
 

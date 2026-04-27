@@ -85,7 +85,7 @@ Publish the empirical paper on APE-builds-APE. Requires the full metrics dataset
 Currently DARWIN proposes mutations only to *this* repo's APE. The long-term vision is a community-level DARWIN that aggregates evolution issues across many APE-using projects to propose changes upstream to the framework itself.
 
 ### Risk-matrix-driven UX
-The semantic risk matrix exists in spec but not yet in CLI behavior. End-state: `iq state transition` automatically gates on human approval only when the risk class warrants it, and silently proceeds otherwise.
+The semantic risk matrix exists in spec but not yet in CLI behavior. End-state: `iq fsm transition` automatically gates on human approval only when the risk class warrants it, and silently proceeds otherwise.
 
 ## Lore vs reality
 
@@ -104,7 +104,7 @@ The original [lore.md](lore.md) sketched 9+ apes. After two months of building A
 | **ADA** | Replaced | BASHŌ's techne replaces explicit TDD as a separate phase |
 | **DIJKSTRA** | Future skill | Quality-gate becomes a `pre-pr-review` skill inside END, not a separate agent |
 | **BORGES** | Future skill | Schema validation becomes `iq memory validate`, not a standalone ape |
-| **HERMES** | Materialized | State transitions are now `iq state transition` (CLI command, not an agent) |
+| **HERMES** | Materialized | State transitions are now `iq fsm transition` (CLI command, not an agent) |
 
 The lesson: **the framework wants fewer, sharper agents, not more**. Each absorption was driven by a real cycle where two agents were doing what one could do better.
 
