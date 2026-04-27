@@ -200,7 +200,7 @@ void main() {
     });
 
     group('instructions', () {
-      test('ANALYZE instructions reference socrates', () async {
+      test('ANALYZE instructions describe the mission', () async {
         setupWorkspace(state: 'ANALYZE', issue: '145');
 
         final command = FsmStateCommand(FsmStateInput(
@@ -208,10 +208,11 @@ void main() {
         ));
         final result = await command.execute();
 
-        expect(result.toJson()['instructions'], contains('socrates'));
+        expect(result.toJson()['instructions'], contains('Investigate'));
+        expect(result.toJson()['instructions'], contains('diagnosis.md'));
       });
 
-      test('IDLE instructions mention start_analyze', () async {
+      test('IDLE instructions describe triage mission', () async {
         setupWorkspace(state: 'IDLE');
 
         final command = FsmStateCommand(FsmStateInput(
@@ -219,7 +220,8 @@ void main() {
         ));
         final result = await command.execute();
 
-        expect(result.toJson()['instructions'], contains('start_analyze'));
+        expect(result.toJson()['instructions'], contains('Evaluate'));
+        expect(result.toJson()['instructions'], contains('inquiry'));
       });
     });
 

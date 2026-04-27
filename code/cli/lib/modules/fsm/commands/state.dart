@@ -182,17 +182,17 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
 
   static const _stateInstructions = <FsmState, String>{
     FsmState.idle:
-        'IDLE: No active cycle. Use `iq fsm transition --event start_analyze` to begin.',
+        'Evaluate what work merits inquiry. Understand the problem, search for existing issues, create or select an issue, prepare the branch.',
     FsmState.analyze:
-        'ANALYZE: socrates is investigating. Produce diagnosis.md, then `iq fsm transition --event complete_analysis`.',
+        'Investigate the problem through structured questioning. Challenge assumptions, gather evidence, explore perspectives. Produce diagnosis.md.',
     FsmState.plan:
-        'PLAN: descartes is structuring the plan. Produce plan.md, then `iq fsm transition --event approve_plan`.',
+        'Design an experimental plan from the diagnosis. Divide into phases, order by dependencies, define verification for each. Produce plan.md.',
     FsmState.execute:
-        'EXECUTE: basho is implementing. Complete the work, then `iq fsm transition --event finish_execute`.',
+        'Implement the plan phase by phase under its formal constraints. Each phase produces tested code and a commit.',
     FsmState.end:
-        'END: basho is finalizing. Create PR with `iq fsm transition --event pr_ready`.',
+        'Review the execution. Create the pull request.',
     FsmState.evolution:
-        'EVOLUTION: darwin is reviewing mutations.md. Complete with `iq fsm transition --event finish_evolution`.',
+        'Evaluate the completed cycle. Observe what worked, what deviated, what can improve. Create improvement issues.',
   };
 
   String _computeInstructions(FsmState state) {
