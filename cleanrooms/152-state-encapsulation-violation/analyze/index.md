@@ -13,8 +13,9 @@ author: socrates
 
 | Document | Status | Description |
 |----------|--------|-------------|
+| [confirmed-findings.md](confirmed-findings.md) | active | **Living document** — all confirmed findings, updated as analysis progresses |
 | [violation-inventory.md](violation-inventory.md) | active | Complete inventory of all encapsulation violations across 7 layers |
-| [assumptions-challenge.md](assumptions-challenge.md) | active | Assumptions challenge for 4 key decisions — risk and blast radius |
+| [assumptions-challenge.md](assumptions-challenge.md) | active | Assumptions challenge for 4 decisions — risk and blast radius |
 
 ## Specs produced
 
@@ -24,7 +25,13 @@ author: socrates
 
 ## Key findings
 
-- `--issue` flag on `iq fsm transition` works correctly — verified manually
-- `issue-start` SKILL.md violates kernel space principle (instructs agents to write state.yaml)
-- Event rename (Decision 2) deferred to separate issue — blast radius too high
-- TRIAGE sub-agent proposed as ARISTOTLE (phronesis + categories)
+- **F1:** The bug is real and ongoing — even a frontier model violated kernel boundary during this session
+- **F2:** Thesis corrected from "method over model" to "clarity through method" — matched to project origin
+- **F3:** `--issue` flag on `iq fsm transition` works correctly — verified manually
+- **F4:** `issue-start` SKILL.md violates kernel space principle (instructs agents to write state.yaml)
+- **F5:** `start_analyze` prechecks empty — validation code exists, contract declaration missing
+- **F6:** Event rename deferred to separate issue — blast radius too high (25+ files)
+- **F7:** TRIAGE sub-agent confirmed as ARISTOTLE (phronesis + categories) — details for PLAN
+- **F8:** `docs/philosophy.md` created as foundational document — governs all specs
+- **F9:** `next_state` removal from JSON is safe — 1 test to update
+- **F10:** Sub-agent YAMLs are clean — violation is in firmware and CLI only
