@@ -33,7 +33,7 @@ This means **skills are pure documentation** and commands are the enforcement la
 
 ### D6: Humans can use Inquiry without AI
 
-A developer without any AI tool can still use the implemented Inquiry CLI directly. Today that includes commands such as `iq init`, `iq doctor`, `iq target get`, `iq version`, and `iq state transition --event <e>`. The AI is an accelerator, not a requirement.
+A developer without any AI tool can still use the implemented Inquiry CLI directly. Today that includes commands such as `iq init`, `iq doctor`, `iq target get`, `iq version`, and `iq fsm transition --event <e>`. The AI is an accelerator, not a requirement.
 
 This is critical for trust: the human understands exactly what the tool does because they can use it themselves.
 
@@ -64,7 +64,7 @@ The current Inquiry CLI already enforces the runtime FSM and deployment operatio
 | api-design | (domain skill for BASHŌ) | Source code | EXECUTE |
 | db-as-code | (domain skill for BASHŌ) | Migration files | EXECUTE |
 | evolution | `gh issue list`, `gh issue create`, `gh issue comment` | Issues in APE repo | EVOLUTION |
-| transition | `iq state transition --event <e>` | `.inquiry/state.yaml` | Any |
+| transition | `iq fsm transition --event <e>` | `.inquiry/state.yaml` | Any |
 | (future) status | `iq status` | stdout (derived from docs/) | Any |
 
 ## CLI Commands: Existing and Planned
@@ -77,7 +77,7 @@ The current Inquiry CLI already enforces the runtime FSM and deployment operatio
 | `iq doctor` | Verify prerequisites and environment readiness |
 | `iq target get` | Deploy agent + skills to the active target |
 | `iq target clean` | Remove deployed files |
-| `iq state transition --event <e>` | Execute a declared FSM transition |
+| `iq fsm transition --event <e>` | Execute a declared FSM transition |
 | `iq upgrade` | Upgrade CLI binary |
 | `iq version` | Show version |
 | `iq uninstall` | Remove Inquiry completely |

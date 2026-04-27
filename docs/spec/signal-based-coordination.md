@@ -31,7 +31,7 @@ Tasks never reference each other. They only know about events.
 A signal is emitted when a meaningful step completes. In the current implementation, this routing is materialized through explicit transition events rather than a public `ape signal` command:
 
 ```bash
-iq state transition --event <event-name>
+iq fsm transition --event <event-name>
 ```
 
 The emitter does not know who (if anyone) listens. It just signals.
