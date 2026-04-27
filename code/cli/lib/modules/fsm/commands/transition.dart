@@ -143,6 +143,7 @@ class StateTransitionCommand
     final precheckResult = await _validatePreconditions(
       transition,
       input.workingDirectory,
+      inputIssue: input.issue,
     );
     if (precheckResult != null) {
       return StateTransitionOutput(
@@ -193,11 +194,13 @@ class StateTransitionCommand
 
   Future<String?> _validatePreconditions(
     FsmTransition transition,
-    String workingDirectory,
-  ) async {
+    String workingDirectory, {
+    String? inputIssue,
+  }) async {
     final prechecks = transition.operations?.prechecks ?? const <String>[];
     final branch = await branchProvider(workingDirectory);
-    final issueSelected = _isIssueSelected(workingDirectory);
+    final issueSelected = _isIssueSelected(workingDirectory) ||
+        (inputIssue != null && inputIssue.trim().isNotEmpty);
 
     if ((prechecks.contains('issue_selected') ||
             prechecks.contains('issue_selected_or_created')) &&

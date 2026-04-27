@@ -35,7 +35,7 @@ transitions:
     to: ANALYZE
     allowed: true
     operations:
-      prechecks: []
+      prechecks: [issue_selected_or_created, feature_branch_selected]
       effects: [open_analysis_context, reset_mutations, snapshot_metrics]
       artifacts: [analysis/index.md, .inquiry/metrics_snapshot.yaml]
       commit_policy: none
