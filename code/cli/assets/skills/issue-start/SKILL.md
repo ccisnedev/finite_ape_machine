@@ -106,31 +106,19 @@ Create `cleanrooms/<NNN>-<slug>/analyze/index.md` with this template:
 |---|------|-------------|
 ```
 
-### Step 7: Update state.yaml
+### Step 7: Transition to ANALYZE
 
-Write `.inquiry/state.yaml` with:
-
-```yaml
-cycle:
-  phase: ANALYZE
-  task: "<NNN>"
-
-ready: []
-waiting: []
-complete: []
-```
-
-Use the same raw string write pattern as `inquiry init` does.
-
-### Step 8: Announce Transition
-
-Output the state announcement:
+Execute the CLI transition command with the issue number:
 
 ```
-[APE: ANALYZE]
+iq fsm transition --event start_analyze --issue <NNN>
 ```
 
-The scheduler is now in ANALYZE state and should invoke SOCRATES for analysis work.
+This transitions the FSM to ANALYZE and auto-activates the analysis sub-agent. Do NOT write `.inquiry/state.yaml` directly — all state mutations go through `iq` commands.
+
+### Step 8: Verify Transition
+
+Run `iq fsm state` to confirm the state is now ANALYZE with the correct issue number.
 
 ## Verification
 
@@ -138,7 +126,7 @@ After completing all steps, verify:
 
 - [ ] Branch exists: `git branch --show-current` returns `<NNN>-<slug>`
 - [ ] Directory exists: `cleanrooms/<NNN>-<slug>/analyze/index.md`
-- [ ] State updated: `.inquiry/state.yaml` shows `phase: ANALYZE`
+- [ ] State updated: `iq fsm state` shows ANALYZE with the issue number
 
 ## Notes
 
