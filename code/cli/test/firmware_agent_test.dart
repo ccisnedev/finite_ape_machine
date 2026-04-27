@@ -14,10 +14,6 @@ void main() {
       expect(content, contains('iq fsm state'));
     });
 
-    test('references iq ape state', () {
-      expect(content, contains('iq ape state'));
-    });
-
     test('references iq ape prompt', () {
       expect(content, contains('iq ape prompt'));
     });

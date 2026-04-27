@@ -153,26 +153,9 @@ gh pr create \
 
 **Important:** PR creation completes the explicit END gate.
 
-- If `evolution.enabled: true`, the cycle advances from END to EVOLUTION after PR creation.
-- If `evolution.enabled: false`, the cycle returns directly from END to IDLE after PR creation.
 - PR merge is an **external event** (happens later, possibly with CI checks)
 - Do not wait for PR merge to leave END
-
-### Step 10: Transition to EVOLUTION or IDLE
-
-If evolution is enabled, update `.inquiry/state.yaml` (if using state tracking):
-
-```yaml
-phase: EVOLUTION
-issue: {issue-number}
-branch: {branch}
-version: X.Y.Z
-```
-
-Announce state change:
-> `[APE: EVOLUTION]`
-
-If evolution is disabled, update `.inquiry/state.yaml` directly to IDLE instead.
+- After PR creation, the scheduler transitions to the next state automatically.
 
 ## After PR Merge
 
@@ -193,5 +176,5 @@ When the PR is merged:
 7. Transition to END
 8. Push: git push -u origin {branch}
 9. Create PR: gh pr create --title "vX.Y.Z: ..."
-10. Transition to EVOLUTION or IDLE
+10. Scheduler transitions automatically after PR creation
 ```

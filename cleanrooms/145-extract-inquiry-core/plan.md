@@ -756,3 +756,84 @@ La hipótesis se confirma si:
 8. `iq doctor` reporta skills correctamente
 9. `iq init` genera `state.yaml` con formato nuevo (`ape:` field)
 7. `iq init` crea `./cleanrooms/` (no `docs/cleanrooms`)
+
+---
+
+## Phase 9 — Corrección de bugs de firmware descubiertos en smoke test
+
+**Origen**: Smoke test v0.2.0 ejecutado en `cacsi-dev/tareas` devcontainer (2026-04-26). Evidencia en [smoke-test-report.md](smoke-test-report.md). Análisis de hipótesis en [bugs.md](bugs.md).
+**Dependencias**: Phase 8b completa. Binario v0.2.0 funcionando.
+**Componentes afectados**: `code/cli/assets/agents/inquiry.agent.md`, `code/cli/assets/skills/issue-end/SKILL.md`
+
+### 9.1 — BUG-A: Reemplazar "Become" por "Dispatch" en Inner Loop
+
+**Hipótesis** (ver bugs.md#BUG-A): La instrucción `Become that sub-agent` hace que el scheduler ejecute el trabajo del sub-agente dentro de su propio contexto, en lugar de delegar a un agente separado. Esto causa que el scheduler renderice el contenido del plan en chat (F2) y que él mismo escriba plan.md (F4).
+
+- [ ] Leer `inquiry.agent.md` completo para entender el contexto del Inner Loop antes de editar.
+- [ ] Reemplazar paso 2 del Inner Loop: `**Become** that sub-agent: follow its instructions exactly` → instrucción explícita de dispatch usando la herramienta `agent`.
+- [ ] El paso debe especificar: (a) invocar `@<ape.name>` con el prompt de `iq ape prompt`, (b) esperar que el agente complete y señalice, (c) no reproducir en chat el contenido producido por el sub-agente.
+- [ ] Verificar que la herramienta `agent` permanece en el `tools` del frontmatter.
+
+**Criterio de aceptación**: El scheduler anuncia "Delegando a @DESCARTES..." y espera, sin renderizar plan.md en el chat.
+
+### 9.2 — BUG-B: Restricción de formato en preguntas de aprobación
+
+**Hipótesis** (ver bugs.md#BUG-B): La instrucción "ask user to approve" no impone formato. El LLM genera preguntas abiertas y compuestas.
+
+- [ ] Agregar regla explícita: una sola pregunta por checkpoint, formato binario sí/no, sin alternativas.
+- [ ] La regla debe cubrir tanto el Inner Loop (aprobación de sub-fase) como el checkpoint de END (creación de PR).
+- [ ] Agregar sección END explícita al firmware con la pregunta exacta permitida: "¿Hago el PR? (sí/no)".
+
+**Criterio de aceptación**: En PLAN, la pregunta es "¿Apruebas el plan? (sí/no)". En END, la pregunta es "¿Hago el PR? (sí/no)". Sin opciones adicionales en ninguno de los dos.
+
+### 9.3 — BUG-C + BUG-D: Reforzar y aclarar reglas de autorización y escritura
+
+**Hipótesis BUG-C** (ver bugs.md#BUG-C): La regla existe pero no prescribe la respuesta ante inconsistencia de estado.
+**Hipótesis BUG-D** (ver bugs.md#BUG-D): "state" es ambiguo — el LLM lo extiende a commits.
+
+- [ ] Mover la regla NEVER-write a una posición más prominente en el firmware (antes o dentro de los loops, no solo al final).
+- [ ] Agregar respuesta prescripta: si state.yaml parece incorrecto, el scheduler reporta el error y sugiere el comando CLI correcto; no edita el archivo.
+- [ ] Acotar la regla de autorización: "Solo `iq fsm transition` y `iq ape transition` requieren autorización explícita. Commits, pushes, test runs y operaciones de archivos dentro de una sub-fase son autónomos."
+
+**Criterio de aceptación**: El scheduler no edita `.inquiry/` directamente bajo ninguna circunstancia. El scheduler no pregunta autorización para `git commit`.
+
+### 9.4 — BUG-F: Handling imperativo de EVOLUTION desactivada
+
+**Hipótesis** (ver bugs.md#BUG-F): El firmware no tiene instrucción para `evolution.enabled: false`; la skill describe ambos caminos pasivamente.
+
+- [ ] Agregar al firmware, en la sección END o en los Rules, una instrucción imperativa: tras crear el PR, leer `evolution.enabled` de `.inquiry/config.yaml`; si es `false`, ejecutar `iq fsm transition --event pr_ready_no_evolution` sin preguntar y sin mencionar EVOLUTION.
+- [ ] La instrucción debe usar el mismo patrón imperativo del resto del firmware (no descriptivo/pasivo).
+
+**Criterio de aceptación**: Con `evolution.enabled: false`, el ciclo termina en IDLE tras el PR sin ninguna mención de EVOLUTION en el chat.
+
+### 9.5 — BUG-E: Desacoplar `issue-end` skill del proyecto Inquiry
+
+**Hipótesis** (ver bugs.md#BUG-E): `issue-end/SKILL.md` contiene rutas y comandos específicos de Dart/Inquiry que el LLM reconoce como ajenos a otros proyectos, revelando el meta-proyecto.
+
+- [ ] Leer `issue-end/SKILL.md` completo.
+- [ ] Eliminar Step 3 (Determine Version Bump) o hacerlo condicional: "Si el proyecto gestiona versionado semántico, determina el tipo de bump. Si no, salta este paso."
+- [ ] Reemplazar `grep "inquiryVersion" lib/src/version.dart` por descripción genérica del patrón.
+- [ ] Reemplazar referencias a `pubspec.yaml` y `lib/src/version.dart` por "el archivo de versión del proyecto (ej. `pubspec.yaml`, `package.json`, `pyproject.toml`)".
+- [ ] Reemplazar `dart analyze` / `dart test` por "los comandos de análisis y test del proyecto".
+- [ ] Verificar que ninguna referencia a "inquiry", "dart", "flutter" permanece en la skill tras la edición.
+
+**Criterio de aceptación**: La skill no menciona Inquiry, Dart ni Flutter. El LLM puede aplicarla a cualquier proyecto sin detectar el meta-proyecto.
+
+### 9.6 — Sincronización de assets
+
+- [ ] Copiar `code/cli/assets/agents/inquiry.agent.md` → `code/cli/build/assets/agents/inquiry.agent.md`
+- [ ] Copiar `code/cli/assets/skills/issue-end/SKILL.md` → `code/cli/build/assets/skills/issue-end/SKILL.md`
+- [ ] `dart analyze` — 0 warnings (los assets son texto, pero asegurar que ningún test de contenido del firmware falla).
+- [ ] `dart test` — todos pasan (tests de contenido de firmware en Phase 6.3).
+
+### 9.7 — Smoke test de regresión (manual)
+
+Reinstalar el binario corregido en el devcontainer de `tareas` y verificar que:
+
+- [ ] `iq fsm transition --event start_analyze --issue <n>` escribe correctamente `issue: <n>` en state.yaml (F1 — ya corregido en CLI, verificar en este binario).
+- [ ] DESCARTES es despachado como agente separado; plan.md no se renderiza en chat (BUG-A).
+- [ ] La pregunta de aprobación de PLAN es binaria y una sola (BUG-B).
+- [ ] El scheduler no edita `.inquiry/state.yaml` directamente bajo ninguna condición (BUG-C).
+- [ ] El commit de BASHŌ no solicita autorización (BUG-D).
+- [ ] La skill issue-end no genera mención de Inquiry durante END (BUG-E).
+- [ ] Con `evolution.enabled: false`, el ciclo termina en IDLE sin mención de EVOLUTION (BUG-F).

@@ -104,6 +104,7 @@ class FsmContract {
   final Map<(FsmState, FsmEvent), FsmTransition> transitions;
   final Map<String, PreconditionsContract> preconditions;
   final Map<String, PromptFragmentContract> promptFragments;
+  final Map<FsmState, String> completionAuthority;
 
   const FsmContract({
     required this.version,
@@ -113,6 +114,7 @@ class FsmContract {
     required this.transitions,
     required this.preconditions,
     required this.promptFragments,
+    required this.completionAuthority,
   });
 
   FsmTransition transitionFor(FsmState state, FsmEvent event) {
@@ -231,6 +233,13 @@ FsmContract parseFsmContract(String yamlContent) {
     );
   }
 
+  final parsedCompletionAuthority = <FsmState, String>{};
+  final completionAuth = (root['completion_authority'] as YamlMap?) ?? YamlMap();
+  for (final entry in completionAuth.entries) {
+    final state = FsmState.fromValue(entry.key as String);
+    parsedCompletionAuthority[state] = entry.value as String;
+  }
+
   final contract = FsmContract(
     version: metadata['version'] as String,
     description: metadata['description'] as String,
@@ -239,6 +248,7 @@ FsmContract parseFsmContract(String yamlContent) {
     transitions: parsedTransitions,
     preconditions: parsedPreconditions,
     promptFragments: parsedPromptFragments,
+    completionAuthority: parsedCompletionAuthority,
   );
 
   contract.assertMatrixIsTotal();

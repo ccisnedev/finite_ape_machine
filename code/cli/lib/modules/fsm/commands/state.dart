@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 import 'package:path/path.dart' as p;
+import 'package:yaml/yaml.dart';
 
 import '../../../assets.dart';
 import '../../../fsm_contract.dart';
@@ -32,6 +33,7 @@ class FsmStateOutput extends Output {
   final List<Map<String, String>> apes;
   final String instructions;
   final Map<String, dynamic>? ape;
+  final String completionAuthority;
 
   FsmStateOutput({
     required this.state,
@@ -40,12 +42,14 @@ class FsmStateOutput extends Output {
     required this.apes,
     required this.instructions,
     this.ape,
+    required this.completionAuthority,
   });
 
   @override
   Map<String, dynamic> toJson() => {
     'state': state,
     'issue': issue,
+    'completion_authority': completionAuthority,
     'transitions': transitions,
     'apes': apes,
     'instructions': instructions,
@@ -99,10 +103,13 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
         : p.join(input.workingDirectory, 'assets', 'fsm', 'transition_contract.yaml');
     final contract = parseFsmContract(File(contractPath).readAsStringSync());
 
-    final validTransitions = _computeTransitions(contract, currentState);
+    final validTransitions = _computeTransitions(
+      contract, currentState, input.workingDirectory);
     final activeApes = _computeApes(currentState);
     final instructions = _computeInstructions(currentState);
     final apeInfo = _computeApeInfo(inquiry);
+    final completionAuthority =
+        contract.completionAuthority[currentState] ?? 'user';
 
     return FsmStateOutput(
       state: currentState.value,
@@ -111,12 +118,14 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
       apes: activeApes,
       instructions: instructions,
       ape: apeInfo,
+      completionAuthority: completionAuthority,
     );
   }
 
   List<Map<String, String>> _computeTransitions(
     FsmContract contract,
     FsmState state,
+    String workingDirectory,
   ) {
     final result = <Map<String, String>>[];
     for (final event in contract.events) {
@@ -128,7 +137,35 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
         });
       }
     }
+
+    // Filter END transitions based on evolution.enabled in config.yaml
+    if (state == FsmState.end) {
+      final evolutionEnabled = _readEvolutionEnabled(workingDirectory);
+      if (evolutionEnabled) {
+        result.removeWhere((t) => t['event'] == 'pr_ready_no_evolution');
+      } else {
+        result.removeWhere((t) => t['event'] == 'pr_ready');
+      }
+    }
+
     return result;
+  }
+
+  bool _readEvolutionEnabled(String workingDirectory) {
+    final configFile = File(p.join(workingDirectory, '.inquiry', 'config.yaml'));
+    if (!configFile.existsSync()) return false;
+    try {
+      final yaml = loadYaml(configFile.readAsStringSync());
+      if (yaml is YamlMap) {
+        final evolution = yaml['evolution'];
+        if (evolution is YamlMap) {
+          return evolution['enabled'] == true;
+        }
+      }
+    } catch (_) {
+      // If config is malformed, default to no evolution
+    }
+    return false;
   }
 
   static const _stateApes = <FsmState, List<Map<String, String>>>{

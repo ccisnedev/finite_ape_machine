@@ -328,5 +328,120 @@ void main() {
         expect(ape.containsKey('transitions'), isFalse);
       });
     });
+
+    group('completion_authority', () {
+      test('ANALYZE has completion_authority: user', () async {
+        setupWorkspace(state: 'ANALYZE', issue: '145');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final json = result.toJson();
+
+        expect(json['completion_authority'], equals('user'));
+      });
+
+      test('PLAN has completion_authority: user', () async {
+        setupWorkspace(state: 'PLAN', issue: '145');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final json = result.toJson();
+
+        expect(json['completion_authority'], equals('user'));
+      });
+
+      test('END has completion_authority: automatic', () async {
+        setupWorkspace(state: 'END', issue: '145');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final json = result.toJson();
+
+        expect(json['completion_authority'], equals('automatic'));
+      });
+
+      test('EVOLUTION has completion_authority: automatic', () async {
+        setupWorkspace(state: 'EVOLUTION', issue: '145');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final json = result.toJson();
+
+        expect(json['completion_authority'], equals('automatic'));
+      });
+
+      test('IDLE has completion_authority: user', () async {
+        setupWorkspace(state: 'IDLE');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final json = result.toJson();
+
+        expect(json['completion_authority'], equals('user'));
+      });
+    });
+
+    group('END transition filtering by config.yaml', () {
+      test('END with evolution disabled shows only pr_ready_no_evolution',
+          () async {
+        setupWorkspace(state: 'END', issue: '145');
+        // config.yaml with evolution.enabled: false
+        File('${tempDir.path}/.inquiry/config.yaml')
+            .writeAsStringSync('evolution:\n  enabled: false\n');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final transitions = result.toJson()['transitions'] as List;
+        final events = transitions.map((t) => t['event']).toList();
+
+        expect(events, contains('pr_ready_no_evolution'));
+        expect(events, isNot(contains('pr_ready')));
+      });
+
+      test('END with evolution enabled shows only pr_ready', () async {
+        setupWorkspace(state: 'END', issue: '145');
+        // config.yaml with evolution.enabled: true
+        File('${tempDir.path}/.inquiry/config.yaml')
+            .writeAsStringSync('evolution:\n  enabled: true\n');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final transitions = result.toJson()['transitions'] as List;
+        final events = transitions.map((t) => t['event']).toList();
+
+        expect(events, contains('pr_ready'));
+        expect(events, isNot(contains('pr_ready_no_evolution')));
+      });
+
+      test('END without config.yaml defaults to pr_ready_no_evolution',
+          () async {
+        setupWorkspace(state: 'END', issue: '145');
+        // No config.yaml file
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final transitions = result.toJson()['transitions'] as List;
+        final events = transitions.map((t) => t['event']).toList();
+
+        expect(events, contains('pr_ready_no_evolution'));
+        expect(events, isNot(contains('pr_ready')));
+      });
+    });
   });
 }
