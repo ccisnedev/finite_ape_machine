@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.1]
+### Added
+- **`completion_authority`**: FSM contract and `iq fsm state --json` output now include per-state `completion_authority` field (`user` | `automatic`) — the scheduler reads this to know whether to ask the user or transition immediately
+- **END transition filtering**: `iq fsm state` filters END transitions by `evolution.enabled` from `config.yaml` — scheduler sees only one valid path, no choice needed
+
+### Fixed
+- **`--issue` flag silently ignored** (#145): `iq fsm transition --event start_analyze --issue 31` now persists issue to `state.yaml`
+- **Firmware: Become → Dispatch** (F2, F4): scheduler no longer executes sub-agent work directly; dispatches via `agent` tool
+- **Firmware: open-ended approval questions** (F3, F8): restricted to single binary yes/no questions
+- **Firmware: over-broad authorization rule** (F6): scoped to `iq fsm transition` and `iq ape transition` only; commits/pushes are autonomous
+- **Firmware: EVOLUTION offered as choice** (F9): removed all EVOLUTION knowledge from firmware; `completion_authority: automatic` handles it programmatically
+- **Skill: issue-end exposed meta-project** (F7): removed all Dart/Inquiry-specific references; skill is now stack-agnostic
+
 ## [0.2.0]
 ### Added
 - **FSM module** (`iq fsm`): renamed from `iq state`, new `iq fsm state --json` command returns full FSM context (state, issue, transitions, APEs, instructions) for machine consumption
