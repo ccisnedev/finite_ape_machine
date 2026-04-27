@@ -31,7 +31,9 @@ author: socrates
 - **F4:** `issue-start` SKILL.md violates kernel space principle (instructs agents to write state.yaml)
 - **F5:** `start_analyze` prechecks empty — validation code exists, contract declaration missing
 - **F6:** Event rename deferred to separate issue — blast radius too high (25+ files)
-- **F7:** TRIAGE sub-agent confirmed as ARISTOTLE (phronesis + categories) — details for PLAN
+- **F7:** ~~ARISTOTLE~~ invalidated — SOCRATES in two modes (triage + diagnosis) replaces it
 - **F8:** `docs/philosophy.md` created as foundational document — governs all specs
 - **F9:** `next_state` removal from JSON is safe — 1 test to update
 - **F10:** Sub-agent YAMLs are clean — violation is in firmware and CLI only
+- **F11:** Sub-agents are cross-cutting capabilities, not 1:1 state slots — DARWIN everywhere when evolution=true
+- **F12:** IDLE is Dewey's problematization — "analysis before the analysis" is inherent, not a bug

@@ -56,11 +56,31 @@ Renaming events from state-specific names (e.g., `start_analyze`) to generic nam
 
 **Evidence:** grep search during assumptions challenge showed 8 cleanroom plans, tests, site HTML all reference current names.
 
-## F7: TRIAGE sub-agent design — CONFIRMED (direction, not details)
+## F7: TRIAGE sub-agent design — REVISED
 
-IDLE will get an ARISTOTLE sub-agent using phronesis (practical wisdom) + categories (systematic classification). Internal states: `classify_intent → scope_problem → search_issues → create_or_select → confirm → _DONE`. 
+~~IDLE will get an ARISTOTLE sub-agent.~~ **Invalidated.** Aristotle's tools (phronesis, categories) classify what is already determined — they don't transform indeterminate situations into determinate ones. That is Dewey's problematization, and SOCRATES already performs it.
 
-**Open question:** Exact YAML structure, completion behavior, scheduler integration details still need PLAN phase work.
+**New design: SOCRATES in two modes.**
+- In IDLE: SOCRATES asks "Is this a well-scoped problem? Does it already exist? Is it granular enough?" → produces an issue
+- In ANALYZE: SOCRATES asks "What is the root cause? What assumptions are we making?" → produces diagnosis.md
+
+This eliminates the need for a new sub-agent. The sub-FSM states differ per mode — details for PLAN.
+
+## F11: Sub-agents are cross-cutting capabilities, not 1:1 slots — CONFIRMED (new)
+
+The original model assumed each state has exactly one sub-agent. The revised model:
+- **SOCRATES**: active in IDLE (issue selection) and ANALYZE (diagnosis)
+- **DESCARTES**: active in PLAN
+- **BASHŌ**: active in EXECUTE and END
+- **DARWIN**: active in ALL phases when evolution=true — observes whether the process is being followed, documents what works and what fails
+
+DARWIN as continuous observer solves the problem the developer currently handles manually: noticing process violations during the cycle.
+
+**Evidence:** This session itself — the developer caught the thesis drift ("method over model"), the kernel boundary violation, and the ARISTOTLE design flaw. DARWIN should catch these.
+
+## F12: "Analysis before the analysis" — the chicken-and-egg of IDLE — CONFIRMED (new)
+
+To start ANALYZE you need an issue (for branch, cleanroom, traceability). To create a good issue you need analysis. This means IDLE inherently performs a pre-analysis: scope checking, deduplication, granularity assessment. This is not a bug — it is Dewey's problematization: converting an indeterminate situation into a formulated problem (an issue).
 
 ## F8: `docs/philosophy.md` is the foundational document — CONFIRMED
 
@@ -87,4 +107,4 @@ No firmware or agent reads `next_state` for routing. Only 1 test file to update 
 
 ---
 
-*Last updated: 2026-04-27 — SOCRATES assumptions phase*
+*Last updated: 2026-04-27 — SOCRATES meta_reflection phase*
