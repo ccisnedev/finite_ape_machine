@@ -116,7 +116,7 @@ void main() {
         expect(events, isNot(contains('complete_analysis')));
       });
 
-      test('each transition has event and next_state', () async {
+      test('each transition has event only', () async {
         setupWorkspace(state: 'PLAN', issue: '145');
 
         final command = FsmStateCommand(FsmStateInput(
@@ -127,7 +127,7 @@ void main() {
 
         for (final t in transitions) {
           expect(t, contains('event'));
-          expect(t, contains('next_state'));
+          expect(t.keys, isNot(contains('next_state')));
         }
       });
     });

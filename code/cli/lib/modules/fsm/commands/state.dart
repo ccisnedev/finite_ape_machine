@@ -72,7 +72,7 @@ class FsmStateOutput extends Output {
     if (transitions.isNotEmpty) {
       buf.writeln('Valid transitions:');
       for (final t in transitions) {
-        buf.writeln('  --${t['event']}--> ${t['next_state']}');
+        buf.writeln('  --${t['event']}');
       }
     }
     return buf.toString().trimRight();
@@ -133,7 +133,6 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
       if (transition != null && transition.allowed && transition.to != null) {
         result.add({
           'event': event.value,
-          'next_state': transition.to!.value,
         });
       }
     }
