@@ -24,6 +24,7 @@ These documents support the current model and should be read as technical elabor
 | [signal-based-coordination.md](signal-based-coordination.md) | Signal/event model for coordination and transitions |
 | [cli-as-api.md](cli-as-api.md) | Boundary between skills, agent behavior, and CLI enforcement |
 | [target-specific-agents.md](target-specific-agents.md) | Per-target deployment strategy and current single-target decision |
+| [state-encapsulation.md](state-encapsulation.md) | State encapsulation principle, system analogies, TRIAGE sub-agent design |
 
 ## Mixed, Historical, or Planned Specs
 
