@@ -87,7 +87,7 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
 
   /// Maps FSM states to their active sub-agent names.
   static const _stateApes = <FsmState, List<String>>{
-    FsmState.idle: [],
+    FsmState.idle: ['socrates-idle'],
     FsmState.analyze: ['socrates'],
     FsmState.plan: ['descartes'],
     FsmState.execute: ['basho'],

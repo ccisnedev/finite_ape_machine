@@ -224,9 +224,14 @@ void main() {
         expect(content, contains('state: clarification'));
       });
 
-      test('writes ape null when transitioning to IDLE', () {
+      test('activates socrates-idle when transitioning to IDLE', () {
         File('${tempDir.path}/.inquiry/state.yaml')
             .writeAsStringSync('state: EVOLUTION\nissue: "145"\n');
+
+        final apesDir = Directory('${tempDir.path}/assets/apes');
+        apesDir.createSync(recursive: true);
+        File('assets/apes/socrates-idle.yaml')
+            .copySync('${apesDir.path}/socrates-idle.yaml');
 
         final executor = EffectExecutor(workingDirectory: tempDir.path);
         executor.updateState('IDLE');
@@ -234,7 +239,8 @@ void main() {
         final content =
             File('${tempDir.path}/.inquiry/state.yaml').readAsStringSync();
         expect(content, contains('state: IDLE'));
-        expect(content, contains('ape: null'));
+        expect(content, contains('name: socrates-idle'));
+        expect(content, contains('state: evaluate_scope'));
       });
 
       test('activates descartes when transitioning to PLAN', () {
