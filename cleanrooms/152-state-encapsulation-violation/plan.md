@@ -125,3 +125,18 @@
 - [ ] Grep firmware for state names — zero matches
 - [ ] Grep `issue-start/SKILL.md` for `state.yaml` — zero matches
 - [ ] Commit all changes
+
+---
+
+## Phase 8 — QA: Remove `to` from APE sub-FSM transitions
+
+**Entry:** Phase 7 complete (QA smoke test found the bug)
+**Risk:** Low — single line change, no tests assert on `to` in APE transitions
+**Discovery:** Manual QA simulation revealed that `_computeApeInfo` in `state.dart` was emitting `{"event": "next", "to": "assumptions"}` for APE sub-FSM transitions — the same encapsulation violation fixed in Phase 2 for the main FSM, but missed at the APE level.
+
+- [x] Edit `code/cli/lib/modules/fsm/commands/state.dart` line 220: change `.map((t) => {'event': t.event, 'to': t.to})` to `.map((t) => {'event': t.event})`
+- [x] `dart analyze` — no warnings
+- [x] `dart test` — 300/300 pass (no tests asserted on `to` field)
+- [x] QA: full cycle simulation — IDLE, ANALYZE, PLAN, EXECUTE all confirmed: APE transitions show only `{"event": "..."}`, no `to` field
+
+**Verification:** `iq fsm state --json` in any state with active APE — sub-FSM transitions contain only `{"event": "..."}`, no destination state.

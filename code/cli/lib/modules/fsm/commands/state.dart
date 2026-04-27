@@ -217,7 +217,7 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
         final apeState = def.findState(subState);
         if (apeState != null) {
           result['transitions'] = apeState.transitions
-              .map((t) => {'event': t.event, 'to': t.to})
+              .map((t) => {'event': t.event})
               .toList();
         }
       }
