@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.0]
+### Changed
+- **State encapsulation** (#152): `iq fsm state --json` transitions no longer expose `next_state` — agents see only available events
+- **APE sub-FSM encapsulation** (#152): APE transitions no longer expose `to` destination state
+- **Mission descriptions** (#152): `instructions` field contains mission objectives, not event names or CLI hints
+- **Firmware v0.3.0** (#152): state-agnostic generic dispatch loop — zero state or sub-agent names hardcoded
+- **SOCRATES in IDLE** (#152): `socrates-idle` triage sub-agent activates automatically in IDLE state
+
+### Fixed
+- **issue-start skill** (#152): uses `iq fsm transition` instead of writing `.inquiry/state.yaml` directly
+- **start_analyze prechecks** (#152): requires `issue_selected_or_created` and `feature_branch_selected`
+
 ## [0.2.1]
 ### Added
 - **`completion_authority`**: FSM contract and `iq fsm state --json` output now include per-state `completion_authority` field (`user` | `automatic`) — the scheduler reads this to know whether to ask the user or transition immediately

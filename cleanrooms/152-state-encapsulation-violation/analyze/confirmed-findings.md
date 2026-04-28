@@ -82,6 +82,23 @@ DARWIN as continuous observer solves the problem the developer currently handles
 
 To start ANALYZE you need an issue (for branch, cleanroom, traceability). To create a good issue you need analysis. This means IDLE inherently performs a pre-analysis: scope checking, deduplication, granularity assessment. This is not a bug — it is Dewey's problematization: converting an indeterminate situation into a formulated problem (an issue).
 
+## F13: Sub-agent YAMLs contain infrastructure — CONFIRMED (new)
+
+The principle: sub-agents are pure thinking tools. They reason. They do not know about files, folders, skills, commands, or deliverables. The STATE provides operational context via the prompt the CLI assembles.
+
+**Current violation:** All four sub-agent YAMLs mix thinking-tool identity with infrastructure:
+- SOCRATES: references `diagnosis.md`, `memory-write skill`, `index.md`, and knows PLAN exists ("sole required input for the planning phase")
+- DESCARTES: references `diagnosis.md` as input, knows EXECUTE exists ("Do not implement anything")
+- BASHŌ: references `plan.md`, `retrospective.md`, git commits
+- DARWIN: references `.inquiry/mutations.md` and `.inquiry/metrics.yaml` (kernel space!), `gh issue list`, `diagnosis.md`, `plan.md`, `retrospective.md`
+
+**Required separation:**
+- Sub-agent YAML `base_prompt` = pure thinking tool (mindset, behavior, reasoning method)
+- State context (assembled by CLI per FSM state) = objective, skills, deliverables, constraints
+- Assembled prompt = `thinking_tool + state_context + sub_state_focus`
+
+**Impact:** This changes prompt assembly in `ape_definition.dart` and requires state-level context templates in the CLI or transition contract. Significant redesign of how `iq ape prompt` works.
+
 ## F8: `docs/philosophy.md` is the foundational document — CONFIRMED
 
 Created during this analysis as the document that governs all other specs. Five convictions:
