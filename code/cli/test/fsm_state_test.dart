@@ -116,7 +116,7 @@ void main() {
         expect(events, isNot(contains('complete_analysis')));
       });
 
-      test('each transition has event and next_state', () async {
+      test('each transition has event only', () async {
         setupWorkspace(state: 'PLAN', issue: '145');
 
         final command = FsmStateCommand(FsmStateInput(
@@ -127,7 +127,7 @@ void main() {
 
         for (final t in transitions) {
           expect(t, contains('event'));
-          expect(t, contains('next_state'));
+          expect(t.keys, isNot(contains('next_state')));
         }
       });
     });
@@ -147,7 +147,7 @@ void main() {
         expect(apes[0]['status'], equals('RUNNING'));
       });
 
-      test('IDLE has no active APEs', () async {
+      test('IDLE has socrates-idle active', () async {
         setupWorkspace(state: 'IDLE');
 
         final command = FsmStateCommand(FsmStateInput(
@@ -156,7 +156,8 @@ void main() {
         final result = await command.execute();
         final apes = result.toJson()['apes'] as List;
 
-        expect(apes, isEmpty);
+        expect(apes, hasLength(1));
+        expect(apes.first['name'], equals('socrates-idle'));
       });
 
       test('PLAN has descartes running', () async {
@@ -200,7 +201,7 @@ void main() {
     });
 
     group('instructions', () {
-      test('ANALYZE instructions reference socrates', () async {
+      test('ANALYZE instructions describe the mission', () async {
         setupWorkspace(state: 'ANALYZE', issue: '145');
 
         final command = FsmStateCommand(FsmStateInput(
@@ -208,10 +209,11 @@ void main() {
         ));
         final result = await command.execute();
 
-        expect(result.toJson()['instructions'], contains('socrates'));
+        expect(result.toJson()['instructions'], contains('Investigate'));
+        expect(result.toJson()['instructions'], contains('diagnosis.md'));
       });
 
-      test('IDLE instructions mention start_analyze', () async {
+      test('IDLE instructions describe triage mission', () async {
         setupWorkspace(state: 'IDLE');
 
         final command = FsmStateCommand(FsmStateInput(
@@ -219,7 +221,8 @@ void main() {
         ));
         final result = await command.execute();
 
-        expect(result.toJson()['instructions'], contains('start_analyze'));
+        expect(result.toJson()['instructions'], contains('Evaluate'));
+        expect(result.toJson()['instructions'], contains('inquiry'));
       });
     });
 

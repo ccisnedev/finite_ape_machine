@@ -88,7 +88,7 @@ void main() {
       expect(output.message, contains('ERROR_PRECONDITION_ISSUE_FIRST'));
     });
 
-    test('allows IDLE exploration transition without issue context', () async {
+    test('blocks IDLE to ANALYZE without issue context', () async {
       _writeState(tempDir.path, 'IDLE');
 
       final input = StateTransitionInput(
@@ -98,7 +98,27 @@ void main() {
       );
       final command = StateTransitionCommand(
         input,
-        branchProvider: (_) async => 'main',
+        branchProvider: (_) async => '152-feature-branch',
+      );
+
+      final output = await command.execute();
+
+      expect(output.allowed, isFalse);
+      expect(output.message, contains('ERROR_PRECONDITION_ISSUE_FIRST'));
+    });
+
+    test('allows IDLE to ANALYZE with issue and feature branch', () async {
+      _writeState(tempDir.path, 'IDLE');
+
+      final input = StateTransitionInput(
+        currentState: null,
+        event: 'start_analyze',
+        issue: '152',
+        workingDirectory: tempDir.path,
+      );
+      final command = StateTransitionCommand(
+        input,
+        branchProvider: (_) async => '152-feature-branch',
       );
 
       final output = await command.execute();
@@ -176,7 +196,7 @@ void main() {
       );
       final command = StateTransitionCommand(
         input,
-        branchProvider: (_) async => 'main',
+        branchProvider: (_) async => '31-feature-branch',
       );
 
       final output = await command.execute();
