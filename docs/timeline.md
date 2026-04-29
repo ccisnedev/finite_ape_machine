@@ -89,7 +89,7 @@ APE wasn't just a workflow — it was an implementation of the oldest formal the
 
 ## The VS Code extension
 
-**2026-04-19.** A VS Code extension was created to bring Inquiry into the editor: status bar showing FSM state, commands for `init`, `toggleEvolution`, and `addMutation`. Published to the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ccisnedev.inquiry-vscode) the same day. Built entirely using the APE cycle (issue #82).
+**2026-04-19.** A VS Code extension was created to bring Inquiry into the editor: status bar showing FSM state, commands for `init`, `toggleEvolution`, and `addMutation`. Published to the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ccisnedev.inquiry) the same day. Built entirely using the APE cycle (issue #82).
 
 ## The rebrand
 

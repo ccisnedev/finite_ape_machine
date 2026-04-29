@@ -26,7 +26,7 @@ The extension is a lightweight integration surface around the Inquiry CLI and th
 
 ## Quick start
 
-1. Install from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=ccisnedev.inquiry-vscode)
+1. Install from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=ccisnedev.inquiry)
 2. `Ctrl+Shift+P` → **Inquiry: Init**
 3. The extension installs the CLI if missing, runs `iq init`, creates `.inquiry/`
 4. Open Copilot Chat → select **@inquiry** → describe your task
