@@ -1,0 +1,16 @@
+name: end
+version: "1.0.0"
+description: "Review execution and create pull request"
+
+instructions: |
+  Review the execution. Create the pull request.
+
+constraints:
+  - No new code changes (execution is complete)
+  - PR description must reference the issue
+  - All tests must pass before PR creation
+
+allowed_actions:
+  - Review completed work
+  - Create pull request
+  - Push branch

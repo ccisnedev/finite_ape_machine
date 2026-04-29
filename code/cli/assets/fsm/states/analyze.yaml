@@ -1,0 +1,21 @@
+name: analyze
+version: "1.0.0"
+description: "Deep investigation via structured questioning"
+
+instructions: |
+  Investigate the problem through structured questioning.
+  Challenge assumptions, gather evidence, explore perspectives.
+  Produce diagnosis.md as the sole input for planning.
+
+constraints:
+  - No solution proposals (belongs to PLAN)
+  - No code edits (belongs to EXECUTE)
+  - No branch creation (already on feature branch)
+  - Analysis must produce diagnosis.md before transitioning
+
+allowed_actions:
+  - Read and search codebase
+  - Ask clarifying questions
+  - Challenge assumptions
+  - Document findings in cleanroom analyze/
+  - Produce diagnosis.md
