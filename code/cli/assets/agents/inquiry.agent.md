@@ -21,13 +21,14 @@ Run `iq fsm state --json` to read current state. Parse the JSON:
 ## Outer Loop (Main FSM)
 
 1. Announce state: `[INQUIRY]`
-2. Read `instructions` — this describes what the current state does
-3. If `ape` is active: enter Inner Loop
-4. If `ape` is null: follow `instructions` and present `transitions[]` to user
-5. After APE reaches `_DONE`: read `completion_authority`:
+2. If state is `IDLE`: run `iq doctor` first to validate environment and check for updates
+3. Read `instructions` — this describes what the current state does
+4. If `ape` is active: enter Inner Loop
+5. If `ape` is null: follow `instructions` and present `transitions[]` to user
+6. After APE reaches `_DONE`: read `completion_authority`:
    - If `"user"`: ask ONE yes/no question to confirm, then `iq fsm transition --event <event>`
    - If `"automatic"`: `iq fsm transition --event <event>` immediately
-6. After transition: re-run `iq fsm state --json` and loop
+7. After transition: re-run `iq fsm state --json` and loop
 
 ## Inner Loop (Per-APE FSM)
 
