@@ -10,13 +10,12 @@ export function parseState(content: string): ApeState {
   }
   try {
     const doc = parse(content);
-    const cycle = doc?.cycle;
-    if (!cycle || typeof cycle !== 'object') {
+    if (!doc?.state || typeof doc.state !== 'string') {
       return { ...DEFAULT_STATE };
     }
     return {
-      phase: String(cycle.phase ?? 'IDLE'),
-      task: String(cycle.task ?? ''),
+      phase: doc.state,
+      task: String(doc.issue ?? ''),
     };
   } catch {
     return { ...DEFAULT_STATE };

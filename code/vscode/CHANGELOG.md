@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.1] - 2026-04-29
+
+### Fixed
+- Status bar now reads the current CLI state format (`state`/`issue` at root level) instead of the obsolete `cycle.phase`/`cycle.task` structure
+- TypeScript language server errors resolved by adding explicit `types: ["node"]` to tsconfig.json
+
 ## [0.2.0] - 2026-04-28
 
 ### Changed
