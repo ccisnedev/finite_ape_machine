@@ -18,7 +18,7 @@ The pattern was forming: **Analyze → Plan → Execute.**
 
 ## The Inquiry repo is born
 
-**2026-03-30.** The `inquiry` repo (then called `finite_ape_machine`) was created with a first commit ([`a1cd601`](https://github.com/SiliconBrainedMachines/inquiry/commit/a1cd601)). Initially it was a documentation-only project: agent role definitions, lore, architecture decision records. No CLI yet — just the intellectual scaffolding for what would become the Finite APE Machine.
+**2026-03-30.** The `inquiry` repo (then called `finite_ape_machine`) was created with a first commit ([`a1cd601`](https://github.com/ccisnedev/inquiry/commit/a1cd601)). Initially it was a documentation-only project: agent role definitions, lore, architecture decision records. No CLI yet — just the intellectual scaffolding for what would become the Finite APE Machine.
 
 ## The book begins
 
@@ -53,9 +53,9 @@ Each agent embodied a philosophical tradition. Each tradition had been tested fo
 
 ## The CLI is born
 
-**2026-04-15.** The same day SOCRATES was defined, the CLI work began. The manual symlink process (copy prompt to `~/.copilot/`) was a friction point. A CLI that automated deployment was the natural next step. Inspired by [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) (Gentleman Programming) — a project that packaged prompts and skills via a CLI — I started building a Dart CLI on [`modular_cli_sdk`](https://github.com/siliconbrainedmachines/modular_cli_sdk).
+**2026-04-15.** The same day SOCRATES was defined, the CLI work began. The manual symlink process (copy prompt to `~/.copilot/`) was a friction point. A CLI that automated deployment was the natural next step. Inspired by [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) (Gentleman Programming) — a project that packaged prompts and skills via a CLI — I started building a Dart CLI on [`modular_cli_sdk`](https://github.com/ccisnedev/modular_cli_sdk).
 
-Commits [`44150463`](https://github.com/SiliconBrainedMachines/inquiry/commit/44150463) (scaffold) and [`45fba9e`](https://github.com/SiliconBrainedMachines/inquiry/commit/45fba9e) (`ape init` command) landed that day.
+Commits [`44150463`](https://github.com/ccisnedev/inquiry/commit/44150463) (scaffold) and [`45fba9e`](https://github.com/ccisnedev/inquiry/commit/45fba9e) (`ape init` command) landed that day.
 
 ## Rapid evolution: v0.0.2 to v0.0.14
 
@@ -77,7 +77,7 @@ From this point on, APE was building APE. Every CLI feature was developed using 
 
 ## Peirce and the philosophical grounding
 
-**2026-04-20.** Research into why APE's three-phase structure worked led to Charles Sanders Peirce's theory of inquiry. Commit [`feat: agregar documentación sobre la teoría de la indagación de Peirce`](https://github.com/SiliconBrainedMachines/inquiry/commit/feat) revealed the mapping:
+**2026-04-20.** Research into why APE's three-phase structure worked led to Charles Sanders Peirce's theory of inquiry. Commit [`feat: agregar documentación sobre la teoría de la indagación de Peirce`](https://github.com/ccisnedev/inquiry/commit/feat) revealed the mapping:
 
 | Peirce's inquiry | APE phase | Agent |
 |------------------|-----------|-------|
@@ -85,11 +85,11 @@ From this point on, APE was building APE. Every CLI feature was developed using 
 | **Deduction** — derive consequences from hypotheses | PLAN | DESCARTES |
 | **Induction** — test consequences against reality | EXECUTE | BASHŌ |
 
-APE wasn't just a workflow — it was an implementation of the oldest formal theory of structured investigation. The name **Inquiry** was chosen the same day ([`docs(110): analysis complete - inquiry chosen as APE primary noun`](https://github.com/SiliconBrainedMachines/inquiry/commit/docs-110)).
+APE wasn't just a workflow — it was an implementation of the oldest formal theory of structured investigation. The name **Inquiry** was chosen the same day ([`docs(110): analysis complete - inquiry chosen as APE primary noun`](https://github.com/ccisnedev/inquiry/commit/docs-110)).
 
 ## The VS Code extension
 
-**2026-04-19.** A VS Code extension was created to bring Inquiry into the editor: status bar showing FSM state, commands for `init`, `toggleEvolution`, and `addMutation`. Published to the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=siliconbrainedmachines.inquiry-vscode) the same day. Built entirely using the APE cycle (issue #82).
+**2026-04-19.** A VS Code extension was created to bring Inquiry into the editor: status bar showing FSM state, commands for `init`, `toggleEvolution`, and `addMutation`. Published to the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ccisnedev.inquiry-vscode) the same day. Built entirely using the APE cycle (issue #82).
 
 ## The rebrand
 

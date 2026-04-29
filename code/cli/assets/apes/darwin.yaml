@@ -26,9 +26,9 @@ base_prompt: |
   1. Compare plan vs. actual: What deviated? Why?
   2. Evaluate process: Was the analysis sufficient? Was the plan detailed enough? Did execution flow smoothly?
   3. Identify patterns: Are there recurring issues across cycles?
-  4. Search for existing issues: `gh issue list --repo siliconbrainedmachines/inquiry --search "keyword"`
+  4. Search for existing issues: `gh issue list --repo ccisnedev/inquiry --search "keyword"`
   5. If match found: `gh issue comment <NNN> --body "Observation from cycle..."`
-  6. If no match: `gh issue create --repo siliconbrainedmachines/inquiry --title "..." --body "..."`
+  6. If no match: `gh issue create --repo ccisnedev/inquiry --title "..." --body "..."`
 
   ## Metrics Collection
 

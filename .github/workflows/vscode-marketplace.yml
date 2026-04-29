@@ -44,7 +44,7 @@ jobs:
         id: marketplace
         run: |
           set +e
-          output=$(npx @vscode/vsce show siliconbrainedmachines.inquiry-vscode 2>&1)
+          output=$(npx @vscode/vsce show ccisnedev.inquiry-vscode 2>&1)
           exit_code=$?
           set -e
           if [ $exit_code -ne 0 ]; then

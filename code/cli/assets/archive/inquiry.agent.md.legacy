@@ -167,11 +167,11 @@ DARWIN uses **natural selection**: observe what worked, what failed, what mutate
    - `.inquiry/mutations.md` (human observations about APE's process performance during this cycle)
    - The DARWIN prompt (see section below)
 2. DARWIN evaluates APE's process performance.
-3. DARWIN searches for existing issues: `gh issue list --repo siliconbrainedmachines/inquiry --search "keyword"`.
+3. DARWIN searches for existing issues: `gh issue list --repo ccisnedev/inquiry --search "keyword"`.
 4. If match found → `gh issue comment NNN --body "..."`.
-5. If no match → `gh issue create --repo siliconbrainedmachines/inquiry --title "..."`.
+5. If no match → `gh issue create --repo ccisnedev/inquiry --title "..."`.
 6. DARWIN generates `.inquiry/metrics.yaml` using cycle artifacts (see DARWIN prompt below for field mapping).
-7. After DARWIN completes, **APE** (not DARWIN) performs the conditional copy: if `git remote get-url origin` contains `siliconbrainedmachines/inquiry`, copy `.inquiry/metrics.yaml` to `cleanrooms/<slug>/metrics.yaml` and `git add` it.
+7. After DARWIN completes, **APE** (not DARWIN) performs the conditional copy: if `git remote get-url origin` contains `ccisnedev/inquiry`, copy `.inquiry/metrics.yaml` to `cleanrooms/<slug>/metrics.yaml` and `git add` it.
 8. Transition to IDLE automatically (no user gate).
 
 **Rules:**
@@ -485,9 +485,9 @@ You receive the complete cycle artifacts:
 1. Compare plan vs. actual: What deviated? Why?
 2. Evaluate process: Was the analysis sufficient? Was the plan detailed enough? Did execution flow smoothly?
 3. Identify patterns: Are there recurring issues across cycles?
-4. Search for existing issues: `gh issue list --repo siliconbrainedmachines/inquiry --search "keyword"`
+4. Search for existing issues: `gh issue list --repo ccisnedev/inquiry --search "keyword"`
 5. If match found: `gh issue comment <NNN> --body "Observation from cycle..."
-6. If no match: `gh issue create --repo siliconbrainedmachines/inquiry --title "..." --body "..."`
+6. If no match: `gh issue create --repo ccisnedev/inquiry --title "..." --body "..."`
 
 ## Metrics Collection
 

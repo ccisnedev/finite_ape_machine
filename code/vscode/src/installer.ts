@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import * as path from 'path';
 import * as os from 'os';
 
-const INSTALL_BASE_URL = 'https://inquiry.si14bm.com';
+const INSTALL_BASE_URL = 'https://inquiry.ccisne.dev';
 
 export function getInstallScriptUrl(platform: string): { url: string; filename: string } {
   if (platform === 'win32') {
