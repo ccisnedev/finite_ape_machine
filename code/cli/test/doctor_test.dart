@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:inquiry_cli/assets.dart';
 import 'package:inquiry_cli/modules/global/commands/doctor.dart';
+import 'package:inquiry_cli/src/version_check.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
@@ -107,6 +108,25 @@ void main() {
       final agentsDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
       agentsDir.createSync(recursive: true);
       File(p.join(agentsDir.path, 'inquiry.agent.md')).writeAsStringSync('# Agent');
+
+      // APE definition files
+      final apesDir = Directory(p.join(tempDir.path, 'assets', 'apes'));
+      apesDir.createSync(recursive: true);
+      for (final ape in ['socrates', 'socrates-idle', 'descartes', 'basho', 'darwin']) {
+        File(p.join(apesDir.path, '$ape.yaml')).writeAsStringSync('name: $ape\n');
+      }
+
+      // FSM state instruction files
+      final statesDir = Directory(p.join(tempDir.path, 'assets', 'fsm', 'states'));
+      statesDir.createSync(recursive: true);
+      for (final state in ['idle', 'analyze', 'plan', 'execute', 'end', 'evolution']) {
+        File(p.join(statesDir.path, '$state.yaml')).writeAsStringSync('name: $state\ninstructions: "test"\n');
+      }
+
+      // Transition contract
+      final fsmDir = Directory(p.join(tempDir.path, 'assets', 'fsm'));
+      File(p.join(fsmDir.path, 'transition_contract.yaml')).writeAsStringSync('metadata:\n  version: "1.0.0"\n');
+
       testAssets = Assets(root: tempDir.path);
     });
 
@@ -126,6 +146,8 @@ void main() {
         inquiryVersionOverride: version,
         fileSystemOps: fs ?? allPassFs('/home/testuser', testSkills),
         assets: assets ?? testAssets,
+        versionChecker: ({required String currentVersion}) async =>
+            const VersionCheckResult(updateAvailable: false),
       );
     }
 
@@ -135,7 +157,7 @@ void main() {
 
       expect(output.passed, isTrue);
       expect(output.exitCode, 0);
-      expect(output.checks.length, 4);
+      expect(output.checks.length, 5);
       expect(output.checks.every((c) => c.passed), isTrue);
     });
 
@@ -180,7 +202,7 @@ void main() {
 
       expect(json, containsPair('passed', true));
       expect(json['checks'], isList);
-      expect((json['checks'] as List).length, 4);
+      expect((json['checks'] as List).length, 5);
       expect(json['targetChecks'], isList);
       expect((json['targetChecks'] as List).length, 1);
 
@@ -190,9 +212,9 @@ void main() {
       expect(firstCheck, containsPair('version', '0.0.9'));
     });
 
-    test('DoctorInput.toJson() returns empty map', () {
+    test('DoctorInput.toJson() returns fix field', () {
       final input = DoctorInput();
-      expect(input.toJson(), isEmpty);
+      expect(input.toJson(), equals({'fix': false}));
     });
 
     test('DoctorCheck.toJson() includes error when present', () {

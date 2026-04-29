@@ -11,6 +11,7 @@ import 'package:path/path.dart' as p;
 
 import '../../../assets.dart';
 import '../../../src/version.dart' as version_lib;
+import '../../../src/version_check.dart';
 import '../../../targets/copilot_adapter.dart';
 import '../../../targets/target_adapter.dart';
 
@@ -78,14 +79,18 @@ class TargetCheck {
 
 /// Input for the doctor command.
 ///
-/// No parameters required — doctor checks system state.
+/// Accepts an optional `--fix` flag to auto-remediate failures.
 class DoctorInput extends Input {
-  DoctorInput();
+  final bool fix;
 
-  factory DoctorInput.fromCliRequest(CliRequest req) => DoctorInput();
+  DoctorInput({this.fix = false});
+
+  factory DoctorInput.fromCliRequest(CliRequest req) => DoctorInput(
+    fix: req.flagBool('fix'),
+  );
 
   @override
-  Map<String, dynamic> toJson() => {};
+  Map<String, dynamic> toJson() => {'fix': fix};
 }
 
 /// Output for the doctor command.
@@ -193,6 +198,8 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
   final FileSystemOps _fileSystem;
   final Assets? _assets;
   final List<TargetAdapter> _activeAdapters;
+  final Future<VersionCheckResult> Function({required String currentVersion})?
+      _versionChecker;
 
   /// Current Inquiry version (injected for testability).
   final String inquiryVersion;
@@ -204,10 +211,13 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
     FileSystemOps? fileSystemOps,
     Assets? assets,
     List<TargetAdapter>? activeAdapters,
+    Future<VersionCheckResult> Function({required String currentVersion})?
+        versionChecker,
   }) : _runProcess = runProcess ?? Process.run,
        _fileSystem = fileSystemOps ?? RealFileSystemOps(),
        _assets = assets,
        _activeAdapters = activeAdapters ?? [CopilotAdapter()],
+       _versionChecker = versionChecker,
        inquiryVersion = inquiryVersionOverride ?? version_lib.inquiryVersion;
 
   @override
@@ -273,6 +283,38 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
       prereqPassed = false;
     }
 
+    // Check 6: Internal assets integrity
+    final assetCheck = _checkInternalAssets();
+    if (assetCheck != null) {
+      checks.add(assetCheck);
+      if (!assetCheck.passed) {
+        if (input.fix) {
+          final fixResult = await _fixAssets();
+          checks.add(fixResult);
+          if (fixResult.passed) {
+            // Re-check after fix
+            final recheck = _checkInternalAssets();
+            if (recheck == null || recheck.passed) {
+              // Remove the failed check, it's been fixed
+              checks.remove(assetCheck);
+            } else {
+              prereqPassed = false;
+            }
+          } else {
+            prereqPassed = false;
+          }
+        } else {
+          prereqPassed = false;
+        }
+      }
+    }
+
+    // Check 7: Version check (non-blocking)
+    final versionCheck = await _checkVersion();
+    if (versionCheck != null) {
+      checks.add(versionCheck);
+    }
+
     // Target checks
     final targetChecks = <TargetCheck>[];
     for (final adapter in _activeAdapters) {
@@ -326,6 +368,185 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
       missingSkills: missingSkills,
       totalSkills: expectedSkills.length,
     );
+  }
+
+  /// Checks that all expected internal assets exist on disk.
+  ///
+  /// Returns null if no [_assets] is available (cannot verify).
+  DoctorCheck? _checkInternalAssets() {
+    if (_assets == null) return null;
+
+    final missing = <String>[];
+
+    // FSM state instruction files
+    const stateFiles = ['idle', 'analyze', 'plan', 'execute', 'end', 'evolution'];
+    for (final state in stateFiles) {
+      final path = _assets.path('fsm/states/$state.yaml');
+      if (!File(path).existsSync()) {
+        missing.add('fsm/states/$state.yaml');
+      }
+    }
+
+    // APE definition files
+    const apeFiles = ['socrates', 'socrates-idle', 'descartes', 'basho', 'darwin'];
+    for (final ape in apeFiles) {
+      final path = _assets.path('apes/$ape.yaml');
+      if (!File(path).existsSync()) {
+        missing.add('apes/$ape.yaml');
+      }
+    }
+
+    // Transition contract
+    final contractPath = _assets.path('fsm/transition_contract.yaml');
+    if (!File(contractPath).existsSync()) {
+      missing.add('fsm/transition_contract.yaml');
+    }
+
+    // Skills
+    try {
+      final skills = _assets.listDirectory('skills');
+      for (final skill in skills) {
+        final path = _assets.path('skills/$skill/SKILL.md');
+        if (!File(path).existsSync()) {
+          missing.add('skills/$skill/SKILL.md');
+        }
+      }
+    } catch (_) {
+      missing.add('skills/ (directory missing)');
+    }
+
+    if (missing.isEmpty) {
+      return DoctorCheck(name: 'assets', passed: true);
+    }
+
+    return DoctorCheck(
+      name: 'assets',
+      passed: false,
+      error: '${missing.length} missing: ${missing.join(', ')}',
+      remediation: "Run 'iq doctor --fix' to restore missing assets",
+    );
+  }
+
+  /// Downloads and restores missing assets from the current version's release.
+  Future<DoctorCheck> _fixAssets() async {
+    if (_assets == null) {
+      return DoctorCheck(
+        name: 'fix',
+        passed: false,
+        error: 'Cannot determine asset location',
+      );
+    }
+
+    try {
+      stderr.writeln('Downloading assets for v$inquiryVersion...');
+      final client = HttpClient();
+      client.connectionTimeout = const Duration(seconds: 10);
+
+      final assetName = Platform.isWindows
+          ? 'inquiry-windows-x64.zip'
+          : 'inquiry-linux-x64.tar.gz';
+
+      final downloadUrl = Uri.parse(
+        'https://github.com/ccisnedev/inquiry/releases/download/v$inquiryVersion/$assetName',
+      );
+
+      final request = await client.getUrl(downloadUrl);
+      request.headers.set('User-Agent', 'inquiry-cli/$inquiryVersion');
+      request.followRedirects = true;
+      final response = await request.close();
+
+      if (response.statusCode != 200) {
+        await response.drain<void>();
+        client.close();
+        return DoctorCheck(
+          name: 'fix',
+          passed: false,
+          error: 'Failed to download assets (HTTP ${response.statusCode})',
+        );
+      }
+
+      // Save to temp and extract
+      final tempDir = Directory.systemTemp.createTempSync('iq_fix_');
+      final archiveFile = File(p.join(tempDir.path, assetName));
+      final sink = archiveFile.openWrite();
+      await response.pipe(sink);
+      client.close();
+
+      // Extract to the asset root's parent (which is the install dir)
+      final installDir = p.dirname(_assets.path(''));
+      // Remove trailing 'assets' from path to get install root
+      final installRoot = installDir.endsWith('assets${p.separator}') ||
+              installDir.endsWith('assets')
+          ? p.dirname(installDir)
+          : p.dirname(p.dirname(installDir));
+
+      stderr.writeln('Extracting to: $installRoot');
+
+      if (Platform.isWindows) {
+        final result = await Process.run('powershell', [
+          '-NoProfile',
+          '-Command',
+          'Expand-Archive',
+          '-Path', archiveFile.path,
+          '-DestinationPath', installRoot,
+          '-Force',
+        ]);
+        if (result.exitCode != 0) {
+          tempDir.deleteSync(recursive: true);
+          return DoctorCheck(
+            name: 'fix',
+            passed: false,
+            error: 'Extraction failed: ${result.stderr}',
+          );
+        }
+      } else {
+        final result = await Process.run('tar', [
+          '-xzf', archiveFile.path,
+          '-C', installRoot,
+        ]);
+        if (result.exitCode != 0) {
+          tempDir.deleteSync(recursive: true);
+          return DoctorCheck(
+            name: 'fix',
+            passed: false,
+            error: 'Extraction failed: ${result.stderr}',
+          );
+        }
+      }
+
+      tempDir.deleteSync(recursive: true);
+      stderr.writeln('✓ Assets restored successfully');
+      return DoctorCheck(name: 'fix', passed: true, version: 'restored');
+    } on Exception catch (e) {
+      return DoctorCheck(
+        name: 'fix',
+        passed: false,
+        error: 'Fix failed: $e',
+      );
+    }
+  }
+
+  /// Checks if a newer version is available. Non-blocking.
+  ///
+  /// Returns a passing check with update info, or null on failure/timeout.
+  Future<DoctorCheck?> _checkVersion() async {
+    try {
+      final checker = _versionChecker ??
+          ({required String currentVersion}) =>
+              checkLatestVersion(currentVersion: currentVersion);
+      final result = await checker(currentVersion: inquiryVersion);
+      if (result.updateAvailable && result.latestVersion != null) {
+        return DoctorCheck(
+          name: 'update',
+          passed: true,
+          version: '${result.latestVersion} available',
+          remediation: "Run 'iq upgrade' to update",
+        );
+      }
+      return null; // No update, no check to show
+    } catch (_) {
+      return null; // Silent on failure
+    }
   }
 
   /// Runs a command and returns a [DoctorCheck] with the result.
