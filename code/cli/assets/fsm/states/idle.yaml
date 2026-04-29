@@ -1,0 +1,23 @@
+name: idle
+version: "1.0.0"
+description: "Triage and issue formulation"
+
+instructions: |
+  Evaluate what work merits inquiry. Understand the problem,
+  search for existing issues, create or select an issue.
+  Run 'iq doctor' as first action to validate environment.
+
+constraints:
+  - Read-only mode — no code edits
+  - No file creation outside of GitHub issues
+  - No branch preparation (belongs to transition prechecks)
+  - No analysis of root causes (belongs to ANALYZE)
+  - No solution proposals (belongs to PLAN)
+
+allowed_actions:
+  - Create GitHub issues
+  - Edit GitHub issues
+  - Comment on GitHub issues
+  - Search codebase (read-only)
+  - Discuss and clarify with user
+  - Run iq doctor

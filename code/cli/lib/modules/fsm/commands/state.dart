@@ -180,23 +180,38 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
     return _stateApes[state] ?? [];
   }
 
-  static const _stateInstructions = <FsmState, String>{
-    FsmState.idle:
-        'Evaluate what work merits inquiry. Understand the problem, search for existing issues, create or select an issue, prepare the branch.',
-    FsmState.analyze:
-        'Investigate the problem through structured questioning. Challenge assumptions, gather evidence, explore perspectives. Produce diagnosis.md.',
-    FsmState.plan:
-        'Design an experimental plan from the diagnosis. Divide into phases, order by dependencies, define verification for each. Produce plan.md.',
-    FsmState.execute:
-        'Implement the plan phase by phase under its formal constraints. Each phase produces tested code and a commit.',
-    FsmState.end:
-        'Review the execution. Create the pull request.',
-    FsmState.evolution:
-        'Evaluate the completed cycle. Observe what worked, what deviated, what can improve. Create improvement issues.',
-  };
-
   String _computeInstructions(FsmState state) {
-    return _stateInstructions[state] ?? 'Unknown state: ${state.value}';
+    final stateName = state.value.toLowerCase();
+    try {
+      final yamlPath = _assets != null
+          ? _assets.path('fsm/states/$stateName.yaml')
+          : p.join(input.workingDirectory, 'assets', 'fsm', 'states', '$stateName.yaml');
+      final content = File(yamlPath).readAsStringSync();
+      final yaml = loadYaml(content);
+      if (yaml is YamlMap && yaml['instructions'] is String) {
+        return (yaml['instructions'] as String).trim();
+      }
+      throw CommandException(
+        code: 'MALFORMED_STATE_YAML',
+        message: "State file for '$stateName' is missing 'instructions' field. "
+            "Run 'iq doctor --fix' to repair.",
+        exitCode: ExitCode.genericError,
+      );
+    } on PathNotFoundException {
+      throw CommandException(
+        code: 'MISSING_STATE_YAML',
+        message: "State instructions missing for '$stateName'. "
+            "Run 'iq doctor --fix' to repair.",
+        exitCode: ExitCode.genericError,
+      );
+    } on FileSystemException {
+      throw CommandException(
+        code: 'MISSING_STATE_YAML',
+        message: "State instructions missing for '$stateName'. "
+            "Run 'iq doctor --fix' to repair.",
+        exitCode: ExitCode.genericError,
+      );
+    }
   }
 
   /// Build `ape` info from InquiryState + APE YAML definition.

@@ -1,0 +1,20 @@
+name: execute
+version: "1.0.0"
+description: "Implementation under plan constraints"
+
+instructions: |
+  Implement the plan phase by phase under its formal constraints.
+  Each phase produces tested code and a commit.
+
+constraints:
+  - Follow plan.md phases in order
+  - Each phase must pass its verification criteria before advancing
+  - Commits must be atomic (one phase = one commit)
+  - No scope creep — only implement what plan.md specifies
+
+allowed_actions:
+  - Edit code files
+  - Create new files as specified in plan
+  - Run tests
+  - Commit completed phases
+  - Read plan.md for guidance

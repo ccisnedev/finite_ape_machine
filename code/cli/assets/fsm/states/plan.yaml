@@ -1,0 +1,21 @@
+name: plan
+version: "1.0.0"
+description: "Experimental plan design from diagnosis"
+
+instructions: |
+  Design an experimental plan from the diagnosis.
+  Divide into phases, order by dependencies,
+  define verification criteria for each phase.
+  Produce plan.md.
+
+constraints:
+  - No code edits (belongs to EXECUTE)
+  - Plan must reference diagnosis.md decisions
+  - Each phase must have verification criteria
+  - Plan must be approved by user before transitioning
+
+allowed_actions:
+  - Read diagnosis.md and codebase
+  - Decompose work into ordered phases
+  - Define verification per phase
+  - Produce plan.md in cleanroom

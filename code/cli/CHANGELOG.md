@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.1]
+### Added
+- **State YAML files** (#160): FSM instructions extracted into `assets/fsm/states/*.yaml` — no more hardcoded strings
+- **Doctor asset validation** (#160): `iq doctor` verifies integrity of internal assets (apes, states, skills, contract)
+- **Doctor version check** (#160): `iq doctor` and `iq` bare check for newer releases via GitHub API
+- **Doctor `--fix`** (#160): `iq doctor --fix` downloads and restores missing assets from GitHub release
+- **IDLE doctor-first** (#160): firmware instructs scheduler to run `iq doctor` as first action in IDLE
+- **TUI shows Evolution** (#160): diagram displays `[Evolution]` as optional stage
+- **Cleanroom auto-creation** (#160): `iq fsm transition --event start_analyze` creates `cleanrooms/<branch>/analyze/index.md` automatically
+- **Commit gate** (#160): `iq ape transition --event next_phase` requires at least one commit on the feature branch before advancing to next phase
+
+### Changed
+- **Firmware v0.3.1** (#160): Outer Loop step 2 runs doctor in IDLE before dispatching sub-agents
+
 ## [0.3.0]
 ### Changed
 - **State encapsulation** (#152): `iq fsm state --json` transitions no longer expose `next_state` — agents see only available events

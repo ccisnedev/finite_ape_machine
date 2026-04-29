@@ -5,6 +5,7 @@ import 'package:cli_router/cli_router.dart';
 import 'package:modular_cli_sdk/modular_cli_sdk.dart';
 
 import '../../../src/version.dart';
+import '../../../src/version_check.dart';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 
@@ -46,15 +47,35 @@ class TuiOutput extends Output {
 class TuiCommand implements Command<TuiInput, TuiOutput> {
   @override
   final TuiInput input;
+  final Future<VersionCheckResult> Function({required String currentVersion})?
+      _versionChecker;
 
-  TuiCommand(this.input);
+  TuiCommand(this.input, {
+    Future<VersionCheckResult> Function({required String currentVersion})?
+        versionChecker,
+  }) : _versionChecker = versionChecker;
 
   @override
   String? validate() => null;
 
   @override
   Future<TuiOutput> execute() async {
-    final diagram = _buildDiagram(inquiryVersion);
+    var diagram = _buildDiagram(inquiryVersion);
+
+    // Non-blocking version check
+    try {
+      final checker = _versionChecker ??
+          ({required String currentVersion}) =>
+              checkLatestVersion(currentVersion: currentVersion);
+      final result = await checker(currentVersion: inquiryVersion);
+      if (result.updateAvailable && result.latestVersion != null) {
+        diagram += "\n\nUpdate available: $inquiryVersion → ${result.latestVersion}"
+            " — run 'iq upgrade'";
+      }
+    } catch (_) {
+      // Silent on failure
+    }
+
     return TuiOutput(version: inquiryVersion, diagram: diagram);
   }
 }
@@ -66,10 +87,9 @@ String _buildDiagram(String version) {
   return '''
 Inquiry v$version — powered by the Finite APE Machine
 
-  ╭────────────────────────────────╮
-IDLE → │ Analyze → Plan → Execute → End │ → EVOLUTION
-  ╰────────────────────────────────╯
-
+       ╭──────────────────────────╮
+Idle → │ Analyze → Plan → Execute │ → End → [Evolution]
+       ╰──────────────────────────╯
 
 Commands: init, doctor, version
 Run: inquiry --help''';

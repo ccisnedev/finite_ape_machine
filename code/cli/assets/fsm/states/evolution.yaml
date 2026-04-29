@@ -1,0 +1,18 @@
+name: evolution
+version: "1.0.0"
+description: "Cycle evaluation and process improvement"
+
+instructions: |
+  Evaluate the completed cycle. Observe what worked,
+  what deviated, what can improve. Create improvement issues.
+
+constraints:
+  - No code edits (cycle is closed)
+  - Observations must be evidence-based
+  - Improvement issues must be atomic and actionable
+
+allowed_actions:
+  - Review cycle artifacts (diagnosis, plan, commits, PR)
+  - Document observations in mutations.md
+  - Create improvement issues on GitHub
+  - Collect metrics

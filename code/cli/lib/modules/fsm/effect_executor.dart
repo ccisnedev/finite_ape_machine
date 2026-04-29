@@ -20,6 +20,7 @@ const cliEffects = {
   'snapshot_metrics',
   'close_cycle',
   'collect_metrics',
+  'open_analysis_context',
 };
 
 class EffectExecutor {
@@ -74,6 +75,52 @@ class EffectExecutor {
       apeState: apeInitialState,
     );
     updated.save(workingDirectory);
+  }
+
+  /// Create `cleanrooms/<branch>/analyze/index.md` for ANALYZE phase.
+  void openAnalysisContext() {
+    final branch = _getCurrentBranch();
+    if (branch.isEmpty) return;
+
+    final issue = InquiryState.load(workingDirectory).issue ?? '';
+    final cleanroomDir = p.join(workingDirectory, 'cleanrooms', branch, 'analyze');
+    final dir = Directory(cleanroomDir);
+    if (!dir.existsSync()) {
+      dir.createSync(recursive: true);
+    }
+
+    final indexFile = File(p.join(cleanroomDir, 'index.md'));
+    if (!indexFile.existsSync()) {
+      indexFile.writeAsStringSync(
+        '# Analyze Phase — Index\n'
+        '\n'
+        '**Issue:** #$issue\n'
+        '**Branch:** $branch\n'
+        '**Phase:** ANALYZE\n'
+        '**Status:** In progress\n'
+        '\n'
+        '---\n'
+        '\n'
+        '## Documents\n'
+        '\n'
+        '| # | File | Description |\n'
+        '|---|------|-------------|\n',
+      );
+    }
+  }
+
+  String _getCurrentBranch() {
+    try {
+      final result = Process.runSync(
+        'git',
+        ['rev-parse', '--abbrev-ref', 'HEAD'],
+        workingDirectory: workingDirectory,
+      );
+      if (result.exitCode != 0) return '';
+      return (result.stdout as String).trim();
+    } catch (_) {
+      return '';
+    }
   }
 
   /// Reset `.inquiry/mutations.md` to empty template.
@@ -158,6 +205,9 @@ class EffectExecutor {
 
     for (final effect in effects) {
       switch (effect) {
+        case 'open_analysis_context':
+          openAnalysisContext();
+          executed.add(effect);
         case 'reset_mutations':
           resetMutations();
           executed.add(effect);

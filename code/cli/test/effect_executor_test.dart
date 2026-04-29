@@ -192,13 +192,14 @@ void main() {
 
         final executor = EffectExecutor(workingDirectory: tempDir.path);
         final executed = executor.executeAll(
-          effects: ['open_analysis_context', 'noop', 'push_branch'],
+          effects: ['noop', 'push_branch', 'generate_plan'],
           newState: 'ANALYZE',
         );
 
         // Only update_state is a CLI effect; the rest are skill-side
         expect(executed, contains('update_state'));
-        expect(executed, isNot(contains('open_analysis_context')));
+        expect(executed, isNot(contains('noop')));
+        expect(executed, isNot(contains('push_branch')));
       });
     });
 
