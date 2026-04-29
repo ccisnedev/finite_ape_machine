@@ -1,214 +1,177 @@
 import * as assert from 'assert';
-import { EventEmitter } from 'events';
 import * as path from 'path';
-import { getInstallScriptUrl, getRunCommand, installInquiryCli, InstallerDeps } from '../../src/installer';
+import { getAssetName, getInstallDir, installInquiryCli, InstallerDeps } from '../../src/installer';
 
-function createMockProcess() {
-  const proc = {
-    stdout: new EventEmitter(),
-    stderr: new EventEmitter(),
-    on: (event: string, listener: (...args: any[]) => void) => {
-      (proc as any)._events = (proc as any)._events || {};
-      (proc as any)._events[event] = listener;
-    },
-    kill: () => { (proc as any)._killed = true; },
-    _killed: false,
-    _events: {} as Record<string, (...args: any[]) => void>,
-    emit_close: (code: number) => { (proc as any)._events['close'](code); },
-  };
-  return proc;
-}
-
-describe('getInstallScriptUrl', () => {
-  it('returns ps1 URL on win32', () => {
-    const result = getInstallScriptUrl('win32');
-    assert.strictEqual(result.url, 'https://inquiry.ccisne.dev/install.ps1');
-    assert.strictEqual(result.filename, 'inquiry-install.ps1');
+describe('getAssetName', () => {
+  it('returns zip on win32', () => {
+    assert.strictEqual(getAssetName('win32'), 'inquiry-windows-x64.zip');
   });
 
-  it('returns sh URL on linux', () => {
-    const result = getInstallScriptUrl('linux');
-    assert.strictEqual(result.url, 'https://inquiry.ccisne.dev/install.sh');
-    assert.strictEqual(result.filename, 'inquiry-install.sh');
+  it('returns tar.gz on linux', () => {
+    assert.strictEqual(getAssetName('linux'), 'inquiry-linux-x64.tar.gz');
   });
 
   it('throws on unsupported platform', () => {
-    assert.throws(() => getInstallScriptUrl('darwin'), /Unsupported platform: darwin/);
+    assert.throws(() => getAssetName('darwin'), /Unsupported platform: darwin/);
   });
 });
 
-describe('getRunCommand', () => {
-  it('returns powershell -File on win32', () => {
-    const cmd = getRunCommand('win32', 'C:\\temp\\inquiry-install.ps1');
-    assert.strictEqual(cmd.shell, 'powershell');
-    assert.deepStrictEqual(cmd.args, [
-      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'C:\\temp\\inquiry-install.ps1',
-    ]);
+describe('getInstallDir', () => {
+  it('returns LOCALAPPDATA path on win32', () => {
+    const dir = getInstallDir('win32');
+    assert.ok(dir.includes('inquiry'));
   });
 
-  it('returns bash on linux', () => {
-    const cmd = getRunCommand('linux', '/tmp/inquiry-install.sh');
-    assert.strictEqual(cmd.shell, 'bash');
-    assert.deepStrictEqual(cmd.args, ['/tmp/inquiry-install.sh']);
+  it('returns home/.inquiry on linux', () => {
+    const dir = getInstallDir('linux');
+    assert.ok(dir.endsWith('.inquiry'));
   });
 
   it('throws on unsupported platform', () => {
-    assert.throws(() => getRunCommand('darwin', '/tmp/x'), /Unsupported platform: darwin/);
+    assert.throws(() => getInstallDir('darwin'), /Unsupported platform: darwin/);
   });
 });
 
 describe('installInquiryCli', () => {
   const tick = () => new Promise(r => setTimeout(r, 0));
 
-  it('downloads then spawns powershell -File on win32', async () => {
-    const mockProc = createMockProcess();
-    let spawnedCmd = '';
-    let spawnedArgs: string[] = [];
-    let downloadedUrl = '';
-    let downloadedDest = '';
-
-    const deps: InstallerDeps = {
-      platform: 'win32',
-      tmpdir: () => 'C:\\temp',
-      downloadFile: async (url, dest) => { downloadedUrl = url; downloadedDest = dest; },
-      spawn: (cmd, args) => { spawnedCmd = cmd; spawnedArgs = args; return mockProc; },
-      withProgress: async (_opts, task) => {
-        const reports: { message?: string }[] = [];
-        const progress = { report: (v: { message?: string }) => { reports.push(v); } };
-        const token = { onCancellationRequested: () => {} };
-        const promise = task(progress, token);
-        await tick();
-        mockProc.stdout.emit('data', '>>> Installing...\n');
-        mockProc.emit_close(0);
-        await promise;
-        assert.ok(reports.some(r => r.message === 'Downloading installer...'));
-        assert.ok(reports.some(r => r.message === 'Running installer...'));
-        assert.ok(reports.some(r => r.message === 'Installing...'));
-      },
-    };
-
-    await installInquiryCli(deps);
-    assert.strictEqual(downloadedUrl, 'https://inquiry.ccisne.dev/install.ps1');
-    assert.strictEqual(downloadedDest, path.join('C:\\temp', 'inquiry-install.ps1'));
-    assert.strictEqual(spawnedCmd, 'powershell');
-    assert.deepStrictEqual(spawnedArgs, [
-      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join('C:\\temp', 'inquiry-install.ps1'),
-    ]);
-  });
-
-  it('downloads then spawns bash on linux', async () => {
-    const mockProc = createMockProcess();
-    let spawnedCmd = '';
-    let downloadedUrl = '';
-
-    const deps: InstallerDeps = {
-      platform: 'linux',
-      tmpdir: () => '/tmp',
-      downloadFile: async (url) => { downloadedUrl = url; },
-      spawn: (cmd) => { spawnedCmd = cmd; return mockProc; },
-      withProgress: async (_opts, task) => {
-        const progress = { report: () => {} };
-        const token = { onCancellationRequested: () => {} };
-        const promise = task(progress, token);
-        await tick();
-        mockProc.emit_close(0);
-        await promise;
-      },
-    };
-
-    await installInquiryCli(deps);
-    assert.strictEqual(downloadedUrl, 'https://inquiry.ccisne.dev/install.sh');
-    assert.strictEqual(spawnedCmd, 'bash');
-  });
-
-  it('rejects on non-zero exit code', async () => {
-    const mockProc = createMockProcess();
-
-    const deps: InstallerDeps = {
-      platform: 'win32',
-      tmpdir: () => 'C:\\temp',
+  function baseDeps(platform: string): InstallerDeps {
+    return {
+      platform,
+      tmpdir: () => (platform === 'win32' ? 'C:\\temp' : '/tmp'),
+      fetchJson: async () => ({
+        tag_name: 'v1.0.0',
+        assets: [
+          { name: 'inquiry-windows-x64.zip', browser_download_url: 'https://github.com/dl/win.zip' },
+          { name: 'inquiry-linux-x64.tar.gz', browser_download_url: 'https://github.com/dl/linux.tar.gz' },
+        ],
+      }),
       downloadFile: async () => {},
-      spawn: () => mockProc,
+      extractZip: async () => {},
+      extractTarGz: async () => {},
+      execFile: async () => 'v1.0.0',
+      mkdirp: async () => {},
+      rmrf: async () => {},
+      writeFile: async () => {},
+      chmod: async () => {},
+      symlink: async () => {},
+      getEnvPath: () => '',
+      setEnvPath: () => {},
       withProgress: async (_opts, task) => {
         const progress = { report: () => {} };
         const token = { onCancellationRequested: () => {} };
-        const promise = task(progress, token);
-        await tick();
-        mockProc.emit_close(1);
-        return promise;
+        await task(progress, token);
+      },
+    };
+  }
+
+  it('fetches release, downloads zip, and extracts on win32', async () => {
+    let downloadedUrl = '';
+    let extractedPath = '';
+    let wroteIqCmd = false;
+    const reports: string[] = [];
+
+    const deps: InstallerDeps = {
+      ...baseDeps('win32'),
+      downloadFile: async (url) => { downloadedUrl = url; },
+      extractZip: async (p) => { extractedPath = p; },
+      writeFile: async (f) => { if (f.endsWith('iq.cmd')) { wroteIqCmd = true; } },
+      withProgress: async (_opts, task) => {
+        const progress = { report: (v: { message?: string }) => { if (v.message) { reports.push(v.message); } } };
+        const token = { onCancellationRequested: () => {} };
+        await task(progress, token);
       },
     };
 
-    await assert.rejects(() => installInquiryCli(deps), /Install failed \(exit 1\)/);
+    await installInquiryCli(deps);
+    assert.strictEqual(downloadedUrl, 'https://github.com/dl/win.zip');
+    assert.ok(extractedPath.endsWith('.zip'));
+    assert.ok(wroteIqCmd, 'should create iq.cmd');
+    assert.ok(reports.includes('Fetching latest release...'));
+    assert.ok(reports.some(r => r.startsWith('Downloading')));
+    assert.ok(reports.includes('Extracting...'));
+  });
+
+  it('fetches release, downloads tar.gz, and extracts on linux', async () => {
+    let downloadedUrl = '';
+    let extractedTar = false;
+    let chmodCalled = false;
+    let symlinkTargets: string[] = [];
+
+    const deps: InstallerDeps = {
+      ...baseDeps('linux'),
+      downloadFile: async (url) => { downloadedUrl = url; },
+      extractTarGz: async () => { extractedTar = true; },
+      chmod: async () => { chmodCalled = true; },
+      symlink: async (_t, l) => { symlinkTargets.push(l); },
+    };
+
+    await installInquiryCli(deps);
+    assert.strictEqual(downloadedUrl, 'https://github.com/dl/linux.tar.gz');
+    assert.ok(extractedTar);
+    assert.ok(chmodCalled);
+    assert.ok(symlinkTargets.some(l => l.includes('inquiry')));
+    assert.ok(symlinkTargets.some(l => l.includes('iq')));
+  });
+
+  it('throws when asset not found in release', async () => {
+    const deps: InstallerDeps = {
+      ...baseDeps('win32'),
+      fetchJson: async () => ({ tag_name: 'v1.0.0', assets: [] }),
+    };
+
+    await assert.rejects(() => installInquiryCli(deps), /No inquiry-windows-x64.zip asset found/);
   });
 
   it('rejects on download failure', async () => {
     const deps: InstallerDeps = {
-      platform: 'win32',
-      tmpdir: () => 'C:\\temp',
+      ...baseDeps('win32'),
       downloadFile: async () => { throw new Error('Network error'); },
-      spawn: () => { throw new Error('should not spawn'); },
-      withProgress: async (_opts, task) => {
-        const progress = { report: () => {} };
-        const token = { onCancellationRequested: () => {} };
-        return task(progress, token);
-      },
     };
 
     await assert.rejects(() => installInquiryCli(deps), /Network error/);
   });
 
-  it('kills process on cancellation', async () => {
-    const mockProc = createMockProcess();
-
+  it('rejects on cancellation', async () => {
+    let cancelFn: (() => void) | undefined;
     const deps: InstallerDeps = {
-      platform: 'win32',
-      tmpdir: () => 'C:\\temp',
-      downloadFile: async () => {},
-      spawn: () => mockProc,
+      ...baseDeps('win32'),
+      fetchJson: async () => {
+        cancelFn!();
+        return { tag_name: 'v1.0.0', assets: [{ name: 'inquiry-windows-x64.zip', browser_download_url: 'x' }] };
+      },
       withProgress: async (_opts, task) => {
         const progress = { report: () => {} };
-        let cancelFn: (() => void) | undefined;
-        const token = { onCancellationRequested: (listener: () => void) => { cancelFn = listener; } };
-        const promise = task(progress, token);
-        await tick();
-        cancelFn!();
-        try { await promise; } catch { /* expected */ }
+        const token = { onCancellationRequested: (fn: () => void) => { cancelFn = fn; } };
+        await task(progress, token);
       },
     };
 
-    try {
-      await installInquiryCli(deps);
-    } catch {
-      // expected rejection from cancellation
-    }
-    assert.strictEqual(mockProc._killed, true);
+    await assert.rejects(() => installInquiryCli(deps), /Installation cancelled/);
   });
 
-  it('reports multiple progress milestones from stdout', async () => {
-    const mockProc = createMockProcess();
-    const reports: { message?: string }[] = [];
-
+  it('adds bin dir to process PATH', async () => {
+    let newPath = '';
     const deps: InstallerDeps = {
-      platform: 'linux',
-      tmpdir: () => '/tmp',
-      downloadFile: async () => {},
-      spawn: () => mockProc,
-      withProgress: async (_opts, task) => {
-        const progress = { report: (v: { message?: string }) => { reports.push(v); } };
-        const token = { onCancellationRequested: () => {} };
-        const promise = task(progress, token);
-        await tick();
-        mockProc.stdout.emit('data', '>>> Fetching...\n>>> Downloading...\n>>> Extracting...\n');
-        mockProc.emit_close(0);
-        await promise;
-      },
+      ...baseDeps('win32'),
+      getEnvPath: () => 'C:\\existing',
+      setEnvPath: (p) => { newPath = p; },
     };
 
     await installInquiryCli(deps);
-    // 2 built-in reports (Downloading installer..., Running installer...) + 3 from stdout
-    assert.ok(reports.some(r => r.message === 'Fetching...'));
-    assert.ok(reports.some(r => r.message === 'Downloading...'));
-    assert.ok(reports.some(r => r.message === 'Extracting...'));
+    assert.ok(newPath.includes('inquiry'));
+    assert.ok(newPath.includes('C:\\existing'));
+  });
+
+  it('runs target get and version after install', async () => {
+    const commands: string[][] = [];
+    const deps: InstallerDeps = {
+      ...baseDeps('win32'),
+      execFile: async (_cmd, args) => { commands.push(args); return 'v1.0.0'; },
+    };
+
+    await installInquiryCli(deps);
+    assert.ok(commands.some(c => c.includes('target') && c.includes('get')));
+    assert.ok(commands.some(c => c.includes('version')));
   });
 });
