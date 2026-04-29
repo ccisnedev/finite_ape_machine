@@ -146,6 +146,21 @@ class ApeTransitionCommand implements Command<ApeTransitionInput, ApeTransitionO
       );
     }
 
+    // Gate: basho commit→implement requires a new commit
+    if (inquiryState.apeName == 'basho' &&
+        fromState == 'commit' &&
+        match.to == 'implement') {
+      final hasCommit = _hasUnpushedCommitSinceLastTransition();
+      if (!hasCommit) {
+        throw CommandException(
+          code: 'COMMIT_REQUIRED',
+          message: 'Cannot advance to next phase without committing. '
+              'Commit your changes first, then retry.',
+          exitCode: ExitCode.validationFailed,
+        );
+      }
+    }
+
     // Write the new sub-state
     final newState = inquiryState.copyWith(apeState: match.to);
     newState.save(input.workingDirectory);
@@ -163,5 +178,45 @@ class ApeTransitionCommand implements Command<ApeTransitionInput, ApeTransitionO
       return _assets.path('apes/$name.yaml');
     }
     return p.join(input.workingDirectory, 'assets', 'apes', '$name.yaml');
+  }
+
+  /// Check if there's at least one commit on the current branch since
+  /// it diverged from the default branch (main or master).
+  bool _hasUnpushedCommitSinceLastTransition() {
+    try {
+      // Determine default branch
+      final defaultBranch = _resolveDefaultBranch();
+      if (defaultBranch == null) {
+        // No main/master found — can't validate, allow transition
+        return true;
+      }
+
+      // Count commits on HEAD that are not on the default branch
+      final result = Process.runSync(
+        'git',
+        ['rev-list', '--count', '$defaultBranch..HEAD'],
+        workingDirectory: input.workingDirectory,
+      );
+      if (result.exitCode == 0) {
+        final count = int.tryParse((result.stdout as String).trim()) ?? 0;
+        return count > 0;
+      }
+      return true; // git failed — don't block
+    } catch (_) {
+      // If git fails, don't block — allow transition
+      return true;
+    }
+  }
+
+  String? _resolveDefaultBranch() {
+    for (final branch in ['main', 'master']) {
+      final result = Process.runSync(
+        'git',
+        ['rev-parse', '--verify', branch],
+        workingDirectory: input.workingDirectory,
+      );
+      if (result.exitCode == 0) return branch;
+    }
+    return null;
   }
 }

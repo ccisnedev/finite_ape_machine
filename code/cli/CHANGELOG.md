@@ -12,6 +12,8 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 - **Doctor `--fix`** (#160): `iq doctor --fix` downloads and restores missing assets from GitHub release
 - **IDLE doctor-first** (#160): firmware instructs scheduler to run `iq doctor` as first action in IDLE
 - **TUI shows Evolution** (#160): diagram displays `[Evolution]` as optional stage
+- **Cleanroom auto-creation** (#160): `iq fsm transition --event start_analyze` creates `cleanrooms/<branch>/analyze/index.md` automatically
+- **Commit gate** (#160): `iq ape transition --event next_phase` requires at least one commit on the feature branch before advancing to next phase
 
 ### Changed
 - **Firmware v0.3.1** (#160): Outer Loop step 2 runs doctor in IDLE before dispatching sub-agents
