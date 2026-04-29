@@ -52,6 +52,16 @@ void main() {
         src.copySync('${apesDir.path}/$name.yaml');
       }
     }
+
+    // Copy state instruction YAMLs
+    final statesDir = Directory('${tempDir.path}/assets/fsm/states');
+    statesDir.createSync(recursive: true);
+    for (final name in ['idle', 'analyze', 'plan', 'execute', 'end', 'evolution']) {
+      final src = File('assets/fsm/states/$name.yaml');
+      if (src.existsSync()) {
+        src.copySync('${statesDir.path}/$name.yaml');
+      }
+    }
   }
 
   group('FsmStateCommand', () {
@@ -228,11 +238,20 @@ void main() {
 
     group('missing workspace', () {
       test('defaults to IDLE when .inquiry/state.yaml missing', () async {
-        // No setupWorkspace — but need contract
+        // No setupWorkspace — but need contract and state YAMLs
         final contractDir = Directory('${tempDir.path}/assets/fsm');
         contractDir.createSync(recursive: true);
         final contractSource = File('assets/fsm/transition_contract.yaml');
         contractSource.copySync('${contractDir.path}/transition_contract.yaml');
+
+        final statesDir = Directory('${tempDir.path}/assets/fsm/states');
+        statesDir.createSync(recursive: true);
+        for (final name in ['idle', 'analyze', 'plan', 'execute', 'end', 'evolution']) {
+          final src = File('assets/fsm/states/$name.yaml');
+          if (src.existsSync()) {
+            src.copySync('${statesDir.path}/$name.yaml');
+          }
+        }
 
         final command = FsmStateCommand(FsmStateInput(
           workingDirectory: tempDir.path,
