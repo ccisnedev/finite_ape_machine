@@ -27,13 +27,13 @@ Historical naming note: APE was the system's initial working name. The individua
 ### Install (Windows)
 
 ```powershell
-irm https://inquiry.si14bm.com/install.ps1 | iex
+irm https://inquiry.ccisne.dev/install.ps1 | iex
 ```
 
 ### Install (Linux)
 
 ```bash
-curl -fsSL https://inquiry.si14bm.com/install.sh | bash
+curl -fsSL https://inquiry.ccisne.dev/install.sh | bash
 ```
 
 The installer downloads the latest release, places `inquiry` (aliased as `iq`) on `PATH`, and verifies prerequisites.
@@ -82,7 +82,7 @@ EVOLUTION is opt-in (`evolution.enabled` in `.inquiry/config.yaml`) and one-shot
 
 ## Architecture
 
-- **CLI:** Dart, compiled to a single cross-platform binary, built on top of [`modular_cli_sdk`](https://github.com/siliconbrainedmachines/modular_cli_sdk)
+- **CLI:** Dart, compiled to a single cross-platform binary, built on top of [`modular_cli_sdk`](https://github.com/ccisnedev/modular_cli_sdk)
 - **Modules:** `global` (init, doctor, version, upgrade, uninstall, tui), `target` (get, clean), `fsm` (state, transition), `ape` (state, transition, prompt)
 - **FSM:** declarative `transition_contract.yaml` parsed into `FsmContract` — every (state, event) pair is total (allowed or explicitly illegal)
 - **Targets:** Copilot only at present per [ADR D20](docs/spec/target-specific-agents.md). Adapters for Claude/Codex/Crush/Gemini exist for cleanup but are deferred until multi-target reactivation

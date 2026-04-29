@@ -1,17 +1,17 @@
 {
   "name": "inquiry-vscode",
   "displayName": "Inquiry",
-  "publisher": "siliconbrainedmachines",
-  "version": "0.1.4",
+  "publisher": "ccisnedev",
+  "version": "0.2.0",
   "description": "Inquiry — Analyze. Plan. Execute. End. Structured AI-assisted development for GitHub Copilot.",
   "license": "MIT",
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/siliconbrainedmachines/inquiry"
+    "url": "https://github.com/ccisnedev/inquiry"
   },
-  "bugs": { "url": "https://github.com/siliconbrainedmachines/inquiry/issues" },
-  "homepage": "https://www.si14bm.com/inquiry/",
+  "bugs": { "url": "https://github.com/ccisnedev/inquiry/issues" },
+  "homepage": "https://inquiry.ccisne.dev/",
   "categories": ["Other"],
   "keywords": ["inquiry", "agent", "github-copilot", "copilot", "ai", "methodology"],
   "engines": {

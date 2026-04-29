@@ -2,7 +2,7 @@
 # install.sh — Downloads and installs the latest Inquiry CLI release on Linux.
 #
 # Usage:
-#   curl -fsSL https://inquiry.si14bm.com/install.sh | bash
+#   curl -fsSL https://inquiry.ccisne.dev/install.sh | bash
 #
 # What it does:
 #   1. Detects Linux x64
@@ -15,7 +15,7 @@
 
 set -euo pipefail
 
-REPO="siliconbrainedmachines/inquiry"
+REPO="ccisnedev/inquiry"
 INSTALL_DIR="$HOME/.inquiry"
 BIN_DIR="$INSTALL_DIR/bin"
 ASSET_NAME="inquiry-linux-x64.tar.gz"

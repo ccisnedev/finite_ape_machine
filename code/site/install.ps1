@@ -1,7 +1,7 @@
 # install.ps1 — Downloads and installs the latest Inquiry CLI release.
 #
 # Usage:
-#   irm https://inquiry.si14bm.com/install.ps1 | iex
+#   irm https://inquiry.ccisne.dev/install.ps1 | iex
 #
 # What it does:
 #   1. Detects Windows x64
@@ -14,7 +14,7 @@
 
 $ErrorActionPreference = 'Stop'
 
-$repo = 'siliconbrainedmachines/inquiry'
+$repo = 'ccisnedev/inquiry'
 $installDir = Join-Path $env:LOCALAPPDATA 'inquiry'
 $binDir = Join-Path $installDir 'bin'
 

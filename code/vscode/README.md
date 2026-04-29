@@ -12,7 +12,7 @@ This README is the extension's public entry surface. For the canonical repositor
 
 ## How it works
 
-![Inquiry finite state machine](https://raw.githubusercontent.com/siliconbrainedmachines/inquiry/main/code/site/img/fsm.png)
+![Inquiry finite state machine](https://raw.githubusercontent.com/ccisnedev/inquiry/main/code/site/img/fsm.png)
 
 | Phase | What happens | Output |
 |-------|-------------|--------|
@@ -26,7 +26,7 @@ The extension is a lightweight integration surface around the Inquiry CLI and th
 
 ## Quick start
 
-1. Install from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=siliconbrainedmachines.inquiry-vscode)
+1. Install from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=ccisnedev.inquiry-vscode)
 2. `Ctrl+Shift+P` → **Inquiry: Init**
 3. The extension installs the CLI if missing, runs `iq init`, creates `.inquiry/`
 4. Open Copilot Chat → select **@inquiry** → describe your task
@@ -63,9 +63,9 @@ The status bar shows the current FSM phase in real time:
 
 ## Links
 
-- [Website](https://inquiry.si14bm.com/) · [GitHub](https://github.com/siliconbrainedmachines/inquiry) · [Issues](https://github.com/siliconbrainedmachines/inquiry/issues)
-- [Docs map](https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/index.md) · [Architecture](https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/architecture.md) · [Finite APE Machine spec](https://github.com/siliconbrainedmachines/inquiry/blob/main/docs/spec/finite-ape-machine.md)
+- [Website](https://inquiry.ccisne.dev/) · [GitHub](https://github.com/ccisnedev/inquiry) · [Issues](https://github.com/ccisnedev/inquiry/issues)
+- [Docs map](https://github.com/ccisnedev/inquiry/blob/main/docs/index.md) · [Architecture](https://github.com/ccisnedev/inquiry/blob/main/docs/architecture.md) · [Finite APE Machine spec](https://github.com/ccisnedev/inquiry/blob/main/docs/spec/finite-ape-machine.md)
 
-For the full methodology, see [inquiry.si14bm.com](https://inquiry.si14bm.com/).
+For the full methodology, see [inquiry.ccisne.dev](https://inquiry.ccisne.dev/).
 
 MIT © 2026 Cristian Cisneros

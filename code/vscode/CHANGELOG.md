@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0] - 2026-04-28
+
+### Changed
+- Publisher migrated from `siliconbrainedmachines` to `ccisnedev` (personal brand)
+- Repository moved to `ccisnedev/inquiry`
+- Website domain changed from `inquiry.si14bm.com` to `inquiry.ccisne.dev`
+- All internal URLs updated to reflect the new identity
+
 ## [0.1.4] - 2026-04-24
 
 ### Fixed

@@ -615,7 +615,7 @@ Cuando `detectCli()` retorna `null`:
 
 async function installApeCli(): Promise<boolean> {
   // 1. Obtener latest release de GitHub
-  const release = await getLatestRelease("siliconbrainedmachines", "inquiry");
+  const release = await getLatestRelease("ccisnedev", "inquiry");
 
   // 2. Determinar asset según OS
   const asset = release.assets.find(a =>

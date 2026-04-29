@@ -48,6 +48,24 @@ h1 .ape {
   text-align: left;
 }
 
+.hero-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.hero-link {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.hero-link:hover {
+  text-decoration: underline;
+}
+
 /* ----- Intro ----- */
 .intro {
   margin: 1.5rem 0 0.5rem;
