@@ -33,6 +33,8 @@ base_prompt: |
   - Risk notes where applicable
   - Dependencies between phases
   - The plan must be detailed enough that execution is mechanical
+  - Every phase MUST end with: `- [ ] Commit: "<descriptive message referencing issue>"`
+  - The final phase MUST include version bump + CHANGELOG update + commit
 
   The plan's structure is immutable after approval. Only checkboxes and deviation annotations change during execution.
 
