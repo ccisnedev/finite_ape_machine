@@ -39,3 +39,15 @@ export function isInquiryWorkspace(
 ): boolean {
   return existsSync(path.join(workspaceFolder, '.inquiry'));
 }
+
+/**
+ * Build a shell command string that works in both PowerShell (Windows) and bash (Linux).
+ * On Windows, uses the `&` call operator; on Linux, invokes the path directly.
+ */
+export function shellExec(binaryPath: string, args: string[], platform?: string): string {
+  const plat = platform ?? getPlatform();
+  if (plat === 'win32') {
+    return `& "${binaryPath}" ${args.join(' ')}`;
+  }
+  return `"${binaryPath}" ${args.join(' ')}`;
+}

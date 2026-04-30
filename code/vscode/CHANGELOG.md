@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.2] - 2026-04-29
+
+### Fixed
+- Shell command compatibility: `Inquiry: Init` no longer fails in bash terminals (Linux/devcontainers) with `syntax error near unexpected token &` — the PowerShell call operator `&` is now only used on Windows (#162)
+
 ## [0.2.1] - 2026-04-29
 
 ### Fixed

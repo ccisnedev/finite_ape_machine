@@ -1,4 +1,4 @@
-import { isInquiryInstalled, getInquiryBinaryPath, getPlatform } from './guard';
+import { isInquiryInstalled, getInquiryBinaryPath, getPlatform, shellExec } from './guard';
 
 export interface InitDeps {
   isInquiryInstalled: () => boolean;
@@ -39,5 +39,5 @@ export async function inquiryInit(
 
   const terminal = createTerminal('Inquiry Init');
   terminal.show();
-  terminal.sendText(`& "${binaryPath()}" init`);
+  terminal.sendText(shellExec(binaryPath(), ['init']));
 }
