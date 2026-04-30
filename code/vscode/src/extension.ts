@@ -27,6 +27,14 @@ export function activate(context: vscode.ExtensionContext): void {
           const terminal = vscode.window.createTerminal('Inquiry Init');
           terminal.show();
           terminal.sendText(se(getInquiryBinaryPath(getPlatform()), ['init']));
+          terminal.sendText(se(getInquiryBinaryPath(getPlatform()), ['target', 'get']));
+          const action = await vscode.window.showInformationMessage(
+            'Inquiry initialized. Reload window so Copilot detects the @inquiry agent?',
+            'Reload',
+          );
+          if (action === 'Reload') {
+            await vscode.commands.executeCommand('workbench.action.reloadWindow');
+          }
         } else {
           vscode.window.showErrorMessage('Inquiry CLI installation failed. Please install manually.');
         }
