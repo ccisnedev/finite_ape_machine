@@ -52,8 +52,8 @@
 │  │  Invokes skills as needed:                                    │  │
 │  │    issue-start  → IDLE → ANALYZE protocol                     │  │
 │  │    issue-end    → EXECUTE → END → IDLE protocol               │  │
-│  │    memory-read  → structured doc retrieval                    │  │
-│  │    memory-write → structured doc creation                     │  │
+│  │    doc-read     → structured doc retrieval                    │  │
+│  │    doc-write    → structured doc creation                     │  │
 │  └───────────────────────────────────────────────────────────────┘  │
 │                                                                     │
 │  The agent has NO knowledge of other states' agents.                │
@@ -137,8 +137,9 @@ Skills are **step-by-step protocols** invoked by the agent at specific moments:
 |---|---|---|
 | `issue-start` | Human says "start working on issue #N" | Creates branch, reads issue, transitions IDLE → ANALYZE |
 | `issue-end` | All plan checkboxes complete | Pushes, creates PR, merges, transitions → END → IDLE |
-| `memory-read` | Agent needs project context | Index scan → filter → partial read → full read |
-| `memory-write` | Agent produces documentation | YAML frontmatter, one topic per doc, index maintenance |
+| `doc-read` | Agent needs project context | Index scan → filter → partial read → full read |
+| `doc-write` | Agent produces documentation | YAML frontmatter, one topic per doc, index maintenance |
+| `inquiry-install` | First-time setup | Bootstraps `.inquiry/` workspace structure |
 
 Skills are **shared across targets** (same SKILL.md for Copilot, Claude, etc.). The agent file is **target-specific** (prompt format differs per tool).
 
@@ -153,8 +154,9 @@ iq target get
     └── Copies skills/ → ~/.copilot/skills/
          ├── issue-start/SKILL.md
          ├── issue-end/SKILL.md
-         ├── memory-read/SKILL.md
-         └── memory-write/SKILL.md
+         ├── doc-read/SKILL.md
+         ├── doc-write/SKILL.md
+         └── inquiry-install/SKILL.md
 ```
 
 Only **Copilot** is active in v0.0.x ([ADR D20](spec/target-specific-agents.md)). Adapters for Claude, Codex, Crush, and Gemini exist but are deferred — they only participate in `iq target clean` (removes orphaned files from previous multi-target deploys).

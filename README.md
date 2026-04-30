@@ -4,108 +4,107 @@
 
 A methodology for AI-assisted software development that models coding agents as a cooperative finite state machine — **Analyze → Plan → Execute → End → [Evolution] → Idle** — where the value is in the process, not the model.
 
-**Status:** `v0.2.1` · Windows + Linux · Single-target MVP (Copilot)
+**Status:** `v0.3.1` · Windows + Linux · Single-target MVP (Copilot)
 
 This README is the public entry surface. For the repository's canonical documentation map, start at [`docs/index.md`](docs/index.md).
 
 ## What is Inquiry?
 
-Inquiry names the cycle-level process. APE names the orchestrating methodology that schedules that process. Finite APE Machine names the engineered finite-state system that makes the methodology operational through explicit states, transitions, and artifacts. This README summarizes that model; the canonical explanations live in the documentation set.
+Inquiry is a structured methodology that turns AI coding assistants into disciplined engineering partners. Instead of letting an LLM freestream solutions, Inquiry forces a cycle: understand the problem first (Analyze), design the solution second (Plan), then implement mechanically (Execute). Each phase has constraints, artifacts, and a clear exit condition.
 
-Historical naming note: APE was the system's initial working name. The individual sub-agents still appear as apes in the lore and avatar language, but Inquiry is the current name of the system and its public identity.
+The insight: **a smaller model following a rigorous process beats a frontier model freestyling.** Method is the durable asset; models are replaceable.
 
-**Core ideas:**
+### Key principles
 
-- **Agents as FSM states** — each phase has one ape; transitions are declarative, total, and validated (`code/cli/assets/transition_contract.yaml`)
-- **Methodology over model** — a smaller model following Inquiry's runbook beats a frontier model freestyling
-- **Memory as Code** — project memory as version-controlled markdown in `.inquiry/` and `docs/`. No vector DB, no cloud dependency
-- **DARWIN** — an evolutionary meta-agent that proposes mutations to APE itself after each cycle
-- **Semantic risk matrix** — human approval only when engineering judgment matters
+- **Methodology over model** — the process produces quality, not the model's size or temperature
+- **Memory as Code** — project memory lives as version-controlled markdown, readable by both humans and AI. No vector DB, no cloud dependency
+- **Agents as FSM states** — each phase activates one specialized agent; transitions are declarative, total, and validated
+- **CLI carries methodology** — the CLI resolves paths, injects context, and enforces constraints; the AI focuses on reasoning
+- **Antifragile by design** — if models plateau, the methodology is the only improvement lever left; if models improve, the methodology amplifies gains
 
-## Quick start
+## The Inquiry cycle
 
-### Install (Windows)
-
-```powershell
-irm https://inquiry.ccisne.dev/install.ps1 | iex
-```
-
-### Install (Linux)
-
-```bash
-curl -fsSL https://inquiry.ccisne.dev/install.sh | bash
-```
-
-The installer downloads the latest release, places `inquiry` (aliased as `iq`) on `PATH`, and verifies prerequisites.
-
-### Initialize a repository
-
-```bash
-iq doctor               # verify inquiry, git, gh, gh auth
-iq target get           # deploy Inquiry agent + skills to ~/.copilot
-cd your-repo
-iq init                 # create .inquiry/{state,config,mutations}
-iq                      # show TUI banner with current FSM state
-```
-
-## Available commands
-
-| Command | Purpose |
-|---|---|
-| `iq` | TUI banner with current FSM state and diagram |
-| `iq init` | Idempotent scaffolding of `.inquiry/` (state.yaml, config.yaml, mutations.md) |
-| `iq doctor` | Verify prerequisites: `inquiry`, `git`, `gh`, `gh auth` |
-| `iq version` | Print CLI version |
-| `iq upgrade` | Download and install latest release |
-| `iq uninstall` | Remove `inquiry` binary and deployed assets |
-| `iq target get` | Deploy Inquiry agent and skills to active AI tool (Copilot) |
-| `iq target clean` | Remove deployed Inquiry files from all known targets |
-| `iq fsm transition --event <e>` | Execute a deterministic FSM transition with prechecks/effects |
-| `iq fsm state [--json]` | Show current FSM state, transitions, and active APE |
-| `iq ape prompt --name <name>` | Assemble sub-agent prompt from YAML + current state |
-| `iq ape state` | Show active APE sub-state and valid transitions |
-| `iq ape transition --event <e>` | Advance the active APE's internal FSM |
-
-## The APE cycle
-
-![APE finite state machine](code/site/img/fsm.svg)
-
-| State | Agent | Function | Output |
+| State | Agent | Method | Artifact |
 |---|---|---|---|
-| **ANALYZE** | SOCRATES | Mayéutica — clarify requirements via dialog | `diagnosis.md` |
-| **PLAN** | DESCARTES | Method — divide, order, verify, enumerate | `plan.md` |
-| **EXECUTE** | BASHŌ | Techne — minimal, beautiful implementation under tests | code + commits |
-| **END** | — | PR gate — `gh pr create` + `gh pr merge` | merged PR |
-| **EVOLUTION** | DARWIN | Natural selection — propose Inquiry mutations | issues in this repo |
+| **ANALYZE** | SOCRATES | Socratic questioning — clarify, challenge, evidence | `confirmed.md` → `diagnosis.md` |
+| **PLAN** | DESCARTES | Scientific method — divide, order, verify, enumerate | `plan.md` |
+| **EXECUTE** | BASHŌ | Wabi-sabi — minimal, beautiful implementation under tests | code + commits |
+| **END** | — | PR gate — review, merge | merged PR |
+| **EVOLUTION** | DARWIN | Natural selection — propose methodology mutations | issues on this repo |
 
-EVOLUTION is opt-in (`evolution.enabled` in `.inquiry/config.yaml`) and one-shot: if interrupted, the cycle simply returns to IDLE.
+Each agent receives a prompt assembled by the CLI that includes:
+- Its philosophical mandate (from YAML definitions)
+- Its current sub-state within the phase
+- An `inquiry-context` block with resolved paths (where to write, what to read)
 
-## Architecture
+The agent never guesses where things go. The CLI tells it.
 
-- **CLI:** Dart, compiled to a single cross-platform binary, built on top of [`modular_cli_sdk`](https://github.com/ccisnedev/modular_cli_sdk)
-- **Modules:** `global` (init, doctor, version, upgrade, uninstall, tui), `target` (get, clean), `fsm` (state, transition), `ape` (state, transition, prompt)
-- **FSM:** declarative `transition_contract.yaml` parsed into `FsmContract` — every (state, event) pair is total (allowed or explicitly illegal)
-- **Targets:** Copilot only at present per [ADR D20](docs/spec/target-specific-agents.md). Adapters for Claude/Codex/Crush/Gemini exist for cleanup but are deferred until multi-target reactivation
-- **Memory:** `.inquiry/` (per-cycle runtime), `cleanrooms/NNN-slug/` (per-cycle artifacts), `docs/spec/` (technical specifications)
+## Documentation as investigation
 
-## Documentation
+During ANALYZE, SOCRATES writes investigation material to `cleanrooms/<branch>/analyze/`:
 
-- **[`docs/index.md`](docs/index.md)** — top-level navigation across the current documentation set
-- **[`docs/research/inquiry/index.md`](docs/research/inquiry/index.md)** — canonical philosophical home of Inquiry
-- **[`docs/architecture.md`](docs/architecture.md)** — canonical current explanation of APE as orchestrating methodology
-- **[`docs/spec/finite-ape-machine.md`](docs/spec/finite-ape-machine.md)** — canonical technical overview of the Finite APE Machine
-- **[`docs/thinking-tools.md`](docs/thinking-tools.md)** — canonical explanation of Thinking Tools in the current model
-- **[`docs/spec/index.md`](docs/spec/index.md)** — status-aware navigation across technical specifications
-- **[`cleanrooms/`](cleanrooms/)** — per-issue working artifacts (analysis, plan, metrics)
-- **[`docs/roadmap.md`](docs/roadmap.md)** — strategic direction and long-term theses
-- **[`docs/lore.md`](docs/lore.md)** — nomenclature, allegory, and historical context for the named agents
-- **[`docs/adr/`](docs/adr/)** — Architecture Decision Records
+- **`confirmed.md`** — living document of confirmed findings (mandatory)
+- **Topic documents** — one per investigation thread (`root-cause.md`, `prior-art.md`, etc.)
+- **`diagnosis.md`** — final synthesis that references all findings
+
+Every document follows a strict YAML frontmatter schema. An index is maintained after every write. DESCARTES reads `diagnosis.md` as its sole input for planning.
+
+This ensures that analysis survives context windows, session resets, and model swaps. The investigation is in the files, not in the chat.
 
 ## Philosophy
 
-APE is designed to be **antifragile** across AI market scenarios. If cloud models get expensive, APE runs on local models. If frontier models plateau, DARWIN is the only improvement mechanism left. If models keep improving, APE amplifies the gains. The methodology benefits from disorder.
+### AAD / AAE / AAM
 
-The collaboration model — **AAD/AAE/AAM** (Agent-Aided Design/Engineering/Manufacturing) — draws from CAD/CAE/CAM: humans design with AI assistance, co-engineer with AI execution, and delegate mechanical work to automation. The risk matrix calibrates where each action falls on that spectrum.
+The collaboration model draws from manufacturing: **Agent-Aided Design, Engineering, and Manufacturing.** Humans design with AI assistance, co-engineer with AI execution, and delegate mechanical work to automation. A semantic risk matrix calibrates where each action falls on that spectrum.
+
+### DARWIN and antifragility
+
+EVOLUTION is an optional phase where DARWIN — a meta-agent — reviews the completed cycle and proposes mutations to the methodology itself. Bad cycles produce lessons; lessons produce better methodology. The system improves from failure, not despite it.
+
+### Why a finite state machine?
+
+An FSM eliminates ambiguity. At any point, the system is in exactly one state, with a finite set of valid transitions. There is no "figure out what to do next." The agent reads its state, receives its mandate, and executes within constraints. This is not a limitation — it is the source of reliability.
+
+## Quick start
+
+```bash
+# Install (Windows)
+irm https://inquiry.ccisne.dev/install.ps1 | iex
+
+# Install (Linux)
+curl -fsSL https://inquiry.ccisne.dev/install.sh | bash
+
+# Setup
+iq doctor               # verify prerequisites
+iq target get           # deploy agent + skills to Copilot
+cd your-repo
+iq init                 # scaffold .inquiry/
+iq                      # show current state
+```
+
+For the full command reference, see [`docs/index.md`](docs/index.md).
+
+## Architecture
+
+- **CLI:** Dart, single cross-platform binary, built on [`modular_cli_sdk`](https://github.com/ccisnedev/modular_cli_sdk)
+- **FSM:** declarative `transition_contract.yaml` — every (state, event) pair is total
+- **Context injection:** `iq ape prompt` assembles base prompt + sub-state + dynamic paths as fenced YAML
+- **Skills:** `doc-write`, `doc-read`, `issue-start`, `issue-end`, `inquiry-install` — protocols the AI follows
+- **Memory:** `.inquiry/` (runtime state), `cleanrooms/` (per-cycle artifacts), `docs/spec/` (specifications)
+- **Target:** Copilot only at present. Multi-target deferred until reactivation
+
+## Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [`docs/index.md`](docs/index.md) | Top-level navigation |
+| [`docs/architecture.md`](docs/architecture.md) | APE as orchestrating methodology |
+| [`docs/spec/finite-ape-machine.md`](docs/spec/finite-ape-machine.md) | Technical FSM specification |
+| [`docs/spec/memory-as-code-spec.md`](docs/spec/memory-as-code-spec.md) | Memory architecture (v0.2.0) |
+| [`docs/thinking-tools.md`](docs/thinking-tools.md) | Thinking Tools in the model |
+| [`docs/research/inquiry/index.md`](docs/research/inquiry/index.md) | Philosophical home |
+| [`docs/roadmap.md`](docs/roadmap.md) | Strategic direction |
+| [`docs/lore.md`](docs/lore.md) | Nomenclature and allegory |
 
 ## License
 

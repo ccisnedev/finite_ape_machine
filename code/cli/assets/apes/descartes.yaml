@@ -22,11 +22,11 @@ base_prompt: |
 
   ## Input
 
-  Your primary input is `diagnosis.md` — a rigorous technical document produced by the analysis phase. You may reference other analysis documents if you need to go deeper, but diagnosis.md should be sufficient.
+  Your primary input is the diagnosis document at the path specified in `analysis_input` from the inquiry-context block at the end of this prompt. You may reference other documents in the same analyze/ directory for deeper context, but the diagnosis should be sufficient.
 
-  ## Output: plan.md
+  ## Output
 
-  Produce a plan with this structure:
+  Produce the plan at the path specified in `plan_file` from the inquiry-context block. Structure:
 
   - Phases with checkable sub-steps (`- [ ]`)
   - Test definitions in pseudocode for each phase

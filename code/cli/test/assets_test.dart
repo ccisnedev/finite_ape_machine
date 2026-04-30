@@ -50,13 +50,13 @@ void main() {
 
     test('listDirectory returns relative paths of files in a directory', () {
       final skillsDir = Directory(
-        p.join(tempDir.path, 'assets', 'skills', 'memory-read'),
+        p.join(tempDir.path, 'assets', 'skills', 'doc-read'),
       );
       skillsDir.createSync(recursive: true);
       File(p.join(skillsDir.path, 'SKILL.md')).writeAsStringSync('# Skill');
 
       final skillsDir2 = Directory(
-        p.join(tempDir.path, 'assets', 'skills', 'memory-write'),
+        p.join(tempDir.path, 'assets', 'skills', 'doc-write'),
       );
       skillsDir2.createSync(recursive: true);
       File(p.join(skillsDir2.path, 'SKILL.md')).writeAsStringSync('# Skill 2');
@@ -64,7 +64,7 @@ void main() {
       final assets = Assets(root: tempDir.path);
       final dirs = assets.listDirectory('skills');
 
-      expect(dirs, unorderedEquals(['memory-read', 'memory-write']));
+      expect(dirs, unorderedEquals(['doc-read', 'doc-write']));
     });
   });
 
@@ -81,15 +81,15 @@ void main() {
       expect(content, isNotEmpty);
     });
 
-    test('reads skills/memory-read/SKILL.md', () {
-      final content = assets.loadString('skills/memory-read/SKILL.md');
-      expect(content, contains('memory'));
+    test('reads skills/doc-read/SKILL.md', () {
+      final content = assets.loadString('skills/doc-read/SKILL.md');
+      expect(content, contains('doc-read'));
       expect(content, isNotEmpty);
     });
 
-    test('reads skills/memory-write/SKILL.md', () {
-      final content = assets.loadString('skills/memory-write/SKILL.md');
-      expect(content, contains('memory'));
+    test('reads skills/doc-write/SKILL.md', () {
+      final content = assets.loadString('skills/doc-write/SKILL.md');
+      expect(content, contains('doc-write'));
       expect(content, isNotEmpty);
     });
 
@@ -112,10 +112,11 @@ void main() {
       expect(
         dirs,
         unorderedEquals([
+          'doc-read',
+          'doc-write',
+          'inquiry-install',
           'issue-end',
           'issue-start',
-          'memory-read',
-          'memory-write',
         ]),
       );
     });
