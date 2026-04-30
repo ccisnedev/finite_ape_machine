@@ -26,7 +26,7 @@ void main() {
       expect(content, contains('iq fsm transition'));
     });
 
-    test('is thin: under 60 lines (excluding frontmatter)', () {
+    test('is thin: under 90 lines (excluding frontmatter)', () {
       final lines = content.split('\n');
       // Skip YAML frontmatter (between --- markers)
       var bodyStart = 0;
@@ -39,8 +39,8 @@ void main() {
         }
       }
       final bodyLines = lines.sublist(bodyStart);
-      expect(bodyLines.length, lessThan(60),
-          reason: 'Firmware body should be under 60 lines, got ${bodyLines.length}');
+      expect(bodyLines.length, lessThan(90),
+          reason: 'Firmware body should be under 90 lines, got ${bodyLines.length}');
     });
 
     test('does NOT contain sub-agent prompts (no monolith leakage)', () {

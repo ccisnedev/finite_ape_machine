@@ -6,6 +6,7 @@ export interface InitDeps {
   showErrorMessage: (msg: string) => Thenable<string | undefined>;
   showInformationMessage: (msg: string, ...items: string[]) => Thenable<string | undefined>;
   createTerminal: (name: string) => { show: () => void; sendText: (text: string) => void };
+  executeCommand: (command: string, ...args: any[]) => Thenable<unknown>;
 }
 
 export async function inquiryInit(
@@ -22,6 +23,7 @@ export async function inquiryInit(
   const installed = deps?.isInquiryInstalled ?? (() => isInquiryInstalled());
   const binaryPath = deps?.getInquiryBinaryPath ?? (() => getInquiryBinaryPath(getPlatform()));
   const createTerminal = deps?.createTerminal ?? vscode.window.createTerminal.bind(vscode.window);
+  const executeCommand = deps?.executeCommand ?? vscode.commands.executeCommand.bind(vscode.commands);
 
   if (!workspaceFolder) {
     showErrorMessage('Inquiry: Open a workspace folder first.');
@@ -40,4 +42,14 @@ export async function inquiryInit(
   const terminal = createTerminal('Inquiry Init');
   terminal.show();
   terminal.sendText(shellExec(binaryPath(), ['init']));
+  terminal.sendText(shellExec(binaryPath(), ['target', 'get']));
+
+  // Copilot reads agent/skill files on activation; prompt reload so it picks them up.
+  const action = await showInformationMessage(
+    'Inquiry initialized. Reload window so Copilot detects the @inquiry agent?',
+    'Reload',
+  );
+  if (action === 'Reload') {
+    await executeCommand('workbench.action.reloadWindow');
+  }
 }

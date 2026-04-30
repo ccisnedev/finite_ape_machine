@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.2]
+### Fixed
+- **Firmware v0.3.3**: eliminate false approval gates — scheduler dispatches sub-agents immediately without asking
+- **Completion Gate**: separated into explicit Step A (ape done) → Step B (user reviews) → Step C (fsm transition) — prevents collapsing approval into one turn
+- **END state**: no longer assigns basho; scheduler executes push + PR directly from instructions
+- **EXECUTE state**: instructions now mandate version bump + CHANGELOG as final phase
+- **Descartes output**: plan.md must include commit step per phase and version bump as final phase
+
+### Changed
+- Firmware description clarified: "User approval only at state completion gates"
+- Firmware rules: explicit prohibitions against narration and false approval prompts
+- Firmware line-count test threshold raised to 90 (firmware is more explicit by design)
+
 ## [0.3.1]
 ### Added
 - **State YAML files** (#160): FSM instructions extracted into `assets/fsm/states/*.yaml` — no more hardcoded strings

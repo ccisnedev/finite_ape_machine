@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.0] - 2026-04-30
+
+### Fixed
+- `Inquiry: Init` now runs `iq target get` after `iq init` so skills and agent are deployed without manual steps
+- Prompts window reload after init so Copilot detects the newly deployed @inquiry agent immediately
+
 ## [0.2.3] - 2026-04-30
 
 ### Changed

@@ -1,16 +1,18 @@
 name: end
-version: "1.0.0"
-description: "Review execution and create pull request"
+version: "1.1.0"
+description: "Push branch and create pull request"
 
 instructions: |
-  Review the execution. Create the pull request.
+  Push the branch and create the pull request. This is mechanical:
+  1. git push -u origin <branch>
+  2. gh pr create --title "<issue-title>" --body "Closes #<issue>"
+  No review, no new changes. Execution already validated everything.
 
 constraints:
-  - No new code changes (execution is complete)
-  - PR description must reference the issue
-  - All tests must pass before PR creation
+  - No code changes (execution is complete)
+  - No review or re-validation (basho already did that)
+  - PR description must reference the issue with Closes #NNN
 
 allowed_actions:
-  - Review completed work
-  - Create pull request
   - Push branch
+  - Create pull request
