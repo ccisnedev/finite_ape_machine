@@ -53,15 +53,27 @@ class ApeDefinition {
   ///
   /// Returns `basePrompt + "\n\n" + state.prompt`.
   /// If [stateName] is null, returns only the base prompt.
-  String assemblePrompt({String? stateName}) {
-    if (stateName == null) return basePrompt;
+  /// If [context] is provided, appends a fenced YAML inquiry-context block.
+  String assemblePrompt({String? stateName, Map<String, String>? context}) {
+    final buffer = StringBuffer(basePrompt);
 
-    final state = states.firstWhere(
-      (s) => s.name == stateName,
-      orElse: () => throw ArgumentError('Unknown state: $stateName for APE $name'),
-    );
+    if (stateName != null) {
+      final state = states.firstWhere(
+        (s) => s.name == stateName,
+        orElse: () => throw ArgumentError('Unknown state: $stateName for APE $name'),
+      );
+      buffer.write('\n\n${state.prompt}');
+    }
 
-    return '$basePrompt\n\n${state.prompt}';
+    if (context != null && context.isNotEmpty) {
+      buffer.write('\n\n---\n```yaml\n# --- inquiry-context ---\n');
+      for (final entry in context.entries) {
+        buffer.write('${entry.key}: ${entry.value}\n');
+      }
+      buffer.write('```');
+    }
+
+    return buffer.toString();
   }
 
   /// Parse a YAML string into an [ApeDefinition].

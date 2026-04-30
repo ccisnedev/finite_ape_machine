@@ -95,7 +95,7 @@ void main() {
     /// Creates a temp Assets directory with the given skill names.
     late Directory tempDir;
     late Assets testAssets;
-    final testSkills = ['issue-start', 'issue-end', 'memory-read', 'memory-write'];
+    final testSkills = ['doc-read', 'doc-write', 'inquiry-install', 'issue-start', 'issue-end'];
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('doctor_test_');
@@ -264,7 +264,7 @@ void main() {
 
         final text = output.toText()!;
         expect(text, contains('Checking targets...'));
-        expect(text, contains('✓ copilot: agent + 4 skills deployed'));
+        expect(text, contains('✓ copilot: agent + 5 skills deployed'));
         expect(text, contains('All checks passed.'));
       });
 
@@ -319,14 +319,14 @@ void main() {
           p.join('/home/testuser', '.copilot', 'agents', 'inquiry.agent.md'),
           true,
         );
-        // Deploy only 3 of 4 skills
-        for (final skill in ['issue-start', 'issue-end', 'memory-write']) {
+        // Deploy only 4 of 5 skills
+        for (final skill in ['doc-write', 'inquiry-install', 'issue-start', 'issue-end']) {
           fs.setFileExists(
             p.join('/home/testuser', '.copilot', 'skills', skill, 'SKILL.md'),
             true,
           );
         }
-        // memory-read is MISSING
+        // doc-read is MISSING
 
         final cmd = makeCmd(fs: fs);
         final output = await cmd.execute();
@@ -334,11 +334,11 @@ void main() {
         expect(output.passed, isFalse);
         expect(output.exitCode, 1);
         expect(output.targetChecks.first.agentExists, isTrue);
-        expect(output.targetChecks.first.missingSkills, ['memory-read']);
+        expect(output.targetChecks.first.missingSkills, ['doc-read']);
 
         final text = output.toText()!;
         expect(text, contains('✓ copilot: agent deployed'));
-        expect(text, contains('✗ copilot: missing skills: memory-read'));
+        expect(text, contains('✗ copilot: missing skills: doc-read'));
         expect(text, contains("Run 'inquiry target get' to deploy"));
       });
 
@@ -346,15 +346,15 @@ void main() {
         final check = TargetCheck(
           targetName: 'copilot',
           agentExists: true,
-          missingSkills: ['memory-read'],
-          totalSkills: 4,
+          missingSkills: ['doc-read'],
+          totalSkills: 5,
         );
 
         final json = check.toJson();
         expect(json['targetName'], 'copilot');
         expect(json['agentExists'], true);
-        expect(json['missingSkills'], ['memory-read']);
-        expect(json['totalSkills'], 4);
+        expect(json['missingSkills'], ['doc-read']);
+        expect(json['totalSkills'], 5);
         expect(json.containsKey('error'), isFalse);
       });
 

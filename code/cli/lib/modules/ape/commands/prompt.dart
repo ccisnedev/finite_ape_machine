@@ -13,6 +13,7 @@ import 'package:path/path.dart' as p;
 
 import '../../../assets.dart';
 import '../../../fsm_contract.dart';
+import '../../../src/git_utils.dart';
 import '../ape_definition.dart';
 import '../inquiry_state.dart';
 
@@ -137,9 +138,15 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
     // Resolve sub-state: explicit flag > state.yaml > null
     final resolvedSubState = input.subState ?? inquiry.apeState;
 
+    // Resolve dynamic context for injection
+    final context = _resolveContext(input.name!, currentState);
+
     // Parse and assemble
     final definition = ApeDefinition.parse(yamlFile.readAsStringSync());
-    final prompt = definition.assemblePrompt(stateName: resolvedSubState);
+    final prompt = definition.assemblePrompt(
+      stateName: resolvedSubState,
+      context: context,
+    );
 
     return ApePromptOutput(
       apeName: input.name!,
@@ -147,6 +154,45 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
       subState: resolvedSubState,
       prompt: prompt,
     );
+  }
+
+  /// Resolves dynamic context paths per APE and FSM state.
+  Map<String, String>? _resolveContext(String apeName, FsmState state) {
+    final branch = getCurrentBranch(input.workingDirectory);
+    if (branch.isEmpty) return null;
+
+    final analyzeDir = 'cleanrooms/$branch/analyze/';
+
+    switch (apeName) {
+      case 'socrates':
+        return {
+          'output_dir': analyzeDir,
+          'index_file': '${analyzeDir}index.md',
+          'confirmed_doc': '${analyzeDir}confirmed.md',
+          'doc_protocol': 'doc-write',
+        };
+      case 'descartes':
+        return {
+          'analysis_input': '${analyzeDir}diagnosis.md',
+          'output_dir': 'cleanrooms/$branch/',
+          'plan_file': 'cleanrooms/$branch/plan.md',
+          'doc_protocol': 'doc-read',
+        };
+      case 'basho':
+        return {
+          'plan_file': 'cleanrooms/$branch/plan.md',
+          'output_dir': 'cleanrooms/$branch/',
+          'doc_protocol': 'doc-read',
+        };
+      case 'darwin':
+        return {
+          'analyze_dir': analyzeDir,
+          'plan_file': 'cleanrooms/$branch/plan.md',
+          'output_dir': 'cleanrooms/$branch/',
+        };
+      default:
+        return null;
+    }
   }
 
   String _resolveApePath(String name) {

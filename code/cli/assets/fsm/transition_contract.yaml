@@ -455,23 +455,23 @@ preconditions:
 prompt_fragments:
   idle_to_analyze:
     role: SOCRATES
-    skill: memory-read
+    skill: doc-read
     template: "analyze.clarification"
   idle_block:
     role: APE
-    skill: memory-read
+    skill: doc-read
     template: "idle.blocked"
   analyze_continue:
     role: SOCRATES
-    skill: memory-read
+    skill: doc-read
     template: "analyze.iterate"
   analyze_to_plan:
     role: DESCARTES
-    skill: memory-write
+    skill: doc-write
     template: "plan.from_diagnosis"
   analyze_to_idle:
     role: APE
-    skill: memory-read
+    skill: doc-read
     template: "analyze.pause"
   plan_to_execute:
     role: BASHO
@@ -479,7 +479,7 @@ prompt_fragments:
     template: "execute.phase"
   plan_to_idle:
     role: APE
-    skill: memory-read
+    skill: doc-read
     template: "plan.pause"
   execute_to_end:
     role: APE
@@ -491,11 +491,11 @@ prompt_fragments:
     template: "execute.continue"
   plan_to_analyze:
     role: SOCRATES
-    skill: memory-read
+    skill: doc-read
     template: "analyze.reopen"
   execute_to_analyze:
     role: SOCRATES
-    skill: memory-read
+    skill: doc-read
     template: "analyze.reopen"
   end_to_evolution:
     role: DARWIN
@@ -507,5 +507,5 @@ prompt_fragments:
     template: "idle.resume"
   evolution_to_idle:
     role: APE
-    skill: memory-read
+    skill: doc-read
     template: "idle.resume"

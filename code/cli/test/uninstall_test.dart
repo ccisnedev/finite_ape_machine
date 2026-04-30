@@ -35,10 +35,10 @@ void main() {
     homeDir = Directory(p.join(tempDir.path, 'home'))..createSync();
 
     final skillDir = Directory(
-      p.join(tempDir.path, 'assets', 'skills', 'memory-read'),
+      p.join(tempDir.path, 'assets', 'skills', 'doc-read'),
     );
     skillDir.createSync(recursive: true);
-    File(p.join(skillDir.path, 'SKILL.md')).writeAsStringSync('# Memory Read');
+    File(p.join(skillDir.path, 'SKILL.md')).writeAsStringSync('# Doc Read');
 
     final agentDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
     agentDir.createSync(recursive: true);
@@ -63,7 +63,7 @@ void main() {
 
       expect(
         File(
-          p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'),
+          p.join(homeDir.path, '.fake', 'skills', 'doc-read', 'SKILL.md'),
         ).existsSync(),
         isTrue,
       );

@@ -14,9 +14,18 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 - **TUI shows Evolution** (#160): diagram displays `[Evolution]` as optional stage
 - **Cleanroom auto-creation** (#160): `iq fsm transition --event start_analyze` creates `cleanrooms/<branch>/analyze/index.md` automatically
 - **Commit gate** (#160): `iq ape transition --event next_phase` requires at least one commit on the feature branch before advancing to next phase
+- **Context injection** (#160): `iq ape prompt` appends fenced YAML `inquiry-context` block with dynamic paths per APE
+- **`confirmed.md` template** (#160): `start_analyze` transition also creates `confirmed.md` with pre-filled frontmatter
+- **`git_utils.dart`** (#160): shared `getCurrentBranch()` utility for branch resolution
 
 ### Changed
 - **Firmware v0.3.1** (#160): Outer Loop step 2 runs doctor in IDLE before dispatching sub-agents
+- **Skills renamed** (#160): `memory-write` → `doc-write`, `memory-read` → `doc-read` — reflects investigation material, not memory
+- **doc-write rewritten** (#160): teaches AI to fill CLI-generated templates, maintain index from inquiry-context paths
+- **doc-read rewritten** (#160): index-first protocol reads `index_file` from inquiry-context block
+- **SOCRATES prompt** (#160): mandatory `confirmed.md` updates, references inquiry-context for output paths
+- **DESCARTES prompt** (#160): reads `analysis_input` and `plan_file` from inquiry-context block
+- **Memory as Code spec** (#160): updated to v0.2.0 with Section 11 (Context Injection pattern)
 
 ## [0.3.0]
 ### Changed

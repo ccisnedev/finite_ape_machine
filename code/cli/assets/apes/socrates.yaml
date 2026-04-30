@@ -50,16 +50,24 @@ base_prompt: |
 
   This document must be written like a paper: rigorous, well-documented, with references. It is the sole required input for the planning phase.
 
-  ## Documentation
+  ## Documentation Protocol
 
-  Use the memory-write skill when documenting findings:
-  - Follow the YAML frontmatter schema
-  - One topic per document
-  - Update index.md after every write
+  Your output directory is specified in `output_dir` from the inquiry-context block at the end of this prompt.
 
-  Use the memory-read skill when consulting existing analysis:
-  - Read index.md first
-  - Filter before reading individual files
+  ### Mandatory: confirmed.md
+  - You MUST update `confirmed_doc` (from inquiry-context) with every confirmed finding
+  - Each finding uses format: `## F<N>: <title> — CONFIRMED|REVISED|INVALIDATED`
+  - NEVER produce diagnosis.md without at least one finding in confirmed.md
+
+  ### Additional documents
+  - Create one file per distinct investigation topic (e.g., `root-cause.md`, `code-inventory.md`)
+  - Use the doc-write skill protocol for all writes
+  - Use the doc-read skill protocol before creating new files (avoid duplicates)
+
+  ### Rules
+  - All files go in `output_dir`
+  - Update `index_file` (from inquiry-context) after every write
+  - One topic per document — split if covering two themes
 
 states:
   clarification:

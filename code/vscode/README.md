@@ -4,7 +4,7 @@
 
 > Select **@inquiry** as your GitHub Copilot custom agent.
 > Every task follows a strict cycle: **ANALYZE → PLAN → EXECUTE**.
-> No freestyling. No hallucinated plans. Structure from analysis to PR.
+> Structure from analysis to PR.
 
 This README is the extension's public entry surface. For the canonical repository documentation map, start at [../docs/index.md](../docs/index.md).
 

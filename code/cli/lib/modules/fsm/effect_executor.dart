@@ -9,6 +9,8 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
+import '../../src/git_utils.dart';
+
 import '../ape/ape_definition.dart';
 import '../ape/inquiry_state.dart';
 import '../../assets.dart';
@@ -77,7 +79,7 @@ class EffectExecutor {
     updated.save(workingDirectory);
   }
 
-  /// Create `cleanrooms/<branch>/analyze/index.md` for ANALYZE phase.
+  /// Create `cleanrooms/<branch>/analyze/index.md` and `confirmed.md` for ANALYZE phase.
   void openAnalysisContext() {
     final branch = _getCurrentBranch();
     if (branch.isEmpty) return;
@@ -88,6 +90,8 @@ class EffectExecutor {
     if (!dir.existsSync()) {
       dir.createSync(recursive: true);
     }
+
+    final today = DateTime.now().toIso8601String().substring(0, 10);
 
     final indexFile = File(p.join(cleanroomDir, 'index.md'));
     if (!indexFile.existsSync()) {
@@ -103,24 +107,34 @@ class EffectExecutor {
         '\n'
         '## Documents\n'
         '\n'
-        '| # | File | Description |\n'
-        '|---|------|-------------|\n',
+        '| # | File | Title | Status | Tags |\n'
+        '|---|------|-------|--------|------|\n'
+        '| 1 | confirmed.md | Confirmed findings | active | findings, confirmed |\n',
+      );
+    }
+
+    final confirmedFile = File(p.join(cleanroomDir, 'confirmed.md'));
+    if (!confirmedFile.existsSync()) {
+      confirmedFile.writeAsStringSync(
+        '---\n'
+        'id: confirmed\n'
+        'title: "Confirmed findings"\n'
+        'date: $today\n'
+        'status: active\n'
+        'tags: [findings, confirmed]\n'
+        'author: socrates\n'
+        '---\n'
+        '\n'
+        '# Confirmed Findings\n'
+        '\n'
+        '> Living document. Update as findings are confirmed, revised, or invalidated.\n'
+        '> Format: ## F<N>: <title> — CONFIRMED|REVISED|INVALIDATED\n',
       );
     }
   }
 
   String _getCurrentBranch() {
-    try {
-      final result = Process.runSync(
-        'git',
-        ['rev-parse', '--abbrev-ref', 'HEAD'],
-        workingDirectory: workingDirectory,
-      );
-      if (result.exitCode != 0) return '';
-      return (result.stdout as String).trim();
-    } catch (_) {
-      return '';
-    }
+    return getCurrentBranch(workingDirectory);
   }
 
   /// Reset `.inquiry/mutations.md` to empty template.

@@ -5,8 +5,8 @@
 #     bin/inquiry.exe
 #     assets/
 #       agents/inquiry.agent.md
-#       skills/memory-read/SKILL.md
-#       skills/memory-write/SKILL.md
+#       skills/doc-read/SKILL.md
+#       skills/doc-write/SKILL.md
 
 $ErrorActionPreference = 'Stop'
 

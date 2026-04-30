@@ -115,7 +115,7 @@ transitions:
 prompt_fragments:
   idle_to_analyze:
     role: SOCRATES
-    skill: memory-read
+    skill: doc-read
     template: "analyze.clarification"
 ''';
 

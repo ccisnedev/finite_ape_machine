@@ -5,7 +5,7 @@ import { toggleEvolution, addMutation } from './commands';
 import { withGuard } from './command-guard';
 import { inquiryInit } from './init';
 import { installInquiryCli } from './installer';
-import { getInquiryBinDir } from './guard';
+import { getInquiryBinDir, shellExec } from './guard';
 
 export function activate(context: vscode.ExtensionContext): void {
   // Inject inquiry bin dir into terminal PATH so `inquiry` and `iq` work
@@ -22,11 +22,11 @@ export function activate(context: vscode.ExtensionContext): void {
       const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
       return inquiryInit(folder, undefined, async () => {
         await installInquiryCli();
-        const { isInquiryInstalled, getInquiryBinaryPath, getPlatform } = require('./guard');
+        const { isInquiryInstalled, getInquiryBinaryPath, getPlatform, shellExec: se } = require('./guard');
         if (isInquiryInstalled()) {
           const terminal = vscode.window.createTerminal('Inquiry Init');
           terminal.show();
-          terminal.sendText(`& "${getInquiryBinaryPath(getPlatform())}" init`);
+          terminal.sendText(se(getInquiryBinaryPath(getPlatform()), ['init']));
         } else {
           vscode.window.showErrorMessage('Inquiry CLI installation failed. Please install manually.');
         }

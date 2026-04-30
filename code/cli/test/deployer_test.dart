@@ -34,18 +34,18 @@ void main() {
 
     // Create asset files
     final skillDir = Directory(
-      p.join(tempDir.path, 'assets', 'skills', 'memory-read'),
+      p.join(tempDir.path, 'assets', 'skills', 'doc-read'),
     );
     skillDir.createSync(recursive: true);
-    File(p.join(skillDir.path, 'SKILL.md')).writeAsStringSync('# Memory Read');
+    File(p.join(skillDir.path, 'SKILL.md')).writeAsStringSync('# Doc Read');
 
     final skillDir2 = Directory(
-      p.join(tempDir.path, 'assets', 'skills', 'memory-write'),
+      p.join(tempDir.path, 'assets', 'skills', 'doc-write'),
     );
     skillDir2.createSync(recursive: true);
     File(
       p.join(skillDir2.path, 'SKILL.md'),
-    ).writeAsStringSync('# Memory Write');
+    ).writeAsStringSync('# Doc Write');
 
     final agentDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
     agentDir.createSync(recursive: true);
@@ -71,16 +71,16 @@ void main() {
       deployer.deploy();
 
       final skillFile = File(
-        p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'),
+        p.join(homeDir.path, '.fake', 'skills', 'doc-read', 'SKILL.md'),
       );
       expect(skillFile.existsSync(), isTrue);
-      expect(skillFile.readAsStringSync(), '# Memory Read');
+      expect(skillFile.readAsStringSync(), '# Doc Read');
 
       final skillFile2 = File(
-        p.join(homeDir.path, '.fake', 'skills', 'memory-write', 'SKILL.md'),
+        p.join(homeDir.path, '.fake', 'skills', 'doc-write', 'SKILL.md'),
       );
       expect(skillFile2.existsSync(), isTrue);
-      expect(skillFile2.readAsStringSync(), '# Memory Write');
+      expect(skillFile2.readAsStringSync(), '# Doc Write');
     });
 
     test('deploy copies agent to each adapter agentDirectory', () {
@@ -98,10 +98,10 @@ void main() {
       deployer.deploy();
 
       final skillFile = File(
-        p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'),
+        p.join(homeDir.path, '.fake', 'skills', 'doc-read', 'SKILL.md'),
       );
       expect(skillFile.existsSync(), isTrue);
-      expect(skillFile.readAsStringSync(), '# Memory Read');
+      expect(skillFile.readAsStringSync(), '# Doc Read');
     });
 
     test('deploy cleans before deploying (D18)', () {
@@ -149,13 +149,13 @@ void main() {
       // Verify both adapters received files
       expect(
         File(
-          p.join(homeDir.path, '.fake', 'skills', 'memory-read', 'SKILL.md'),
+          p.join(homeDir.path, '.fake', 'skills', 'doc-read', 'SKILL.md'),
         ).existsSync(),
         isTrue,
       );
       expect(
         File(
-          p.join(homeDir.path, '.fake2', 'skills', 'memory-read', 'SKILL.md'),
+          p.join(homeDir.path, '.fake2', 'skills', 'doc-read', 'SKILL.md'),
         ).existsSync(),
         isTrue,
       );

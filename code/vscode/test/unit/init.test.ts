@@ -35,7 +35,10 @@ describe('inquiryInit', () => {
 
     await inquiryInit('/workspace', deps);
     assert.strictEqual(terminalName, 'Inquiry Init');
-    assert.strictEqual(sentText, '& "/home/user/.inquiry/bin/inquiry" init');
+    const expected = process.platform === 'win32'
+      ? '& "/home/user/.inquiry/bin/inquiry" init'
+      : '"/home/user/.inquiry/bin/inquiry" init';
+    assert.strictEqual(sentText, expected);
   });
 
   it('delegates to install flow when CLI missing', async () => {

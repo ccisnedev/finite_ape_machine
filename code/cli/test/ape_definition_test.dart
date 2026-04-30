@@ -131,7 +131,7 @@ void main() {
         expect(def.basePrompt, contains('DESCARTES'));
         expect(def.basePrompt, contains('scientific method'));
         expect(def.basePrompt, contains('EVIDENCE'));
-        expect(def.basePrompt, contains('plan.md'));
+        expect(def.basePrompt, contains('plan_file'));
       });
 
       test('basho base_prompt contains implementation keywords', () {

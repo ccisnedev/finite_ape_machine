@@ -348,7 +348,7 @@ void main() {
 
         expect(result.prompt, contains('EVIDENCE'));
         expect(result.prompt, contains('DIVISION'));
-        expect(result.prompt, contains('plan.md'));
+        expect(result.prompt, contains('plan_file'));
         expect(result.prompt, contains('Division'));
       });
 
@@ -436,6 +436,79 @@ void main() {
 
         expect(result.subState, equals('test'));
         expect(result.prompt, contains('Verification'));
+      });
+    });
+
+    group('inquiry-context injection', () {
+      late Directory gitTmpDir;
+
+      setUp(() {
+        gitTmpDir = Directory.systemTemp.createTempSync('ape_ctx_test_');
+        Directory(p.join(gitTmpDir.path, '.inquiry')).createSync();
+
+        // Init a git repo with a branch and initial commit
+        Process.runSync('git', ['init'], workingDirectory: gitTmpDir.path);
+        Process.runSync('git', ['config', 'user.email', 'test@test.com'],
+            workingDirectory: gitTmpDir.path);
+        Process.runSync('git', ['config', 'user.name', 'Test'],
+            workingDirectory: gitTmpDir.path);
+        File(p.join(gitTmpDir.path, '.gitkeep')).writeAsStringSync('');
+        Process.runSync('git', ['add', '.'], workingDirectory: gitTmpDir.path);
+        Process.runSync('git', ['commit', '-m', 'init'],
+            workingDirectory: gitTmpDir.path);
+        Process.runSync('git', ['checkout', '-b', '152-test-branch'],
+            workingDirectory: gitTmpDir.path);
+
+        // Copy ape YAMLs
+        final apesDir = Directory(p.join(gitTmpDir.path, 'assets', 'apes'));
+        apesDir.createSync(recursive: true);
+        for (final name in ['socrates', 'descartes', 'basho', 'darwin']) {
+          File('assets/apes/$name.yaml')
+              .copySync(p.join(apesDir.path, '$name.yaml'));
+        }
+      });
+
+      tearDown(() {
+        gitTmpDir.deleteSync(recursive: true);
+      });
+
+      test('socrates prompt includes inquiry-context with output_dir', () async {
+        File(p.join(gitTmpDir.path, '.inquiry', 'state.yaml'))
+            .writeAsStringSync('state: ANALYZE\nissue: "152"\n');
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(name: 'socrates', workingDirectory: gitTmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.prompt, contains('# --- inquiry-context ---'));
+        expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/analyze/'));
+        expect(result.prompt, contains('confirmed_doc: cleanrooms/152-test-branch/analyze/confirmed.md'));
+        expect(result.prompt, contains('index_file: cleanrooms/152-test-branch/analyze/index.md'));
+      });
+
+      test('descartes prompt includes analysis_input path', () async {
+        File(p.join(gitTmpDir.path, '.inquiry', 'state.yaml'))
+            .writeAsStringSync('state: PLAN\nissue: "152"\n');
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(name: 'descartes', workingDirectory: gitTmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.prompt, contains('# --- inquiry-context ---'));
+        expect(result.prompt, contains('analysis_input: cleanrooms/152-test-branch/analyze/diagnosis.md'));
+        expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
+      });
+
+      test('no context injected when not in a git repo', () async {
+        writeState('ANALYZE');
+        final cmd = ApePromptCommand(
+          ApePromptInput(name: 'socrates', workingDirectory: tmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.prompt, isNot(contains('# --- inquiry-context ---')));
       });
     });
   });

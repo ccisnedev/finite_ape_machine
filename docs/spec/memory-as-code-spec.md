@@ -1,12 +1,12 @@
 # Memory as Code
 
-> Status note: This document remains conceptually important but is partly historical and partly planned. It preserves an earlier agent roster and implementation assumptions, so it should not be treated as the current operational source of truth without qualification. For current surrounding doctrine, see [../architecture.md](../architecture.md), [cli-as-api.md](cli-as-api.md), and [index.md](index.md).
+> **Status:** Partially implemented (v0.2.0). Per-cycle investigation material lives in `cleanrooms/<branch>/analyze/`. The `.inquiry/memory/` directory structure described below is reserved for future cross-cycle persistent memory (DARWIN reports, lessons learned). For current operational details, see the `doc-write` and `doc-read` skills.
 
 **Finite APE Machine — Memory Architecture Specification**
 *"Documentation that doesn't compile is documentation that doesn't exist."*
 
-Version: 0.1.0-spec
-Date: March 29, 2026
+Version: 0.2.0-spec
+Date: April 30, 2026
 Author: Dev (cacsidev@gmail.com)
 
 ---
@@ -535,18 +535,15 @@ BORGES is implemented as a section in every ape's prompt:
 ```markdown
 ## BORGES Protocol (Mandatory)
 
-You have write access to .inquiry/memory/. Every write MUST comply with
-the BORGES protocol:
+You have write access to the output directory specified in inquiry-context.
+Every write MUST comply with the BORGES protocol:
 
-1. Before writing, read the schema for this document type from
-   .inquiry/skills/_shared/contracts.md
-2. Generate the frontmatter YAML with ALL required fields.
-3. Verify: is the ID unique? Check the relevant index.md.
-4. Verify: do all tags exist in .inquiry/memory/taxonomy.md?
-5. Verify: do all related_* IDs exist? Check relevant indices.
-6. Write the file following the section template exactly.
-7. Update the relevant index.md immediately after writing.
-8. If any verification fails, DO NOT write. Report the violation.
+1. The CLI creates templates with pre-filled frontmatter. Do not modify it.
+2. Fill content sections following the document structure.
+3. Verify: is the ID unique? Check the index_file from inquiry-context.
+4. Write the file in output_dir.
+5. Update index_file immediately after writing.
+6. If any verification fails, DO NOT write. Report the violation.
 
 Malformed documentation is equivalent to broken code.
 Do not proceed with malformed memory files.
@@ -845,5 +842,67 @@ At every version, the .md files are the canonical source. SQLite is always a der
 
 ---
 
-*Memory as Code v0.1.0-spec — Finite APE Machine*
+## 11. Context Injection (Implemented v0.2.0)
+
+### 11.1 Principle: CLI Carries Methodology
+
+The CLI resolves all operational paths and injects them into the APE prompt. The AI agent focuses exclusively on reasoning and tool use — it never needs to guess where to write or what to read.
+
+### 11.2 inquiry-context Block
+
+`iq ape prompt --name <ape>` appends a fenced YAML block at the end of the assembled prompt:
+
+```yaml
+# --- inquiry-context ---
+output_dir: cleanrooms/<branch>/analyze/
+index_file: cleanrooms/<branch>/analyze/index.md
+confirmed_doc: cleanrooms/<branch>/analyze/confirmed.md
+doc_protocol: doc-write
+```
+
+Fields vary by APE:
+
+| APE | Fields |
+|-----|--------|
+| SOCRATES | `output_dir`, `index_file`, `confirmed_doc`, `doc_protocol` |
+| DESCARTES | `analysis_input`, `output_dir`, `plan_file`, `doc_protocol` |
+| BASHO | `plan_file`, `output_dir`, `doc_protocol` |
+| DARWIN | `analyze_dir`, `plan_file`, `output_dir` |
+
+### 11.3 Per-Cycle Investigation Material
+
+During ANALYZE, SOCRATES writes to `cleanrooms/<branch>/analyze/`:
+
+- `index.md` — primary index (created by CLI on transition)
+- `confirmed.md` — mandatory living document (template created by CLI)
+- `*.md` — additional investigation documents (one topic each)
+- `diagnosis.md` — final synthesis (references confirmed findings)
+
+### 11.4 Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `doc-write` | Protocol for writing investigation material. Teaches index maintenance, frontmatter rules, one-topic-per-doc |
+| `doc-read` | Protocol for reading investigation material. Implements query planner: index → filter → partial → full |
+
+### 11.5 Schema Enforcement
+
+The CLI creates file templates with pre-filled YAML frontmatter (universal schema):
+
+```yaml
+---
+id: <slug>
+title: <descriptive title>
+date: <YYYY-MM-DD>
+status: draft | active | completed
+tags: [tag1, tag2]
+author: <ape-name>
+---
+```
+
+The AI fills content sections. BORGES validation (Section 5) applies to all documents.
+
+---
+
+*Memory as Code v0.2.0-spec — Finite APE Machine*
 *"Documentation that doesn't compile is documentation that doesn't exist."*
