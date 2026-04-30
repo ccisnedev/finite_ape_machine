@@ -1,16 +1,21 @@
 name: execute
-version: "1.0.0"
+version: "1.1.0"
 description: "Implementation under plan constraints"
 
 instructions: |
   Implement the plan phase by phase under its formal constraints.
   Each phase produces tested code and a commit.
+  After the final plan phase, perform release preparation:
+  - Version bump (as specified in the plan)
+  - CHANGELOG update
+  - Final commit with version bump and CHANGELOG
 
 constraints:
   - Follow plan.md phases in order
   - Each phase must pass its verification criteria before advancing
   - Commits must be atomic (one phase = one commit)
   - No scope creep — only implement what plan.md specifies
+  - Version bump and CHANGELOG are mandatory before completion
 
 allowed_actions:
   - Edit code files
@@ -18,3 +23,5 @@ allowed_actions:
   - Run tests
   - Commit completed phases
   - Read plan.md for guidance
+  - Bump version
+  - Update CHANGELOG
