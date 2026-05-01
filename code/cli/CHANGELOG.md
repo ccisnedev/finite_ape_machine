@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.4]
+### Fixed
+- **FSM diagram**: TUI now correctly represents the Finite APE Machine — rejection arrows (Analyze→Idle, Plan→Analyze) shown above the main flow; Evolution displayed as a lateral yellow loop with vertical arrows; End→Idle as natural linear continuation (#172)
+
 ## [0.3.3]
 ### Fixed
 - **Version check**: semver comparison now uses numeric major.minor.patch ordering instead of string equality — eliminates false "update available" when local version is ahead of remote (#169)
