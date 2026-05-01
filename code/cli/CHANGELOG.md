@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.3]
+### Changed
+- **TUI banner**: redesigned `iq` logo using Unicode half-block characters (`▀▄`) as pixel unit — lighthouse metaphor with green beacon `●` above serif `i` and circular `q` with descender (#169)
+
 ## [0.3.2]
 ### Fixed
 - **Firmware v0.3.3**: eliminate false approval gates — scheduler dispatches sub-agents immediately without asking
