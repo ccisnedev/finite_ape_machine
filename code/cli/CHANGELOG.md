@@ -5,8 +5,11 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [0.3.3]
+### Fixed
+- **Version check**: semver comparison now uses numeric major.minor.patch ordering instead of string equality — eliminates false "update available" when local version is ahead of remote (#169)
+
 ### Changed
-- **TUI banner**: redesigned `iq` logo using Unicode half-block characters (`▀▄`) as pixel unit — lighthouse metaphor with green beacon `●` above serif `i` and circular `q` with descender (#169)
+- **TUI banner**: redesigned `iq` logo using Unicode half-block characters (`▀▄`) as pixel unit — Gatsby's green light metaphor with green beacon `●` above serif `i` and circular `q` with descender (#169)
 
 ## [0.3.2]
 ### Fixed

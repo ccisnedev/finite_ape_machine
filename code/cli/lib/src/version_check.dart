@@ -50,7 +50,7 @@ Future<VersionCheckResult> checkLatestVersion({
     final latestVersion =
         tagName.startsWith('v') ? tagName.substring(1) : tagName;
 
-    final hasUpdate = latestVersion != currentVersion;
+    final hasUpdate = _isNewerVersion(latestVersion, currentVersion);
     return VersionCheckResult(
       latestVersion: latestVersion,
       updateAvailable: hasUpdate,
@@ -61,4 +61,23 @@ Future<VersionCheckResult> checkLatestVersion({
   } finally {
     if (httpClient == null) client.close();
   }
+}
+
+/// Returns true only if [remote] is strictly greater than [current]
+/// using semantic versioning (major.minor.patch).
+bool _isNewerVersion(String remote, String current) {
+  final r = _parseSemver(remote);
+  final c = _parseSemver(current);
+  if (r == null || c == null) return false;
+  if (r[0] != c[0]) return r[0] > c[0];
+  if (r[1] != c[1]) return r[1] > c[1];
+  return r[2] > c[2];
+}
+
+List<int>? _parseSemver(String version) {
+  final parts = version.split('.');
+  if (parts.length != 3) return null;
+  final nums = parts.map(int.tryParse).toList();
+  if (nums.any((n) => n == null)) return null;
+  return nums.cast<int>();
 }
