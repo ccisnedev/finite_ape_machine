@@ -82,15 +82,43 @@ class TuiCommand implements Command<TuiInput, TuiOutput> {
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
+// ANSI escape codes for terminal colors.
+const _r = '\x1B[0m'; // reset
+const _b = '\x1B[1m'; // bold
+const _d = '\x1B[2m'; // dim
+const _wht = '\x1B[37m'; // white
+const _red = '\x1B[31m'; // red
+// const _grn = '\x1B[32m'; // green
+const _ylw = '\x1B[33m'; // yellow
+// const _blu = '\x1B[34m'; // blue
+// const _mag = '\x1B[35m'; // magenta
+// const _cyn = '\x1B[36m'; // cyan
+const _bgrn = '\x1B[92m'; // bright green
+
 /// Builds the FSM diagram with the given version.
 String _buildDiagram(String version) {
-  return '''
-Inquiry v$version — powered by the Finite APE Machine
+  // Logo: serif "i" — beacon (●) is the dot, ──█── are the serifs
+  final logo =
+      '\n$_bgrn  ●    $_r'
+      '\n$_wht ▀█ ▄▀▀█$_r  $_b${_red}Inquiry$_r v$version'
+      '\n$_wht▄▄█▄▀▄▄█$_r  ${_d}powered by the Finite APE Machine$_r'
+      '\n$_wht       ▀$_r'
+  ;
 
-       ╭──────────────────────────╮
-Idle → │ Analyze → Plan → Execute │ → End → [Evolution]
-       ╰──────────────────────────╯
+  // FSM: backward arrows above, Evolution loop below
+  final fsm =
+      '$_d             ╭───────────────────────────────╮$_r\n'
+      '$_d             ├─────────────────────╮         │$_r\n'
+      '$_d             ▼                     │         │$_r\n'
+      '  Idle$_r ──▶ $_b${_red}Analyze$_r ──▶ $_b${_red}Plan$_r ──▶ $_b${_red}Execute$_r ──▶ End$_r\n'
+      '$_d   ▲                                         │$_r\n'
+      '$_d   ╰──────────── $_b$_ylw[Evolution]$_r$_d ◂───────────────╯$_r'
+  ;
 
-Commands: init, doctor, version
-Run: inquiry --help''';
+  final footer =
+      '  ${_d}Commands: init, doctor, version$_r\n'
+      '  ${_d}Run: iq --help$_r'
+  ;
+
+  return '$logo\n\n$fsm\n\n$footer';
 }
