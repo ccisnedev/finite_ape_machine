@@ -107,12 +107,12 @@ String _buildDiagram(String version) {
 
   // FSM: backward arrows above, Evolution loop below
   final fsm =
-      '$_d             ╭───────────────────────────────╮$_r\n'
-      '$_d             ├─────────────────────╮         │$_r\n'
-      '$_d             ▼                     │         │$_r\n'
-      '  Idle$_r ──▶ $_b${_red}Analyze$_r ──▶ $_b${_red}Plan$_r ──▶ $_b${_red}Execute$_r ──▶ End$_r\n'
-      '$_d   ▲                                         │$_r\n'
-      '$_d   ╰──────────── $_b$_ylw[Evolution]$_r$_d ◂───────────────╯$_r'
+      '$_d             ╭─────────────────────╮$_r\n'
+      '$_d             ▼                     │$_r\n'
+      '  Idle$_r $_d──>$_r $_b${_red}Analyze$_r $_d──>$_r $_b${_red}Plan$_r $_d──>$_r $_b${_red}Execute$_r $_d──>$_r End$_r $_d──>$_r Idle\n'
+      '$_d             ▲           │                   $_ylw│$_r        $_d$_ylw▲$_r\n'
+      '$_d             ╰───────────╯                   $_ylw▼$_r        $_d$_ylw│$_r\n'
+      '$_d                                        ${_ylw}Evolution$_r$_d$_ylw ────╯$_r'
   ;
 
   final footer =

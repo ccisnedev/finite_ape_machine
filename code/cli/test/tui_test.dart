@@ -33,7 +33,7 @@ void main() {
       expect(output.diagram, contains('Plan'));
       expect(output.diagram, contains('Execute'));
       expect(output.diagram, contains('End'));
-      expect(output.diagram, contains('[Evolution]'));
+      expect(output.diagram, contains('Evolution'));
     });
 
     test('TuiOutput.diagram contains version', () async {
