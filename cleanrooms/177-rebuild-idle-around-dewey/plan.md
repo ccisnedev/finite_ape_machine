@@ -362,13 +362,15 @@ expect code/cli/CHANGELOG.md mentions dewey as the IDLE operator change
 
 **TDD:** No. This phase is whole-system confirmation and release recording after the feature contract is already GREEN; treat it as final evidence collection, not RED→GREEN design.
 
-- [ ] Run `dart analyze`.
-- [ ] Run `dart test`.
-- [ ] Manual smoke test: enter IDLE in a temp workspace and confirm `iq fsm state --json` reports `dewey` as the active operator.
-- [ ] Manual smoke test: in the same IDLE workspace, run `iq ape prompt --name dewey` and confirm prompt assembly succeeds.
-- [ ] Manual smoke test: run `iq doctor` and confirm the APE asset check passes with `dewey` present.
-- [ ] Manual smoke test: review the updated site roster pages and confirm DEWEY is listed as the IDLE ape and the live count/copy no longer says only four active apes.
-- [ ] Update `code/cli/pubspec.yaml` with the version bump that will ship issue #177.
-- [ ] Update `code/cli/CHANGELOG.md` with the dewey IDLE operator change.
-- [ ] Re-run `dart analyze` and `dart test` after the release metadata edits.
-- [ ] Commit: "release(cli): record dewey idle rebuild for #177"
+- [x] Run `dart analyze`.
+- [x] Run `dart test`.
+- [x] Manual smoke test: enter IDLE in a temp workspace and confirm `iq fsm state --json` reports `dewey` as the active operator.
+- [x] Manual smoke test: in the same IDLE workspace, run `iq ape prompt --name dewey` and confirm prompt assembly succeeds.
+- [x] Manual smoke test: run `iq doctor` and confirm the APE asset check passes with `dewey` present.
+- [x] Manual smoke test: review the updated site roster pages and confirm DEWEY is listed as the IDLE ape and the live count/copy no longer says only four active apes.
+- [x] Update `code/cli/pubspec.yaml` with the version bump that will ship issue #177.
+- [x] Update `code/cli/CHANGELOG.md` with the dewey IDLE operator change.
+- [x] Re-run `dart analyze` and `dart test` after the release metadata edits.
+- [x] Commit: "release(cli): record dewey idle rebuild for #177"
+
+> Deviation: the Phase 5 version bump could not stop at `code/cli/pubspec.yaml`. `code/cli/test/version_sync_test.dart` also required the same release number in `code/cli/lib/src/version.dart` and the `code/site/index.html` badge, so those release metadata surfaces were updated in-phase to keep validation GREEN.

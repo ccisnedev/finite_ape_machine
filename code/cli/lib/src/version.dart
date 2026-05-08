@@ -2,4 +2,4 @@
 ///
 /// Update this constant when bumping version in pubspec.yaml.
 /// Both are kept in sync manually to avoid build-time complexity.
-const String inquiryVersion = '0.3.4';
+const String inquiryVersion = '0.3.5';
