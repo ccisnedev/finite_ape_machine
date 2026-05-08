@@ -231,8 +231,7 @@ void main() {
 
         final apesDir = Directory('${tempDir.path}/assets/apes');
         apesDir.createSync(recursive: true);
-        File('assets/apes/socrates-idle.yaml')
-            .copySync('${apesDir.path}/socrates-idle.yaml');
+        File('assets/apes/dewey.yaml').copySync('${apesDir.path}/dewey.yaml');
 
         final executor = EffectExecutor(workingDirectory: tempDir.path);
         executor.updateState('IDLE');

@@ -170,12 +170,12 @@ expect no canonical source/build binding still requires socrates-idle for IDLE e
 
 **TDD:** Yes. Use the RED contract from P1 as the driver, but make this phase GREEN on the narrowest slice first: effect execution plus the live asset pair that makes that transition possible.
 
-- [ ] Create `code/cli/assets/apes/dewey.yaml` from the current idle-triage prompt, preserving Dewey problematization, issue-only scope, and ignorance of downstream states.
-- [ ] Remove or retire `code/cli/assets/apes/socrates-idle.yaml` from live source assets once `dewey.yaml` exists.
-- [ ] Edit `code/cli/lib/modules/fsm/effect_executor.dart` so entering IDLE activates `dewey` instead of `socrates-idle`.
-- [ ] Mirror the asset rename in `code/cli/build/assets/apes/` so packaged CLI assets expose the same canonical operator name.
-- [ ] Run `dart test test/effect_executor_test.dart` until the IDLE transition check passes GREEN.
-- [ ] Commit: "feat(cli): bind idle to dewey for #177"
+- [x] Create `code/cli/assets/apes/dewey.yaml` from the current idle-triage prompt, preserving Dewey problematization, issue-only scope, and ignorance of downstream states.
+- [x] Remove or retire `code/cli/assets/apes/socrates-idle.yaml` from live source assets once `dewey.yaml` exists.
+- [x] Edit `code/cli/lib/modules/fsm/effect_executor.dart` so entering IDLE activates `dewey` instead of `socrates-idle`.
+- [x] Mirror the asset rename in `code/cli/build/assets/apes/` so packaged CLI assets expose the same canonical operator name.
+- [x] Run `dart test test/effect_executor_test.dart` until the IDLE transition check passes GREEN.
+- [x] Commit: "feat(cli): bind idle to dewey for #177"
 
 ## Phase 3 — Align all CLI truth surfaces with the dewey contract (P3)
 

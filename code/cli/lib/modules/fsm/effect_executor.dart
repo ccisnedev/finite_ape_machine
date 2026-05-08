@@ -35,7 +35,7 @@ class EffectExecutor {
 
   /// Maps FSM states to their active sub-agent names.
   static const _stateApes = <String, String>{
-    'IDLE': 'socrates-idle',
+    'IDLE': 'dewey',
     'ANALYZE': 'socrates',
     'PLAN': 'descartes',
     'EXECUTE': 'basho',
