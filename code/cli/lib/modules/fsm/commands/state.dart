@@ -168,7 +168,7 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
   }
 
   static const _stateApes = <FsmState, List<Map<String, String>>>{
-    FsmState.idle: [{'name': 'socrates-idle', 'status': 'RUNNING'}],
+    FsmState.idle: [{'name': 'dewey', 'status': 'RUNNING'}],
     FsmState.analyze: [{'name': 'socrates', 'status': 'RUNNING'}],
     FsmState.plan: [{'name': 'descartes', 'status': 'RUNNING'}],
     FsmState.execute: [{'name': 'basho', 'status': 'RUNNING'}],

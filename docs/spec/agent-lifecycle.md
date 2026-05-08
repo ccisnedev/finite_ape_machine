@@ -3,7 +3,7 @@ id: agent-lifecycle
 title: "Agent lifecycle — six-state model and confirmed agent registry"
 date: 2026-04-17
 status: active
-tags: [agents, fsm, lifecycle, registry, socrates, descartes, basho, darwin]
+tags: [agents, fsm, lifecycle, registry, dewey, socrates, descartes, basho, darwin]
 author: socrates
 ---
 
@@ -19,7 +19,7 @@ IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION
 
 | APE State | Function | Operator | Thinking Tool |
 |-----------|----------|----------|---------------|
-| IDLE | Triage — classify, prepare infrastructure | APE + triage skill | Phronesis (Aristotle) — practical wisdom |
+| IDLE | Triage — clarify scope, select issue, prepare handoff | DEWEY (sub-agent) | Deweyan problematization — transform the indeterminate into an actionable issue |
 | ANALYZE | Deep understanding via Socratic method | SOCRATES (sub-agent) | Mayéutica — draw truth through questions |
 | PLAN | Experimental design, WBS, test definition | DESCARTES (sub-agent) | Method — divide, order, verify, enumerate |
 | EXECUTE | Implementation under constraints | BASHŌ (sub-agent) | Techne + 用の美 (yō no bi) — functional beauty |
@@ -28,7 +28,7 @@ IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION
 
 ### State descriptions
 
-**IDLE** — APE's default state. The user converses freely. APE uses the triage skill to evaluate whether the problem merits a formal cycle. If so, the protocol guides infrastructure preparation: verify or create the GitHub issue, create the branch and working directory, and transition to ANALYZE. APE operates directly in this state — no sub-agent.
+**IDLE** — DEWEY owns bounded issue triage. The user converses freely while DEWEY determines whether the indeterminate situation merits a formal cycle, whether an issue already exists, and whether that issue is ready for handoff. DEWEY does not create branches, write diagnosis, plan work, or code. The explicit handoff remains external: `issue-start` verifies or creates the issue, prepares the branch and working directory, and fires `start_analyze`.
 
 **ANALYZE** — SOCRATES conducts Socratic analysis. Explores the problem through questions, challenges assumptions, documents findings. Produces `diagnosis.md` — a rigorous technical document (paper-style, with references) that serves as the sole input for the planning phase. The user approves the diagnosis before transitioning.
 
@@ -42,10 +42,11 @@ IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION
 
 ## Agent Registry
 
-### Confirmed Agents (v0.0.8 target)
+### Confirmed Agents (live contract)
 
 | Agent | Namesake | State | Herramienta | Description |
 |-------|----------|-------|-------------|-------------|
+| DEWEY | John Dewey (1859–1952) | IDLE | Problematization | Bounded issue triage, issue readiness, explicit handoff to `issue-start` |
 | SOCRATES | Sócrates (470–399 BC) | ANALYZE | Mayéutica | Conversational understanding, produces `diagnosis.md` |
 | DESCARTES | René Descartes (1596–1650) | PLAN | Método | Experimental design, WBS, test pseudocode |
 | BASHŌ | Matsuo Bashō (1644–1694) | EXECUTE | Techne/用の美 | Implementation as functional art under constraints |
@@ -53,7 +54,7 @@ IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION
 
 ### APE (the scheduler)
 
-APE is NOT an ape. It is the Finite APE Machine — the scheduler, the event loop, the RTOS. It has no personality, no namesake. It reads state, evaluates conditions, dispatches sub-agents, and updates state. It operates directly in IDLE (with the triage skill) and delegates to sub-agents in all other states.
+APE is NOT an ape. It is the Finite APE Machine — the scheduler, the event loop, the RTOS. It has no personality, no namesake. It reads state, evaluates conditions, dispatches sub-agents, and updates state. It dispatches DEWEY in IDLE, governs the END gate with the human, and delegates to sub-agents in ANALYZE, PLAN, EXECUTE, and EVOLUTION.
 
 ### Lore Agents (future/referential)
 
@@ -106,13 +107,13 @@ All APE state transitions are mechanical, executed via skill → CLI chain:
 
 | Transition | Event | Effects |
 |-----------|-------|---------|
-| IDLE → ANALYZE | `issue_ready` | Verify rama + carpeta exist |
-| ANALYZE → PLAN | `analysis_approved` | `git commit` analysis docs |
-| PLAN → EXECUTE | `plan_approved` | `git commit` plan.md |
-| EXECUTE → END | `execution_approved` | `git commit` execution artifacts |
+| IDLE → ANALYZE | `start_analyze` | `issue-start` verifies issue, prepares branch/cleanroom, transitions |
+| ANALYZE → PLAN | `complete_analysis` | `git commit` analysis docs |
+| PLAN → EXECUTE | `approve_plan` | `git commit` plan-boundary artifacts |
+| EXECUTE → END | `finish_execute` | `git commit` execution artifacts |
 | END → EVOLUTION | `pr_ready` | `git push`, `gh pr create` |
 | END → IDLE | `pr_ready_no_evolution` | `git push`, `gh pr create` |
-| EVOLUTION → IDLE | `cycle_complete` | Close issue if applicable |
+| EVOLUTION → IDLE | `finish_evolution` | Reset cycle notes and return to IDLE |
 
 **Illegal transitions:**
 - IDLE → PLAN (no analysis)

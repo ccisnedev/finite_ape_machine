@@ -34,6 +34,8 @@ This is not a metaphor. It is an isomorphism:
 
 The three modes of inference — abduction, deduction, induction — are not optional stages. They are **epistemically necessary**. You cannot plan what you have not understood (abduction before deduction). You cannot verify what you have not planned (deduction before induction). You cannot understand without questioning what you assume (abduction requires Socratic humility). Peirce proved this cycle is the structure of all scientific inquiry. We apply it to software.
 
+Before formal inquiry begins, DEWEY owns bounded IDLE triage. DEWEY determines whether the indeterminate situation is ready to become or select a GitHub issue, then hands off through the explicit `issue-start` protocol. DEWEY does not analyze, plan, or execute.
+
 ## The five convictions
 
 ### 1. Clarity through method
@@ -80,13 +82,13 @@ The sub-agents are not arbitrary characters. Each name identifies a **thinking t
 
 | Agent | Thinker | Era | Culture | Tool | Essence |
 |-------|---------|-----|---------|------|---------|
-| ARISTOTLE | Aristotle (384–322 BC) | Classical | Greek | **Phronesis** — practical wisdom + **Categories** — systematic classification | To know what merits action and how to scope it |
+| DEWEY | John Dewey (1859–1952) | Pragmatist | American | **Problematization** — disciplined inquiry into an indeterminate situation | To turn a vague problem into a well-formed issue worthy of inquiry |
 | SOCRATES | Socrates (470–399 BC) | Classical | Greek | **Mayéutica** — truth through questioning | To understand before solving |
 | DESCARTES | René Descartes (1596–1650) | Early Modern | French | **The Method** — divide, order, verify, enumerate | To decompose until execution is mechanical |
 | BASHŌ | Matsuo Bashō (1644–1694) | Edo period | Japanese | **Techne + 用の美** — functional beauty under constraint | To create within limits, where constraint reveals elegance |
 | DARWIN | Charles Darwin (1809–1882) | Victorian | English | **Natural selection** — observe, compare, select | To improve without a designer |
 
-This diversity is intentional. The tools span 2,400 years, four cultures, and five disciplines (philosophy, epistemology, mathematics, poetry, biology). The thesis: **the best methodology for building software already exists, scattered across human intellectual history. Inquiry assembles it.**
+This diversity is intentional. The tools span 2,400 years, five cultures, and five disciplines (philosophy, epistemology, mathematics, poetry, biology). The thesis: **the best methodology for building software already exists, scattered across human intellectual history. Inquiry assembles it.**
 
 ## The name
 

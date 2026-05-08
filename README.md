@@ -26,11 +26,14 @@ The insight: **a smaller model following a rigorous process beats a frontier mod
 
 | State | Agent | Method | Artifact |
 |---|---|---|---|
+| **IDLE** | DEWEY | Deweyan problematization — scope, deduplicate, prepare issue handoff | selected issue + `issue-start` handoff |
 | **ANALYZE** | SOCRATES | Socratic questioning — clarify, challenge, evidence | `confirmed.md` → `diagnosis.md` |
 | **PLAN** | DESCARTES | Scientific method — divide, order, verify, enumerate | `plan.md` |
 | **EXECUTE** | BASHŌ | Wabi-sabi — minimal, beautiful implementation under tests | code + commits |
 | **END** | — | PR gate — review, merge | merged PR |
 | **EVOLUTION** | DARWIN | Natural selection — propose methodology mutations | issues on this repo |
+
+DEWEY stays bounded to issue triage in IDLE. Branch preparation and the `start_analyze` transition remain in the `issue-start` protocol.
 
 Each agent receives a prompt assembled by the CLI that includes:
 - Its philosophical mandate (from YAML definitions)

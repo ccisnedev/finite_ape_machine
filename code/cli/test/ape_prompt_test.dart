@@ -17,7 +17,7 @@ void main() {
     // Copy assets/apes/ from real assets
     final apesDir = Directory(p.join(tmpDir.path, 'assets', 'apes'));
     apesDir.createSync(recursive: true);
-    for (final name in ['socrates', 'descartes', 'basho', 'darwin']) {
+    for (final name in ['socrates', 'dewey', 'descartes', 'basho', 'darwin']) {
       File('assets/apes/$name.yaml')
           .copySync(p.join(apesDir.path, '$name.yaml'));
     }
@@ -128,6 +128,23 @@ void main() {
         expect(result.prompt, contains('DARWIN'));
         expect(result.prompt, contains('natural selection'));
       });
+
+      test('dewey in IDLE returns base prompt', () async {
+        writeStateWithApe('IDLE',
+          apeName: 'dewey',
+          apeState: 'evaluate_scope',
+        );
+        final cmd = ApePromptCommand(
+          ApePromptInput(name: 'dewey', workingDirectory: tmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.apeName, equals('dewey'));
+        expect(result.fsmState, equals('IDLE'));
+        expect(result.subState, equals('evaluate_scope'));
+        expect(result.prompt, contains('well-formed issue'));
+        expect(result.prompt, contains('FOCUS: Scope evaluation.'));
+      });
     });
 
     group('MISSING_NAME', () {
@@ -217,10 +234,19 @@ void main() {
         );
       });
 
-      test('any APE in IDLE throws not active', () async {
-        writeState('IDLE');
+      test('socrates-idle in IDLE throws not active', () async {
+        writeStateWithApe('IDLE',
+          apeName: 'dewey',
+          apeState: 'evaluate_scope',
+        );
+        File(p.join(tmpDir.path, 'assets', 'apes', 'socrates-idle.yaml'))
+            .writeAsStringSync(
+              File('assets/apes/dewey.yaml')
+                  .readAsStringSync()
+                  .replaceFirst('name: dewey', 'name: socrates-idle'),
+            );
         final cmd = ApePromptCommand(
-          ApePromptInput(name: 'socrates', workingDirectory: tmpDir.path),
+          ApePromptInput(name: 'socrates-idle', workingDirectory: tmpDir.path),
         );
 
         expect(

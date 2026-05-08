@@ -113,7 +113,7 @@ transitions:
       prechecks: [issue_selected_or_created, diagnosis_exists]
       effects: [generate_plan]
       artifacts: [plan.md]
-      commit_policy: stage_only
+      commit_policy: commit_analysis_boundary
       prompt_fragment_id: analyze_to_plan
 
   - from: ANALYZE
@@ -188,7 +188,7 @@ transitions:
       prechecks: [issue_selected, feature_branch_selected, plan_approved]
       effects: [prepare_execute]
       artifacts: [execution_log.md]
-      commit_policy: branch_required
+      commit_policy: commit_plan_boundary
       prompt_fragment_id: plan_to_execute
 
   - from: PLAN

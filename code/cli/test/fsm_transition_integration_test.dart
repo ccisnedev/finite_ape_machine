@@ -12,6 +12,7 @@ void main() {
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('ape_state_integration_');
       _copyContractFromWorkspace(tempDir.path);
+      _initGitRepo(tempDir.path, branch: '51-idle-execution-guardrails');
       _writeState(tempDir.path, 'IDLE', issue: '51');
     });
 
@@ -59,16 +60,22 @@ void main() {
       expect(t1.promptFragmentId, isNotNull);
       current = t1.nextState!;
 
+      final analysisCommitsBefore = _commitCount(tempDir.path);
+      _writeDiagnosis(tempDir.path, branch, 'diagnosis ready');
       final t2 = await transition('complete_analysis');
       expect(t2.allowed, isTrue);
       expect(t2.nextState, 'PLAN');
       expect(t2.promptFragmentId, isNotNull);
+      expect(_commitCount(tempDir.path), analysisCommitsBefore + 1);
       current = t2.nextState!;
 
+      final planCommitsBefore = _commitCount(tempDir.path);
+      _writePlan(tempDir.path, branch, '# plan\n');
       final t3 = await transition('approve_plan');
       expect(t3.allowed, isTrue);
       expect(t3.nextState, 'EXECUTE');
       expect(t3.promptFragmentId, isNotNull);
+      expect(_commitCount(tempDir.path), planCommitsBefore + 1);
       current = t3.nextState!;
 
       final t4 = await transition('finish_execute');
@@ -111,4 +118,41 @@ void _copyContractFromWorkspace(String root) {
   final destination = File(p.join(root, 'assets', 'fsm', 'transition_contract.yaml'));
   destination.createSync(recursive: true);
   destination.writeAsStringSync(source.readAsStringSync());
+}
+
+void _writeDiagnosis(String root, String branch, String content) {
+  final file = File(
+    p.join(root, 'cleanrooms', branch, 'analyze', 'diagnosis.md'),
+  );
+  file.createSync(recursive: true);
+  file.writeAsStringSync(content);
+}
+
+void _writePlan(String root, String branch, String content) {
+  final file = File(p.join(root, 'cleanrooms', branch, 'plan.md'));
+  file.createSync(recursive: true);
+  file.writeAsStringSync(content);
+}
+
+void _initGitRepo(String root, {required String branch}) {
+  _git(root, ['init']);
+  _git(root, ['config', 'user.email', 'test@test.com']);
+  _git(root, ['config', 'user.name', 'Test']);
+  File(p.join(root, '.gitkeep')).writeAsStringSync('');
+  _git(root, ['add', '.']);
+  _git(root, ['commit', '-m', 'init']);
+  _git(root, ['checkout', '-b', branch]);
+}
+
+int _commitCount(String root) {
+  final result = _git(root, ['rev-list', '--count', 'HEAD']);
+  return int.parse(result.stdout.trim());
+}
+
+ProcessResult _git(String root, List<String> args) {
+  final result = Process.runSync('git', args, workingDirectory: root);
+  if (result.exitCode != 0) {
+    fail('git ${args.join(' ')} failed: ${result.stderr}');
+  }
+  return result;
 }

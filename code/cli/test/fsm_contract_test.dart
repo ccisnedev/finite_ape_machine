@@ -42,18 +42,38 @@ void main() {
     expect(transition.reason, contains('forbidden'));
   });
 
-  test('allowed transitions include operations contract fields', () {
-    final transition = contract.transitionFor(
+  test('approval boundaries expose explicit commit policies', () {
+    final analyzeTransition = contract.transitionFor(
       FsmState.analyze,
       FsmEvent.completeAnalysis,
     );
+    final planTransition = contract.transitionFor(
+      FsmState.plan,
+      FsmEvent.approvePlan,
+    );
 
-    expect(transition.allowed, isTrue);
-    expect(transition.to, FsmState.plan);
-    expect(transition.operations, isNotNull);
-    expect(transition.operations!.prechecks, contains('issue_selected_or_created'));
-    expect(transition.operations!.commitPolicy, 'stage_only');
-    expect(transition.operations!.promptFragmentId, 'analyze_to_plan');
+    expect(analyzeTransition.allowed, isTrue);
+    expect(analyzeTransition.to, FsmState.plan);
+    expect(analyzeTransition.operations, isNotNull);
+    expect(
+      analyzeTransition.operations!.prechecks,
+      contains('issue_selected_or_created'),
+    );
+    expect(
+      analyzeTransition.operations!.commitPolicy,
+      'commit_analysis_boundary',
+    );
+    expect(analyzeTransition.operations!.promptFragmentId, 'analyze_to_plan');
+
+    expect(planTransition.allowed, isTrue);
+    expect(planTransition.to, FsmState.execute);
+    expect(planTransition.operations, isNotNull);
+    expect(planTransition.operations!.prechecks, contains('plan_approved'));
+    expect(
+      planTransition.operations!.commitPolicy,
+      'commit_plan_boundary',
+    );
+    expect(planTransition.operations!.promptFragmentId, 'plan_to_execute');
   });
 
   test('EXECUTE passes through END before PR creation', () {

@@ -43,6 +43,7 @@
 │  │  Reads .inquiry/state.yaml → knows current FSM state          │  │
 │  │  Activates the agent for that state:                          │  │
 │  │                                                               │  │
+│  │    IDLE     → DEWEY     (bounded triage, issue-ready only)    │  │
 │  │    ANALYZE  → SOCRATES  (mayéutica, produces diagnosis.md)    │  │
 │  │    PLAN     → DESCARTES (method, produces plan.md)            │  │
 │  │    EXECUTE  → BASHŌ     (techne, produces code + commits)     │  │
@@ -116,13 +117,15 @@ There is **one agent file** (`inquiry.agent.md`) that acts as orchestrator. It i
 ```
 inquiry.agent.md
 ├── Reads .inquiry/state.yaml → determines active phase
-├── IDLE: waits for user to invoke issue-start skill
+├── IDLE: becomes DEWEY (bounded issue triage; handoff via issue-start)
 ├── ANALYZE: becomes SOCRATES (asks questions, writes diagnosis.md)
 ├── PLAN: becomes DESCARTES (decomposes, writes plan.md with phases)
 ├── EXECUTE: becomes BASHŌ (implements, tests, commits)
 ├── END: executes PR creation protocol
 └── EVOLUTION: becomes DARWIN (reads mutations.md, proposes issues)
 ```
+
+DEWEY determines whether the situation is ready to become or select a GitHub issue. It does not prepare branches, write `diagnosis.md`, or anticipate downstream phases; `issue-start` owns that explicit handoff.
 
 The agent **never decides** state transitions on its own. Transitions are authorized by:
 1. The human (explicitly)
@@ -166,7 +169,7 @@ Only **Copilot** is active in v0.0.x ([ADR D20](spec/target-specific-agents.md))
 A complete APE cycle from issue to merge:
 
 ```
-1. Human creates GitHub issue with requirements
+1. Human and DEWEY clarify/select the GitHub issue in IDLE
 2. Human invokes issue-start skill
 3. CLI: IDLE → ANALYZE (start_analyze event)
 4. Agent (SOCRATES): asks clarifying questions, produces diagnosis.md

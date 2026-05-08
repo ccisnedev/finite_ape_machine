@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.5]
+### Changed
+- **IDLE operator**: DEWEY is now the active IDLE operator across CLI runtime, prompt resolution, doctor validation, and public roster surfaces (#177)
+
 ## [0.3.4]
 ### Fixed
 - **FSM diagram**: TUI now correctly represents the Finite APE Machine — rejection arrows (Analyze→Idle, Plan→Analyze) shown above the main flow; Evolution displayed as a lateral yellow loop with vertical arrows; End→Idle as natural linear continuation (#172)
