@@ -388,7 +388,7 @@ class DoctorCommand implements Command<DoctorInput, DoctorOutput> {
     }
 
     // APE definition files
-    const apeFiles = ['socrates', 'socrates-idle', 'descartes', 'basho', 'darwin'];
+    const apeFiles = ['socrates', 'dewey', 'descartes', 'basho', 'darwin'];
     for (final ape in apeFiles) {
       final path = _assets.path('apes/$ape.yaml');
       if (!File(path).existsSync()) {

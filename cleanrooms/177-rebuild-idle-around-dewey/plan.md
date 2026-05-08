@@ -225,13 +225,13 @@ expect no remaining live-contract matches outside intentional historical referen
 
 **TDD:** Yes. Keep the scope surface-by-surface: make the targeted suite GREEN by resolving one truth surface at a time, rerunning the same contract after each edit so prompt, state, and doctor never diverge again.
 
-- [ ] Edit `code/cli/lib/modules/ape/commands/prompt.dart` so IDLE accepts `dewey` and no longer treats `socrates-idle` as active.
-- [ ] Edit `code/cli/lib/modules/fsm/commands/state.dart` so IDLE reports `dewey` as `RUNNING`.
-- [ ] Edit `code/cli/lib/modules/global/commands/doctor.dart` so doctor validates `dewey` instead of `socrates-idle`.
-- [ ] Update any remaining live-contract references in `code/cli/lib/**` and the targeted test files so the active IDLE contract uses one name everywhere.
-- [ ] Run `dart test test/effect_executor_test.dart test/fsm_state_test.dart test/doctor_test.dart test/ape_prompt_test.dart` until the Phase 1 contract checks are GREEN.
-- [ ] Run `rg "socrates-idle" code/cli/lib code/cli/assets code/cli/test` and resolve remaining live-contract matches before leaving the phase.
-- [ ] Commit: "refactor(cli): unify idle runtime surfaces on dewey for #177"
+- [x] Edit `code/cli/lib/modules/ape/commands/prompt.dart` so IDLE accepts `dewey` and no longer treats `socrates-idle` as active.
+- [x] Edit `code/cli/lib/modules/fsm/commands/state.dart` so IDLE reports `dewey` as `RUNNING`.
+- [x] Edit `code/cli/lib/modules/global/commands/doctor.dart` so doctor validates `dewey` instead of `socrates-idle`.
+- [x] Update any remaining live-contract references in `code/cli/lib/**` and the targeted test files so the active IDLE contract uses one name everywhere.
+- [x] Run `dart test test/effect_executor_test.dart test/fsm_state_test.dart test/doctor_test.dart test/ape_prompt_test.dart` until the Phase 1 contract checks are GREEN.
+- [x] Run `rg "socrates-idle" code/cli/lib code/cli/assets code/cli/test` and resolve remaining live-contract matches before leaving the phase.
+- [x] Commit: "refactor(cli): unify idle runtime surfaces on dewey for #177"
 
 ## Phase 4 — Reconcile declared architecture, public documentation, and site roster with runtime (P4)
 
