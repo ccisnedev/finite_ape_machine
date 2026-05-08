@@ -97,37 +97,42 @@ void main() {
     late Assets testAssets;
     final testSkills = ['doc-read', 'doc-write', 'inquiry-install', 'issue-start', 'issue-end'];
 
-    setUp(() {
-      tempDir = Directory.systemTemp.createTempSync('doctor_test_');
-      final skillsDir = Directory(p.join(tempDir.path, 'assets', 'skills'));
+    Assets seedAssets(Directory root, {required List<String> apes}) {
+      final skillsDir = Directory(p.join(root.path, 'assets', 'skills'));
       for (final skill in testSkills) {
         final skillDir = Directory(p.join(skillsDir.path, skill));
         skillDir.createSync(recursive: true);
         File(p.join(skillDir.path, 'SKILL.md')).writeAsStringSync('---\nname: $skill\n---');
       }
-      final agentsDir = Directory(p.join(tempDir.path, 'assets', 'agents'));
+
+      final agentsDir = Directory(p.join(root.path, 'assets', 'agents'));
       agentsDir.createSync(recursive: true);
       File(p.join(agentsDir.path, 'inquiry.agent.md')).writeAsStringSync('# Agent');
 
-      // APE definition files
-      final apesDir = Directory(p.join(tempDir.path, 'assets', 'apes'));
+      final apesDir = Directory(p.join(root.path, 'assets', 'apes'));
       apesDir.createSync(recursive: true);
-      for (final ape in ['socrates', 'socrates-idle', 'descartes', 'basho', 'darwin']) {
+      for (final ape in apes) {
         File(p.join(apesDir.path, '$ape.yaml')).writeAsStringSync('name: $ape\n');
       }
 
-      // FSM state instruction files
-      final statesDir = Directory(p.join(tempDir.path, 'assets', 'fsm', 'states'));
+      final statesDir = Directory(p.join(root.path, 'assets', 'fsm', 'states'));
       statesDir.createSync(recursive: true);
       for (final state in ['idle', 'analyze', 'plan', 'execute', 'end', 'evolution']) {
         File(p.join(statesDir.path, '$state.yaml')).writeAsStringSync('name: $state\ninstructions: "test"\n');
       }
 
-      // Transition contract
-      final fsmDir = Directory(p.join(tempDir.path, 'assets', 'fsm'));
+      final fsmDir = Directory(p.join(root.path, 'assets', 'fsm'));
       File(p.join(fsmDir.path, 'transition_contract.yaml')).writeAsStringSync('metadata:\n  version: "1.0.0"\n');
 
-      testAssets = Assets(root: tempDir.path);
+      return Assets(root: root.path);
+    }
+
+    setUp(() {
+      tempDir = Directory.systemTemp.createTempSync('doctor_test_');
+      testAssets = seedAssets(
+        tempDir,
+        apes: ['socrates', 'socrates-idle', 'dewey', 'descartes', 'basho', 'darwin'],
+      );
     });
 
     tearDown(() {
@@ -159,6 +164,44 @@ void main() {
       expect(output.exitCode, 0);
       expect(output.checks.length, 5);
       expect(output.checks.every((c) => c.passed), isTrue);
+    });
+
+    test('assets check reports missing dewey when bundled APEs omit it', () async {
+      final customDir = Directory.systemTemp.createTempSync('doctor_missing_dewey_');
+      addTearDown(() {
+        customDir.deleteSync(recursive: true);
+      });
+
+      final cmd = makeCmd(
+        assets: seedAssets(
+          customDir,
+          apes: ['socrates', 'socrates-idle', 'descartes', 'basho', 'darwin'],
+        ),
+      );
+      final output = await cmd.execute();
+      final assetsCheck = output.checks.firstWhere((c) => c.name == 'assets');
+
+      expect(assetsCheck.error ?? '', contains('apes/dewey.yaml'));
+      expect(assetsCheck.error ?? '', isNot(contains('apes/socrates-idle.yaml')));
+    });
+
+    test('assets check does not require socrates-idle when dewey is present', () async {
+      final customDir = Directory.systemTemp.createTempSync('doctor_without_socrates_idle_');
+      addTearDown(() {
+        customDir.deleteSync(recursive: true);
+      });
+
+      final cmd = makeCmd(
+        assets: seedAssets(
+          customDir,
+          apes: ['socrates', 'dewey', 'descartes', 'basho', 'darwin'],
+        ),
+      );
+      final output = await cmd.execute();
+      final assetsCheck = output.checks.firstWhere((c) => c.name == 'assets');
+
+      expect(assetsCheck.error ?? '', isNot(contains('apes/socrates-idle.yaml')));
+      expect(assetsCheck.passed, isTrue);
     });
 
     test('git missing → exit 1, stopped at git', () async {

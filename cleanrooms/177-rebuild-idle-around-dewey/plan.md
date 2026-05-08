@@ -122,12 +122,12 @@ expect no unrelated test files fail
 
 **TDD:** Yes. This phase is intentionally RED-first: write or tighten the assertions before any runtime rename so the failure surface proves the contract drift that later phases must remove.
 
-- [ ] Edit `code/cli/test/effect_executor_test.dart` to expect `dewey` activation in IDLE and the existing `evaluate_scope` initial sub-state.
-- [ ] Edit `code/cli/test/fsm_state_test.dart` to expect `dewey` as the sole running ape in IDLE.
-- [ ] Edit `code/cli/test/doctor_test.dart` to require `dewey` in the bundled APE set and stop requiring `socrates-idle`.
-- [ ] Edit `code/cli/test/ape_prompt_test.dart` to copy `dewey.yaml`, add a successful IDLE prompt case for `dewey`, and replace the IDLE rejection case so `socrates-idle` is no longer considered valid there.
-- [ ] Run `dart test test/effect_executor_test.dart test/fsm_state_test.dart test/doctor_test.dart test/ape_prompt_test.dart` and capture the expected RED failures.
-- [ ] Commit: "test(cli): lock dewey idle contract for #177"
+- [x] Edit `code/cli/test/effect_executor_test.dart` to expect `dewey` activation in IDLE and the existing `evaluate_scope` initial sub-state.
+- [x] Edit `code/cli/test/fsm_state_test.dart` to expect `dewey` as the sole running ape in IDLE.
+- [x] Edit `code/cli/test/doctor_test.dart` to require `dewey` in the bundled APE set and stop requiring `socrates-idle`.
+- [x] Edit `code/cli/test/ape_prompt_test.dart` to copy `dewey.yaml`, add a successful IDLE prompt case for `dewey`, and replace the IDLE rejection case so `socrates-idle` is no longer considered valid there.
+- [x] Run `dart test test/effect_executor_test.dart test/fsm_state_test.dart test/doctor_test.dart test/ape_prompt_test.dart` and capture the expected RED failures.
+- [x] Commit: "test(cli): lock dewey idle contract for #177"
 
 ## Phase 2 — Replace the live IDLE operator asset and activation binding (P2)
 

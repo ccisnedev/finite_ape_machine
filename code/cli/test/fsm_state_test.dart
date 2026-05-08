@@ -157,7 +157,7 @@ void main() {
         expect(apes[0]['status'], equals('RUNNING'));
       });
 
-      test('IDLE has socrates-idle active', () async {
+      test('IDLE has dewey active', () async {
         setupWorkspace(state: 'IDLE');
 
         final command = FsmStateCommand(FsmStateInput(
@@ -167,7 +167,7 @@ void main() {
         final apes = result.toJson()['apes'] as List;
 
         expect(apes, hasLength(1));
-        expect(apes.first['name'], equals('socrates-idle'));
+        expect(apes.first['name'], equals('dewey'));
       });
 
       test('PLAN has descartes running', () async {

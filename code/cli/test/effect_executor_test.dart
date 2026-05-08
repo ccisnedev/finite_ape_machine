@@ -225,7 +225,7 @@ void main() {
         expect(content, contains('state: clarification'));
       });
 
-      test('activates socrates-idle when transitioning to IDLE', () {
+      test('activates dewey when transitioning to IDLE', () {
         File('${tempDir.path}/.inquiry/state.yaml')
             .writeAsStringSync('state: EVOLUTION\nissue: "145"\n');
 
@@ -240,7 +240,7 @@ void main() {
         final content =
             File('${tempDir.path}/.inquiry/state.yaml').readAsStringSync();
         expect(content, contains('state: IDLE'));
-        expect(content, contains('name: socrates-idle'));
+        expect(content, contains('name: dewey'));
         expect(content, contains('state: evaluate_scope'));
       });
 
