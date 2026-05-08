@@ -93,13 +93,13 @@ const _ylw = '\x1B[33m'; // yellow
 // const _blu = '\x1B[34m'; // blue
 // const _mag = '\x1B[35m'; // magenta
 // const _cyn = '\x1B[36m'; // cyan
-const _bgrn = '\x1B[92m'; // bright green
+const _bgr = '\x1B[92m'; // bright green
 
 /// Builds the FSM diagram with the given version.
 String _buildDiagram(String version) {
   // Logo: serif "i" — beacon (●) is the dot, ──█── are the serifs
   final logo =
-      '\n$_bgrn  ●    $_r'
+      '\n$_bgr  ●    $_r'
       '\n$_wht ▀█ ▄▀▀█$_r  $_b${_red}Inquiry$_r v$version'
       '\n$_wht▄▄█▄▀▄▄█$_r  ${_d}powered by the Finite APE Machine$_r'
       '\n$_wht       ▀$_r'
