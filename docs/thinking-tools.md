@@ -15,15 +15,17 @@ Thinking Tools are the reusable reasoning methods and working disciplines employ
 
 ## Current Role in the System
 
-The current model uses Thinking Tools through four active sub-agents and one orchestrating system role:
+The current model uses Thinking Tools through five active operators and one orchestrating system role:
 
 | Phase | Operator | Thinking Tool | Function |
 |---|---|---|---|
-| IDLE | APE | Practical triage rather than a named tool-specific persona | Prepares infrastructure and governs transition readiness |
+| IDLE | DEWEY | Deweyan problematization | Bounded issue triage, issue selection, and readiness for explicit handoff |
 | ANALYZE | SOCRATES | Mayeutics / Socratic method | Clarifies the problem through structured questioning |
 | PLAN | DESCARTES | The Method | Divides, orders, verifies, and enumerates work |
 | EXECUTE | BASHO | Techne + yō no bi | Implements under constraints with emphasis on functional elegance |
 | EVOLUTION | DARWIN | Natural selection | Compares outcomes and proposes fitter process mutations |
+
+APE remains the scheduler and closure gate. DEWEY does not prepare branches or perform downstream phases; `issue-start` owns the explicit handoff into ANALYZE.
 
 This mapping matters because the system does not treat the named agents as arbitrary characters. Their names identify the method each phase is expected to embody. [2][3][4]
 

@@ -8,15 +8,29 @@
 
 ---
 
-## Active Model (v0.0.8+)
+## Active Model (live contract)
 
-The current APE cycle uses four sub-agents, each embodying a thinking tool from a different discipline, era, and culture, plus an explicit END gate before EVOLUTION:
+The current APE cycle uses five active operators, each embodying a thinking tool from a different discipline, era, and culture, plus an explicit END gate before EVOLUTION:
 
 ```
 IDLE ──→ ANALYZE ──→ PLAN ──→ EXECUTE ──→ END ──→ EVOLUTION
 ```
 
-APE is NOT an ape — it is the Finite APE Machine, the scheduler, the RTOS event loop. It has no personality and no namesake. It operates directly in IDLE and at the END gate; the four sub-agents below are the thinking tools it dispatches in the other states.
+APE is NOT an ape — it is the Finite APE Machine, the scheduler, the RTOS event loop. It has no personality and no namesake. It governs the END gate; the five named operators below are the thinking tools it dispatches across the active states. In IDLE, DEWEY stays bounded to issue triage and hands off through `issue-start`.
+
+---
+
+## DEWEY
+
+**State:** IDLE
+**Function:** `triage` — Deweyan Problematization and Issue Formation
+**Thinking tool:** Problematization — transform the indeterminate into a well-formed issue
+
+**The allegory.** John Dewey (1859–1952) defined inquiry as the controlled transformation of an indeterminate situation into a determinate unified whole. Before explanation, design, or implementation can begin, the situation itself has to be rendered precise enough to deserve formal work.
+
+**The ape.** DEWEY owns bounded issue triage. It clarifies whether the situation merits a formal cycle, searches for existing issues, creates or selects the issue when needed, and gets that issue ready for explicit handoff. DEWEY does not prepare branches, write `diagnosis.md`, design the plan, or code. That handoff belongs to `issue-start`.
+
+**Key artifact:** Selected issue + `issue-start` handoff
 
 ---
 
@@ -97,7 +111,7 @@ mizu no oto          sound of water
 
 ## Extended Lore (future/referential)
 
-> The following agents are part of APE's original vision. They remain as reference for future expansion. In the current model (v0.0.8+), their functions have been absorbed by the four active agents or are planned as skills/CLI features.
+> The following agents are part of APE's original vision. They remain as reference for future expansion. In the current live model, their functions have been absorbed by the active operators or are planned as skills/CLI features.
 
 ### MARCOPOLO
 
@@ -159,10 +173,11 @@ mizu no oto          sound of water
 
 ## Quick Reference
 
-### Active Agents (v0.0.8+)
+### Active Agents (live contract)
 
 | Name | State | Thinking Tool | Era/Culture | Key Artifact |
 |------|-------|--------------|-------------|-------------|
+| DEWEY | IDLE | Problematization | United States, 1859 | Selected issue + `issue-start` handoff |
 | SOCRATES | ANALYZE | Mayéutica | Greece, 470 BC | `diagnosis.md` |
 | DESCARTES | PLAN | Scientific Method | France, 1596 | `plan.md` |
 | BASHŌ | EXECUTE | Techne / 用の美 | Japan, 1644 | Code + commits |

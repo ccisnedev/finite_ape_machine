@@ -30,7 +30,7 @@ Each sub-agent operates within one APE state. Sub-agents are launched with clean
 ```c
 void ape_tick() {
   switch(ape_state) {
-    case IDLE:       ape_triage();         break;  // APE direct + triage skill
+    case IDLE:       dewey_run();          break;  // Sub-agent: DEWEY (bounded triage)
     case ANALYZE:    socrates_run();       break;  // Sub-agent: SOCRATES
     case PLAN:       descartes_run();      break;  // Sub-agent: DESCARTES
     case EXECUTE:    basho_run();          break;  // Sub-agent: BASHŌ
@@ -42,7 +42,7 @@ void ape_tick() {
 
 ### Key Properties
 
-1. **One primary operator per phase.** IDLE uses APE directly (with a skill). ANALYZE→SOCRATES. PLAN→DESCARTES. EXECUTE→BASHŌ. END→APE + human gate. EVOLUTION→DARWIN.
+1. **One primary operator per phase.** IDLE→DEWEY. ANALYZE→SOCRATES. PLAN→DESCARTES. EXECUTE→BASHŌ. END→APE + human gate. EVOLUTION→DARWIN.
 2. **Sub-agents are launched with clean context.** Each invocation receives: the user's input, the relevant artifacts (diagnosis.md, plan.md, etc.), and a phase-specific prompt. The sub-agent does not know about other phases or agents.
 3. **Illusion of continuity.** Sub-agents don't persist between ticks. APE reconstructs context from artifacts (`state.yaml`, `diagnosis.md`, `plan.md`) and passes it to the sub-agent on each invocation. The agent experiences continuity; the scheduler provides it.
 4. **Agents are unaware of each other.** No agent knows what other agents exist. Communication is through artifacts (files) routed by the scheduler (see [signal-based-coordination](signal-based-coordination.md)).
@@ -52,22 +52,25 @@ void ape_tick() {
 
 | Agent | State | Thinking Tool | Key Artifact |
 |-------|-------|---------------|-------------|
+| DEWEY | IDLE | Deweyan problematization | Selected issue + explicit `issue-start` handoff |
 | SOCRATES | ANALYZE | Mayéutica (Socratic method) | `diagnosis.md` — rigorous paper with references |
 | DESCARTES | PLAN | Method (divide, order, verify, enumerate) | `plan.md` — WBS with checkboxes + test pseudocode |
 | BASHŌ | EXECUTE | Techne + 用の美 (functional beauty) | Code + commits per phase |
 | APE + human gate | END | Explicit closure discipline | PR creation and merge gate |
 | DARWIN | EVOLUTION | Natural selection (observe, compare, select) | Issues in APE repo (via `gh`) |
 
-## APE in IDLE (triage)
+## DEWEY in IDLE (triage)
 
-In IDLE, APE operates directly — no sub-agent. It uses the triage skill, which embodies Aristotle's **phronesis** (practical wisdom): the ability to decide what merits action.
+In IDLE, DEWEY owns bounded issue triage. DEWEY determines whether an indeterminate situation merits a formal cycle, whether an issue already exists, and whether that issue is ready for handoff. DEWEY does not perform root-cause analysis, planning, branch preparation, or coding.
 
 Triage determines:
 - Whether the problem merits a formal APE cycle
 - Whether a GitHub issue already exists (via `gh issue list --search`)
-- Infrastructure preparation: `gh issue create` (if needed) → issue-start protocol (branch + checkout + cleanroom folder)
+- Whether the issue is ready for explicit handoff into `issue-start`
 
-The gate to exit IDLE: issue exists + branch created + working directory ready.
+Infrastructure preparation remains external to DEWEY: `issue-start` performs `gh issue create` (if needed), creates the branch and cleanroom folder, and fires the `start_analyze` transition.
+
+The gate to exit IDLE: issue selected or created, then `issue-start` completes branch creation, workspace setup, and transition readiness.
 
 ## Relationship to Existing Specs
 
@@ -85,4 +88,4 @@ The [finite-ape-machine spec](finite-ape-machine.md) describes the current three
 IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION → IDLE
 ```
 
-The [lore](../lore.md) describes the broader original roster. The current operational model uses SOCRATES, DESCARTES, BASHŌ, DARWIN, and an explicit END gate governed by APE plus the human.
+The [lore](../lore.md) describes the broader original roster. The current operational model uses DEWEY, SOCRATES, DESCARTES, BASHŌ, DARWIN, and an explicit END gate governed by APE plus the human.

@@ -286,22 +286,22 @@ expect handoff remains documented in issue-start rather than in dewey
 
 **TDD:** Partial. Use search assertions as the RED guardrail before editing docs, but this is documentation/protocol reconciliation rather than classical unit TDD.
 
-- [ ] Edit `docs/spec/cooperative-multitasking-model.md` to replace the IDLE `APE direct + triage skill / no sub-agent` description with the approved dewey-operated model.
-- [ ] Edit `docs/spec/agent-lifecycle.md` to name `dewey` as the IDLE operator while preserving issue triage boundaries and externalized transition mechanics.
-- [ ] Update `README.md`, `docs/architecture.md`, `docs/roadmap.md`, and `docs/thinking-tools.md` wherever the live roster or state-to-agent mapping still omits DEWEY from the active APE set.
-- [ ] Inspect `docs/philosophy.md` and any other live methodology page that maps states to named agents; if the live roster or IDLE contract is stale there, update it in this phase.
-- [ ] Update `code/site/agents.html` so the public roster includes DEWEY as the IDLE ape, adjusts the count and copy that currently say `Four active agents` / `Four apes, not nine`, and preserves any historical note as explicitly historical rather than live roster truth.
-- [ ] Update any dependent site surface that mirrors the live roster or agent count, especially `code/site/index.html`, `code/site/methodology.html`, and `code/site/ape-builds-ape.html`.
+- [x] Edit `docs/spec/cooperative-multitasking-model.md` to replace the IDLE `APE direct + triage skill / no sub-agent` description with the approved dewey-operated model.
+- [x] Edit `docs/spec/agent-lifecycle.md` to name `dewey` as the IDLE operator while preserving issue triage boundaries and externalized transition mechanics.
+- [x] Update `README.md`, `docs/architecture.md`, `docs/roadmap.md`, and `docs/thinking-tools.md` wherever the live roster or state-to-agent mapping still omits DEWEY from the active APE set.
+- [x] Inspect `docs/philosophy.md` and any other live methodology page that maps states to named agents; if the live roster or IDLE contract is stale there, update it in this phase.
+- [x] Update `code/site/agents.html` so the public roster includes DEWEY as the IDLE ape, adjusts the count and copy that currently say `Four active agents` / `Four apes, not nine`, and preserves any historical note as explicitly historical rather than live roster truth.
+- [x] Update any dependent site surface that mirrors the live roster or agent count, especially `code/site/index.html`, `code/site/methodology.html`, and `code/site/ape-builds-ape.html`.
 - [ ] If adding DEWEY to the site requires new card styling or layout support, update `code/site/css/agents.css` in this phase so the public roster renders correctly on desktop and mobile.
-- [ ] Inspect `docs/lore.md`; if it distinguishes historical lore from the live roster, preserve that distinction while making the live roster sections and tables include DEWEY where appropriate.
+- [x] Inspect `docs/lore.md`; if it distinguishes historical lore from the live roster, preserve that distinction while making the live roster sections and tables include DEWEY where appropriate.
 - [ ] Inspect `docs/research/inquiry/dewey-inquiry.md` only if the public-facing documentation needs an explicit cross-reference explaining why DEWEY owns IDLE.
-- [ ] Inspect `docs/architecture.md` and `code/cli/assets/skills/issue-start/SKILL.md`; if either contradicts the approved dewey-operated IDLE model or collapses handoff logic back into IDLE, update it in this phase.
+- [x] Inspect `docs/architecture.md` and `code/cli/assets/skills/issue-start/SKILL.md`; if either contradicts the approved dewey-operated IDLE model or collapses handoff logic back into IDLE, update it in this phase.
 - [ ] If `code/cli/assets/skills/issue-start/SKILL.md` changes, mirror the same contract update into `code/cli/build/assets/skills/issue-start/SKILL.md` or rebuild packaged assets before leaving the phase.
-- [ ] Run `rg "socrates-idle|APE operates directly|no sub-agent" docs/spec docs/architecture.md code/cli/assets/skills/issue-start/SKILL.md code/cli/build/assets/skills/issue-start/SKILL.md` and clear stale contradictions before leaving the phase.
-- [ ] Run `rg "Four active agents|Four apes, not nine|The four active|four active apes" README.md docs code/site` and clear stale live-roster contradictions before leaving the phase.
-- [ ] Run `rg "DEWEY|dewey" README.md docs code/site` and confirm the live roster and IDLE mapping now include DEWEY on both technical and public-facing surfaces.
-- [ ] Run `rg "start_analyze" docs/architecture.md code/cli/assets/skills/issue-start/SKILL.md code/cli/build/assets/skills/issue-start/SKILL.md` and confirm the explicit handoff still belongs to `issue-start`, not to `dewey`.
-- [ ] Commit: "docs(site): add dewey to idle roster and handoff docs for #177"
+- [x] Run `rg "socrates-idle|APE operates directly|no sub-agent" docs/spec docs/architecture.md code/cli/assets/skills/issue-start/SKILL.md code/cli/build/assets/skills/issue-start/SKILL.md` and clear stale contradictions before leaving the phase.
+- [x] Run `rg "Four active agents|Four apes, not nine|The four active|four active apes" README.md docs code/site` and clear stale live-roster contradictions before leaving the phase.
+- [x] Run `rg "DEWEY|dewey" README.md docs code/site` and confirm the live roster and IDLE mapping now include DEWEY on both technical and public-facing surfaces.
+- [x] Run `rg "start_analyze" docs/architecture.md code/cli/assets/skills/issue-start/SKILL.md code/cli/build/assets/skills/issue-start/SKILL.md` and confirm the explicit handoff still belongs to `issue-start`, not to `dewey`.
+- [x] Commit: "docs(site): add dewey to idle roster and handoff docs for #177"
 
 ## Phase 5 — Release record and full validation (P5)
 

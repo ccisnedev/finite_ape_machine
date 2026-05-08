@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meet the agents — Inquiry</title>
-  <meta name="description" content="Four active agents — SOCRATES, DESCARTES, BASHŌ, DARWIN — and the honest story of five that collapsed. How the Inquiry agent roster went from nine to four.">
+  <meta name="description" content="Five active agents — DEWEY, SOCRATES, DESCARTES, BASHŌ, DARWIN — and the honest story of the larger roster that collapsed.">
   <meta name="theme-color" content="#0a0e1a">
 
   <meta property="og:title" content="Meet the agents — Inquiry">
-  <meta property="og:description" content="Four active agents, and the honest story of five that collapsed.">
+  <meta property="og:description" content="Five active agents, and the honest story of the larger roster that collapsed.">
   <meta property="og:type" content="article">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Meet the agents — Inquiry">
-  <meta name="twitter:description" content="Four active agents, and the honest story of five that collapsed.">
+  <meta name="twitter:description" content="Five active agents, and the honest story of the larger roster that collapsed.">
 
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
 
@@ -31,15 +31,33 @@
     </nav>
 
     <header class="page-hero">
-      <h1>Four apes, not nine.</h1>
+      <h1>Five live apes, nine in lore.</h1>
       <p class="page-subhead">
-        Inquiry started with nine named agents. The sub-agents are still called apes in the lore because APE was the system's early working name. Two months of bootstrapping the system collapsed the roster to four. Here's who's on the team, and the honest story of who didn't make it.
+        Inquiry started with nine named agents. The sub-agents are still called apes in the lore because APE was the system's early working name. Today's live roster has five: DEWEY owns bounded IDLE triage, and the other four carry ANALYZE, PLAN, EXECUTE, and EVOLUTION. Here's who's on the team, and the honest story of who didn't make it.
       </p>
     </header>
 
     <section aria-labelledby="roster-heading">
-      <h2 id="roster-heading">The four active</h2>
+      <h2 id="roster-heading">The live roster</h2>
       <div class="agents-grid">
+
+        <article class="agent-card" id="dewey">
+          <div class="inner">
+            <div class="agent-header">
+              <span class="agent-phase">Idle</span>
+              <h3 class="agent-name">DEWEY</h3>
+              <span class="agent-discipline">Problematization</span>
+            </div>
+            <p class="agent-maxim">Turn the indeterminate situation into a well-formed issue.</p>
+            <p class="agent-body">
+              Owns bounded IDLE triage. DEWEY clarifies whether the situation merits a formal cycle, searches for existing issues, and gets the issue ready for handoff. It does not branch, diagnose, plan, or code.
+            </p>
+            <div class="agent-output">
+              <span class="output-label">Output</span>
+              <code>issue-ready handoff</code>
+            </div>
+          </div>
+        </article>
 
         <article class="agent-card agent-card--socrates" id="socrates">
           <div class="motif-strip">
@@ -165,7 +183,7 @@
             <p class="agent-body">
               Reads the cycle's artifacts and proposes mutations to Inquiry itself — changes to the framework, the transition contract, the other agents. The only ape that improves Inquiry. Off by default; when enabled, files its proposals as issues in this repo (evidence: <a href="https://github.com/ccisnedev/inquiry/issues/54">#54</a>).
             </p>
-            <p class="field-note">Observation nº 54 — collapse of the roster from nine to four; three absorbed, one replaced, pattern consistent across six cycles.</p>
+            <p class="field-note">Observation nº 54 — collapse of the original roster into today's live set; three absorbed, one replaced, and IDLE later made explicit as DEWEY.</p>
             <div class="agent-output">
               <span class="output-label">Output</span>
               <code>repo issues</code>
@@ -179,7 +197,7 @@
     <section aria-labelledby="collapse-heading">
       <h2 id="collapse-heading">Lore vs reality</h2>
       <p class="section-intro">
-        The original <a href="https://github.com/ccisnedev/inquiry/blob/main/docs/lore.md"><code>lore.md</code></a> sketched nine apes. The historical bootstrap thesis was "APE builds APE" because APE was the system's initial codename; Inquiry is the current system name. After two months of building the system through its own cycle, the roster collapsed to four. This is honest accounting, not a roadmap to revive the deferred ones. Most were absorbed by simpler agents that turned out to do the job better.
+        The original <a href="https://github.com/ccisnedev/inquiry/blob/main/docs/lore.md"><code>lore.md</code></a> sketched nine apes. The historical bootstrap thesis was "APE builds APE" because APE was the system's initial codename; Inquiry is the current system name. After two months of building the system through its own cycle, the roster collapsed to a smaller live set. DEWEY now owns bounded IDLE triage while the other four cover ANALYZE, PLAN, EXECUTE, and EVOLUTION. This is honest accounting, not a roadmap to revive the deferred ones. Most were absorbed by simpler agents that turned out to do the job better.
       </p>
       <div class="table-wrapper">
         <table class="data-table">
@@ -191,6 +209,11 @@
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <th scope="row">DEWEY</th>
+              <td><span class="status-pill status-active">Active</span></td>
+              <td>IDLE — bounded issue triage and explicit handoff through <code>issue-start</code>.</td>
+            </tr>
             <tr>
               <th scope="row">SOCRATES</th>
               <td><span class="status-pill status-active">Active</span></td>

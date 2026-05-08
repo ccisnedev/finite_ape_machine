@@ -43,15 +43,15 @@
     <section aria-labelledby="fsm-heading">
       <h2 id="fsm-heading">The operational cycle</h2>
       <p class="section-intro">
-        The current operational model is a six-state cycle. <code>IDLE</code> is the entry and exit. <code>ANALYZE</code>, <code>PLAN</code>, and <code>EXECUTE</code> are the core work phases. <code>END</code> is the explicit PR gate. <code>EVOLUTION</code> is opt-in. The forward flow is linear; backward edges from <code>PLAN</code> and <code>EXECUTE</code> to <code>ANALYZE</code> exist because re-analysis is legal, not a recovery hack.
+        The current operational model is a six-state cycle. <code>IDLE</code> is the entry and exit, and DEWEY owns its bounded triage mission. <code>ANALYZE</code>, <code>PLAN</code>, and <code>EXECUTE</code> are the core work phases. <code>END</code> is the explicit PR gate. <code>EVOLUTION</code> is opt-in. The forward flow is linear; backward edges from <code>PLAN</code> and <code>EXECUTE</code> to <code>ANALYZE</code> exist because re-analysis is legal, not a recovery hack.
       </p>
       <figure class="fsm-diagram">
         <img src="img/fsm.svg" alt="Inquiry finite state machine diagram showing IDLE → ANALYZE → PLAN → EXECUTE → END → IDLE cycle, with backward transitions from PLAN and EXECUTE to ANALYZE, and an opt-in EVOLUTION state after END.">
       </figure>
       <div class="state-list">
         <dl>
-          <dt><code>IDLE</code></dt>
-          <dd>Rest state. No agent runs; the cycle waits for the next issue to arrive.</dd>
+          <dt><code>IDLE</code> · DEWEY</dt>
+          <dd>Bounded issue triage. DEWEY determines whether the situation is ready to become or select a GitHub issue; <code>issue-start</code> performs the explicit handoff into ANALYZE.</dd>
 
           <dt><code>ANALYZE</code> · SOCRATES</dt>
           <dd>Clarifies the problem through dialog. Produces <code>diagnosis.md</code>.</dd>
@@ -158,7 +158,7 @@
       <div class="deeper">
         <a href="agents.html" class="deeper-card">
           <h3>Meet the agents →</h3>
-          <p>The four agents that run each phase, and the five that collapsed.</p>
+          <p>The five active agents in the live roster, and the larger cast that collapsed.</p>
         </a>
         <a href="ape-builds-ape.html" class="deeper-card">
           <h3>Bootstrap thesis: APE builds APE →</h3>

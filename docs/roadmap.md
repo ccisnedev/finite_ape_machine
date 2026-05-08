@@ -4,6 +4,8 @@
 
 > Where APE is going next. For where APE is today, see [../README.md](../README.md).
 
+> Live roster note: DEWEY now owns bounded IDLE triage in the current contract; `issue-start` remains the explicit handoff into ANALYZE.
+
 This roadmap is **descriptive, not prescriptive**: it reflects the open issues currently in the backlog and the long-running theses that motivate the project. Anything not backed by an issue is exploratory.
 
 ## Vision
@@ -21,7 +23,7 @@ The end-state is an **APE that builds APE**: a self-improving framework where ev
 - 5-state FSM with declarative transition contract (IDLE / ANALYZE / PLAN / EXECUTE / EVOLUTION)
 - 9 working CLI commands across 3 modules (`global`, `target`, `state`)
 - Single-target deployment (Copilot) per [ADR D20](spec/target-specific-agents.md)
-- 4 active agents: SOCRATES, DESCARTES, BASHŌ, DARWIN
+- Active roster at that snapshot: SOCRATES, DESCARTES, BASHŌ, DARWIN
 - 131 tests, cross-platform (Windows + Linux), 12 GitHub releases
 - Empirical bootstrap underway: APE is being built using APE (see [bootstrap-validation](research/ape_builds_ape/bootstrap-validation.md))
 
@@ -89,10 +91,11 @@ The semantic risk matrix exists in spec but not yet in CLI behavior. End-state: 
 
 ## Lore vs reality
 
-The original [lore.md](lore.md) sketched 9+ apes. After two months of building APE with APE, the roster collapsed to 4 active agents. This is honest accounting, not a roadmap commitment to revive deferred ones — most were absorbed by simpler agents that turned out to do the job better.
+The original [lore.md](lore.md) sketched 9+ apes. After two months of building APE with APE, the roster collapsed to a smaller live set. In the current contract, DEWEY owns IDLE triage alongside SOCRATES, DESCARTES, BASHŌ, and DARWIN. This is honest accounting, not a roadmap commitment to revive deferred ones — most other roles were absorbed by simpler operators that turned out to do the job better.
 
 | Lore agent | Status | What happened |
 |---|---|---|
+| **DEWEY** | ✅ Active | IDLE — bounded issue triage and explicit handoff to `issue-start` |
 | **SOCRATES** | ✅ Active | ANALYZE — implemented as the mayéutica agent |
 | **DESCARTES** | ✅ Active | PLAN — replaces SUNZI's strategy + VITRUVIUS's WBS in one Cartesian Method |
 | **BASHŌ** | ✅ Active | EXECUTE — replaces ADA's TDD with techne (functional beauty under constraints) |
