@@ -1366,14 +1366,14 @@ The canonical workflow through APE commands:
 This is a fundamental architectural decision. Apes do NOT:
 - Write .md files directly to `.inquiry/memory/`.
 - Modify `index.md` files manually.
-- Create GitHub Issues via `gh` directly.
 - Run `git commit` directly.
 
-Instead, they execute `iq` CLI commands. This creates a single validation boundary:
+Instead, they act through the runtime's explicit command and skill surfaces. For FSM transitions and structured effects, they execute `iq` CLI commands. For bounded GitHub-side IDLE work, they use the deterministic runtime skill surface. This keeps the validation boundary explicit instead of leaving it implicit in prompt text alone:
 
 ```
 [Ape prompt] → executes → [ape memory create ...] → [BORGES validates] → [file written + index updated]
-[Ape prompt] → executes → [ape task create ...]   → [gh issue create] → [status.md updated]
+[DEWEY in TRIAGE] → executes → [issue-create skill] → [gh issue list/create or issue selection] → [issue_selected_or_created]
+[Explicit start] → executes → [issue-start skill] → [feature_branch_selected] → [iq fsm transition --event start_analyze]
 [Ape prompt] → executes → [ape git commit ...]    → [green verified] → [structured commit]
 ```
 
@@ -1382,6 +1382,7 @@ Benefits:
 - Index consistency is guaranteed.
 - ID uniqueness is guaranteed.
 - The CLI can be tested independently of the agent prompts.
+- IDLE keeps issue readiness separate from explicit operational start.
 - Future backends (Jira, SQLite cache) can be swapped without changing agent prompts.
 
 ---

@@ -240,11 +240,13 @@ expect only the updated wording to remain for the clarified IDLE model
 
 **TDD:** No. This phase aligns explanatory material after the executable contract is already green; complete it by passing the documentation verification gate.
 
-- [ ] Update `docs/spec/agent-lifecycle.md` so IDLE explicitly stays in TRIAGE after issue readiness, reserves DONE for explicit start intent, points issue creation to `issue-create`, and assigns `issue_selected_or_created` vs `feature_branch_selected` to the correct moments in the handoff sequence.
-- [ ] Update `docs/spec/cooperative-multitasking-model.md` so DEWEY remains methodology-only and the explicit create-or-select fast path is described as IDLE/Inquiry CLI behavior rather than DEWEY routing.
-- [ ] Reconcile the superseded note in `docs/spec/state-encapsulation.md` with the final runtime terminology from Phases 2-4.
-- [ ] Run `rg "gh issue create|issue-start.*create|explicit handoff|issue readiness|_DONE|create_or_select|issue-create|issue_selected_or_created|feature_branch_selected" ..\docs\spec ..\code\cli\assets` and resolve stale wording before leaving the phase.
-- [ ] Commit: "docs: align idle specs with clarified contract for #175"
+- [x] Update `docs/spec/agent-lifecycle.md` so IDLE explicitly stays in TRIAGE after issue readiness, reserves DONE for explicit start intent, points issue creation to `issue-create`, and assigns `issue_selected_or_created` vs `feature_branch_selected` to the correct moments in the handoff sequence.
+- [x] Update `docs/spec/cooperative-multitasking-model.md` so DEWEY remains methodology-only and the explicit create-or-select fast path is described as IDLE/Inquiry CLI behavior rather than DEWEY routing.
+- [x] Reconcile the superseded note in `docs/spec/state-encapsulation.md` with the final runtime terminology from Phases 2-4.
+- [x] Run `rg "gh issue create|issue-start.*create|explicit handoff|issue readiness|_DONE|create_or_select|issue-create|issue_selected_or_created|feature_branch_selected" ..\docs\spec ..\code\cli\assets` and resolve stale wording before leaving the phase.
+- [x] Commit: "docs: align idle specs with clarified contract for #175"
+
+Deviation: Also aligned `docs/spec/cli-as-api.md` and `docs/spec/inquiry-cli-spec.md` because both still described the pre-split IDLE issue-creation and explicit-start handoff semantics, which would have left contradictory explanatory guidance after P5.
 
 ## Phase 6 — Version, changelog, and final validation (P6)
 

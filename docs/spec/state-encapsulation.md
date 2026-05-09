@@ -12,7 +12,9 @@ issue: 152
 
 > Superseded for canonical IDLE behavior. This document remains useful as historical architecture and for the encapsulation principle, but the normative runtime contract now lives in `code/cli/assets/fsm/transition_contract.yaml` for the outer IDLE boundary and `code/cli/assets/fsm/states/idle.yaml` for internal IDLE behavior.
 >
-> Historical note: the operator naming below, the proposed TRIAGE flow ending at `_DONE`, and the older handoff semantics are preserved as context only and may be stale relative to the live runtime assets.
+> Runtime terminology has since stabilized: DEWEY is the live TRIAGE operator, `issue-create` owns GitHub issue creation or confirmation, issue readiness produces `issue_selected_or_created` and resets DEWEY while the main FSM remains in IDLE, and DONE is reserved for explicit start intent, after which `issue-start` prepares `feature_branch_selected` before `start_analyze`.
+>
+> Historical note: the operator naming below, the proposed TRIAGE flow ending at `_DONE`, and the older handoff semantics are preserved as context only and should be read against the live runtime mapping above.
 
 ## Principle
 
@@ -125,11 +127,13 @@ This mirrors the kernel rule: "if you make a single change to numerous files, gr
 
 This section is historical rather than normative. It preserves an earlier explanation of the IDLE mission and still-valid architectural intuition, but the canonical runtime definition belongs to `transition_contract.yaml` plus `idle.yaml`.
 
-IDLE is the only state where the scheduler operates directly (via the TRIAGE sub-agent). Its mission is **phronesis** (Aristotle's practical wisdom) — the ability to decide what merits formal inquiry.
+Historically this note described a dedicated TRIAGE sub-agent. The live runtime now maps that mission to DEWEY inside IDLE, with `issue-create` handling deterministic GitHub issue creation or confirmation and explicit start intent alone reaching DONE.
+
+IDLE is the only state where the scheduler operates directly on triage behavior. Its mission is **phronesis** (Aristotle's practical wisdom) — the ability to decide what merits formal inquiry.
 
 IDLE is not a waiting room. It is an active state whose output is **well-defined issues**. Someone can remain in IDLE indefinitely, creating issues without ever entering ANALYZE. The transition to the next phase is a side effect of successful triage, not the goal of triage.
 
-### TRIAGE sub-agent
+### Historical TRIAGE sub-agent proposal
 
 | Property | Value |
 |----------|-------|
@@ -144,6 +148,8 @@ IDLE is not a waiting room. It is an active state whose output is **well-defined
 
 ### TRIAGE internal states (proposed)
 
+The historical state names below remain useful as a design sketch, but the live runtime now interprets them differently: `create_or_select` is the fast-path label inside DEWEY, issue readiness no longer reaches `_DONE`, and the explicit-start path alone reaches DONE after `issue_selected_or_created` already exists.
+
 ```
 classify_intent → scope_problem → search_issues → create_or_select → confirm → _DONE
 ```
@@ -153,18 +159,18 @@ classify_intent → scope_problem → search_issues → create_or_select → con
 | `classify_intent` | Is this a consultation (answer directly, stay in IDLE) or a modification (needs an issue)? |
 | `scope_problem` | Decompose the request. Is it one issue or multiple? Apply the "sufficiently related" test. |
 | `search_issues` | `gh issue list --search "..."` — does an issue already exist for this? |
-| `create_or_select` | Create new issue(s) via `gh issue create` or select existing one. User confirms. |
+| `create_or_select` | Use the TRIAGE issue surface to create or confirm the issue, then present it for user confirmation. |
 | `confirm` | Present the selected/created issue to the user. User confirms readiness. |
-| `_DONE` | Terminal. Scheduler evaluates: if issue confirmed → `iq fsm transition --event ready --issue <NNN>`. If blocked → `iq fsm transition --event block`. |
+| `_DONE` | Historical terminal proposal only. In the live runtime, issue readiness already produced `issue_selected_or_created` and returned to TRIAGE; explicit start intent alone reaches DONE, then `issue-start` prepares `feature_branch_selected` before `start_analyze`. |
 
 ### Completion authority compatibility
 
-IDLE has `completion_authority: user`. This means:
-- TRIAGE reaches `_DONE` → scheduler asks user: "¿Consideras que el triage está completo?"
-- User confirms → scheduler executes transition with the selected issue
-- User declines → stays in IDLE, TRIAGE can restart
+IDLE still has `completion_authority: user`, but the live runtime applies that gate to explicit start rather than to issue readiness alone. This means:
+- TRIAGE may produce `issue_selected_or_created` and reset to DEWEY's initial state without leaving IDLE
+- Only when the user explicitly wants to begin resolving the issue does IDLE reach DONE
+- `issue-start` then prepares `feature_branch_selected`, after which `start_analyze` may transition the main FSM
 
-This is compatible with the existing model. TRIAGE never auto-transitions the main FSM.
+This preserves the encapsulation principle: issue readiness does not auto-transition the main FSM, and explicit operational start remains a separate user-gated handoff.
 
 ## References
 

@@ -52,7 +52,7 @@ void ape_tick() {
 
 | Agent | State | Thinking Tool | Key Artifact |
 |-------|-------|---------------|-------------|
-| DEWEY | IDLE | Deweyan problematization | Selected issue + explicit `issue-start` handoff |
+| DEWEY | IDLE | Deweyan problematization | `issue_selected_or_created` inside TRIAGE until explicit start |
 | SOCRATES | ANALYZE | Mayéutica (Socratic method) | `diagnosis.md` — rigorous paper with references |
 | DESCARTES | PLAN | Method (divide, order, verify, enumerate) | `plan.md` — WBS with checkboxes + test pseudocode |
 | BASHŌ | EXECUTE | Techne + 用の美 (functional beauty) | Code + commits per phase |
@@ -63,16 +63,17 @@ void ape_tick() {
 
 This section explains the intended DEWEY/IDLE architecture; it does not replace the canonical runtime contract. The normative IDLE surfaces are `code/cli/assets/fsm/transition_contract.yaml` for the outer boundary and `code/cli/assets/fsm/states/idle.yaml` for the internal IDLE behavior.
 
-In IDLE, DEWEY owns bounded issue triage. DEWEY determines whether an indeterminate situation merits a formal cycle, whether an issue already exists, and whether that issue is ready for handoff. By default, issue readiness stays within IDLE until the explicit handoff surface is prepared; DEWEY does not itself define the outer exit from IDLE. DEWEY does not perform root-cause analysis, planning, branch preparation, or coding.
+In IDLE, DEWEY owns bounded issue triage. DEWEY determines whether an indeterminate situation merits a formal cycle, whether an issue already exists, and whether TRIAGE should use `issue-create` to create or confirm one. By default, issue readiness stays within IDLE: TRIAGE produces `issue_selected_or_created`, DEWEY resets to TRIAGE, and the main FSM remains in IDLE. DEWEY does not itself define the outer exit from IDLE. The explicit create-or-select fast path is IDLE/Inquiry CLI orchestration, not DEWEY's canonical ownership boundary. DEWEY does not perform root-cause analysis, planning, branch preparation, or coding.
 
 Triage determines:
 - Whether the problem merits a formal APE cycle
 - Whether a GitHub issue already exists (via `gh issue list --search`)
-- Whether the issue is ready for explicit handoff into `issue-start`
+- Whether `issue-create` must create or confirm the GitHub issue
+- Whether explicit start intent has been given after issue readiness
 
-Infrastructure preparation remains external to DEWEY: `issue-start` performs `gh issue create` (if needed), creates the branch and cleanroom folder, and fires the `start_analyze` transition.
+Infrastructure preparation remains external to DEWEY: only explicit start intent reaches DONE, `issue-start` assumes the issue already exists, prepares the branch and cleanroom folder, produces `feature_branch_selected`, and then the outer `start_analyze` transition may fire.
 
-The gate to exit IDLE: issue selected or created, then `issue-start` completes branch creation, workspace setup, and transition readiness.
+The gate to exit IDLE is therefore split across two moments: TRIAGE first produces `issue_selected_or_created` while remaining in IDLE, then explicit start runs `issue-start` to prepare `feature_branch_selected` and transition readiness.
 
 ## Relationship to Existing Specs
 
