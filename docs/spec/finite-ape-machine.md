@@ -27,7 +27,7 @@ If evolution is disabled in `.inquiry/config.yaml`, the cycle returns directly f
 
 | State | Operator | Purpose | Primary artifact |
 |---|---|---|---|
-| IDLE | APE | Triage, readiness, and infrastructure preparation | `.inquiry/state.yaml` |
+| IDLE | DEWEY | Triage, issue readiness, and explicit start handoff | `.inquiry/state.yaml` |
 | ANALYZE | SOCRATES | Clarify the problem and produce a rigorous diagnosis | `cleanrooms/<issue>/analyze/diagnosis.md` |
 | PLAN | DESCARTES | Design the execution sequence and verification strategy | `cleanrooms/<issue>/plan.md` |
 | EXECUTE | BASHO | Implement phase by phase under the plan's constraints | code + commits |
@@ -44,16 +44,21 @@ APE is not a peer agent in the roster. It is the orchestrating methodology and d
 
 The current system uses one primary sub-agent per active work phase:
 
+- DEWEY in IDLE
 - SOCRATES in ANALYZE
 - DESCARTES in PLAN
 - BASHO in EXECUTE
 - DARWIN in EVOLUTION
 
-IDLE and END are orchestration-heavy states governed directly by APE plus explicit human authorization. Earlier multi-agent rosters remain historically relevant, but they are not the active architectural model. Their documentary home is [../lore.md](../lore.md), not this specification. [4][6]
+APE still orchestrates every state boundary, and END remains the explicit APE + human closure gate. Earlier multi-agent rosters remain historically relevant, but they are not the active architectural model. Their documentary home is [../lore.md](../lore.md), not this specification. [4][6]
 
 ### Transitions are explicit and CLI-governed
 
 The machine does not rely on implicit conversational drift to change phases. Transitions are checked against a declared contract and executed through the CLI, which is responsible for validating preconditions, applying effects, and updating persisted state. This makes the finite-state structure operational rather than metaphorical. [2][5]
+
+### Prompt assembly is explicit and inspectable
+
+The sub-agent prompt seen by the operator is not an opaque mixture of YAML prose. Inquiry CLI assembles it explicitly as APE identity from `assets/apes/<name>.yaml`, phase-owned operational contract from `assets/fsm/states/<state>.yaml`, and runtime inquiry-context. `iq ape prompt` prints that exact effective prompt. Standard APE YAMLs stay identity-first; DARWIN is the only bounded exception and keeps only abstract-process methodology while EVOLUTION owns repository procedure. [2][4][5]
 
 ### Artifacts are the coordination surface
 

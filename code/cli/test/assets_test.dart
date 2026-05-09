@@ -116,6 +116,36 @@ void main() {
       expect(content, isNotEmpty);
     });
 
+    test('standard APE identity assets do not own runtime contract markers', () {
+      final disallowedMarkers = {
+        'socrates': ['output_dir', 'confirmed_doc', 'index_file', 'doc-write'],
+        'descartes': ['analysis_input', 'plan_file', 'Commit:'],
+        'basho': ['retrospective.md'],
+        'darwin': [
+          'gh issue list',
+          'gh issue comment',
+          'gh issue create',
+          'diagnosis.md',
+          'plan.md',
+          'retrospective.md',
+          '.inquiry/',
+          'metrics.yaml',
+        ],
+      };
+
+      for (final entry in disallowedMarkers.entries) {
+        final content = assets.loadString('apes/${entry.key}.yaml');
+        for (final marker in entry.value) {
+          expect(
+            content,
+            isNot(contains(marker)),
+            reason:
+                '${entry.key}.yaml should leave "$marker" to runtime-owned prompt surfaces',
+          );
+        }
+      }
+    });
+
     test('listDirectory skills returns all skill directories', () {
       final dirs = assets.listDirectory('skills');
       expect(

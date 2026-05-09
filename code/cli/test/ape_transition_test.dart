@@ -140,6 +140,24 @@ void main() {
         expect(result.to, equals('evaluate_scope'));
       });
 
+      test('dewey search_existing --next--> create_or_select', () async {
+        writeState(
+          state: 'IDLE',
+          apeName: 'dewey',
+          apeState: 'search_existing',
+        );
+
+        final cmd = ApeTransitionCommand(
+          ApeTransitionInput(event: 'next', workingDirectory: tmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.apeName, equals('dewey'));
+        expect(result.from, equals('search_existing'));
+        expect(result.event, equals('next'));
+        expect(result.to, equals('create_or_select'));
+      });
+
       test('reaches _DONE sentinel', () async {
         writeState(
           state: 'ANALYZE',

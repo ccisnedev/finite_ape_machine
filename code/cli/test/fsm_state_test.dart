@@ -82,6 +82,32 @@ void main() {
         expect(json['instructions'], isA<String>());
       });
 
+      test('returns operational contract sourced from state assets', () async {
+        setupWorkspace(state: 'EXECUTE', issue: '145');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final json = result.toJson();
+        final operationalContract =
+            json['operational_contract'] as Map<String, dynamic>?;
+
+        expect(operationalContract, isNotNull);
+        expect(
+          operationalContract!['instructions'],
+          contains('Implement the plan phase by phase under its formal constraints.'),
+        );
+        expect(
+          operationalContract['constraints'],
+          contains('Follow plan.md phases in order'),
+        );
+        expect(
+          operationalContract['allowed_actions'],
+          contains('Edit code files'),
+        );
+      });
+
       test('IDLE state has no task', () async {
         setupWorkspace(state: 'IDLE');
 
@@ -233,9 +259,29 @@ void main() {
 
         expect(result.toJson()['instructions'], contains('TRIAGE'));
         expect(result.toJson()['instructions'], contains('DONE'));
+        expect(result.toJson()['instructions'], contains('create_or_select'));
         expect(result.toJson()['instructions'], contains('issue-create'));
+        expect(result.toJson()['instructions'], contains('gh issue create'));
         expect(result.toJson()['instructions'], contains('issue-start'));
         expect(result.toJson()['instructions'], contains('start_analyze'));
+      });
+
+      test('EVOLUTION instructions own darwin repository procedure', () async {
+        setupWorkspace(state: 'EVOLUTION', issue: '145');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+
+        expect(
+          result.toJson()['instructions'],
+          contains('ideal Analyze -> Plan -> Execute -> End loop'),
+        );
+        expect(result.toJson()['instructions'], contains('gh issue list'));
+        expect(result.toJson()['instructions'], contains('gh issue comment'));
+        expect(result.toJson()['instructions'], contains('gh issue create'));
+        expect(result.toJson()['instructions'], contains('.inquiry/metrics.yaml'));
       });
     });
 

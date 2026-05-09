@@ -34,11 +34,11 @@ IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION
 
 **PLAN** — DESCARTES applies the scientific method: the plan is an experimental design. Decomposes complexity into phases (WBS), defines tests in pseudocode, sequences by dependencies. Produces `plan.md` as an immutable checklist. The plan must be detailed enough that EXECUTE is mechanical — following instructions, not inventing them. The user approves the plan before transitioning.
 
-**EXECUTE** — BASHŌ implements the plan phase by phase, like a haiku master working within formal constraints (the plan's restrictions = the 5-7-5 form). Each phase produces a commit. The final phase includes product retrospective: an implementation report with validation instructions for the user. If a deviation is detected, returns to ANALYZE (like falsifying a hypothesis in the scientific method). The user approves the execution report before transitioning to END.
+**EXECUTE** — This document is explanatory architecture, not the sole normative source. The canonical runtime contract for EXECUTE lives in `code/cli/assets/fsm/states/execute.yaml`. BASHŌ's YAML supplies implementation identity and sub-state modulation, while plan-path/output protocol reaches the operator through the phase-owned operational contract that `iq ape prompt` assembles and exposes. BASHŌ then implements the plan phase by phase, like a haiku master working within formal constraints (the plan's restrictions = the 5-7-5 form). Each phase produces a commit. The final phase includes product retrospective: an implementation report with validation instructions for the user. If a deviation is detected, returns to ANALYZE (like falsifying a hypothesis in the scientific method). The user approves the execution report before transitioning to END.
 
 **END** — APE presents the execution summary and waits for explicit authorization to create the PR and pass into EVOLUTION or return to IDLE if evolution is disabled. This keeps delivery and merge preparation as a distinct closure gate rather than an implicit side effect of EXECUTE.
 
-**EVOLUTION** — DARWIN reads the complete cycle (diagnosis, plan, commits, deviations) and evaluates APE's own process. Searches for existing issues in the Inquiry repository (`gh issue list --search`), comments on matches or creates new issues. Automatic, no user approval required. Opt-out via `.inquiry/config.yaml` (`evolution.enabled: false`).
+**EVOLUTION** — This document is explanatory architecture, not the sole normative source. The canonical runtime contract for EVOLUTION lives in `code/cli/assets/fsm/states/evolution.yaml`. EVOLUTION owns repository procedure for issue search/comment/create and metrics collection, while DARWIN retains only the abstract process methodology of observe, compare, select, and report. `iq ape prompt --name darwin` exposes that full assembled prompt without hidden glue. Automatic, no user approval required. Opt-out via `.inquiry/config.yaml` (`evolution.enabled: false`).
 
 ## Agent Registry
 
@@ -94,7 +94,7 @@ From the **agent's perspective**, only three states are visible: idle, working, 
 
 ### Key principle
 
-Agent intelligence lives in prompts, not in state machines. SOCRATES uses Socratic phases (CLARIFICATION → ASSUMPTIONS → EVIDENCE → PERSPECTIVES → IMPLICATIONS → META-REFLECTION) as conversation strategies, not scheduler-tracked states. DESCARTES applies the 4 rules of the Method internally. BASHŌ selects the appropriate domain skill per phase. These are opaque to the scheduler.
+Agent intelligence lives in prompts assembled explicitly by the CLI, not in state machines. SOCRATES uses Socratic phases (CLARIFICATION → ASSUMPTIONS → EVIDENCE → PERSPECTIVES → IMPLICATIONS → META-REFLECTION) as conversation strategies, not scheduler-tracked states. DESCARTES applies the 4 rules of the Method internally. BASHŌ selects the appropriate domain skill per phase. DARWIN keeps only its abstract-process exception. These methodology details remain opaque to the scheduler, while the phase-owned operational contract stays visible through `iq ape prompt` instead of being buried as repository procedure inside standard APE YAMLs.
 
 | Concept | Visible to scheduler | Visible to agent |
 |---------|---------------------|------------------|

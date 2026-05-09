@@ -21,6 +21,13 @@ void main() {
       File('assets/apes/$name.yaml')
           .copySync(p.join(apesDir.path, '$name.yaml'));
     }
+
+    final statesDir = Directory(p.join(tmpDir.path, 'assets', 'fsm', 'states'));
+    statesDir.createSync(recursive: true);
+    for (final name in ['idle', 'analyze', 'plan', 'execute', 'end', 'evolution']) {
+      File('assets/fsm/states/$name.yaml')
+          .copySync(p.join(statesDir.path, '$name.yaml'));
+    }
   });
 
   tearDown(() {
@@ -374,7 +381,7 @@ void main() {
 
         expect(result.prompt, contains('EVIDENCE'));
         expect(result.prompt, contains('DIVISION'));
-        expect(result.prompt, contains('plan_file'));
+        expect(result.prompt, contains('experimental plan'));
         expect(result.prompt, contains('Division'));
       });
 
@@ -406,7 +413,14 @@ void main() {
         final result = await cmd.execute();
 
         expect(result.prompt, contains('natural selection'));
-        expect(result.prompt, contains('mutations.md'));
+        expect(
+          result.prompt,
+          contains('ideal Analyze -> Plan -> Execute -> End loop'),
+        );
+        expect(
+          result.prompt,
+          contains('EVOLUTION owns the repository procedure for issue search/comment/create and metrics collection.'),
+        );
         expect(result.prompt, contains('Observation'));
       });
     });
@@ -468,6 +482,48 @@ void main() {
     group('inquiry-context injection', () {
       late Directory gitTmpDir;
 
+      void expectExplicitContextAfter(String prompt, String promptFragment) {
+        final promptIndex = prompt.indexOf(promptFragment);
+        final contextIndex = prompt.indexOf('# --- inquiry-context ---');
+
+        expect(promptIndex, greaterThanOrEqualTo(0),
+            reason: 'Missing assembled prompt fragment: $promptFragment');
+        expect(contextIndex, greaterThan(promptIndex),
+            reason: 'inquiry-context should stay explicit after the prompt body');
+      }
+
+      void expectOperationalContractBetween(
+        String prompt, {
+        required String identityFragment,
+        required String contractFragment,
+      }) {
+        final identityIndex = prompt.indexOf(identityFragment);
+        final contractIndex = prompt.indexOf('## Phase-Owned Operational Contract');
+        final detailIndex = prompt.indexOf(contractFragment);
+        final contextIndex = prompt.indexOf('# --- inquiry-context ---');
+
+        expect(identityIndex, greaterThanOrEqualTo(0),
+            reason: 'Missing assembled prompt identity fragment: $identityFragment');
+        expect(contractIndex, greaterThan(identityIndex),
+            reason: 'Operational contract should come after the APE identity');
+        expect(detailIndex, greaterThan(contractIndex),
+            reason: 'Operational contract should expose the phase-owned details');
+        expect(contextIndex, greaterThan(detailIndex),
+            reason: 'inquiry-context should stay explicit after the operational contract');
+      }
+
+        void expectContextKeyOnlyInInquiryContext(String prompt, String key) {
+        final contextIndex = prompt.indexOf('# --- inquiry-context ---');
+        final keyIndex = prompt.indexOf(key);
+
+        expect(contextIndex, greaterThanOrEqualTo(0),
+          reason: 'Missing inquiry-context block for key: $key');
+        expect(keyIndex, greaterThan(contextIndex),
+          reason: '$key should be owned by inquiry-context, not the APE identity');
+        expect(prompt.indexOf(key, keyIndex + key.length), equals(-1),
+          reason: '$key should appear only once in the assembled prompt');
+        }
+
       setUp(() {
         gitTmpDir = Directory.systemTemp.createTempSync('ape_ctx_test_');
         Directory(p.join(gitTmpDir.path, '.inquiry')).createSync();
@@ -492,6 +548,13 @@ void main() {
           File('assets/apes/$name.yaml')
               .copySync(p.join(apesDir.path, '$name.yaml'));
         }
+
+        final statesDir = Directory(p.join(gitTmpDir.path, 'assets', 'fsm', 'states'));
+        statesDir.createSync(recursive: true);
+        for (final name in ['idle', 'analyze', 'plan', 'execute', 'end', 'evolution']) {
+          File('assets/fsm/states/$name.yaml')
+              .copySync(p.join(statesDir.path, '$name.yaml'));
+        }
       });
 
       tearDown(() {
@@ -503,14 +566,38 @@ void main() {
             .writeAsStringSync('state: ANALYZE\nissue: "152"\n');
 
         final cmd = ApePromptCommand(
-          ApePromptInput(name: 'socrates', workingDirectory: gitTmpDir.path),
+          ApePromptInput(
+            name: 'socrates',
+            subState: 'clarification',
+            workingDirectory: gitTmpDir.path,
+          ),
         );
         final result = await cmd.execute();
 
+        expect(result.prompt, contains('diagnosis.md'));
+        expect(result.prompt, contains('Clarification questions'));
         expect(result.prompt, contains('# --- inquiry-context ---'));
         expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/analyze/'));
         expect(result.prompt, contains('confirmed_doc: cleanrooms/152-test-branch/analyze/confirmed.md'));
         expect(result.prompt, contains('index_file: cleanrooms/152-test-branch/analyze/index.md'));
+        expect(result.prompt, contains('doc_protocol: doc-write'));
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'output_dir: cleanrooms/152-test-branch/analyze/',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'confirmed_doc: cleanrooms/152-test-branch/analyze/confirmed.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'index_file: cleanrooms/152-test-branch/analyze/index.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'doc_protocol: doc-write',
+        );
+        expectExplicitContextAfter(result.prompt, 'Clarification questions');
       });
 
       test('descartes prompt includes analysis_input path', () async {
@@ -518,13 +605,88 @@ void main() {
             .writeAsStringSync('state: PLAN\nissue: "152"\n');
 
         final cmd = ApePromptCommand(
-          ApePromptInput(name: 'descartes', workingDirectory: gitTmpDir.path),
+          ApePromptInput(
+            name: 'descartes',
+            subState: 'decomposition',
+            workingDirectory: gitTmpDir.path,
+          ),
         );
         final result = await cmd.execute();
 
+        expect(result.prompt, contains('EVIDENCE'));
+        expect(result.prompt, contains('FOCUS: Division.'));
         expect(result.prompt, contains('# --- inquiry-context ---'));
         expect(result.prompt, contains('analysis_input: cleanrooms/152-test-branch/analyze/diagnosis.md'));
         expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
+        expect(result.prompt, contains('doc_protocol: doc-read'));
+        expect(result.prompt, isNot(contains('Commit:')));
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'analysis_input: cleanrooms/152-test-branch/analyze/diagnosis.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'plan_file: cleanrooms/152-test-branch/plan.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'doc_protocol: doc-read',
+        );
+        expectExplicitContextAfter(result.prompt, 'FOCUS: Division.');
+      });
+
+      test('basho prompt includes plan contract in assembled prompt', () async {
+        File(p.join(gitTmpDir.path, '.inquiry', 'state.yaml'))
+            .writeAsStringSync('state: EXECUTE\nissue: "152"\n');
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(
+            name: 'basho',
+            subState: 'implement',
+            workingDirectory: gitTmpDir.path,
+          ),
+        );
+        final result = await cmd.execute();
+
+        expect(result.prompt, contains('NOTHING WASTED'));
+        expect(
+          result.prompt,
+          contains('Implement exactly what the plan says. No more, no less.'),
+        );
+        expect(result.prompt, contains('## Phase-Owned Operational Contract'));
+        expect(
+          result.prompt,
+          contains('Implement the plan phase by phase under its formal constraints.'),
+        );
+        expect(
+          result.prompt,
+          contains('Follow plan.md phases in order'),
+        );
+        expect(result.prompt, contains('Allowed actions:'));
+        expect(result.prompt, contains('Edit code files'));
+        expect(result.prompt, contains('# --- inquiry-context ---'));
+        expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
+        expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/'));
+        expect(result.prompt, contains('doc_protocol: doc-read'));
+        expect(result.prompt, isNot(contains('Run tests, lint, build')));
+        expect(result.prompt, isNot(contains('retrospective.md')));
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'plan_file: cleanrooms/152-test-branch/plan.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'output_dir: cleanrooms/152-test-branch/',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'doc_protocol: doc-read',
+        );
+        expectOperationalContractBetween(
+          result.prompt,
+          identityFragment: 'Implement exactly what the plan says. No more, no less.',
+          contractFragment: 'Implement the plan phase by phase under its formal constraints.',
+        );
       });
 
       test('dewey create_or_select prompt includes IDLE-owned routing context', () async {
@@ -543,13 +705,104 @@ void main() {
         final result = await cmd.execute();
 
         expect(result.subState, equals('create_or_select'));
+        expect(result.prompt, contains('FOCUS: Issue formulation. Create or select.'));
         expect(result.prompt, contains('# --- inquiry-context ---'));
+        expect(
+          result.prompt,
+          contains('IDLE owns that fast-path routing contract: triage_objective=create_or_select, deterministic_skill=issue-create, allowed_commands=gh issue list, gh issue view, gh issue create, gh issue edit.'),
+        );
         expect(result.prompt, contains('triage_objective: create_or_select'));
         expect(result.prompt, contains('deterministic_skill: issue-create'));
         expect(
           result.prompt,
           contains('allowed_commands: gh issue list, gh issue view, gh issue create, gh issue edit'),
         );
+        expectOperationalContractBetween(
+          result.prompt,
+          identityFragment: 'FOCUS: Issue formulation. Create or select.',
+          contractFragment: 'IDLE owns that fast-path routing contract: triage_objective=create_or_select',
+        );
+        expectExplicitContextAfter(
+          result.prompt,
+          'FOCUS: Issue formulation. Create or select.',
+        );
+      });
+
+      test('dewey search_existing prompt keeps GitHub procedure in the IDLE contract', () async {
+        File(p.join(gitTmpDir.path, '.inquiry', 'state.yaml'))
+            .writeAsStringSync(
+              'state: IDLE\n'
+              'issue: null\n'
+              'ape:\n'
+              '  name: dewey\n'
+              '  state: search_existing\n',
+            );
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(name: 'dewey', workingDirectory: gitTmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.subState, equals('search_existing'));
+        expect(result.prompt, contains('FOCUS: Deduplication. Search before creating.'));
+        expect(
+          result.prompt,
+          isNot(contains('Use: `gh issue list --search "<keywords>"` to find existing issues.')),
+        );
+        expect(
+          result.prompt,
+          contains('IDLE owns that fast-path routing contract: triage_objective=create_or_select, deterministic_skill=issue-create, allowed_commands=gh issue list, gh issue view, gh issue create, gh issue edit.'),
+        );
+        final promptIndex = result.prompt.indexOf(
+          'FOCUS: Deduplication. Search before creating.',
+        );
+        final contractIndex = result.prompt.indexOf(
+          '## Phase-Owned Operational Contract',
+        );
+        final detailIndex = result.prompt.indexOf(
+          'IDLE owns that fast-path routing contract: triage_objective=create_or_select',
+        );
+
+        expect(promptIndex, greaterThanOrEqualTo(0));
+        expect(contractIndex, greaterThan(promptIndex));
+        expect(detailIndex, greaterThan(contractIndex));
+      });
+
+      test('darwin prompt includes cycle artifact contract in assembled prompt', () async {
+        File(p.join(gitTmpDir.path, '.inquiry', 'state.yaml'))
+            .writeAsStringSync('state: EVOLUTION\nissue: "152"\n');
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(
+            name: 'darwin',
+            subState: 'observe',
+            workingDirectory: gitTmpDir.path,
+          ),
+        );
+        final result = await cmd.execute();
+
+        expect(result.prompt, contains('diagnosis.md'));
+        expect(result.prompt, contains('FOCUS: Observation.'));
+        expect(
+          result.prompt,
+          contains('EVOLUTION owns the repository procedure for issue search/comment/create and metrics collection.'),
+        );
+        expect(result.prompt, contains('# --- inquiry-context ---'));
+        expect(result.prompt, contains('analyze_dir: cleanrooms/152-test-branch/analyze/'));
+        expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
+        expect(
+          result.prompt,
+          contains('retrospective_file: cleanrooms/152-test-branch/retrospective.md'),
+        );
+        expect(result.prompt, contains('mutations_file: .inquiry/mutations.md'));
+        expect(result.prompt, contains('state_file: .inquiry/state.yaml'));
+        expect(
+          result.prompt,
+          contains('metrics_snapshot_file: .inquiry/metrics_snapshot.yaml'),
+        );
+        expect(result.prompt, contains('metrics_file: .inquiry/metrics.yaml'));
+        expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/'));
+        expectExplicitContextAfter(result.prompt, 'FOCUS: Observation.');
       });
 
       test('no context injected when not in a git repo', () async {

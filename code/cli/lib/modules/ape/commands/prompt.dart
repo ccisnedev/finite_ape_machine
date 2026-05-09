@@ -16,6 +16,7 @@ import '../../../fsm_contract.dart';
 import '../../../src/git_utils.dart';
 import '../ape_definition.dart';
 import '../inquiry_state.dart';
+import '../operational_contract.dart';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 
@@ -138,17 +139,21 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
     // Resolve sub-state: explicit flag > state.yaml > null
     final resolvedSubState = input.subState ?? inquiry.apeState;
 
-    // Resolve dynamic context for injection
+    final operationalContract = OperationalContractLoader(
+      workingDirectory: input.workingDirectory,
+      assets: _assets,
+    ).load(currentState);
     final context = _resolveContext(
       input.name!,
-      currentState,
       resolvedSubState,
+      operationalContract: operationalContract,
     );
 
     // Parse and assemble
     final definition = ApeDefinition.parse(yamlFile.readAsStringSync());
     final prompt = definition.assemblePrompt(
       stateName: resolvedSubState,
+      operationalContract: operationalContract.render(),
       context: context,
     );
 
@@ -163,20 +168,29 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
   /// Resolves dynamic context paths per APE and FSM state.
   Map<String, String>? _resolveContext(
     String apeName,
-    FsmState state,
     String? subState,
-  ) {
-    if (apeName == 'dewey' &&
-        state == FsmState.idle &&
-        subState == 'create_or_select') {
-      return const {
-        'triage_objective': 'create_or_select',
-        'deterministic_skill': 'issue-create',
-        'allowed_commands':
-            'gh issue list, gh issue view, gh issue create, gh issue edit',
-      };
+    {
+    required OperationalContract operationalContract,
+  }) {
+    final context = <String, String>{};
+
+    final stateOwnedContext = operationalContract.inquiryContextFor(
+      apeName: apeName,
+      subState: subState,
+    );
+    if (stateOwnedContext != null) {
+      context.addAll(stateOwnedContext);
     }
 
+    final runtimeContext = _resolveRuntimeContext(apeName);
+    if (runtimeContext != null) {
+      context.addAll(runtimeContext);
+    }
+
+    return context.isEmpty ? null : context;
+  }
+
+  Map<String, String>? _resolveRuntimeContext(String apeName) {
     final branch = getCurrentBranch(input.workingDirectory);
     if (branch.isEmpty) return null;
 
@@ -206,7 +220,13 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
       case 'darwin':
         return {
           'analyze_dir': analyzeDir,
+          'diagnosis_file': '${analyzeDir}diagnosis.md',
           'plan_file': 'cleanrooms/$branch/plan.md',
+          'retrospective_file': 'cleanrooms/$branch/retrospective.md',
+          'mutations_file': '.inquiry/mutations.md',
+          'state_file': '.inquiry/state.yaml',
+          'metrics_snapshot_file': '.inquiry/metrics_snapshot.yaml',
+          'metrics_file': '.inquiry/metrics.yaml',
           'output_dir': 'cleanrooms/$branch/',
         };
       default:

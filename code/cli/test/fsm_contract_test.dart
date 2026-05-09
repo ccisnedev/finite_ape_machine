@@ -4,6 +4,7 @@ import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 import 'package:inquiry_cli/fsm_contract.dart';
+import 'package:inquiry_cli/modules/ape/operational_contract.dart';
 
 void main() {
   late FsmContract contract;
@@ -32,6 +33,58 @@ void main() {
         );
       }
     }
+  });
+
+  test('state assets expose phase-owned operational contract for every FSM state', () {
+    final loader = OperationalContractLoader(
+      workingDirectory: Directory.current.path,
+    );
+
+    for (final state in FsmState.values) {
+      final operationalContract = loader.load(state);
+
+      expect(
+        operationalContract.toJson()['state'],
+        equals(state.value),
+        reason: 'Operational contract should keep the owning FSM state visible',
+      );
+      expect(
+        operationalContract.instructions,
+        isNotEmpty,
+        reason: 'Operational contract for ${state.value} should expose instructions',
+      );
+      expect(
+        operationalContract.constraints,
+        isNotEmpty,
+        reason: 'Operational contract for ${state.value} should expose constraints',
+      );
+      expect(
+        operationalContract.allowedActions,
+        isNotEmpty,
+        reason: 'Operational contract for ${state.value} should expose allowed actions',
+      );
+    }
+  });
+
+  test('IDLE state asset exposes DEWEY create_or_select routing context', () {
+    final loader = OperationalContractLoader(
+      workingDirectory: Directory.current.path,
+    );
+
+    final idleContract = loader.load(FsmState.idle);
+
+    expect(
+      idleContract.inquiryContextFor(
+        apeName: 'dewey',
+        subState: 'create_or_select',
+      ),
+      equals({
+        'triage_objective': 'create_or_select',
+        'deterministic_skill': 'issue-create',
+        'allowed_commands':
+            'gh issue list, gh issue view, gh issue create, gh issue edit',
+      }),
+    );
   });
 
   test('IDLE + go_execute is rejected as illegal transition', () {
