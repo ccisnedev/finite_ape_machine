@@ -169,12 +169,12 @@ expect IDLE/runtime surfaces to own the concrete procedure rather than dewey.yam
 
 **TDD:** Yes. RED first: codify IDLE-owned routing and prompt expectations. GREEN second: move the procedure until the same gate passes.
 
-- [ ] Edit `code/cli/assets/fsm/states/idle.yaml` and `code/cli/build/assets/fsm/states/idle.yaml` so IDLE explicitly owns the operational contract for create/select routing and issue work.
-- [ ] Edit `code/cli/assets/apes/dewey.yaml` and `code/cli/build/assets/apes/dewey.yaml` so DEWEY preserves methodology while dropping primary ownership of concrete repository procedure.
-- [ ] Update `code/cli/lib/modules/ape/commands/prompt.dart` and nearby prompt-contract helpers so DEWEY receives the new IDLE-owned contract at assembly time.
-- [ ] Update `code/cli/test/ape_prompt_test.dart`, `code/cli/test/ape_transition_test.dart`, `code/cli/test/fsm_state_test.dart`, and `code/cli/test/fsm_contract_test.dart` so the IDLE/DEWEY ownership boundary is protected.
-- [ ] Run `dart test test/ape_prompt_test.dart test/ape_transition_test.dart test/fsm_state_test.dart test/fsm_contract_test.dart test/firmware_agent_test.dart` and the `rg` verification above until the DEWEY boundary is GREEN.
-- [ ] Commit: "refactor(cli): externalize idle routing from dewey for #154"
+- [x] Edit `code/cli/assets/fsm/states/idle.yaml` and `code/cli/build/assets/fsm/states/idle.yaml` so IDLE explicitly owns the operational contract for create/select routing and issue work.
+- [x] Edit `code/cli/assets/apes/dewey.yaml` and `code/cli/build/assets/apes/dewey.yaml` so DEWEY preserves methodology while dropping primary ownership of concrete repository procedure.
+- [x] Update `code/cli/lib/modules/ape/commands/prompt.dart` and nearby prompt-contract helpers so DEWEY receives the new IDLE-owned contract at assembly time.
+- [x] Update `code/cli/test/ape_prompt_test.dart`, `code/cli/test/ape_transition_test.dart`, `code/cli/test/fsm_state_test.dart`, and `code/cli/test/fsm_contract_test.dart` so the IDLE/DEWEY ownership boundary is protected.
+- [x] Run `dart test test/ape_prompt_test.dart test/ape_transition_test.dart test/fsm_state_test.dart test/fsm_contract_test.dart test/firmware_agent_test.dart` and the `rg` verification above until the DEWEY boundary is GREEN.
+- [x] Commit: "refactor(cli): externalize idle routing from dewey for #154"
 
 ## Phase 5 — Bound DARWIN's abstract-process exception and externalize repository procedure (P5)
 

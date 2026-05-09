@@ -66,6 +66,27 @@ void main() {
     }
   });
 
+  test('IDLE state asset exposes DEWEY create_or_select routing context', () {
+    final loader = OperationalContractLoader(
+      workingDirectory: Directory.current.path,
+    );
+
+    final idleContract = loader.load(FsmState.idle);
+
+    expect(
+      idleContract.inquiryContextFor(
+        apeName: 'dewey',
+        subState: 'create_or_select',
+      ),
+      equals({
+        'triage_objective': 'create_or_select',
+        'deterministic_skill': 'issue-create',
+        'allowed_commands':
+            'gh issue list, gh issue view, gh issue create, gh issue edit',
+      }),
+    );
+  });
+
   test('IDLE + go_execute is rejected as illegal transition', () {
     final transition = contract.transitionFor(FsmState.idle, FsmEvent.goExecute);
 

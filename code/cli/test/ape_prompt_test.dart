@@ -700,16 +700,65 @@ void main() {
         expect(result.subState, equals('create_or_select'));
         expect(result.prompt, contains('FOCUS: Issue formulation. Create or select.'));
         expect(result.prompt, contains('# --- inquiry-context ---'));
+        expect(
+          result.prompt,
+          contains('IDLE owns that fast-path routing contract: triage_objective=create_or_select, deterministic_skill=issue-create, allowed_commands=gh issue list, gh issue view, gh issue create, gh issue edit.'),
+        );
         expect(result.prompt, contains('triage_objective: create_or_select'));
         expect(result.prompt, contains('deterministic_skill: issue-create'));
         expect(
           result.prompt,
           contains('allowed_commands: gh issue list, gh issue view, gh issue create, gh issue edit'),
         );
+        expectOperationalContractBetween(
+          result.prompt,
+          identityFragment: 'FOCUS: Issue formulation. Create or select.',
+          contractFragment: 'IDLE owns that fast-path routing contract: triage_objective=create_or_select',
+        );
         expectExplicitContextAfter(
           result.prompt,
           'FOCUS: Issue formulation. Create or select.',
         );
+      });
+
+      test('dewey search_existing prompt keeps GitHub procedure in the IDLE contract', () async {
+        File(p.join(gitTmpDir.path, '.inquiry', 'state.yaml'))
+            .writeAsStringSync(
+              'state: IDLE\n'
+              'issue: null\n'
+              'ape:\n'
+              '  name: dewey\n'
+              '  state: search_existing\n',
+            );
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(name: 'dewey', workingDirectory: gitTmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.subState, equals('search_existing'));
+        expect(result.prompt, contains('FOCUS: Deduplication. Search before creating.'));
+        expect(
+          result.prompt,
+          isNot(contains('Use: `gh issue list --search "<keywords>"` to find existing issues.')),
+        );
+        expect(
+          result.prompt,
+          contains('IDLE owns that fast-path routing contract: triage_objective=create_or_select, deterministic_skill=issue-create, allowed_commands=gh issue list, gh issue view, gh issue create, gh issue edit.'),
+        );
+        final promptIndex = result.prompt.indexOf(
+          'FOCUS: Deduplication. Search before creating.',
+        );
+        final contractIndex = result.prompt.indexOf(
+          '## Phase-Owned Operational Contract',
+        );
+        final detailIndex = result.prompt.indexOf(
+          'IDLE owns that fast-path routing contract: triage_objective=create_or_select',
+        );
+
+        expect(promptIndex, greaterThanOrEqualTo(0));
+        expect(contractIndex, greaterThan(promptIndex));
+        expect(detailIndex, greaterThan(contractIndex));
       });
 
       test('darwin prompt includes cycle artifact contract in assembled prompt', () async {

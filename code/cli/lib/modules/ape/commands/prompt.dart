@@ -139,16 +139,15 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
     // Resolve sub-state: explicit flag > state.yaml > null
     final resolvedSubState = input.subState ?? inquiry.apeState;
 
-    // Resolve dynamic context for injection
-    final context = _resolveContext(
-      input.name!,
-      currentState,
-      resolvedSubState,
-    );
     final operationalContract = OperationalContractLoader(
       workingDirectory: input.workingDirectory,
       assets: _assets,
     ).load(currentState);
+    final context = _resolveContext(
+      input.name!,
+      resolvedSubState,
+      operationalContract: operationalContract,
+    );
 
     // Parse and assemble
     final definition = ApeDefinition.parse(yamlFile.readAsStringSync());
@@ -169,20 +168,29 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
   /// Resolves dynamic context paths per APE and FSM state.
   Map<String, String>? _resolveContext(
     String apeName,
-    FsmState state,
     String? subState,
-  ) {
-    if (apeName == 'dewey' &&
-        state == FsmState.idle &&
-        subState == 'create_or_select') {
-      return const {
-        'triage_objective': 'create_or_select',
-        'deterministic_skill': 'issue-create',
-        'allowed_commands':
-            'gh issue list, gh issue view, gh issue create, gh issue edit',
-      };
+    {
+    required OperationalContract operationalContract,
+  }) {
+    final context = <String, String>{};
+
+    final stateOwnedContext = operationalContract.inquiryContextFor(
+      apeName: apeName,
+      subState: subState,
+    );
+    if (stateOwnedContext != null) {
+      context.addAll(stateOwnedContext);
     }
 
+    final runtimeContext = _resolveRuntimeContext(apeName);
+    if (runtimeContext != null) {
+      context.addAll(runtimeContext);
+    }
+
+    return context.isEmpty ? null : context;
+  }
+
+  Map<String, String>? _resolveRuntimeContext(String apeName) {
     final branch = getCurrentBranch(input.workingDirectory);
     if (branch.isEmpty) return null;
 

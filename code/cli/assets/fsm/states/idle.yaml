@@ -6,7 +6,8 @@ instructions: |
   IDLE has two internal modes: TRIAGE and DONE.
   TRIAGE is the default: DEWEY clarifies scope, searches, and uses issue-create to create or confirm the GitHub issue.
   If the user's intent is already explicit enough to create or select an issue, IDLE may route TRIAGE directly to create_or_select.
-  Inquiry CLI delivers the TRIAGE objective, deterministic skill, and allowed command surface for that fast path.
+  IDLE owns that fast-path routing contract: triage_objective=create_or_select, deterministic_skill=issue-create, allowed_commands=gh issue list, gh issue view, gh issue create, gh issue edit.
+  Inquiry CLI injects that routing contract into the assembled prompt as explicit inquiry-context.
   When issue readiness is reached, produce issue_selected_or_created, reset DEWEY, and remain in IDLE.
   DONE is reached only on explicit start intent; DONE consumes issue-start to prepare feature_branch_selected.
   Only after that handoff may IDLE fire start_analyze.
@@ -26,3 +27,10 @@ allowed_actions:
   - Search codebase (read-only)
   - Discuss and clarify with user
   - Run iq doctor
+
+inquiry_context:
+  dewey:
+    create_or_select:
+      triage_objective: create_or_select
+      deterministic_skill: issue-create
+      allowed_commands: gh issue list, gh issue view, gh issue create, gh issue edit

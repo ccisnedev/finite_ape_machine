@@ -15,12 +15,14 @@ class OperationalContract {
   final String instructions;
   final List<String> constraints;
   final List<String> allowedActions;
+  final Map<String, Map<String, Map<String, String>>> inquiryContext;
 
   const OperationalContract({
     required this.state,
     required this.instructions,
     required this.constraints,
     required this.allowedActions,
+    this.inquiryContext = const {},
   });
 
   Map<String, dynamic> toJson() => {
@@ -28,7 +30,25 @@ class OperationalContract {
     'instructions': instructions,
     'constraints': constraints,
     'allowed_actions': allowedActions,
+    if (inquiryContext.isNotEmpty) 'inquiry_context': inquiryContext,
   };
+
+  Map<String, String>? inquiryContextFor({
+    required String apeName,
+    String? subState,
+  }) {
+    if (subState == null) return null;
+
+    final apeContext = inquiryContext[apeName];
+    if (apeContext == null) return null;
+
+    final subStateContext = apeContext[subState];
+    if (subStateContext == null || subStateContext.isEmpty) {
+      return null;
+    }
+
+    return subStateContext;
+  }
 
   String render() {
     final buffer = StringBuffer()
@@ -91,12 +111,17 @@ class OperationalContractLoader {
       fieldName: 'allowed_actions',
       stateName: stateName,
     );
+    final inquiryContext = _readInquiryContextField(
+      yaml,
+      stateName: stateName,
+    );
 
     return OperationalContract(
       state: state,
       instructions: instructions.trim(),
       constraints: constraints,
       allowedActions: allowedActions,
+      inquiryContext: inquiryContext,
     );
   }
 
@@ -136,6 +161,55 @@ class OperationalContractLoader {
       return value.cast<String>().toList(growable: false);
     }
     throw _malformedStateYaml(stateName, fieldName);
+  }
+
+  Map<String, Map<String, Map<String, String>>> _readInquiryContextField(
+    YamlMap yaml, {
+    required String stateName,
+  }) {
+    final value = yaml['inquiry_context'];
+    if (value == null) {
+      return const {};
+    }
+    if (value is! YamlMap) {
+      throw _malformedStateYaml(stateName, 'inquiry_context');
+    }
+
+    final inquiryContext = <String, Map<String, Map<String, String>>>{};
+    for (final apeEntry in value.entries) {
+      final apeName = apeEntry.key;
+      final apeValue = apeEntry.value;
+      if (apeName is! String || apeValue is! YamlMap) {
+        throw _malformedStateYaml(stateName, 'inquiry_context');
+      }
+
+      final subStateContext = <String, Map<String, String>>{};
+      for (final subStateEntry in apeValue.entries) {
+        final subStateName = subStateEntry.key;
+        final subStateValue = subStateEntry.value;
+        if (subStateName is! String || subStateValue is! YamlMap) {
+          throw _malformedStateYaml(stateName, 'inquiry_context');
+        }
+
+        final contextFields = <String, String>{};
+        for (final contextEntry in subStateValue.entries) {
+          final contextKey = contextEntry.key;
+          final contextValue = contextEntry.value;
+          if (contextKey is! String ||
+              contextValue is! String ||
+              contextValue.trim().isEmpty) {
+            throw _malformedStateYaml(stateName, 'inquiry_context');
+          }
+          contextFields[contextKey] = contextValue;
+        }
+
+        subStateContext[subStateName] = contextFields;
+      }
+
+      inquiryContext[apeName] = subStateContext;
+    }
+
+    return inquiryContext;
   }
 
   CommandException _missingStateYaml(String stateName) {
