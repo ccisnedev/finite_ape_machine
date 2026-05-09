@@ -60,6 +60,9 @@
 │  The agent has NO knowledge of other states' agents.                │
 │  It only sees: current state + transition contract + memory.        │
 └─────────────────────────────────────────────────────────────────────┘
+
+Sub-agent prompt delivery is explicit and inspectable. `iq ape prompt --name <ape>` prints the exact effective prompt as APE identity from `assets/apes/<name>.yaml`, phase-owned operational contract from `assets/fsm/states/<state>.yaml`, and runtime `inquiry-context` resolved by the CLI. Standard APE YAMLs no longer own the primary repository procedure. DARWIN is the bounded exception: EVOLUTION may provide the abstract observe/compare/select standard that DARWIN consumes, but issue search/comment/create and metrics procedure remain state-owned.
+
                                    │
                           reads/writes
                                    │
@@ -113,6 +116,8 @@ The CLI enforces this via `iq fsm transition --event <e>`: reads `.inquiry/state
 ## Agent architecture
 
 There is **one agent file** (`inquiry.agent.md`) that acts as orchestrator. It is NOT 4 separate agents — it is one prompt that **behaves differently depending on FSM state**:
+
+The scheduler does not inline each phase runbook itself. It reads state, inspects the exact assembled sub-agent prompt through `iq ape prompt`, and dispatches the active thinking tool against that inspectable runtime surface.
 
 ```
 inquiry.agent.md
@@ -194,4 +199,5 @@ A complete APE cycle from issue to merge:
 | **Skills are protocols** | Step-by-step markdown, not code | Portable across any LLM that reads markdown |
 | **Memory in repo** | .inquiry/ + docs/, no external DB | Version-controlled, survives any infrastructure change |
 | **Single target until MVP** | Copilot only (D20) | Prove methodology on one tool before fragmenting |
+| **Prompt delivery is explicit** | `iq ape prompt` prints identity + contract + context | The effective prompt stays inspectable; no hidden glue in standard APE YAMLs |
 | **EVOLUTION is opt-in** | config.yaml flag | Self-modification is powerful but must be conscious |

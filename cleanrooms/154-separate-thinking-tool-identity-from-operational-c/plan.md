@@ -264,9 +264,13 @@ expect docs and firmware to describe the final validated ownership boundary, pre
 
 **TDD:** No. This phase aligns explanation and release surfaces after the executable contract is already green.
 
-- [ ] Update the explanatory documentation in `docs/architecture.md`, `docs/thinking-tools.md`, `docs/spec/agent-lifecycle.md`, `docs/spec/finite-ape-machine.md`, and `docs/spec/target-specific-agents.md` so they describe the validated ownership boundary and the bounded DARWIN exception.
-- [ ] Reconcile `code/cli/assets/agents/inquiry.agent.md` with the final runtime wording if earlier phases left any temporary wording behind.
-- [ ] Update `code/cli/CHANGELOG.md` with the prompt-boundary refactor.
-- [ ] Bump the release surfaces in `code/cli/pubspec.yaml`, `code/cli/lib/src/version.dart`, and `code/site/index.html`.
-- [ ] Run `dart analyze`, `dart test`, `dart test test/version_sync_test.dart`, and the `rg` verification above until the repository is release-ready.
-- [ ] Commit: "release(cli): finalize prompt-boundary separation for #154"
+- [x] Update the explanatory documentation in `docs/architecture.md`, `docs/thinking-tools.md`, `docs/spec/agent-lifecycle.md`, `docs/spec/finite-ape-machine.md`, and `docs/spec/target-specific-agents.md` so they describe the validated ownership boundary and the bounded DARWIN exception.
+- [x] Reconcile `code/cli/assets/agents/inquiry.agent.md` with the final runtime wording if earlier phases left any temporary wording behind.
+- [x] Update `code/cli/CHANGELOG.md` with the prompt-boundary refactor.
+- [x] Bump the release surfaces in `code/cli/pubspec.yaml`, `code/cli/lib/src/version.dart`, and `code/site/index.html`.
+- [x] Run `dart analyze`, `dart test`, `dart test test/version_sync_test.dart`, and the `rg` verification above until the repository is release-ready.
+- [x] Commit: "release(cli): finalize prompt-boundary separation for #154"
+
+Deviation: `dart analyze` exposed a preexisting unused import in `code/cli/lib/modules/ape/operational_contract.dart`; it was removed to satisfy the approved release-readiness gate without changing prompt behavior.
+
+Deviation: The approved P6 checklist did not enumerate the prompt-required final retrospective artifact, so the cleanroom validation record is captured in `retrospective.md` without widening the release scope.

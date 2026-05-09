@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.7]
+### Changed
+- **Prompt-boundary doctrine**: architecture, thinking-tool, lifecycle, finite-state, and target-wrapper docs now describe the validated runtime boundary: APE YAMLs provide thinking-tool identity, FSM state assets provide the phase-owned operational contract, and `iq ape prompt` remains the inspectable assembler (#154)
+- **DARWIN exception wording**: docs and firmware now bound DARWIN to abstract-process methodology while EVOLUTION owns issue/metrics repository procedure (#154)
+
 ## [0.3.6]
 ### Added
 - **TRIAGE issue creation**: IDLE now uses a dedicated `issue-create` skill for deterministic issue creation or confirmation before operational handoff (#175)

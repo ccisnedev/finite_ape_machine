@@ -50,6 +50,8 @@ gentle-ai itself uses target-specific asset directories (`internal/assets/claude
 
 The prompt body (instructions, state machine, behavior rules) is the **shared core**. The frontmatter and file structure are **target-specific wrappers**.
 
+For Copilot, that wrapper surrounds the scheduler firmware, not the phase-specific repository procedure. At runtime Inquiry CLI assembles the inspectable sub-agent prompt as APE identity from `assets/apes/*.yaml`, phase-owned operational contract from `assets/fsm/states/*.yaml`, and runtime inquiry-context. `iq ape prompt` prints that effective prompt, so operational procedure is not duplicated inside target wrappers or standard APE YAMLs.
+
 ---
 
 ## 4. Architectural Decision
@@ -106,7 +108,8 @@ The prompt body (instructions, state machine, behavior rules) is the **shared co
 
 - Re-register adapters one at a time in the deploy list
 - Each adapter may define its own agent template or transformation
-- The deployer becomes a compiler: shared prompt + target-specific wrapper → target-specific file
+- The deployer becomes a compiler: shared scheduler firmware + target-specific wrapper → target-specific file
+- Sub-agent prompt assembly remains CLI-owned and inspectable via `iq ape prompt`
 - Skills continue to be copied verbatim
 
 ---
