@@ -18,6 +18,10 @@ void main() {
       expect(content, contains('iq ape prompt'));
     });
 
+    test('documents iq ape prompt as the exact effective prompt surface', () {
+      expect(content, contains('inspect the exact effective sub-agent prompt'));
+    });
+
     test('references iq ape transition', () {
       expect(content, contains('iq ape transition'));
     });

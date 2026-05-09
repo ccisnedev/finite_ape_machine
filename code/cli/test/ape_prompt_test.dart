@@ -468,6 +468,16 @@ void main() {
     group('inquiry-context injection', () {
       late Directory gitTmpDir;
 
+      void expectExplicitContextAfter(String prompt, String promptFragment) {
+        final promptIndex = prompt.indexOf(promptFragment);
+        final contextIndex = prompt.indexOf('# --- inquiry-context ---');
+
+        expect(promptIndex, greaterThanOrEqualTo(0),
+            reason: 'Missing assembled prompt fragment: $promptFragment');
+        expect(contextIndex, greaterThan(promptIndex),
+            reason: 'inquiry-context should stay explicit after the prompt body');
+      }
+
       setUp(() {
         gitTmpDir = Directory.systemTemp.createTempSync('ape_ctx_test_');
         Directory(p.join(gitTmpDir.path, '.inquiry')).createSync();
@@ -503,14 +513,22 @@ void main() {
             .writeAsStringSync('state: ANALYZE\nissue: "152"\n');
 
         final cmd = ApePromptCommand(
-          ApePromptInput(name: 'socrates', workingDirectory: gitTmpDir.path),
+          ApePromptInput(
+            name: 'socrates',
+            subState: 'clarification',
+            workingDirectory: gitTmpDir.path,
+          ),
         );
         final result = await cmd.execute();
 
+        expect(result.prompt, contains('diagnosis.md'));
+        expect(result.prompt, contains('Clarification questions'));
         expect(result.prompt, contains('# --- inquiry-context ---'));
         expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/analyze/'));
         expect(result.prompt, contains('confirmed_doc: cleanrooms/152-test-branch/analyze/confirmed.md'));
         expect(result.prompt, contains('index_file: cleanrooms/152-test-branch/analyze/index.md'));
+        expect(result.prompt, contains('doc_protocol: doc-write'));
+        expectExplicitContextAfter(result.prompt, 'Clarification questions');
       });
 
       test('descartes prompt includes analysis_input path', () async {
@@ -518,13 +536,49 @@ void main() {
             .writeAsStringSync('state: PLAN\nissue: "152"\n');
 
         final cmd = ApePromptCommand(
-          ApePromptInput(name: 'descartes', workingDirectory: gitTmpDir.path),
+          ApePromptInput(
+            name: 'descartes',
+            subState: 'decomposition',
+            workingDirectory: gitTmpDir.path,
+          ),
         );
         final result = await cmd.execute();
 
+        expect(result.prompt, contains('EVIDENCE'));
+        expect(result.prompt, contains('FOCUS: Division.'));
         expect(result.prompt, contains('# --- inquiry-context ---'));
         expect(result.prompt, contains('analysis_input: cleanrooms/152-test-branch/analyze/diagnosis.md'));
         expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
+        expect(result.prompt, contains('doc_protocol: doc-read'));
+        expectExplicitContextAfter(result.prompt, 'FOCUS: Division.');
+      });
+
+      test('basho prompt includes plan contract in assembled prompt', () async {
+        File(p.join(gitTmpDir.path, '.inquiry', 'state.yaml'))
+            .writeAsStringSync('state: EXECUTE\nissue: "152"\n');
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(
+            name: 'basho',
+            subState: 'implement',
+            workingDirectory: gitTmpDir.path,
+          ),
+        );
+        final result = await cmd.execute();
+
+        expect(result.prompt, contains('NOTHING WASTED'));
+        expect(
+          result.prompt,
+          contains('Implement exactly what the plan says. No more, no less.'),
+        );
+        expect(result.prompt, contains('# --- inquiry-context ---'));
+        expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
+        expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/'));
+        expect(result.prompt, contains('doc_protocol: doc-read'));
+        expectExplicitContextAfter(
+          result.prompt,
+          'Implement exactly what the plan says. No more, no less.',
+        );
       });
 
       test('dewey create_or_select prompt includes IDLE-owned routing context', () async {
@@ -543,6 +597,7 @@ void main() {
         final result = await cmd.execute();
 
         expect(result.subState, equals('create_or_select'));
+        expect(result.prompt, contains('FOCUS: Issue formulation. Create or select.'));
         expect(result.prompt, contains('# --- inquiry-context ---'));
         expect(result.prompt, contains('triage_objective: create_or_select'));
         expect(result.prompt, contains('deterministic_skill: issue-create'));
@@ -550,6 +605,34 @@ void main() {
           result.prompt,
           contains('allowed_commands: gh issue list, gh issue view, gh issue create, gh issue edit'),
         );
+        expectExplicitContextAfter(
+          result.prompt,
+          'FOCUS: Issue formulation. Create or select.',
+        );
+      });
+
+      test('darwin prompt includes cycle artifact contract in assembled prompt', () async {
+        File(p.join(gitTmpDir.path, '.inquiry', 'state.yaml'))
+            .writeAsStringSync('state: EVOLUTION\nissue: "152"\n');
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(
+            name: 'darwin',
+            subState: 'observe',
+            workingDirectory: gitTmpDir.path,
+          ),
+        );
+        final result = await cmd.execute();
+
+        expect(result.prompt, contains('diagnosis.md'));
+        expect(result.prompt, contains('.inquiry/mutations.md'));
+        expect(result.prompt, contains('FOCUS: Observation.'));
+        expect(result.prompt, contains('metrics.yaml'));
+        expect(result.prompt, contains('# --- inquiry-context ---'));
+        expect(result.prompt, contains('analyze_dir: cleanrooms/152-test-branch/analyze/'));
+        expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
+        expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/'));
+        expectExplicitContextAfter(result.prompt, 'FOCUS: Observation.');
       });
 
       test('no context injected when not in a git repo', () async {

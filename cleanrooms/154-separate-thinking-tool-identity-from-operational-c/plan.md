@@ -43,11 +43,11 @@ expect representative prompt assembly, visible inquiry-context, and inspectabili
 
 **TDD:** Yes. RED first: tighten prompt-contract assertions before changing prompt ownership. GREEN second: keep this gate green through all later phases.
 
-- [ ] Expand `code/cli/test/ape_prompt_test.dart` with representative assembled-prompt assertions for SOCRATES, DESCARTES, BASHO, DEWEY, and DARWIN before any operational prose is removed.
-- [ ] Add or adjust prompt-test fixtures so each active APE can be assembled deterministically without depending on the live repository state.
-- [ ] Update `code/cli/test/firmware_agent_test.dart` so prompt inspectability through `iq ape prompt` is protected as a first-class contract.
-- [ ] Run `dart test test/ape_prompt_test.dart test/firmware_agent_test.dart` until the prompt baseline is GREEN.
-- [ ] Commit: "test(cli): lock assembled prompt contract for #154"
+- [x] Expand `code/cli/test/ape_prompt_test.dart` with representative assembled-prompt assertions for SOCRATES, DESCARTES, BASHO, DEWEY, and DARWIN before any operational prose is removed.
+- [x] Add or adjust prompt-test fixtures so each active APE can be assembled deterministically without depending on the live repository state.
+- [x] Update `code/cli/test/firmware_agent_test.dart` so prompt inspectability through `iq ape prompt` is protected as a first-class contract.
+- [x] Run `dart test test/ape_prompt_test.dart test/firmware_agent_test.dart` until the prompt baseline is GREEN.
+- [x] Commit: "test(cli): lock assembled prompt contract for #154"
 
 ## Phase 2 — Introduce a CLI-owned operational-contract layer (P2)
 
