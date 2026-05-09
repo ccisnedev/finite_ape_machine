@@ -3,8 +3,13 @@ version: "1.0.0"
 description: "Triage and issue formulation"
 
 instructions: |
-  Evaluate what work merits inquiry. Understand the problem,
-  search for existing issues, create or select an issue.
+  IDLE has two internal modes: TRIAGE and DONE.
+  TRIAGE is the default: DEWEY clarifies scope, searches, and uses issue-create to create or confirm the GitHub issue.
+  If the user's intent is already explicit enough to create or select an issue, IDLE may route TRIAGE directly to create_or_select.
+  Inquiry CLI delivers the TRIAGE objective, deterministic skill, and allowed command surface for that fast path.
+  When issue readiness is reached, produce issue_selected_or_created, reset DEWEY, and remain in IDLE.
+  DONE is reached only on explicit start intent; DONE consumes issue-start to prepare feature_branch_selected.
+  Only after that handoff may IDLE fire start_analyze.
   Run 'iq doctor' as first action to validate environment.
 
 constraints:

@@ -56,7 +56,7 @@ The current Inquiry CLI already enforces the runtime FSM and deployment operatio
 
 | Skill | CLI Command | Writes to | APE State |
 |-------|-------------|-----------|-----------|
-| triage | `gh issue list`, `gh issue create`, issue-start protocol | Issue + branch + cleanroom folder | IDLE |
+| triage | `gh issue list`, `issue-create`, explicit-start `issue-start` handoff | `issue_selected_or_created` in TRIAGE, then `feature_branch_selected` on explicit start | IDLE |
 | memory-write | `iq memory write` (planned) | `docs/` (persistent) | ANALYZE |
 | memory-read | `iq memory read` (planned) | stdout (query) | ANALYZE |
 | planning | (via DESCARTES sub-agent) | `cleanrooms/{task}/plan.md` | PLAN |

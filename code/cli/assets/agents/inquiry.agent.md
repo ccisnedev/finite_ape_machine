@@ -64,6 +64,12 @@ iq fsm transition --event <event>
 
 **CRITICAL:** Steps A and C are NEVER executed in the same turn when `completion_authority` is `"user"`. The user MUST see the deliverable and confirm before C runs.
 
+## IDLE Handoff
+- explicit create/select intent only changes TRIAGE routing inside IDLE; issue readiness stays in IDLE/TRIAGE and produces `issue_selected_or_created`
+- only explicit start intent reaches `_DONE`
+- only explicit start intent triggers issue-start plus start_analyze
+- `issue-start` first produces `feature_branch_selected`, then `iq fsm transition --event start_analyze` may leave IDLE
+
 ## Inner Loop (Per-APE FSM)
 
 Dispatch is **unconditional and immediate**. When you enter the Inner Loop, execute steps 1–2 without asking, narrating, or confirming.
@@ -83,6 +89,5 @@ Dispatch is **unconditional and immediate**. When you enter the Inner Loop, exec
 - **NEVER** narrate the process. Do not say "the next step is..." or "I will now...". Execute.
 - **NEVER** combine `iq ape transition --event complete` and `iq fsm transition` in the same turn when authority is `"user"`.
 - If a command fails, report the error and offer retry.
-- If you are unsure of your state, run `iq fsm state --json`.
-- One sub-phase at a time. Complete it before transitioning.
+- If you are unsure of your state, run `iq fsm state --json`; complete one sub-phase at a time before transitioning.
 - Do not enumerate states, transitions, or sub-agent names from memory. Read them from the CLI output.

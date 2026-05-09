@@ -152,6 +152,26 @@ void main() {
       expect(output.message, contains('ERROR_PRECONDITION_ISSUE_FIRST'));
     });
 
+    test('blocks IDLE to ANALYZE when issue is ready but branch is not',
+        () async {
+      _writeState(tempDir.path, 'IDLE', issue: '152');
+
+      final input = StateTransitionInput(
+        currentState: null,
+        event: 'start_analyze',
+        workingDirectory: tempDir.path,
+      );
+      final command = StateTransitionCommand(
+        input,
+        branchProvider: (_) async => 'main',
+      );
+
+      final output = await command.execute();
+
+      expect(output.allowed, isFalse);
+      expect(output.message, contains('ERROR_PRECONDITION_BRANCH_POLICY'));
+    });
+
     test('allows IDLE to ANALYZE with issue and feature branch', () async {
       _writeState(tempDir.path, 'IDLE');
 

@@ -76,6 +76,32 @@ void main() {
     expect(planTransition.operations!.promptFragmentId, 'plan_to_execute');
   });
 
+  test('IDLE -> ANALYZE exposes only external handoff metadata', () {
+    final idleTransition = contract.transitionFor(
+      FsmState.idle,
+      FsmEvent.startAnalyze,
+    );
+
+    expect(idleTransition.allowed, isTrue);
+    expect(idleTransition.to, FsmState.analyze);
+    expect(idleTransition.operations, isNotNull);
+    expect(
+      idleTransition.operations!.prechecks,
+      equals(['issue_selected_or_created', 'feature_branch_selected']),
+    );
+    expect(idleTransition.operations!.promptFragmentId, 'idle_to_analyze');
+
+    final issueReady = contract.preconditions['issue_selected_or_created']!;
+    final branchReady = contract.preconditions['feature_branch_selected']!;
+    expect(issueReady.description, contains('IDLE TRIAGE'));
+    expect(branchReady.description, contains('issue-start'));
+
+    final fragment = contract.promptFragments['idle_to_analyze']!;
+    expect(fragment.role, 'SOCRATES');
+    expect(fragment.skill, 'doc-read');
+    expect(fragment.template, 'analyze.clarification');
+  });
+
   test('EXECUTE passes through END before PR creation', () {
     final finishExecution = contract.transitionFor(
       FsmState.execute,

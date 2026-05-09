@@ -15,7 +15,7 @@ void main() {
     // Copy APE YAML assets
     final apesDir = Directory(p.join(tmpDir.path, 'assets', 'apes'));
     apesDir.createSync(recursive: true);
-    for (final name in ['socrates', 'descartes', 'basho', 'darwin']) {
+    for (final name in ['socrates', 'dewey', 'descartes', 'basho', 'darwin']) {
       File('assets/apes/$name.yaml')
           .copySync(p.join(apesDir.path, '$name.yaml'));
     }
@@ -120,6 +120,24 @@ void main() {
 
         expect(result.from, equals('test'));
         expect(result.to, equals('implement'));
+      });
+
+      test('dewey confirm --complete--> evaluate_scope', () async {
+        writeState(
+          state: 'IDLE',
+          apeName: 'dewey',
+          apeState: 'confirm',
+        );
+
+        final cmd = ApeTransitionCommand(
+          ApeTransitionInput(event: 'complete', workingDirectory: tmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.apeName, equals('dewey'));
+        expect(result.from, equals('confirm'));
+        expect(result.event, equals('complete'));
+        expect(result.to, equals('evaluate_scope'));
       });
 
       test('reaches _DONE sentinel', () async {

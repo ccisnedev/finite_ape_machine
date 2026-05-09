@@ -100,10 +100,19 @@ void main() {
       expect(content, isNotEmpty);
     });
 
-    test('reads skills/issue-start/SKILL.md with cleanrooms paths', () {
+    test('reads skills/issue-create/SKILL.md for TRIAGE issue creation', () {
+      final content = assets.loadString('skills/issue-create/SKILL.md');
+      expect(content, contains('issue-create'));
+      expect(content, contains('TRIAGE'));
+      expect(content, isNotEmpty);
+    });
+
+    test('reads skills/issue-start/SKILL.md as operational handoff only', () {
       final content = assets.loadString('skills/issue-start/SKILL.md');
+      expect(content, contains('issue already exists'));
+      expect(content, contains('start_analyze'));
       expect(content, contains('cleanrooms/<NNN>-<slug>/analyze/'));
-      expect(content, isNot(contains('docs/issues/<NNN>-<slug>/analyze/')));
+      expect(content, isNot(contains('gh issue create')));
       expect(content, isNotEmpty);
     });
 
@@ -115,6 +124,7 @@ void main() {
           'doc-read',
           'doc-write',
           'inquiry-install',
+          'issue-create',
           'issue-end',
           'issue-start',
         ]),

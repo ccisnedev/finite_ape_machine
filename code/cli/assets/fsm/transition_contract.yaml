@@ -431,7 +431,7 @@ transitions:
 
 preconditions:
   issue_selected_or_created:
-    description: "Issue exists or has been created"
+    description: "Issue was selected or created during IDLE TRIAGE before explicit start"
     kind: issue
   diagnosis_exists:
     description: "diagnosis.md exists for current issue"
@@ -440,7 +440,7 @@ preconditions:
     description: "Issue selected in current context"
     kind: issue
   feature_branch_selected:
-    description: "Current branch is issue-linked and not main"
+    description: "issue-start prepared an issue-linked feature branch for the explicit start handoff"
     kind: git
   plan_approved:
     description: "User approved plan"

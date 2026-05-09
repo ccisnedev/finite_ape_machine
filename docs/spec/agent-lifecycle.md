@@ -19,7 +19,7 @@ IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION
 
 | APE State | Function | Operator | Thinking Tool |
 |-----------|----------|----------|---------------|
-| IDLE | Triage — clarify scope, select issue, prepare handoff | DEWEY (sub-agent) | Deweyan problematization — transform the indeterminate into an actionable issue |
+| IDLE | Triage — clarify scope, create or confirm issue, stage explicit start | DEWEY (sub-agent) | Deweyan problematization — transform the indeterminate into an actionable issue |
 | ANALYZE | Deep understanding via Socratic method | SOCRATES (sub-agent) | Mayéutica — draw truth through questions |
 | PLAN | Experimental design, WBS, test definition | DESCARTES (sub-agent) | Method — divide, order, verify, enumerate |
 | EXECUTE | Implementation under constraints | BASHŌ (sub-agent) | Techne + 用の美 (yō no bi) — functional beauty |
@@ -28,7 +28,7 @@ IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION
 
 ### State descriptions
 
-**IDLE** — DEWEY owns bounded issue triage. The user converses freely while DEWEY determines whether the indeterminate situation merits a formal cycle, whether an issue already exists, and whether that issue is ready for handoff. DEWEY does not create branches, write diagnosis, plan work, or code. The explicit handoff remains external: `issue-start` verifies or creates the issue, prepares the branch and working directory, and fires `start_analyze`.
+**IDLE** — This document is explanatory architecture, not the sole normative source. The canonical runtime contract for IDLE lives in `code/cli/assets/fsm/transition_contract.yaml` for the outer IDLE boundary and `code/cli/assets/fsm/states/idle.yaml` for internal IDLE behavior. Within that boundary, DEWEY owns bounded issue triage. The user converses freely while DEWEY determines whether the indeterminate situation merits a formal cycle, whether an issue already exists, and whether TRIAGE should use `issue-create` to create or confirm one. When issue readiness is reached, IDLE produces `issue_selected_or_created`, resets DEWEY to TRIAGE, and remains in IDLE. DONE is reserved for explicit start intent alone. Only then does `issue-start` prepare `feature_branch_selected`, after which the outer `start_analyze` transition may leave IDLE.
 
 **ANALYZE** — SOCRATES conducts Socratic analysis. Explores the problem through questions, challenges assumptions, documents findings. Produces `diagnosis.md` — a rigorous technical document (paper-style, with references) that serves as the sole input for the planning phase. The user approves the diagnosis before transitioning.
 
@@ -46,7 +46,7 @@ IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION
 
 | Agent | Namesake | State | Herramienta | Description |
 |-------|----------|-------|-------------|-------------|
-| DEWEY | John Dewey (1859–1952) | IDLE | Problematization | Bounded issue triage, issue readiness, explicit handoff to `issue-start` |
+| DEWEY | John Dewey (1859–1952) | IDLE | Problematization | Bounded issue triage, `issue-create` issue readiness, explicit-start gate inside IDLE |
 | SOCRATES | Sócrates (470–399 BC) | ANALYZE | Mayéutica | Conversational understanding, produces `diagnosis.md` |
 | DESCARTES | René Descartes (1596–1650) | PLAN | Método | Experimental design, WBS, test pseudocode |
 | BASHŌ | Matsuo Bashō (1644–1694) | EXECUTE | Techne/用の美 | Implementation as functional art under constraints |
@@ -107,7 +107,7 @@ All APE state transitions are mechanical, executed via skill → CLI chain:
 
 | Transition | Event | Effects |
 |-----------|-------|---------|
-| IDLE → ANALYZE | `start_analyze` | `issue-start` verifies issue, prepares branch/cleanroom, transitions |
+| IDLE → ANALYZE | `start_analyze` | TRIAGE must already have produced `issue_selected_or_created`; explicit start then runs `issue-start`, which prepares `feature_branch_selected` before the transition fires |
 | ANALYZE → PLAN | `complete_analysis` | `git commit` analysis docs |
 | PLAN → EXECUTE | `approve_plan` | `git commit` plan-boundary artifacts |
 | EXECUTE → END | `finish_execute` | `git commit` execution artifacts |

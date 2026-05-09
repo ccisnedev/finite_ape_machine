@@ -64,6 +64,32 @@ void main() {
       expect(content, contains('_DONE'));
     });
 
+    test('keeps issue readiness inside IDLE TRIAGE', () {
+      expect(content, contains('issue readiness stays in IDLE/TRIAGE'));
+      expect(content, contains('issue_selected_or_created'));
+    });
+
+    test('documents the explicit-start handoff sequence', () {
+      expect(content, contains('explicit start intent'));
+      expect(content, contains('issue-start'));
+      expect(content, contains('start_analyze'));
+      final issueReadyIndex = content.indexOf('issue_selected_or_created');
+      final branchReadyIndex = content.indexOf('feature_branch_selected');
+      expect(issueReadyIndex, greaterThanOrEqualTo(0));
+      expect(branchReadyIndex, greaterThan(issueReadyIndex));
+    });
+
+    test('keeps explicit create/select routing inside IDLE TRIAGE', () {
+      expect(
+        content,
+        contains('explicit create/select intent only changes TRIAGE routing inside IDLE'),
+      );
+      expect(
+        content,
+        contains('only explicit start intent triggers issue-start plus start_analyze'),
+      );
+    });
+
     test('forbids direct writes to .inquiry/', () {
       expect(content, contains('NEVER'));
       expect(content, contains('.inquiry/'));
