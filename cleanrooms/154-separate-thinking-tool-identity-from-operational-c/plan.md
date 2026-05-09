@@ -213,12 +213,12 @@ expect repository procedure to move out of darwin.yaml while the abstract proces
 
 **TDD:** Yes. RED first: protect the allowed DARWIN exception and forbid the procedural one. GREEN second: move the procedure until the gate passes.
 
-- [ ] Extend `code/cli/assets/fsm/states/evolution.yaml` and `code/cli/build/assets/fsm/states/evolution.yaml` with the abstract-process contract that DARWIN may legitimately consume outside its own YAML.
-- [ ] Edit `code/cli/assets/apes/darwin.yaml` and `code/cli/build/assets/apes/darwin.yaml` so DARWIN keeps evaluation identity but stops owning the primary repository procedure.
-- [ ] Update `code/cli/lib/modules/ape/commands/prompt.dart` and nearby prompt-contract helpers so EVOLUTION injects repository procedure and metrics mechanics explicitly at assembly time.
-- [ ] Update `code/cli/test/ape_prompt_test.dart`, `code/cli/test/ape_definition_test.dart`, `code/cli/test/fsm_state_test.dart`, and `code/cli/test/assets_test.dart` so the DARWIN exception is bounded by executable tests.
-- [ ] Run `dart test test/ape_prompt_test.dart test/ape_definition_test.dart test/fsm_state_test.dart test/assets_test.dart test/firmware_agent_test.dart` and the `rg` verification above until the DARWIN boundary is GREEN.
-- [ ] Commit: "refactor(cli): bound darwin exception for #154"
+- [x] Extend `code/cli/assets/fsm/states/evolution.yaml` and `code/cli/build/assets/fsm/states/evolution.yaml` with the abstract-process contract that DARWIN may legitimately consume outside its own YAML.
+- [x] Edit `code/cli/assets/apes/darwin.yaml` and `code/cli/build/assets/apes/darwin.yaml` so DARWIN keeps evaluation identity but stops owning the primary repository procedure.
+- [x] Update `code/cli/lib/modules/ape/commands/prompt.dart` and nearby prompt-contract helpers so EVOLUTION injects repository procedure and metrics mechanics explicitly at assembly time.
+- [x] Update `code/cli/test/ape_prompt_test.dart`, `code/cli/test/ape_definition_test.dart`, `code/cli/test/fsm_state_test.dart`, and `code/cli/test/assets_test.dart` so the DARWIN exception is bounded by executable tests.
+- [x] Run `dart test test/ape_prompt_test.dart test/ape_definition_test.dart test/fsm_state_test.dart test/assets_test.dart test/firmware_agent_test.dart` and the `rg` verification above until the DARWIN boundary is GREEN.
+- [x] Commit: "refactor(cli): bound darwin exception for #154"
 
 ## Phase 6 — Align doctrine, release surfaces, and final validation (P6)
 

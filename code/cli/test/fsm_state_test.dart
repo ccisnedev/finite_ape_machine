@@ -265,6 +265,24 @@ void main() {
         expect(result.toJson()['instructions'], contains('issue-start'));
         expect(result.toJson()['instructions'], contains('start_analyze'));
       });
+
+      test('EVOLUTION instructions own darwin repository procedure', () async {
+        setupWorkspace(state: 'EVOLUTION', issue: '145');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+
+        expect(
+          result.toJson()['instructions'],
+          contains('ideal Analyze -> Plan -> Execute -> End loop'),
+        );
+        expect(result.toJson()['instructions'], contains('gh issue list'));
+        expect(result.toJson()['instructions'], contains('gh issue comment'));
+        expect(result.toJson()['instructions'], contains('gh issue create'));
+        expect(result.toJson()['instructions'], contains('.inquiry/metrics.yaml'));
+      });
     });
 
     group('missing workspace', () {

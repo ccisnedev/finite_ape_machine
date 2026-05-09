@@ -159,8 +159,15 @@ void main() {
         );
         expect(def.basePrompt, contains('DARWIN'));
         expect(def.basePrompt, contains('natural selection'));
-        expect(def.basePrompt, contains('mutations.md'));
-        expect(def.basePrompt, contains('metrics.yaml'));
+        expect(def.basePrompt, contains('observe, compare, and select'));
+        expect(def.basePrompt, isNot(contains('gh issue list')));
+        expect(def.basePrompt, isNot(contains('gh issue create')));
+        expect(def.basePrompt, isNot(contains('gh issue comment')));
+        expect(def.basePrompt, isNot(contains('diagnosis.md')));
+        expect(def.basePrompt, isNot(contains('plan.md')));
+        expect(def.basePrompt, isNot(contains('retrospective.md')));
+        expect(def.basePrompt, isNot(contains('.inquiry/')));
+        expect(def.basePrompt, isNot(contains('metrics.yaml')));
       });
     });
 

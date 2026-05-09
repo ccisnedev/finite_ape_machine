@@ -220,7 +220,13 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
       case 'darwin':
         return {
           'analyze_dir': analyzeDir,
+          'diagnosis_file': '${analyzeDir}diagnosis.md',
           'plan_file': 'cleanrooms/$branch/plan.md',
+          'retrospective_file': 'cleanrooms/$branch/retrospective.md',
+          'mutations_file': '.inquiry/mutations.md',
+          'state_file': '.inquiry/state.yaml',
+          'metrics_snapshot_file': '.inquiry/metrics_snapshot.yaml',
+          'metrics_file': '.inquiry/metrics.yaml',
           'output_dir': 'cleanrooms/$branch/',
         };
       default:

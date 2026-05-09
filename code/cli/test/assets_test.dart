@@ -121,6 +121,16 @@ void main() {
         'socrates': ['output_dir', 'confirmed_doc', 'index_file', 'doc-write'],
         'descartes': ['analysis_input', 'plan_file', 'Commit:'],
         'basho': ['retrospective.md'],
+        'darwin': [
+          'gh issue list',
+          'gh issue comment',
+          'gh issue create',
+          'diagnosis.md',
+          'plan.md',
+          'retrospective.md',
+          '.inquiry/',
+          'metrics.yaml',
+        ],
       };
 
       for (final entry in disallowedMarkers.entries) {

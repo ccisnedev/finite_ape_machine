@@ -413,7 +413,14 @@ void main() {
         final result = await cmd.execute();
 
         expect(result.prompt, contains('natural selection'));
-        expect(result.prompt, contains('mutations.md'));
+        expect(
+          result.prompt,
+          contains('ideal Analyze -> Plan -> Execute -> End loop'),
+        );
+        expect(
+          result.prompt,
+          contains('EVOLUTION owns the repository procedure for issue search/comment/create and metrics collection.'),
+        );
         expect(result.prompt, contains('Observation'));
       });
     });
@@ -775,12 +782,25 @@ void main() {
         final result = await cmd.execute();
 
         expect(result.prompt, contains('diagnosis.md'));
-        expect(result.prompt, contains('.inquiry/mutations.md'));
         expect(result.prompt, contains('FOCUS: Observation.'));
-        expect(result.prompt, contains('metrics.yaml'));
+        expect(
+          result.prompt,
+          contains('EVOLUTION owns the repository procedure for issue search/comment/create and metrics collection.'),
+        );
         expect(result.prompt, contains('# --- inquiry-context ---'));
         expect(result.prompt, contains('analyze_dir: cleanrooms/152-test-branch/analyze/'));
         expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
+        expect(
+          result.prompt,
+          contains('retrospective_file: cleanrooms/152-test-branch/retrospective.md'),
+        );
+        expect(result.prompt, contains('mutations_file: .inquiry/mutations.md'));
+        expect(result.prompt, contains('state_file: .inquiry/state.yaml'));
+        expect(
+          result.prompt,
+          contains('metrics_snapshot_file: .inquiry/metrics_snapshot.yaml'),
+        );
+        expect(result.prompt, contains('metrics_file: .inquiry/metrics.yaml'));
         expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/'));
         expectExplicitContextAfter(result.prompt, 'FOCUS: Observation.');
       });

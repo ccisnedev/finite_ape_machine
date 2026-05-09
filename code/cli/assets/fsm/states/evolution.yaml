@@ -3,16 +3,53 @@ version: "1.0.0"
 description: "Cycle evaluation and process improvement"
 
 instructions: |
-  Evaluate the completed cycle. Observe what worked,
-  what deviated, what can improve. Create improvement issues.
+  Evaluate the completed cycle against the ideal Analyze -> Plan -> Execute -> End loop.
+  EVOLUTION owns the repository procedure for issue search/comment/create and metrics collection.
+  DARWIN keeps only the abstract process methodology: observe, compare, select, report.
+
+  Review the complete cycle artifacts:
+  - diagnosis.md (what was analyzed)
+  - plan.md (what was planned, with checkbox state and deviation annotations)
+  - retrospective.md (what went well, what deviated, what surprised, spawn issues)
+  - .inquiry/mutations.md (human observations about APE's process performance during this cycle)
+  - Commit history (what was actually built)
+  - Any deviation notes
+
+  Search for existing issues: `gh issue list --repo ccisnedev/inquiry --search "keyword"`
+  If a match exists: `gh issue comment <NNN> --body "Observation from cycle..."`
+  If no match exists: `gh issue create --repo ccisnedev/inquiry --title "..." --body "..."`
+
+  After evaluating the cycle, generate `.inquiry/metrics.yaml` with these fields:
+
+  | Field | Source |
+  |-------|--------|
+  | `issue` | `.inquiry/state.yaml` -> `issue` |
+  | `version` | `pubspec.yaml` -> `version` |
+  | `model` | Self-report |
+  | `agent` | Context (copilot, crush, local) |
+  | `cycle.completed` | `true` (you are in EVOLUTION) |
+  | `cycle.darwin_activated` | `true` (you are DARWIN) |
+  | `cycle.darwin_issue` | Issue # you created/commented |
+  | `timing.branch_created` | `.inquiry/metrics_snapshot.yaml` |
+  | `timing.pr_merged` | `gh pr view --json mergedAt` |
+  | `plan.total_phases` | Count phases in plan.md |
+  | `plan.completed_phases` | Count `[x]` in plan.md |
+  | `plan.deviations` | Count deviation annotations |
+  | `tests.before` | `.inquiry/metrics_snapshot.yaml` |
+  | `tests.after` | Current test count |
+  | `tests.delta` | `tests.after - tests.before` |
+  | `observations` | Freeform notable observations |
 
 constraints:
-  - No code edits (cycle is closed)
-  - Observations must be evidence-based
+  - No project code or documentation edits; only GitHub issue operations and `.inquiry/metrics.yaml`
+  - Observations must be evidence-based and tied to the ideal cycle
   - Improvement issues must be atomic and actionable
+  - Only create issues/comments in the inquiry repository
+  - Omit any metric field you cannot reliably determine
 
 allowed_actions:
-  - Review cycle artifacts (diagnosis, plan, commits, PR)
-  - Document observations in mutations.md
-  - Create improvement issues on GitHub
-  - Collect metrics
+  - Review cycle artifacts (diagnosis.md, plan.md, retrospective.md, commit history, .inquiry/mutations.md)
+  - Search existing issues with gh issue list
+  - Comment on matching issues with gh issue comment
+  - Create new issues with gh issue create
+  - Write .inquiry/metrics.yaml from verified sources
