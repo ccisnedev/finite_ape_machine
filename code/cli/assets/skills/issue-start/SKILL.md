@@ -1,14 +1,15 @@
 ---
 name: issue-start
-description: 'Protocol for starting work on a GitHub issue. Creates branch, working directory, and transitions to ANALYZE state.'
+description: 'Protocol for starting work on an existing GitHub issue. Verifies the issue, prepares the branch and cleanroom, and transitions to ANALYZE state.'
 ---
 
-# issue-start — Infrastructure Creation Protocol
+# issue-start - Operational Start Protocol
 
 ## When to Use
 
-- When the scheduler APE is in IDLE state
-- After identifying a GitHub issue to work on (or deciding to create a new one)
+- When the scheduler APE is in IDLE/DONE
+- After explicit start intent
+- After TRIAGE has confirmed that the issue already exists
 - Before transitioning from IDLE to ANALYZE
 
 ## Prerequisites
@@ -33,25 +34,17 @@ iq doctor
 
 All checks must pass. Do not proceed if any check fails.
 
-### Step 2: Identify or Create Issue
+### Step 2: Verify Existing Issue
 
-**If issue number is known:**
 ```bash
-gh issue view <NNN> --json number,title
+gh issue view <NNN> --json number,title,state
 ```
 
-Extract `number` and `title` from the JSON response.
-
-**If no issue exists:**
-```bash
-gh issue create --title "..." --body "..."
-```
-
-The command returns the new issue URL containing the issue number.
+Confirm the issue already exists and extract `number` and `title` from the JSON response.
 
 ### Step 3: Generate Slug
 
-Transform the issue title into a slug:
+Transform the confirmed issue title into a slug:
 
 1. Lowercase the title
 2. Replace spaces with hyphens (`-`)
@@ -60,9 +53,9 @@ Transform the issue title into a slug:
 5. Trim trailing hyphens
 
 **Examples:**
-- "Fix login timeout" → `fix-login-timeout`
-- "Add dark mode support!!!" → `add-dark-mode-support`
-- "URGENT: Database migration script" → `urgent-database-migration-script`
+- "Fix login timeout" -> `fix-login-timeout`
+- "Add dark mode support!!!" -> `add-dark-mode-support`
+- "URGENT: Database migration script" -> `urgent-database-migration-script`
 
 ### Step 4: Create Branch
 
@@ -73,8 +66,8 @@ git checkout -b <NNN>-<slug>
 ```
 
 **Examples:**
-- Issue #37 "Fix login timeout" → `git checkout -b 037-fix-login-timeout`
-- Issue #142 "Add dark mode" → `git checkout -b 142-add-dark-mode`
+- Issue #37 "Fix login timeout" -> `git checkout -b 037-fix-login-timeout`
+- Issue #142 "Add dark mode" -> `git checkout -b 142-add-dark-mode`
 
 Note: Pad issue numbers less than 100 with leading zeros for sort consistency.
 
@@ -91,9 +84,9 @@ This creates the analysis directory for SOCRATES to work in during ANALYZE phase
 Create `cleanrooms/<NNN>-<slug>/analyze/index.md` with this template:
 
 ```markdown
-# Analyze Phase — Index
+# Analyze Phase - Index
 
-**Issue:** #<NNN> — <title>
+**Issue:** #<NNN> - <title>
 **Branch:** <NNN>-<slug>
 **Phase:** ANALYZE
 **Status:** In progress
@@ -114,7 +107,7 @@ Execute the CLI transition command with the issue number:
 iq fsm transition --event start_analyze --issue <NNN>
 ```
 
-This transitions the FSM to ANALYZE and auto-activates the analysis sub-agent. Do NOT write `.inquiry/state.yaml` directly — all state mutations go through `iq` commands.
+This transitions the FSM to ANALYZE and auto-activates the analysis sub-agent. Do NOT write `.inquiry/state.yaml` directly - all state mutations go through `iq` commands.
 
 ### Step 8: Verify Transition
 
@@ -124,6 +117,7 @@ Run `iq fsm state` to confirm the state is now ANALYZE with the correct issue nu
 
 After completing all steps, verify:
 
+- [ ] The issue already exists and `gh issue view <NNN> --json number,title,state` succeeds
 - [ ] Branch exists: `git branch --show-current` returns `<NNN>-<slug>`
 - [ ] Directory exists: `cleanrooms/<NNN>-<slug>/analyze/index.md`
 - [ ] State updated: `iq fsm state` shows ANALYZE with the issue number
@@ -131,5 +125,6 @@ After completing all steps, verify:
 ## Notes
 
 - This skill is executed by the scheduler APE, not by a human
+- TRIAGE owns issue creation or confirmation through `issue-create`
 - The scheduler reads this document and executes commands step by step
 - If any step fails, the scheduler should report the error and remain in IDLE

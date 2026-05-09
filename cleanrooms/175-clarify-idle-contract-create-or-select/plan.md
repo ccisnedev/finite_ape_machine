@@ -150,12 +150,12 @@ expect bundled assets, deployed-target expectations, and idle instructions all r
 
 **TDD:** Yes. RED first: add the new asset and deployment expectations. GREEN second: introduce `issue-create`, narrow `issue-start`, and rerun the same verification gate until it passes.
 
-- [ ] Update `code/cli/test/assets_test.dart` and `code/cli/test/doctor_test.dart` so bundled and deployed skill expectations include `issue-create`.
-- [ ] Add `code/cli/assets/skills/issue-create/SKILL.md` and mirror it to `code/cli/build/assets/skills/issue-create/SKILL.md`, defining deterministic GitHub issue creation or confirmation during TRIAGE.
-- [ ] Edit `code/cli/assets/skills/issue-start/SKILL.md` and `code/cli/build/assets/skills/issue-start/SKILL.md` so `issue-start` assumes the issue already exists and only verifies it, creates the branch/cleanroom, and fires `start_analyze`.
-- [ ] Update `code/cli/assets/fsm/states/idle.yaml` and nearby wording so TRIAGE names `issue-create` as the deterministic GitHub-side skill when issue creation or confirmation is required.
-- [ ] Run `dart test test/assets_test.dart test/doctor_test.dart test/fsm_state_test.dart` until the skill split is GREEN.
-- [ ] Commit: "feat(cli): split issue creation from issue-start for #175"
+- [x] Update `code/cli/test/assets_test.dart` and `code/cli/test/doctor_test.dart` so bundled and deployed skill expectations include `issue-create`.
+- [x] Add `code/cli/assets/skills/issue-create/SKILL.md` and mirror it to `code/cli/build/assets/skills/issue-create/SKILL.md`, defining deterministic GitHub issue creation or confirmation during TRIAGE.
+- [x] Edit `code/cli/assets/skills/issue-start/SKILL.md` and `code/cli/build/assets/skills/issue-start/SKILL.md` so `issue-start` assumes the issue already exists and only verifies it, creates the branch/cleanroom, and fires `start_analyze`.
+- [x] Update `code/cli/assets/fsm/states/idle.yaml` and nearby wording so TRIAGE names `issue-create` as the deterministic GitHub-side skill when issue creation or confirmation is required.
+- [x] Run `dart test test/assets_test.dart test/doctor_test.dart test/fsm_state_test.dart` until the skill split is GREEN.
+- [x] Commit: "feat(cli): split issue creation from issue-start for #175"
 
 ## Phase 4 — Move explicit create-or-select routing into IDLE orchestration (P4)
 

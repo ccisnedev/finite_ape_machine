@@ -223,7 +223,7 @@ void main() {
         expect(result.toJson()['instructions'], contains('diagnosis.md'));
       });
 
-      test('IDLE instructions describe TRIAGE and DONE handoff', () async {
+      test('IDLE instructions describe TRIAGE issue creation and DONE handoff', () async {
         setupWorkspace(state: 'IDLE');
 
         final command = FsmStateCommand(FsmStateInput(
@@ -233,6 +233,7 @@ void main() {
 
         expect(result.toJson()['instructions'], contains('TRIAGE'));
         expect(result.toJson()['instructions'], contains('DONE'));
+        expect(result.toJson()['instructions'], contains('issue-create'));
         expect(result.toJson()['instructions'], contains('issue-start'));
         expect(result.toJson()['instructions'], contains('start_analyze'));
       });

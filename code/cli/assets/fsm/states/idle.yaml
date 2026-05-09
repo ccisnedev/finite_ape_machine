@@ -4,7 +4,7 @@ description: "Triage and issue formulation"
 
 instructions: |
   IDLE has two internal modes: TRIAGE and DONE.
-  TRIAGE is the default: DEWEY clarifies scope, searches, and creates or selects an issue.
+  TRIAGE is the default: DEWEY clarifies scope, searches, and uses issue-create to create or confirm the GitHub issue.
   When issue readiness is reached, produce issue_selected_or_created, reset DEWEY, and remain in IDLE.
   DONE is reached only on explicit start intent; DONE consumes issue-start to prepare feature_branch_selected.
   Only after that handoff may IDLE fire start_analyze.
