@@ -43,8 +43,6 @@ states:
     transitions:
       - event: next
         to: search_existing
-      - event: skip
-        to: create_or_select
     prompt: |
       FOCUS: Scope evaluation. Understand the problem space.
       Ask: "What are you trying to solve?", "Is this one issue or several?", "What changed or broke?"
@@ -70,6 +68,7 @@ states:
         to: search_existing
     prompt: |
       FOCUS: Issue formulation. Create or select.
+      Use the injected inquiry-context to respect IDLE's TRIAGE objective, deterministic skill, and allowed command surface.
       If creating: help write a clear title and description. One problem, one reason.
       If selecting: confirm the existing issue matches the user's intent.
 

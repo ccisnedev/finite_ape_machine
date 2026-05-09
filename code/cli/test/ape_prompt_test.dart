@@ -488,7 +488,7 @@ void main() {
         // Copy ape YAMLs
         final apesDir = Directory(p.join(gitTmpDir.path, 'assets', 'apes'));
         apesDir.createSync(recursive: true);
-        for (final name in ['socrates', 'descartes', 'basho', 'darwin']) {
+        for (final name in ['socrates', 'dewey', 'descartes', 'basho', 'darwin']) {
           File('assets/apes/$name.yaml')
               .copySync(p.join(apesDir.path, '$name.yaml'));
         }
@@ -525,6 +525,31 @@ void main() {
         expect(result.prompt, contains('# --- inquiry-context ---'));
         expect(result.prompt, contains('analysis_input: cleanrooms/152-test-branch/analyze/diagnosis.md'));
         expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
+      });
+
+      test('dewey create_or_select prompt includes IDLE-owned routing context', () async {
+        File(p.join(gitTmpDir.path, '.inquiry', 'state.yaml'))
+            .writeAsStringSync(
+              'state: IDLE\n'
+              'issue: null\n'
+              'ape:\n'
+              '  name: dewey\n'
+              '  state: create_or_select\n',
+            );
+
+        final cmd = ApePromptCommand(
+          ApePromptInput(name: 'dewey', workingDirectory: gitTmpDir.path),
+        );
+        final result = await cmd.execute();
+
+        expect(result.subState, equals('create_or_select'));
+        expect(result.prompt, contains('# --- inquiry-context ---'));
+        expect(result.prompt, contains('triage_objective: create_or_select'));
+        expect(result.prompt, contains('deterministic_skill: issue-create'));
+        expect(
+          result.prompt,
+          contains('allowed_commands: gh issue list, gh issue view, gh issue create, gh issue edit'),
+        );
       });
 
       test('no context injected when not in a git repo', () async {

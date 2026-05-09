@@ -199,13 +199,13 @@ expect matches to reflect IDLE-owned routing rather than DEWEY-owned process log
 
 **TDD:** Yes. RED first: add the canonical IDLE-level prompt and routing expectations. GREEN second: move orchestration/context into the CLI and runtime assets until the same verification gate passes.
 
-- [ ] Update `code/cli/test/ape_prompt_test.dart` and `code/cli/test/firmware_agent_test.dart` so explicit create-or-select requests are protected at the IDLE layer and the firmware wording keeps that ownership boundary explicit.
-- [ ] Edit `code/cli/lib/modules/ape/commands/prompt.dart` so Inquiry CLI injects IDLE-specific routing context for DEWEY instead of leaving process routing implicit in the DEWEY asset.
-- [ ] Edit `code/cli/assets/fsm/states/idle.yaml` and `code/cli/build/assets/fsm/states/idle.yaml` so IDLE owns the explicit create-or-select fast-path trigger semantics.
-- [ ] Edit `code/cli/assets/apes/dewey.yaml` and `code/cli/build/assets/apes/dewey.yaml` so DEWEY consumes the new inquiry-context contract without presenting process routing as its canonical responsibility.
-- [ ] Edit `code/cli/assets/agents/inquiry.agent.md` so the firmware states that explicit create/select intent only changes TRIAGE routing inside IDLE, while explicit start intent alone triggers `issue-start` and `start_analyze`.
-- [ ] Run `dart test test/ape_prompt_test.dart test/ape_transition_test.dart test/firmware_agent_test.dart` and the `rg` verification above until the fast-path ownership leak is closed.
-- [ ] Commit: "refactor(cli): move idle fast-path ownership for #175"
+- [x] Update `code/cli/test/ape_prompt_test.dart` and `code/cli/test/firmware_agent_test.dart` so explicit create-or-select requests are protected at the IDLE layer and the firmware wording keeps that ownership boundary explicit.
+- [x] Edit `code/cli/lib/modules/ape/commands/prompt.dart` so Inquiry CLI injects IDLE-specific routing context for DEWEY instead of leaving process routing implicit in the DEWEY asset.
+- [x] Edit `code/cli/assets/fsm/states/idle.yaml` and `code/cli/build/assets/fsm/states/idle.yaml` so IDLE owns the explicit create-or-select fast-path trigger semantics.
+- [x] Edit `code/cli/assets/apes/dewey.yaml` and `code/cli/build/assets/apes/dewey.yaml` so DEWEY consumes the new inquiry-context contract without presenting process routing as its canonical responsibility.
+- [x] Edit `code/cli/assets/agents/inquiry.agent.md` so the firmware states that explicit create/select intent only changes TRIAGE routing inside IDLE, while explicit start intent alone triggers `issue-start` and `start_analyze`.
+- [x] Run `dart test test/ape_prompt_test.dart test/ape_transition_test.dart test/firmware_agent_test.dart` and the `rg` verification above until the fast-path ownership leak is closed.
+- [x] Commit: "refactor(cli): move idle fast-path ownership for #175"
 
 ## Phase 5 — Align explanatory docs behind the validated runtime contract (P5)
 

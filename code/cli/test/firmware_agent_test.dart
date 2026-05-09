@@ -79,6 +79,17 @@ void main() {
       expect(branchReadyIndex, greaterThan(issueReadyIndex));
     });
 
+    test('keeps explicit create/select routing inside IDLE TRIAGE', () {
+      expect(
+        content,
+        contains('explicit create/select intent only changes TRIAGE routing inside IDLE'),
+      );
+      expect(
+        content,
+        contains('only explicit start intent triggers issue-start plus start_analyze'),
+      );
+    });
+
     test('forbids direct writes to .inquiry/', () {
       expect(content, contains('NEVER'));
       expect(content, contains('.inquiry/'));

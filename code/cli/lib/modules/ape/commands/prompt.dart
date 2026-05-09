@@ -139,7 +139,11 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
     final resolvedSubState = input.subState ?? inquiry.apeState;
 
     // Resolve dynamic context for injection
-    final context = _resolveContext(input.name!, currentState);
+    final context = _resolveContext(
+      input.name!,
+      currentState,
+      resolvedSubState,
+    );
 
     // Parse and assemble
     final definition = ApeDefinition.parse(yamlFile.readAsStringSync());
@@ -157,7 +161,22 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
   }
 
   /// Resolves dynamic context paths per APE and FSM state.
-  Map<String, String>? _resolveContext(String apeName, FsmState state) {
+  Map<String, String>? _resolveContext(
+    String apeName,
+    FsmState state,
+    String? subState,
+  ) {
+    if (apeName == 'dewey' &&
+        state == FsmState.idle &&
+        subState == 'create_or_select') {
+      return const {
+        'triage_objective': 'create_or_select',
+        'deterministic_skill': 'issue-create',
+        'allowed_commands':
+            'gh issue list, gh issue view, gh issue create, gh issue edit',
+      };
+    }
+
     final branch = getCurrentBranch(input.workingDirectory);
     if (branch.isEmpty) return null;
 

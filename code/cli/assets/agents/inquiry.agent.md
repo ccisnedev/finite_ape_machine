@@ -65,10 +65,10 @@ iq fsm transition --event <event>
 **CRITICAL:** Steps A and C are NEVER executed in the same turn when `completion_authority` is `"user"`. The user MUST see the deliverable and confirm before C runs.
 
 ## IDLE Handoff
-- issue readiness stays in IDLE/TRIAGE and produces `issue_selected_or_created`
+- explicit create/select intent only changes TRIAGE routing inside IDLE; issue readiness stays in IDLE/TRIAGE and produces `issue_selected_or_created`
 - only explicit start intent reaches `_DONE`
-- `issue-start` then produces `feature_branch_selected`
-- only after that handoff may `iq fsm transition --event start_analyze` leave IDLE
+- only explicit start intent triggers issue-start plus start_analyze
+- `issue-start` first produces `feature_branch_selected`, then `iq fsm transition --event start_analyze` may leave IDLE
 
 ## Inner Loop (Per-APE FSM)
 
