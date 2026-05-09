@@ -77,9 +77,13 @@ states:
     description: "Confirm the issue is ready to be tracked"
     transitions:
       - event: complete
+        to: evaluate_scope
+      - event: start
         to: _DONE
       - event: back
         to: create_or_select
     prompt: |
       FOCUS: Confirmation. Verify readiness.
+      If the issue is ready to be tracked, record issue readiness and return to TRIAGE.
+      If the user explicitly wants to begin resolving the issue now, signal start.
       Ask: "Is this issue well-scoped?", "Is the title clear?", "Should we track this issue now?"

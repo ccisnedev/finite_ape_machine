@@ -39,6 +39,40 @@ void main() {
       expect(output.exitCode, 64);
     });
 
+    test('IDLE leaves only after the explicit-start handoff is prepared',
+        () async {
+      _writeState(tempDir.path, 'IDLE', issue: '51');
+
+      final blocked = await StateTransitionCommand(
+        StateTransitionInput(
+          currentState: null,
+          event: 'start_analyze',
+          workingDirectory: tempDir.path,
+        ),
+        branchProvider: (_) async => 'main',
+      ).execute();
+
+      expect(blocked.allowed, isFalse);
+      expect(blocked.nextState, isNull);
+      expect(
+        File(p.join(tempDir.path, '.inquiry', 'state.yaml')).readAsStringSync(),
+        contains('state: IDLE'),
+      );
+
+      final allowed = await StateTransitionCommand(
+        StateTransitionInput(
+          currentState: null,
+          event: 'start_analyze',
+          workingDirectory: tempDir.path,
+        ),
+        branchProvider: (_) async => '51-idle-execution-guardrails',
+      ).execute();
+
+      expect(allowed.allowed, isTrue);
+      expect(allowed.nextState, 'ANALYZE');
+      expect(allowed.promptFragmentId, 'idle_to_analyze');
+    });
+
     test('full cycle uses transition command on each step', () async {
       String current = 'IDLE';
       final branch = '51-idle-execution-guardrails';

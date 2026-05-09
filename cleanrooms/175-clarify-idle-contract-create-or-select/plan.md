@@ -100,15 +100,15 @@ expect the issue-readiness loop, idle instructions, idle_to_analyze metadata, fi
 
 **TDD:** Yes. RED first: tighten the targeted contract tests inside this phase. GREEN second: update the source assets, packaged assets, and contract metadata until the same verification gate passes.
 
-- [ ] Update `code/cli/test/ape_transition_test.dart` to assert that issue readiness returns DEWEY to its initial triage state instead of `_DONE`.
-- [ ] Update `code/cli/test/fsm_state_test.dart`, `code/cli/test/fsm_contract_test.dart`, `code/cli/test/fsm_transition_test.dart`, `code/cli/test/fsm_transition_integration_test.dart`, and `code/cli/test/firmware_agent_test.dart` so IDLE instructions, `idle_to_analyze` metadata, explicit-start gating, and the split production of `issue_selected_or_created` vs `feature_branch_selected` are all protected.
-- [ ] Edit `code/cli/assets/apes/dewey.yaml` so issue readiness resets DEWEY to its initial state and only explicit start intent reaches `_DONE`.
-- [ ] Edit `code/cli/assets/fsm/states/idle.yaml` so the canonical IDLE instructions explicitly define TRIAGE vs DONE, reset-after-issue-ready, and DONE consuming `issue-start`.
-- [ ] Edit `code/cli/assets/fsm/transition_contract.yaml` so `start_analyze` remains the only outer IDLE exit and the `idle_to_analyze` fragment advertises only the external handoff metadata: required prechecks and expected handoff surface, while `idle.yaml` remains the canonical owner of TRIAGE/DONE semantics and `issue-start` trigger timing.
-- [ ] Edit `code/cli/assets/agents/inquiry.agent.md` so the firmware states that issue readiness stays in IDLE/TRIAGE, only explicit start intent reaches DONE, and `issue-start` then prepares the operational handoff into `start_analyze`.
-- [ ] Mirror the updated source assets into `code/cli/build/assets/apes/dewey.yaml`, `code/cli/build/assets/fsm/states/idle.yaml`, and `code/cli/build/assets/fsm/transition_contract.yaml`.
-- [ ] Run `dart test test/ape_transition_test.dart test/fsm_state_test.dart test/fsm_contract_test.dart test/fsm_transition_test.dart test/fsm_transition_integration_test.dart test/firmware_agent_test.dart` until the Phase 2 contract is GREEN.
-- [ ] Commit: "feat(cli): canonicalize idle runtime contract for #175"
+- [x] Update `code/cli/test/ape_transition_test.dart` to assert that issue readiness returns DEWEY to its initial triage state instead of `_DONE`.
+- [x] Update `code/cli/test/fsm_state_test.dart`, `code/cli/test/fsm_contract_test.dart`, `code/cli/test/fsm_transition_test.dart`, `code/cli/test/fsm_transition_integration_test.dart`, and `code/cli/test/firmware_agent_test.dart` so IDLE instructions, `idle_to_analyze` metadata, explicit-start gating, and the split production of `issue_selected_or_created` vs `feature_branch_selected` are all protected.
+- [x] Edit `code/cli/assets/apes/dewey.yaml` so issue readiness resets DEWEY to its initial state and only explicit start intent reaches `_DONE`.
+- [x] Edit `code/cli/assets/fsm/states/idle.yaml` so the canonical IDLE instructions explicitly define TRIAGE vs DONE, reset-after-issue-ready, and DONE consuming `issue-start`.
+- [x] Edit `code/cli/assets/fsm/transition_contract.yaml` so `start_analyze` remains the only outer IDLE exit and the `idle_to_analyze` fragment advertises only the external handoff metadata: required prechecks and expected handoff surface, while `idle.yaml` remains the canonical owner of TRIAGE/DONE semantics and `issue-start` trigger timing.
+- [x] Edit `code/cli/assets/agents/inquiry.agent.md` so the firmware states that issue readiness stays in IDLE/TRIAGE, only explicit start intent reaches DONE, and `issue-start` then prepares the operational handoff into `start_analyze`.
+- [x] Mirror the updated source assets into `code/cli/build/assets/apes/dewey.yaml`, `code/cli/build/assets/fsm/states/idle.yaml`, and `code/cli/build/assets/fsm/transition_contract.yaml`.
+- [x] Run `dart test test/ape_transition_test.dart test/fsm_state_test.dart test/fsm_contract_test.dart test/fsm_transition_test.dart test/fsm_transition_integration_test.dart test/firmware_agent_test.dart` until the Phase 2 contract is GREEN.
+- [x] Commit: "feat(cli): canonicalize idle runtime contract for #175"
 
 ## Phase 3 — Separate TRIAGE issue creation from DONE operational start (P3)
 

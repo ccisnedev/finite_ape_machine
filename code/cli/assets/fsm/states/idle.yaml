@@ -3,8 +3,11 @@ version: "1.0.0"
 description: "Triage and issue formulation"
 
 instructions: |
-  Evaluate what work merits inquiry. Understand the problem,
-  search for existing issues, create or select an issue.
+  IDLE has two internal modes: TRIAGE and DONE.
+  TRIAGE is the default: DEWEY clarifies scope, searches, and creates or selects an issue.
+  When issue readiness is reached, produce issue_selected_or_created, reset DEWEY, and remain in IDLE.
+  DONE is reached only on explicit start intent; DONE consumes issue-start to prepare feature_branch_selected.
+  Only after that handoff may IDLE fire start_analyze.
   Run 'iq doctor' as first action to validate environment.
 
 constraints:
