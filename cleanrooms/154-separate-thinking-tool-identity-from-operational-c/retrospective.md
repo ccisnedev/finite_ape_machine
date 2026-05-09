@@ -13,16 +13,17 @@ created: 2026-05-09
 ### What Was Implemented
 
 1. Prompt-boundary doctrine was aligned across `docs/architecture.md`, `docs/thinking-tools.md`, `docs/spec/agent-lifecycle.md`, `docs/spec/finite-ape-machine.md`, and `docs/spec/target-specific-agents.md` so those surfaces now describe APE YAMLs as identity surfaces, FSM state assets as phase-owned operational-contract sources, `iq ape prompt` as the explicit assembler, and DARWIN as the bounded abstract-process exception.
-2. `code/cli/assets/agents/inquiry.agent.md` and `code/cli/CHANGELOG.md` now reflect the final runtime wording, and the release metadata was bumped to `0.3.7` across `code/cli/pubspec.yaml`, `code/cli/lib/src/version.dart`, and `code/site/index.html`.
-3. Final P6 validation passed on 2026-05-09: `dart analyze` reported no issues after a non-behavioral cleanup in `code/cli/lib/modules/ape/operational_contract.dart`; `dart test` passed 336 tests; `dart test test/version_sync_test.dart` passed 5 tests; and the required `rg` verification surfaced the updated prompt-boundary wording in the targeted docs and firmware.
+2. The final release/doc delta now records the shipped state as `0.4.0`: `code/cli/assets/agents/inquiry.agent.md`, `code/cli/CHANGELOG.md`, and `docs/timeline.md` reflect the final runtime wording, and the release metadata was bumped across `code/cli/pubspec.yaml`, `code/cli/lib/src/version.dart`, and `code/site/index.html`.
+3. Final delta validation passed on 2026-05-09: targeted `test/version_sync_test.dart` plus `test/firmware_agent_test.dart` passed 21 tests, `dart analyze` reported no issues, `dart test` passed 329 tests, and the required `rg` verification surfaced the updated prompt-boundary wording in the targeted docs, timeline, and firmware.
 
 ### How to Verify
 
 1. From `code/cli`, run `dart analyze`.
 2. From `code/cli`, run `dart test`.
 3. From `code/cli`, run `dart test test/version_sync_test.dart`.
-4. From `code/cli`, run `rg "thinking tool|operational contract|iq ape prompt|DARWIN|prompt assembly" ..\..\docs assets\agents`.
-5. Review `docs/architecture.md`, `docs/thinking-tools.md`, `docs/spec/agent-lifecycle.md`, `docs/spec/finite-ape-machine.md`, `docs/spec/target-specific-agents.md`, `code/cli/assets/agents/inquiry.agent.md`, and the `0.3.7` release entry in `code/cli/CHANGELOG.md`.
+4. From `code/cli`, run `dart test test/firmware_agent_test.dart`.
+5. From `code/cli`, run `rg "thinking-tool identity|phase-owned operational contract|iq ape prompt|inquiry-context|v0.4.0" ..\..\docs assets\agents`.
+6. Review `docs/architecture.md`, `docs/thinking-tools.md`, `docs/spec/agent-lifecycle.md`, `docs/spec/finite-ape-machine.md`, `docs/spec/target-specific-agents.md`, `docs/timeline.md`, `code/cli/assets/agents/inquiry.agent.md`, and the `0.4.0` release entry in `code/cli/CHANGELOG.md`.
 
 ### Known Limitations
 
@@ -30,7 +31,7 @@ created: 2026-05-09
 
 ## What Went Well
 
-- The validated runtime boundary was already stable, so P6 stayed confined to doctrine, firmware wording, release metadata, and final verification.
+- The validated runtime boundary was already stable, so the final delta stayed confined to doctrine, firmware wording, release metadata, one historical doc sync, and verification.
 - The version-sync test continued to enforce all three release surfaces and caught the necessary metadata alignment immediately.
 
 ## What Deviated from the Plan

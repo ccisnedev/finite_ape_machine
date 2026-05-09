@@ -100,11 +100,15 @@ APE wasn't just a workflow — it was an implementation of the oldest formal the
 **2026-04-25 to 2026-04-26.** The architecture underwent its most significant redesign: the monolithic 554-line agent prompt was replaced by a thin **firmware scheduler** (~35 lines) backed by a dual FSM (main + per-APE). Key innovations:
 
 - **`iq fsm state --json`** — structured output for agent consumption
-- **`iq ape prompt --name <name>`** — sub-agent prompts assembled from YAML + state
+- **`iq ape prompt --name <name>`** — sub-agent prompts assembled from APE identity YAML + phase-owned state contract + runtime inquiry-context
 - **`completion_authority`** — per-state field that tells the scheduler whether to ask the user or transition automatically
 - **Dispatch model** — the scheduler never performs sub-agent work; it delegates via the `agent` tool
 
 The design principle: **the CLI is the algorithm, the LLM is just the executor**. Version **v0.2.0** landed with the redesign, followed immediately by **v0.2.1** with smoke-test fixes.
+
+## Prompt-boundary consolidation
+
+**2026-05-09.** Issue #154 closed the remaining prompt-ownership ambiguity in the public architecture. The effective sub-agent prompt is now described consistently across the canonical docs and firmware as: APE YAMLs provide thinking-tool identity, FSM state assets provide the phase-owned operational contract, and Inquiry CLI assembles the runtime `inquiry-context`. Standard APE YAMLs no longer carry the primary repository procedure. DARWIN remains the bounded exception: it keeps the abstract observe/compare/select methodology, while EVOLUTION owns the concrete issue and metrics procedure. This release line ships as **v0.4.0**.
 
 ## What emerged
 
