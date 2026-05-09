@@ -127,11 +127,11 @@ expect matches to be absent or reduced to identity-preserving references rather 
 
 **TDD:** Yes. RED first: tighten the standard-APE prompt expectations against the new contract carrier. GREEN second: contract the YAMLs until the gate passes.
 
-- [ ] Edit `code/cli/assets/apes/socrates.yaml`, `code/cli/assets/apes/descartes.yaml`, and `code/cli/assets/apes/basho.yaml` so they retain thinking-tool identity and sub-state modulation but stop owning the primary operational contract.
-- [ ] Mirror the updated standard APE YAMLs into `code/cli/build/assets/apes/socrates.yaml`, `code/cli/build/assets/apes/descartes.yaml`, and `code/cli/build/assets/apes/basho.yaml`.
-- [ ] Update prompt-composition tests and any nearby asset expectations in `code/cli/test/ape_prompt_test.dart`, `code/cli/test/ape_definition_test.dart`, and `code/cli/test/assets_test.dart` so the new ownership boundary is enforced.
-- [ ] Run `dart test test/ape_prompt_test.dart test/ape_definition_test.dart test/assets_test.dart test/firmware_agent_test.dart` and the `rg` verification above until the standard-APE boundary is GREEN.
-- [ ] Commit: "refactor(cli): externalize standard ape procedure for #154"
+- [x] Edit `code/cli/assets/apes/socrates.yaml`, `code/cli/assets/apes/descartes.yaml`, and `code/cli/assets/apes/basho.yaml` so they retain thinking-tool identity and sub-state modulation but stop owning the primary operational contract.
+- [x] Mirror the updated standard APE YAMLs into `code/cli/build/assets/apes/socrates.yaml`, `code/cli/build/assets/apes/descartes.yaml`, and `code/cli/build/assets/apes/basho.yaml`.
+- [x] Update prompt-composition tests and any nearby asset expectations in `code/cli/test/ape_prompt_test.dart`, `code/cli/test/ape_definition_test.dart`, and `code/cli/test/assets_test.dart` so the new ownership boundary is enforced.
+- [x] Run `dart test test/ape_prompt_test.dart test/ape_definition_test.dart test/assets_test.dart test/firmware_agent_test.dart` and the `rg` verification above until the standard-APE boundary is GREEN.
+- [x] Commit: "refactor(cli): externalize standard ape procedure for #154"
 
 ## Phase 4 — Externalize IDLE routing and DEWEY procedure from the APE YAML (P4)
 

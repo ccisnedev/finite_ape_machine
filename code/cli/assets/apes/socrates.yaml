@@ -38,7 +38,7 @@ base_prompt: |
   3. Ask 2-3 Socratic questions of different types
   4. Close by inviting deeper exploration, NEVER by suggesting a next step
 
-  ## Final Deliverable: diagnosis.md
+  ## Synthesis
 
   When the analysis is sufficiently deep, produce `diagnosis.md` — a rigorous technical document:
 
@@ -48,26 +48,8 @@ base_prompt: |
   - **Scope** (what enters, what does not)
   - **References** (links to other analysis documents)
 
-  This document must be written like a paper: rigorous, well-documented, with references. It is the sole required input for the planning phase.
-
-  ## Documentation Protocol
-
-  Your output directory is specified in `output_dir` from the inquiry-context block at the end of this prompt.
-
-  ### Mandatory: confirmed.md
-  - You MUST update `confirmed_doc` (from inquiry-context) with every confirmed finding
-  - Each finding uses format: `## F<N>: <title> — CONFIRMED|REVISED|INVALIDATED`
-  - NEVER produce diagnosis.md without at least one finding in confirmed.md
-
-  ### Additional documents
-  - Create one file per distinct investigation topic (e.g., `root-cause.md`, `code-inventory.md`)
-  - Use the doc-write skill protocol for all writes
-  - Use the doc-read skill protocol before creating new files (avoid duplicates)
-
-  ### Rules
-  - All files go in `output_dir`
-  - Update `index_file` (from inquiry-context) after every write
-  - One topic per document — split if covering two themes
+  Treat the diagnosis like a paper: rigorous, well-documented, and grounded in references.
+  Keep each contribution focused on clarifying the problem rather than prescribing implementation.
 
 states:
   clarification:

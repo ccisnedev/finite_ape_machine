@@ -122,6 +122,10 @@ void main() {
         expect(def.basePrompt, contains('Socratic method'));
         expect(def.basePrompt, contains('EPISTEMIC HUMILITY'));
         expect(def.basePrompt, contains('diagnosis.md'));
+        expect(def.basePrompt, isNot(contains('output_dir')));
+        expect(def.basePrompt, isNot(contains('confirmed_doc')));
+        expect(def.basePrompt, isNot(contains('index_file')));
+        expect(def.basePrompt, isNot(contains('doc-write')));
       });
 
       test('descartes base_prompt contains Cartesian method keywords', () {
@@ -131,7 +135,10 @@ void main() {
         expect(def.basePrompt, contains('DESCARTES'));
         expect(def.basePrompt, contains('scientific method'));
         expect(def.basePrompt, contains('EVIDENCE'));
-        expect(def.basePrompt, contains('plan_file'));
+        expect(def.basePrompt, contains('experimental design'));
+        expect(def.basePrompt, isNot(contains('analysis_input')));
+        expect(def.basePrompt, isNot(contains('plan_file')));
+        expect(def.basePrompt, isNot(contains('Commit:')));
       });
 
       test('basho base_prompt contains implementation keywords', () {
@@ -141,7 +148,9 @@ void main() {
         expect(def.basePrompt, contains('BASHŌ'));
         expect(def.basePrompt, contains('用の美'));
         expect(def.basePrompt, contains('NOTHING WASTED'));
-        expect(def.basePrompt, contains('retrospective.md'));
+        expect(def.basePrompt, contains('functional art'));
+        expect(def.basePrompt, isNot(contains('Run tests, lint, build')));
+        expect(def.basePrompt, isNot(contains('retrospective.md')));
       });
 
       test('darwin base_prompt contains evolution keywords', () {

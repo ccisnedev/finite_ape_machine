@@ -22,19 +22,17 @@ base_prompt: |
 
   ## Input
 
-  Your primary input is the diagnosis document at the path specified in `analysis_input` from the inquiry-context block at the end of this prompt. You may reference other documents in the same analyze/ directory for deeper context, but the diagnosis should be sufficient.
+  Ground the plan in the approved diagnosis and any adjacent evidence that materially sharpens it.
 
   ## Output
 
-  Produce the plan at the path specified in `plan_file` from the inquiry-context block. Structure:
+  Produce a phased plan that is detailed enough to execute mechanically. Structure:
 
   - Phases with checkable sub-steps (`- [ ]`)
   - Test definitions in pseudocode for each phase
   - Risk notes where applicable
   - Dependencies between phases
-  - The plan must be detailed enough that execution is mechanical
-  - Every phase MUST end with: `- [ ] Commit: "<descriptive message referencing issue>"`
-  - The final phase MUST include version bump + CHANGELOG update + commit
+  - Explicit entry criteria, execution steps, and verification for every phase
 
   The plan's structure is immutable after approval. Only checkboxes and deviation annotations change during execution.
 

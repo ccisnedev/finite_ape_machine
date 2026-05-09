@@ -381,7 +381,7 @@ void main() {
 
         expect(result.prompt, contains('EVIDENCE'));
         expect(result.prompt, contains('DIVISION'));
-        expect(result.prompt, contains('plan_file'));
+        expect(result.prompt, contains('experimental plan'));
         expect(result.prompt, contains('Division'));
       });
 
@@ -505,6 +505,18 @@ void main() {
             reason: 'inquiry-context should stay explicit after the operational contract');
       }
 
+        void expectContextKeyOnlyInInquiryContext(String prompt, String key) {
+        final contextIndex = prompt.indexOf('# --- inquiry-context ---');
+        final keyIndex = prompt.indexOf(key);
+
+        expect(contextIndex, greaterThanOrEqualTo(0),
+          reason: 'Missing inquiry-context block for key: $key');
+        expect(keyIndex, greaterThan(contextIndex),
+          reason: '$key should be owned by inquiry-context, not the APE identity');
+        expect(prompt.indexOf(key, keyIndex + key.length), equals(-1),
+          reason: '$key should appear only once in the assembled prompt');
+        }
+
       setUp(() {
         gitTmpDir = Directory.systemTemp.createTempSync('ape_ctx_test_');
         Directory(p.join(gitTmpDir.path, '.inquiry')).createSync();
@@ -562,6 +574,22 @@ void main() {
         expect(result.prompt, contains('confirmed_doc: cleanrooms/152-test-branch/analyze/confirmed.md'));
         expect(result.prompt, contains('index_file: cleanrooms/152-test-branch/analyze/index.md'));
         expect(result.prompt, contains('doc_protocol: doc-write'));
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'output_dir: cleanrooms/152-test-branch/analyze/',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'confirmed_doc: cleanrooms/152-test-branch/analyze/confirmed.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'index_file: cleanrooms/152-test-branch/analyze/index.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'doc_protocol: doc-write',
+        );
         expectExplicitContextAfter(result.prompt, 'Clarification questions');
       });
 
@@ -584,6 +612,19 @@ void main() {
         expect(result.prompt, contains('analysis_input: cleanrooms/152-test-branch/analyze/diagnosis.md'));
         expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
         expect(result.prompt, contains('doc_protocol: doc-read'));
+        expect(result.prompt, isNot(contains('Commit:')));
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'analysis_input: cleanrooms/152-test-branch/analyze/diagnosis.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'plan_file: cleanrooms/152-test-branch/plan.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'doc_protocol: doc-read',
+        );
         expectExplicitContextAfter(result.prompt, 'FOCUS: Division.');
       });
 
@@ -620,6 +661,20 @@ void main() {
         expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
         expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/'));
         expect(result.prompt, contains('doc_protocol: doc-read'));
+        expect(result.prompt, isNot(contains('Run tests, lint, build')));
+        expect(result.prompt, isNot(contains('retrospective.md')));
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'plan_file: cleanrooms/152-test-branch/plan.md',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'output_dir: cleanrooms/152-test-branch/',
+        );
+        expectContextKeyOnlyInInquiryContext(
+          result.prompt,
+          'doc_protocol: doc-read',
+        );
         expectOperationalContractBetween(
           result.prompt,
           identityFragment: 'Implement exactly what the plan says. No more, no less.',

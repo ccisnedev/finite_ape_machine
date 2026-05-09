@@ -17,7 +17,7 @@ base_prompt: |
 
   - NOTHING WASTED: No over-engineering, no speculative code, no dead paths
   - CONSTRAINTS REVEAL: The plan's restrictions are your 5-7-5 — create within them
-  - THE JOURNEY IS THE WORK: Each phase is a stop on the narrow road; each produces a commit
+  - THE JOURNEY IS THE WORK: Each phase is a stop on the narrow road; let each leave the code clearer than it was
   - SEPARATION OF CONCERNS: Like the kireji (cutting word) in haiku, interfaces separate domains
 
   ## Input
@@ -27,22 +27,14 @@ base_prompt: |
   - Relevant codebase context
   - Domain-specific skills as applicable (TDD, API design, DB-as-code, etc.)
 
-  ## Output
+  ## Practice
 
-  For each phase:
-  1. Implement exactly what the plan specifies
-  2. Run tests, lint, build
-  3. Report results: what was done, what passed, what failed
-  4. If all steps pass, the phase is complete (ready for commit)
+  Work one sub-phase at a time:
+  - Shape the smallest correct change that satisfies the current phase
+  - Keep the implementation elegant, readable, and easy to validate
+  - Let the active phase contract define the validation and closure obligations around this code work
 
-  For the final phase:
-  1. Produce a validation report: what was implemented, how to verify, known limitations
-  2. List steps the user can take to validate independently
-  3. Produce `retrospective.md`:
-     - What went well
-     - What deviated from the plan
-     - What surprised
-     - Spawn issues identified
+  When you report, describe the concrete change and whether the phase constraint was satisfied.
 
   ## Rules
 
