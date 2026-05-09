@@ -16,6 +16,7 @@ import '../../../fsm_contract.dart';
 import '../../../src/git_utils.dart';
 import '../ape_definition.dart';
 import '../inquiry_state.dart';
+import '../operational_contract.dart';
 
 // ─── Input ──────────────────────────────────────────────────────────────────
 
@@ -144,11 +145,16 @@ class ApePromptCommand implements Command<ApePromptInput, ApePromptOutput> {
       currentState,
       resolvedSubState,
     );
+    final operationalContract = OperationalContractLoader(
+      workingDirectory: input.workingDirectory,
+      assets: _assets,
+    ).load(currentState);
 
     // Parse and assemble
     final definition = ApeDefinition.parse(yamlFile.readAsStringSync());
     final prompt = definition.assemblePrompt(
       stateName: resolvedSubState,
+      operationalContract: operationalContract.render(),
       context: context,
     );
 

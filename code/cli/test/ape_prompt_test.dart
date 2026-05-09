@@ -21,6 +21,13 @@ void main() {
       File('assets/apes/$name.yaml')
           .copySync(p.join(apesDir.path, '$name.yaml'));
     }
+
+    final statesDir = Directory(p.join(tmpDir.path, 'assets', 'fsm', 'states'));
+    statesDir.createSync(recursive: true);
+    for (final name in ['idle', 'analyze', 'plan', 'execute', 'end', 'evolution']) {
+      File('assets/fsm/states/$name.yaml')
+          .copySync(p.join(statesDir.path, '$name.yaml'));
+    }
   });
 
   tearDown(() {
@@ -478,6 +485,26 @@ void main() {
             reason: 'inquiry-context should stay explicit after the prompt body');
       }
 
+      void expectOperationalContractBetween(
+        String prompt, {
+        required String identityFragment,
+        required String contractFragment,
+      }) {
+        final identityIndex = prompt.indexOf(identityFragment);
+        final contractIndex = prompt.indexOf('## Phase-Owned Operational Contract');
+        final detailIndex = prompt.indexOf(contractFragment);
+        final contextIndex = prompt.indexOf('# --- inquiry-context ---');
+
+        expect(identityIndex, greaterThanOrEqualTo(0),
+            reason: 'Missing assembled prompt identity fragment: $identityFragment');
+        expect(contractIndex, greaterThan(identityIndex),
+            reason: 'Operational contract should come after the APE identity');
+        expect(detailIndex, greaterThan(contractIndex),
+            reason: 'Operational contract should expose the phase-owned details');
+        expect(contextIndex, greaterThan(detailIndex),
+            reason: 'inquiry-context should stay explicit after the operational contract');
+      }
+
       setUp(() {
         gitTmpDir = Directory.systemTemp.createTempSync('ape_ctx_test_');
         Directory(p.join(gitTmpDir.path, '.inquiry')).createSync();
@@ -501,6 +528,13 @@ void main() {
         for (final name in ['socrates', 'dewey', 'descartes', 'basho', 'darwin']) {
           File('assets/apes/$name.yaml')
               .copySync(p.join(apesDir.path, '$name.yaml'));
+        }
+
+        final statesDir = Directory(p.join(gitTmpDir.path, 'assets', 'fsm', 'states'));
+        statesDir.createSync(recursive: true);
+        for (final name in ['idle', 'analyze', 'plan', 'execute', 'end', 'evolution']) {
+          File('assets/fsm/states/$name.yaml')
+              .copySync(p.join(statesDir.path, '$name.yaml'));
         }
       });
 
@@ -571,13 +605,25 @@ void main() {
           result.prompt,
           contains('Implement exactly what the plan says. No more, no less.'),
         );
+        expect(result.prompt, contains('## Phase-Owned Operational Contract'));
+        expect(
+          result.prompt,
+          contains('Implement the plan phase by phase under its formal constraints.'),
+        );
+        expect(
+          result.prompt,
+          contains('Follow plan.md phases in order'),
+        );
+        expect(result.prompt, contains('Allowed actions:'));
+        expect(result.prompt, contains('Edit code files'));
         expect(result.prompt, contains('# --- inquiry-context ---'));
         expect(result.prompt, contains('plan_file: cleanrooms/152-test-branch/plan.md'));
         expect(result.prompt, contains('output_dir: cleanrooms/152-test-branch/'));
         expect(result.prompt, contains('doc_protocol: doc-read'));
-        expectExplicitContextAfter(
+        expectOperationalContractBetween(
           result.prompt,
-          'Implement exactly what the plan says. No more, no less.',
+          identityFragment: 'Implement exactly what the plan says. No more, no less.',
+          contractFragment: 'Implement the plan phase by phase under its formal constraints.',
         );
       });
 

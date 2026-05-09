@@ -83,13 +83,13 @@ expect the new operational-contract fragment to be visible in assembled prompts,
 
 **TDD:** Yes. RED first: add the new prompt-composition expectations. GREEN second: introduce the carrier and keep the same gate green.
 
-- [ ] Add a dedicated operational-contract assembly helper/model under `code/cli/lib/modules/ape/` and wire it into `code/cli/lib/modules/ape/commands/prompt.dart` so the assembled prompt order is explicitly APE identity -> phase-owned operational contract -> inquiry-context.
-- [ ] Treat existing FSM state `instructions`, `constraints`, and `allowed_actions` as the primary carrier for phase-owned mission and contract, and introduce new explicit state fields only where prompt delivery still needs data that those surfaces cannot express cleanly.
-- [ ] Extend the phase-owned runtime sources under `code/cli/assets/fsm/states/analyze.yaml`, `code/cli/assets/fsm/states/plan.yaml`, `code/cli/assets/fsm/states/execute.yaml`, `code/cli/assets/fsm/states/end.yaml`, `code/cli/assets/fsm/states/idle.yaml`, and `code/cli/assets/fsm/states/evolution.yaml` with only the additive contract fields still required after that normalization, then mirror those edits into `code/cli/build/assets/fsm/states/`.
-- [ ] Update `code/cli/test/ape_prompt_test.dart`, `code/cli/test/fsm_state_test.dart`, `code/cli/test/fsm_contract_test.dart`, and `code/cli/test/firmware_agent_test.dart` so the CLI-owned operational-contract fragment and inspectable composition boundary are protected.
-- [ ] Update `code/cli/assets/agents/inquiry.agent.md` so the firmware explicitly describes the assembled prompt as APE identity + phase-owned operational contract + inquiry-context.
-- [ ] Run `dart test test/ape_prompt_test.dart test/fsm_state_test.dart test/fsm_contract_test.dart test/firmware_agent_test.dart` until the additive carrier is GREEN.
-- [ ] Commit: "feat(cli): add operational contract layer for #154"
+- [x] Add a dedicated operational-contract assembly helper/model under `code/cli/lib/modules/ape/` and wire it into `code/cli/lib/modules/ape/commands/prompt.dart` so the assembled prompt order is explicitly APE identity -> phase-owned operational contract -> inquiry-context.
+- [x] Treat existing FSM state `instructions`, `constraints`, and `allowed_actions` as the primary carrier for phase-owned mission and contract, and introduce new explicit state fields only where prompt delivery still needs data that those surfaces cannot express cleanly.
+- [x] Extend the phase-owned runtime sources under `code/cli/assets/fsm/states/analyze.yaml`, `code/cli/assets/fsm/states/plan.yaml`, `code/cli/assets/fsm/states/execute.yaml`, `code/cli/assets/fsm/states/end.yaml`, `code/cli/assets/fsm/states/idle.yaml`, and `code/cli/assets/fsm/states/evolution.yaml` with only the additive contract fields still required after that normalization, then mirror those edits into `code/cli/build/assets/fsm/states/`.
+- [x] Update `code/cli/test/ape_prompt_test.dart`, `code/cli/test/fsm_state_test.dart`, `code/cli/test/fsm_contract_test.dart`, and `code/cli/test/firmware_agent_test.dart` so the CLI-owned operational-contract fragment and inspectable composition boundary are protected.
+- [x] Update `code/cli/assets/agents/inquiry.agent.md` so the firmware explicitly describes the assembled prompt as APE identity + phase-owned operational contract + inquiry-context.
+- [x] Run `dart test test/ape_prompt_test.dart test/fsm_state_test.dart test/fsm_contract_test.dart test/firmware_agent_test.dart` until the additive carrier is GREEN.
+- [x] Commit: "feat(cli): add operational contract layer for #154"
 
 ## Phase 3 — Migrate the standard thinking tools to identity-first prompts (P3)
 

@@ -4,6 +4,7 @@ import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 import 'package:inquiry_cli/fsm_contract.dart';
+import 'package:inquiry_cli/modules/ape/operational_contract.dart';
 
 void main() {
   late FsmContract contract;
@@ -31,6 +32,37 @@ void main() {
           reason: 'Missing transition for ${state.value} + ${event.value}',
         );
       }
+    }
+  });
+
+  test('state assets expose phase-owned operational contract for every FSM state', () {
+    final loader = OperationalContractLoader(
+      workingDirectory: Directory.current.path,
+    );
+
+    for (final state in FsmState.values) {
+      final operationalContract = loader.load(state);
+
+      expect(
+        operationalContract.toJson()['state'],
+        equals(state.value),
+        reason: 'Operational contract should keep the owning FSM state visible',
+      );
+      expect(
+        operationalContract.instructions,
+        isNotEmpty,
+        reason: 'Operational contract for ${state.value} should expose instructions',
+      );
+      expect(
+        operationalContract.constraints,
+        isNotEmpty,
+        reason: 'Operational contract for ${state.value} should expose constraints',
+      );
+      expect(
+        operationalContract.allowedActions,
+        isNotEmpty,
+        reason: 'Operational contract for ${state.value} should expose allowed actions',
+      );
     }
   });
 

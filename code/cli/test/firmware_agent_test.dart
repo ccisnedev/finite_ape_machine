@@ -22,6 +22,13 @@ void main() {
       expect(content, contains('inspect the exact effective sub-agent prompt'));
     });
 
+    test('documents prompt assembly as identity plus operational contract plus inquiry-context', () {
+      expect(
+        content,
+        contains('APE identity + phase-owned operational contract + inquiry-context'),
+      );
+    });
+
     test('references iq ape transition', () {
       expect(content, contains('iq ape transition'));
     });

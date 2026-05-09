@@ -82,6 +82,32 @@ void main() {
         expect(json['instructions'], isA<String>());
       });
 
+      test('returns operational contract sourced from state assets', () async {
+        setupWorkspace(state: 'EXECUTE', issue: '145');
+
+        final command = FsmStateCommand(FsmStateInput(
+          workingDirectory: tempDir.path,
+        ));
+        final result = await command.execute();
+        final json = result.toJson();
+        final operationalContract =
+            json['operational_contract'] as Map<String, dynamic>?;
+
+        expect(operationalContract, isNotNull);
+        expect(
+          operationalContract!['instructions'],
+          contains('Implement the plan phase by phase under its formal constraints.'),
+        );
+        expect(
+          operationalContract['constraints'],
+          contains('Follow plan.md phases in order'),
+        );
+        expect(
+          operationalContract['allowed_actions'],
+          contains('Edit code files'),
+        );
+      });
+
       test('IDLE state has no task', () async {
         setupWorkspace(state: 'IDLE');
 

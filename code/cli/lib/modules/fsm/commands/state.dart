@@ -12,6 +12,7 @@ import '../../../assets.dart';
 import '../../../fsm_contract.dart';
 import '../../ape/ape_definition.dart';
 import '../../ape/inquiry_state.dart';
+import '../../ape/operational_contract.dart';
 
 class FsmStateInput extends Input {
   final String workingDirectory;
@@ -32,6 +33,7 @@ class FsmStateOutput extends Output {
   final List<Map<String, String>> transitions;
   final List<Map<String, String>> apes;
   final String instructions;
+  final Map<String, dynamic> operationalContract;
   final Map<String, dynamic>? ape;
   final String completionAuthority;
 
@@ -41,6 +43,7 @@ class FsmStateOutput extends Output {
     required this.transitions,
     required this.apes,
     required this.instructions,
+    required this.operationalContract,
     this.ape,
     required this.completionAuthority,
   });
@@ -53,6 +56,7 @@ class FsmStateOutput extends Output {
     'transitions': transitions,
     'apes': apes,
     'instructions': instructions,
+    'operational_contract': operationalContract,
     if (ape != null) 'ape': ape,
   };
 
@@ -106,7 +110,8 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
     final validTransitions = _computeTransitions(
       contract, currentState, input.workingDirectory);
     final activeApes = _computeApes(currentState);
-    final instructions = _computeInstructions(currentState);
+    final operationalContract = _loadOperationalContract(currentState);
+    final instructions = operationalContract.instructions;
     final apeInfo = _computeApeInfo(inquiry);
     final completionAuthority =
         contract.completionAuthority[currentState] ?? 'user';
@@ -117,6 +122,7 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
       transitions: validTransitions,
       apes: activeApes,
       instructions: instructions,
+      operationalContract: operationalContract.toJson(),
       ape: apeInfo,
       completionAuthority: completionAuthority,
     );
@@ -180,38 +186,11 @@ class FsmStateCommand implements Command<FsmStateInput, FsmStateOutput> {
     return _stateApes[state] ?? [];
   }
 
-  String _computeInstructions(FsmState state) {
-    final stateName = state.value.toLowerCase();
-    try {
-      final yamlPath = _assets != null
-          ? _assets.path('fsm/states/$stateName.yaml')
-          : p.join(input.workingDirectory, 'assets', 'fsm', 'states', '$stateName.yaml');
-      final content = File(yamlPath).readAsStringSync();
-      final yaml = loadYaml(content);
-      if (yaml is YamlMap && yaml['instructions'] is String) {
-        return (yaml['instructions'] as String).trim();
-      }
-      throw CommandException(
-        code: 'MALFORMED_STATE_YAML',
-        message: "State file for '$stateName' is missing 'instructions' field. "
-            "Run 'iq doctor --fix' to repair.",
-        exitCode: ExitCode.genericError,
-      );
-    } on PathNotFoundException {
-      throw CommandException(
-        code: 'MISSING_STATE_YAML',
-        message: "State instructions missing for '$stateName'. "
-            "Run 'iq doctor --fix' to repair.",
-        exitCode: ExitCode.genericError,
-      );
-    } on FileSystemException {
-      throw CommandException(
-        code: 'MISSING_STATE_YAML',
-        message: "State instructions missing for '$stateName'. "
-            "Run 'iq doctor --fix' to repair.",
-        exitCode: ExitCode.genericError,
-      );
-    }
+  OperationalContract _loadOperationalContract(FsmState state) {
+    return OperationalContractLoader(
+      workingDirectory: input.workingDirectory,
+      assets: _assets,
+    ).load(state);
   }
 
   /// Build `ape` info from InquiryState + APE YAML definition.
