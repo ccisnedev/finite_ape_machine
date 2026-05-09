@@ -291,3 +291,5 @@ expect no regressions across the idle boundary, firmware contract, skill split, 
 - [x] Run `dart analyze`.
 - [x] Run `dart test test/ape_transition_test.dart test/fsm_state_test.dart test/fsm_contract_test.dart test/fsm_transition_test.dart test/fsm_transition_integration_test.dart test/firmware_agent_test.dart test/assets_test.dart test/doctor_test.dart test/ape_prompt_test.dart test/version_sync_test.dart`.
 - [x] Commit: "chore(release): record clarified idle contract for #175"
+
+Deviation: The approved P6 checklist did not enumerate the prompt-required final retrospective artifact, so the exact planned release commit above was preserved and the cleanroom validation record is captured in a follow-up docs-only commit.
