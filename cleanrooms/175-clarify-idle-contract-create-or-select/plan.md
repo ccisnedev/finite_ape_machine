@@ -44,11 +44,11 @@ expect the docs to point readers to the runtime pair and to mark stale IDLE guid
 
 **TDD:** No. This phase is documentation groundwork; execute the verification gate after the edits as the completion check.
 
-- [ ] Update `docs/spec/state-encapsulation.md` to mark it as superseded for canonical IDLE behavior while preserving any still-valid architectural intuition.
-- [ ] Update `docs/spec/agent-lifecycle.md` so it states that `transition_contract.yaml` defines the outer IDLE boundary and `idle.yaml` defines the internal IDLE behavior.
-- [ ] Update `docs/spec/cooperative-multitasking-model.md` so it describes the clarified DEWEY/IDLE boundary as explanatory architecture rather than the canonical runtime contract.
-- [ ] Run `rg "canonical|normative|superseded|historical|transition_contract|idle.yaml" ..\docs\spec` and resolve contradictory wording before leaving the phase.
-- [ ] Commit: "docs(spec): clarify idle source map for #175"
+- [x] Update `docs/spec/state-encapsulation.md` to mark it as superseded for canonical IDLE behavior while preserving any still-valid architectural intuition.
+- [x] Update `docs/spec/agent-lifecycle.md` so it states that `transition_contract.yaml` defines the outer IDLE boundary and `idle.yaml` defines the internal IDLE behavior.
+- [x] Update `docs/spec/cooperative-multitasking-model.md` so it describes the clarified DEWEY/IDLE boundary as explanatory architecture rather than the canonical runtime contract.
+- [x] Run `rg "canonical|normative|superseded|historical|transition_contract|idle.yaml" ..\docs\spec` and resolve contradictory wording before leaving the phase.
+- [x] Commit: "docs(spec): clarify idle source map for #175"
 
 ## Phase 2 — Canonicalize the core IDLE runtime contract (P2)
 

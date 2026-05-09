@@ -1,14 +1,18 @@
 ---
 id: state-encapsulation
-title: "State Encapsulation — architectural principle and system analogies"
+title: "State Encapsulation — historical note on the architectural principle"
 date: 2026-04-27
-status: active
+status: superseded
 tags: [architecture, fsm, encapsulation, triage, analogies, kernel]
 author: socrates
 issue: 152
 ---
 
 # State Encapsulation
+
+> Superseded for canonical IDLE behavior. This document remains useful as historical architecture and for the encapsulation principle, but the normative runtime contract now lives in `code/cli/assets/fsm/transition_contract.yaml` for the outer IDLE boundary and `code/cli/assets/fsm/states/idle.yaml` for internal IDLE behavior.
+>
+> Historical note: the operator naming below, the proposed TRIAGE flow ending at `_DONE`, and the older handoff semantics are preserved as context only and may be stale relative to the live runtime assets.
 
 ## Principle
 
@@ -117,7 +121,9 @@ If objectives can be independently reviewed and independently reverted, they are
 
 This mirrors the kernel rule: "if you make a single change to numerous files, group those changes into a single patch." The grouping criterion is **logical unity**, not file proximity.
 
-## IDLE State Mission: Triage
+## Historical IDLE State Mission: Triage
+
+This section is historical rather than normative. It preserves an earlier explanation of the IDLE mission and still-valid architectural intuition, but the canonical runtime definition belongs to `transition_contract.yaml` plus `idle.yaml`.
 
 IDLE is the only state where the scheduler operates directly (via the TRIAGE sub-agent). Its mission is **phronesis** (Aristotle's practical wisdom) — the ability to decide what merits formal inquiry.
 

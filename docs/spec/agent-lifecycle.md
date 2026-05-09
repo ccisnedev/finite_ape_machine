@@ -28,7 +28,7 @@ IDLE → ANALYZE → PLAN → EXECUTE → END → EVOLUTION
 
 ### State descriptions
 
-**IDLE** — DEWEY owns bounded issue triage. The user converses freely while DEWEY determines whether the indeterminate situation merits a formal cycle, whether an issue already exists, and whether that issue is ready for handoff. DEWEY does not create branches, write diagnosis, plan work, or code. The explicit handoff remains external: `issue-start` verifies or creates the issue, prepares the branch and working directory, and fires `start_analyze`.
+**IDLE** — This document is explanatory architecture, not the sole normative source. The canonical runtime contract for IDLE lives in `code/cli/assets/fsm/transition_contract.yaml` for the outer IDLE boundary and `code/cli/assets/fsm/states/idle.yaml` for internal IDLE behavior. Within that boundary, DEWEY owns bounded issue triage. The user converses freely while DEWEY determines whether the indeterminate situation merits a formal cycle, whether an issue already exists, and whether that issue is ready for handoff. DEWEY does not create branches, write diagnosis, plan work, or code. The explicit handoff remains external: `issue-start` verifies or creates the issue, prepares the branch and working directory, and fires `start_analyze`.
 
 **ANALYZE** — SOCRATES conducts Socratic analysis. Explores the problem through questions, challenges assumptions, documents findings. Produces `diagnosis.md` — a rigorous technical document (paper-style, with references) that serves as the sole input for the planning phase. The user approves the diagnosis before transitioning.
 

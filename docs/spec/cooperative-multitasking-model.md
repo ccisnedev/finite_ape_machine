@@ -61,7 +61,9 @@ void ape_tick() {
 
 ## DEWEY in IDLE (triage)
 
-In IDLE, DEWEY owns bounded issue triage. DEWEY determines whether an indeterminate situation merits a formal cycle, whether an issue already exists, and whether that issue is ready for handoff. DEWEY does not perform root-cause analysis, planning, branch preparation, or coding.
+This section explains the intended DEWEY/IDLE architecture; it does not replace the canonical runtime contract. The normative IDLE surfaces are `code/cli/assets/fsm/transition_contract.yaml` for the outer boundary and `code/cli/assets/fsm/states/idle.yaml` for the internal IDLE behavior.
+
+In IDLE, DEWEY owns bounded issue triage. DEWEY determines whether an indeterminate situation merits a formal cycle, whether an issue already exists, and whether that issue is ready for handoff. By default, issue readiness stays within IDLE until the explicit handoff surface is prepared; DEWEY does not itself define the outer exit from IDLE. DEWEY does not perform root-cause analysis, planning, branch preparation, or coding.
 
 Triage determines:
 - Whether the problem merits a formal APE cycle
