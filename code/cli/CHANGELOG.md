@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.6]
+### Added
+- **TRIAGE issue creation**: IDLE now uses a dedicated `issue-create` skill for deterministic issue creation or confirmation before operational handoff (#175)
+
+### Changed
+- **Clarified IDLE contract**: issue readiness now resets DEWEY inside IDLE/TRIAGE, while explicit start intent alone reaches DONE and triggers `issue-start` plus `start_analyze` (#175)
+- **Fast-path ownership**: explicit create-or-select routing now belongs to IDLE/Inquiry CLI orchestration instead of DEWEY's methodology asset (#175, #176)
+- **Handoff sequencing**: firmware, docs, and runtime surfaces now agree that TRIAGE produces `issue_selected_or_created`, while `issue-start` produces `feature_branch_selected` before `start_analyze` (#175)
+
 ## [0.3.5]
 ### Changed
 - **IDLE operator**: DEWEY is now the active IDLE operator across CLI runtime, prompt resolution, doctor validation, and public roster surfaces (#177)

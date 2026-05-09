@@ -286,8 +286,8 @@ expect no regressions across the idle boundary, firmware contract, skill split, 
 
 **TDD:** No. This phase is release bookkeeping plus whole-slice validation; completion depends on the final analyze/test verification gate.
 
-- [ ] Update `code/cli/CHANGELOG.md` with an entry for the clarified IDLE contract, the new `issue-create` skill, and the relocation of fast-path ownership into IDLE.
-- [ ] Bump the CLI version in `code/cli/pubspec.yaml`, `code/cli/lib/src/version.dart`, and the version badge in `code/site/index.html`.
-- [ ] Run `dart analyze`.
-- [ ] Run `dart test test/ape_transition_test.dart test/fsm_state_test.dart test/fsm_contract_test.dart test/fsm_transition_test.dart test/fsm_transition_integration_test.dart test/firmware_agent_test.dart test/assets_test.dart test/doctor_test.dart test/ape_prompt_test.dart test/version_sync_test.dart`.
-- [ ] Commit: "chore(release): record clarified idle contract for #175"
+- [x] Update `code/cli/CHANGELOG.md` with an entry for the clarified IDLE contract, the new `issue-create` skill, and the relocation of fast-path ownership into IDLE.
+- [x] Bump the CLI version in `code/cli/pubspec.yaml`, `code/cli/lib/src/version.dart`, and the version badge in `code/site/index.html`.
+- [x] Run `dart analyze`.
+- [x] Run `dart test test/ape_transition_test.dart test/fsm_state_test.dart test/fsm_contract_test.dart test/fsm_transition_test.dart test/fsm_transition_integration_test.dart test/firmware_agent_test.dart test/assets_test.dart test/doctor_test.dart test/ape_prompt_test.dart test/version_sync_test.dart`.
+- [x] Commit: "chore(release): record clarified idle contract for #175"
