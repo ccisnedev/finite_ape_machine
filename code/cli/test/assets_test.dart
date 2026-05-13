@@ -154,6 +154,7 @@ void main() {
           'doc-read',
           'doc-write',
           'inquiry-install',
+          'Invoke-ExpertCouncil',
           'issue-create',
           'issue-end',
           'issue-start',

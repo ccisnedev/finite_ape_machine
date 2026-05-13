@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.4.2]
+### Fixed
+- **Test suite alignment**: added `Invoke-ExpertCouncil` to hardcoded skill lists in `assets_test.dart` and `doctor_test.dart` to match actual assets (#189)
+
+### Changed
+- **PLAN contract**: `plan.yaml` now requires every plan to include a final verification step running the full project test suite (#189)
+- **EXECUTE contract**: `execute.yaml` now mandates the full project test suite must pass before any commit, independent of plan.md verification criteria (#189)
+
 ## [0.4.1]
 ### Added
 - **Invoke-ExpertCouncil skill**: new universal SKILL.md implementing the LEGION technique — council of experts via independent sub-agents with isolated context, structured dictamen output, and synthesis persistence as `.md` (#186)

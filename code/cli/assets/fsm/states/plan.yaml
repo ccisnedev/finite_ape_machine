@@ -9,6 +9,7 @@ instructions: |
   Produce plan.md.
 
 constraints:
+  - Every plan must include a final verification step that runs the full project test suite (all existing tests, not just phase-specific ones)
   - No code edits (belongs to EXECUTE)
   - Plan must reference diagnosis.md decisions
   - Each phase must have verification criteria
