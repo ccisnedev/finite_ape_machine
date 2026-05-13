@@ -79,7 +79,57 @@ Persist the synthesis as a `.md` file in the appropriate project directory.
 
 ## Expert Dictamen Format
 
+Each expert must produce their output using this structure:
+
+```markdown
+### Expert: [Name]
+**Perspective:** [cognitive lens]
+
+#### Findings
+- [Key observations from this expert's perspective]
+
+#### Risks
+- [Risks identified from this perspective]
+
+#### Recommendation
+[What this expert recommends and why]
+
+#### Confidence
+[high | medium | low] — [brief justification]
+```
+
 ## Synthesis Format
+
+The final integrated document uses this structure:
+
+```markdown
+# Council of Experts — Synthesis
+
+## Problem Analyzed
+[Problem statement as comprehended in Step 1]
+
+## Experts Convened
+| # | Persona | Perspective | Confidence |
+|---|---------|-------------|------------|
+| 1 | [name]  | [lens]      | [level]    |
+
+## Individual Dictamens
+[Embed each expert's dictamen in full]
+
+## Consensuses
+- [Points where multiple experts independently agree]
+
+## Dissents
+- **[Expert A]** vs **[Expert B]**: [nature of disagreement and implications]
+
+## Blind Spots
+- [Aspects no expert addressed, or areas of insufficient coverage]
+
+## Final Recommendation
+[Integrated recommendation that weighs consensuses, addresses dissents, and acknowledges blind spots]
+```
+
+Persist the synthesis as a `.md` file in the appropriate project directory. Use a descriptive filename (e.g., `council-synthesis-<topic>.md`).
 
 ## Reference Personas
 

@@ -112,14 +112,14 @@ ASSERT imperative language addressed to executing agent (evidence-inventory §2.
 
 **Steps:**
 
-- [ ] P3.1: Write `## Expert Dictamen Format` — the structured template each expert must follow for their individual output. Fields from `legion.md` §3.5 and §3.2:
+- [x] P3.1: Write `## Expert Dictamen Format` — the structured template each expert must follow for their individual output. Fields from `legion.md` §3.5 and §3.2:
   - Expert identity (name, perspective)
   - Analysis / Hallazgos (findings)
   - Risks identified
   - Recommendation
   - Confidence level (high / medium / low)
   - Format as markdown template with placeholders
-- [ ] P3.2: Write `## Synthesis Format` — the template for the final integrated document. Fields from `legion.md` §3.5:
+- [x] P3.2: Write `## Synthesis Format` — the template for the final integrated document. Fields from `legion.md` §3.5:
   - Problem analyzed
   - Experts convened (table: #, persona, perspective, confidence)
   - Individual dictamens (embedded or referenced)
@@ -128,7 +128,7 @@ ASSERT imperative language addressed to executing agent (evidence-inventory §2.
   - Blind spots
   - Final recommendation
   - Format as markdown template with placeholders
-- [ ] P3.3: Add persistence instructions within Synthesis Format — where and how to save the output `.md` file. Runtime-agnostic: "persist the synthesis as a `.md` file in the appropriate project directory" (D6). No reference to cleanrooms or `doc-write` as requirement (D3).
+- [x] P3.3: Add persistence instructions within Synthesis Format — where and how to save the output `.md` file. Runtime-agnostic: "persist the synthesis as a `.md` file in the appropriate project directory" (D6). No reference to cleanrooms or `doc-write` as requirement (D3).
 
 **Verification:**
 ```
