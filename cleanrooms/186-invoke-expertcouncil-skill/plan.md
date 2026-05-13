@@ -154,22 +154,22 @@ ASSERT no Inquiry-specific references in templates (D3)
 
 **Steps:**
 
-- [ ] P4.1: Write `## Reference Personas` section — non-prescriptive catalog of cognitive perspectives as guidance (D4, F7). Include 5–7 reference personas from `legion.md` §3.4 adapted to concise format. Explicitly state these are guidance, not mandatory. Note that the agent should maximize cognitive distance for the specific problem.
-- [ ] P4.2: Write `## Rules` section — invariant constraints that must hold during any invocation:
+- [x] P4.1: Write `## Reference Personas` section — non-prescriptive catalog of cognitive perspectives as guidance (D4, F7). Include 5–7 reference personas from `legion.md` §3.4 adapted to concise format. Explicitly state these are guidance, not mandatory. Note that the agent should maximize cognitive distance for the specific problem.
+- [x] P4.2: Write `## Rules` section — invariant constraints that must hold during any invocation:
   - Sub-agent isolation is mandatory; context must not leak between experts (D5)
   - No sequential role-play — each expert must be a separate sub-agent invocation (R1)
   - Cognitive distance maximization — avoid selecting experts with overlapping perspectives
   - Default 5 experts, minimum 3, maximum 7 (D7)
   - Output must be persisted as `.md` (D6)
   - Protocol is runtime-agnostic — do not depend on any specific tooling or runtime (D3)
-- [ ] P4.3: Review the complete SKILL.md end-to-end for:
+- [x] P4.3: Review the complete SKILL.md end-to-end for:
   - Consistent imperative tone (matching existing skills per evidence-inventory §2.3)
   - No Inquiry-specific dependencies in the protocol body (D3, C1)
   - Conciseness — no theoretical background (Q4, stays in `legion.md`)
   - All diagnosis decisions D1–D7 addressed
   - All constraints C1–C5 respected
   - Risk mitigations R1–R5 embedded
-- [ ] P4.4: Verify `description` frontmatter is self-contained and discoverable — an agent reading only the description must understand what the skill does and when to use it.
+- [x] P4.4: Verify `description` frontmatter is self-contained and discoverable — an agent reading only the description must understand what the skill does and when to use it.
 
 **Verification:**
 ```

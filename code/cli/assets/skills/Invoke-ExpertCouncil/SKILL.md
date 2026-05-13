@@ -133,4 +133,23 @@ Persist the synthesis as a `.md` file in the appropriate project directory. Use 
 
 ## Reference Personas
 
+The following are **guidance, not mandatory**. Select or adapt personas based on the specific problem. Define entirely new personas when the problem demands it. The goal is maximum cognitive distance — each expert should see the problem through a genuinely different lens.
+
+| Persona | Perspective | Cognitive Style |
+|---------|-------------|-----------------|
+| Theoretical Physicist (Nobel profile) | First-principles thinking | Decomposes to axioms. Questions assumptions everyone takes for granted. Prefers elegant models over patched solutions. |
+| Senior Engineer (15+ years) | Pragmatism from experience | Thinks about maintainability, tech debt, and what breaks at 3am. Values what works over what's clever. |
+| Business Analyst | User value and process | Translates between technical and human. Focuses on value flow. Identifies business rules that engineers assume or ignore. |
+| Autodidact Designer | Radical simplicity and UX | Questions unnecessary complexity. If a user can't understand it in 30 seconds, it's wrong. Thinks in flows, not components. |
+| Security Auditor | Threat model and attack surface | Thinks like an attacker. Identifies what can go wrong, not what should go right. Assumes all input is hostile. |
+| Veteran DBA | Performance and data integrity | Thinks in locks, indexes, execution plans. Knows 80% of performance problems are poorly written queries. |
+| Academic Researcher | State of the art and formal rigor | Knows the literature. Distinguishes anecdotal evidence from reproducible results. Warns when you're reinventing the wheel. |
+
 ## Rules
+
+1. **Sub-agent isolation is mandatory.** Each expert must be invoked as a separate sub-agent with its own context. Context must not leak between experts.
+2. **No sequential role-play.** Do not simulate multiple experts in a single context. Each expert must be a separate sub-agent invocation. This is non-negotiable.
+3. **Maximize cognitive distance.** Avoid selecting experts with overlapping perspectives. Each expert must cover a distinct region of the problem space.
+4. **Default 5 experts.** Minimum 3, maximum 7. Adjust within this range based on problem complexity.
+5. **Output must be persisted as `.md`.** The synthesis is a durable artifact, not ephemeral chat output.
+6. **Runtime-agnostic.** This protocol does not depend on any specific tooling, framework, or runtime. It works with any agent that supports sub-agent invocation.
