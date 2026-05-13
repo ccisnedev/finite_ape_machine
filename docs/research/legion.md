@@ -9,11 +9,11 @@
 
 ## Abstract
 
-`Invoke-ExpertCouncil` es una **skill universal** dentro del ecosistema Inquiry. Su mandato es convocar un consejo de expertos —personas con perspectivas cognitivas genuinamente distintas— para analizar un problema desde múltiples ángulos antes de sintetizar una conclusión. Cada experto es invocado como sub-agente independiente con su propio contexto, herramientas y skills, maximizando la independencia de perspectivas. El propio LLM es la función de gating que decide qué expertos convocar.
+`legion` es una **skill universal** dentro del ecosistema Inquiry. Su mandato es convocar un consejo de expertos —personas con perspectivas cognitivas genuinamente distintas— para analizar un problema desde múltiples ángulos antes de sintetizar una conclusión. Cada experto es invocado como sub-agente independiente con su propio contexto, herramientas y skills, maximizando la independencia de perspectivas. El propio LLM es la función de gating que decide qué expertos convocar.
 
-A diferencia de las skills inquiry-bound (`doc-read`, `issue-create`, etc.) que requieren el FSM y el CLI `iq` para funcionar, `Invoke-ExpertCouncil` es **independiente de Inquiry**: su protocolo (selección de expertos → invocación de sub-agentes → síntesis → persistencia .md) funciona con cualquier agente, en cualquier contexto. Inquiry la enriquece con contexto de fase, pero no la requiere.
+A diferencia de las skills inquiry-bound (`doc-read`, `issue-create`, etc.) que requieren el FSM y el CLI `iq` para funcionar, `legion` es **independiente de Inquiry**: su protocolo (selección de expertos → invocación de sub-agentes → síntesis → persistencia .md) funciona con cualquier agente, en cualquier contexto. Inquiry la enriquece con contexto de fase, pero no la requiere.
 
-LEGION es el nombre de la **técnica** que `Invoke-ExpertCouncil` implementa. La decisión de implementarla como Skill (no como APE) fue tomada mediante un dictamen formal de consejo de expertos documentado en [`council_of_experts.md`](council_of_experts.md).
+LEGION es el nombre de la **técnica** que `legion` implementa. La decisión de implementarla como Skill (no como APE) fue tomada mediante un dictamen formal de consejo de expertos documentado en [`council_of_experts.md`](council_of_experts.md).
 
 ---
 
@@ -31,7 +31,7 @@ Esta hipótesis no requiere independencia estadística perfecta (mismo modelo, m
 
 ### 1.3 Posición en el Finite APE Machine
 
-`Invoke-ExpertCouncil` es una **skill universal** — invocable por cualquier APE, por el usuario, o por cualquier agente fuera de Inquiry:
+`legion` es una **skill universal** — invocable por cualquier APE, por el usuario, o por cualquier agente fuera de Inquiry:
 
 - **SOCRATES** puede invocarla durante ANALYZE para obtener perspectivas múltiples
 - **DEWEY** puede usarla en IDLE para evaluar si un issue merece trabajo
@@ -44,7 +44,7 @@ La Skill no modifica el FSM. No requiere transiciones nuevas. No tiene sub-estad
 
 ### 1.4 Skill universal vs inquiry-bound
 
-`Invoke-ExpertCouncil` inaugura una distinción arquitectónica en Inquiry:
+`legion` inaugura una distinción arquitectónica en Inquiry:
 
 | Tipo | Registro | Entrega | Dependencia |
 |------|----------|---------|-------------|
@@ -53,7 +53,7 @@ La Skill no modifica el FSM. No requiere transiciones nuevas. No tiene sub-estad
 
 Las skills inquiry-bound (`doc-read`, `issue-create`, `issue-start`, `issue-end`) solo tienen sentido con el runtime de Inquiry activo. Registrarlas en el target contamina el namespace del agente con capacidades que no funcionan fuera de un ciclo APE.
 
-`Invoke-ExpertCouncil` en cambio vive permanentemente en el target porque es útil siempre, con o sin Inquiry. Ver issue [#185](https://github.com/ccisnedev/inquiry/issues/185) para el módulo `iq skill`.
+`legion` en cambio vive permanentemente en el target porque es útil siempre, con o sin Inquiry. Ver issue [#185](https://github.com/ccisnedev/inquiry/issues/185) para el módulo `iq skill`.
 
 ### 1.5 ¿Por qué Skill y no APE?
 
@@ -142,7 +142,7 @@ PanelGPT modela discusiones en panel entre LLMs, emulando deliberación de exper
 
 **Cero infraestructura adicional.** LEGION usa exactamente lo que Inquiry ya tiene:
 
-- Una skill universal (`Invoke-ExpertCouncil/SKILL.md`) desplegada al target
+- Una skill universal (`legion/SKILL.md`) desplegada al target
 - Un catálogo de personas (libre en v1, YAML formalizado en futuro)
 - El LLM como motor de razonamiento, routing, y síntesis
 - Sub-agentes como mecanismo de ejecución aislada
@@ -337,9 +337,9 @@ El costo de tokens no es un factor limitante — lo que limita es la diversidad 
 
 ## 4. Integración con Inquiry
 
-### 4.1 Skill `Invoke-ExpertCouncil`
+### 4.1 Skill `legion`
 
-`Invoke-ExpertCouncil` se despliega al target como skill universal — vive permanentemente en `.github/copilot/skills/Invoke-ExpertCouncil/SKILL.md` (o el equivalente del target). No se entrega via `iq skill get` ni `iq target get`; está siempre disponible.
+`legion` se despliega al target como skill universal — vive permanentemente en `.github/copilot/skills/legion/SKILL.md` (o el equivalente del target). No se entrega via `iq skill get` ni `iq target get`; está siempre disponible.
 
 Dentro de Inquiry, puede ser invocada por cualquier APE en cualquier fase. Fuera de Inquiry, funciona con cualquier agente que soporte skills (GitHub Copilot, Cursor, Claude, etc.).
 
@@ -357,7 +357,7 @@ La técnica que implementa se llama LEGION — *"Mi nombre es LEGION, porque som
 
 ### 4.3 Comandos `iq` relevantes (solo dentro de Inquiry)
 
-| Comando | Utilidad para `Invoke-ExpertCouncil` |
+| Comando | Utilidad para `legion` |
 |---------|--------------------------------------|
 | `iq fsm state` | Saber en qué fase está para adaptar perspectivas al contexto |
 | `iq ape state` | Conocer el sub-estado del APE que invoca al consejo |
@@ -369,27 +369,23 @@ Dentro de Inquiry, el consejo recibe el inquiry-context inyectado por el APE act
 
 ## 5. Nombre y filosofía
 
-**LEGION** es el nombre de la **técnica**. **`Invoke-ExpertCouncil`** es el nombre de la **skill**.
+**LEGION** es tanto el nombre de la **técnica** como de la **skill** (`legion`).
 
 LEGION sigue la convención de identidad de Inquiry: los APEs llevan nombres filosóficos (Sócrates, Descartes, Bashō, Dewey, Darwin). LEGION encarna la **inteligencia colectiva** — *"Mi nombre es LEGION, porque somos muchos."* No es un pensador; es un convocador de pensadores.
 
-`Invoke-ExpertCouncil` sigue la convención Verb-Noun (como cmdlets de PowerShell): describe semánticamente lo que hace. Un usuario que no conozca la referencia bíblica entiende qué hace `Invoke-ExpertCouncil` al leer el nombre.
-
-La separación es deliberada:
-- **LEGION** = la técnica, la filosofía, el lore. Aparece en documentación, en referencias narrativas, en la identidad del proyecto.
-- **`Invoke-ExpertCouncil`** = la implementación, el artefacto. Aparece en SKILL.md, en paths, en invocaciones.
+La skill se llama `legion` — nombre unificado que refleja directamente la técnica. Aparece en SKILL.md, en paths, en invocaciones.
 
 ---
 
 ## 6. Trabajo Futuro
 
-- **Módulo `iq skill`** ([#185](https://github.com/ccisnedev/inquiry/issues/185)): comandos `iq skill list` / `iq skill get` para entrega bajo demanda de skills inquiry-bound. Las skills universales como `Invoke-ExpertCouncil` quedan fuera de este módulo — viven en el target.
+- **Módulo `iq skill`** ([#185](https://github.com/ccisnedev/inquiry/issues/185)): comandos `iq skill list` / `iq skill get` para entrega bajo demanda de skills inquiry-bound. Las skills universales como `legion` quedan fuera de este módulo — viven en el target.
 - **Catálogo YAML formalizado**: catálogo con categorías, clasificación por dominio, y selección asistida. Permite escalabilidad y consistencia entre invocaciones.
 - **Persistencia de sesiones**: guardar la síntesis como artefacto indexado en `cleanrooms/` para que otros APEs la consuman via `doc-read`.
 - **Modo interactivo**: permitir que el usuario interactúe con un experto específico después de la síntesis inicial, profundizando en su perspectiva.
-- **Promoción a APE subroutine**: si `Invoke-ExpertCouncil` demuestra valor consistente y necesidad de estado persistente, evaluar integración formal usando el modelo de autómata de subrutina (call-return composition).
+- **Promoción a APE subroutine**: si `legion` demuestra valor consistente y necesidad de estado persistente, evaluar integración formal usando el modelo de autómata de subrutina (call-return composition).
 - **Métricas**: registrar qué personas fueron invocadas y si la síntesis fue útil, para refinar el catálogo con datos.
-- **Página en site**: documentar `Invoke-ExpertCouncil` en `inquiry.ccisne.dev` como capacidad pública — potencial puerta de entrada a la metodología Inquiry.
+- **Página en site**: documentar `legion` en `inquiry.ccisne.dev` como capacidad pública — potencial puerta de entrada a la metodología Inquiry.
 
 ---
 
@@ -417,4 +413,4 @@ La separación es deliberada:
 
 ---
 
-*LEGION — Invoke-ExpertCouncil Skill — Draft v0.4 — Mayo 2026*
+*LEGION — legion Skill — Draft v0.4 — Mayo 2026*
