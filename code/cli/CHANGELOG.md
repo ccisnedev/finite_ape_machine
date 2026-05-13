@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.4.1]
+### Added
+- **Invoke-ExpertCouncil skill**: new universal SKILL.md implementing the LEGION technique — council of experts via independent sub-agents with isolated context, structured dictamen output, and synthesis persistence as `.md` (#186)
+
 ## [0.4.0]
 ### Changed
 - **Prompt-boundary doctrine**: architecture, thinking-tool, lifecycle, finite-state, and target-wrapper docs now describe the validated runtime boundary: APE YAMLs provide thinking-tool identity, FSM state assets provide the phase-owned operational contract, and `iq ape prompt` remains the inspectable assembler (#154)
