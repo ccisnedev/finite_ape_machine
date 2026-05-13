@@ -11,6 +11,7 @@ instructions: |
   - Final commit with version bump and CHANGELOG
 
 constraints:
+  - The full project test suite must pass before any commit, independent of plan.md verification criteria
   - Follow plan.md phases in order
   - Each phase must pass its verification criteria before advancing
   - Commits must be atomic (one phase = one commit)
