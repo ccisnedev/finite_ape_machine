@@ -75,12 +75,12 @@ ASSERT no references to iq commands, FSM state, or cleanrooms in frontmatter/des
 
 **Steps:**
 
-- [ ] P2.1: Write `## When to Use` section — trigger conditions for invoking the skill. Must be runtime-agnostic (D3). Examples: complex multi-domain problems, decisions requiring diverse perspectives, validating designs from multiple angles.
-- [ ] P2.2: Write `### Step 1: Comprehension` — instructions for the agent to analyze the problem, identify domains involved, determine if clarification is needed from the user. Based on `legion.md` §3.2 step 1.
-- [ ] P2.3: Write `### Step 2: Expert Selection` — instructions for selecting 3–7 experts (default 5, per D7) with maximum cognitive distance (Page 2007). Free mode (D4): agent selects freely, no formal catalog required. Must announce selected experts before proceeding.
-- [ ] P2.4: Write `### Step 3: Consultation` — the critical sub-agent invocation step. Each expert MUST be invoked as an independent sub-agent with isolated context (D5). Explicitly prohibit sequential role-play (R1 mitigation). Specify what each expert receives: persona prompt, problem statement, access to tools/skills. Describe the expected output format per expert (pointer to Expert Dictamen Format section). Runtime-agnostic language per C1: "invoke each expert as a separate sub-agent" without prescribing `@agent` syntax.
-- [ ] P2.5: Write `### Step 4: Synthesis` — instructions for integrating all expert dictamens. Must identify: consensuses, dissents, blind spots, final recommendation (per `legion.md` §3.5). Output persists to `.md` file (D6). Pointer to Synthesis Format section.
-- [ ] P2.6: Address sub-agent fallback (A2 from diagnosis): add a note within Step 3 for runtimes that do not support sub-agent invocation — degraded mode with sequential prompting and explicit context isolation warning.
+- [x] P2.1: Write `## When to Use` section — trigger conditions for invoking the skill. Must be runtime-agnostic (D3). Examples: complex multi-domain problems, decisions requiring diverse perspectives, validating designs from multiple angles.
+- [x] P2.2: Write `### Step 1: Comprehension` — instructions for the agent to analyze the problem, identify domains involved, determine if clarification is needed from the user. Based on `legion.md` §3.2 step 1.
+- [x] P2.3: Write `### Step 2: Expert Selection` — instructions for selecting 3–7 experts (default 5, per D7) with maximum cognitive distance (Page 2007). Free mode (D4): agent selects freely, no formal catalog required. Must announce selected experts before proceeding.
+- [x] P2.4: Write `### Step 3: Consultation` — the critical sub-agent invocation step. Each expert MUST be invoked as an independent sub-agent with isolated context (D5). Explicitly prohibit sequential role-play (R1 mitigation). Specify what each expert receives: persona prompt, problem statement, access to tools/skills. Describe the expected output format per expert (pointer to Expert Dictamen Format section). Runtime-agnostic language per C1: "invoke each expert as a separate sub-agent" without prescribing `@agent` syntax.
+- [x] P2.5: Write `### Step 4: Synthesis` — instructions for integrating all expert dictamens. Must identify: consensuses, dissents, blind spots, final recommendation (per `legion.md` §3.5). Output persists to `.md` file (D6). Pointer to Synthesis Format section.
+- [x] P2.6: Address sub-agent fallback (A2 from diagnosis): add a note within Step 3 for runtimes that do not support sub-agent invocation — degraded mode with sequential prompting and explicit context isolation warning.
 
 **Verification:**
 ```

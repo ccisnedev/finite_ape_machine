@@ -7,15 +7,75 @@ description: 'Convoke a council of diverse experts as independent sub-agents to 
 
 ## When to Use
 
+- A complex problem spans multiple domains and a single perspective risks blind spots
+- A design or architecture decision has subtle trade-offs that benefit from diverse viewpoints
+- You need to validate a proposal, diagnosis, or plan from genuinely different angles
+- A decision carries high stakes and you want structured dissent before committing
+- You suspect your analysis is anchored in one framing and want to break out of it
+
 ## Protocol
 
 ### Step 1: Comprehension
 
+Analyze the problem before selecting experts:
+
+1. Restate the problem in your own words.
+2. Identify the domains involved (technical, business, security, UX, etc.).
+3. Determine the type of output needed (decision, design, diagnosis, evaluation).
+4. If the problem is ambiguous or underspecified, ask the user for clarification before proceeding.
+
+Do NOT select experts until you understand the problem.
+
 ### Step 2: Expert Selection
+
+Select **5 experts** (default). Minimum 3, maximum 7.
+
+For each expert, define:
+- **Name**: a descriptive persona (e.g., "Security Auditor", "Senior Engineer")
+- **Perspective**: the cognitive lens they bring
+- **Why selected**: how this perspective covers a distinct region of the problem space
+
+**Selection criteria:** maximize cognitive distance between experts. Avoid selecting experts with overlapping perspectives (e.g., two backend engineers). Each expert should cover a different axis of the problem.
+
+Announce the selected experts to the user before proceeding to consultation. List each expert's name, perspective, and the rationale for their inclusion.
+
+See **Reference Personas** below for guidance on cognitive styles.
 
 ### Step 3: Consultation
 
+Invoke each expert as a **separate, independent sub-agent** with its own isolated context.
+
+Each expert receives:
+- A persona prompt defining their identity, perspective, and cognitive style
+- The problem statement (as comprehended in Step 1)
+- Access to workspace tools and skills as needed
+- Instructions to produce output in the **Expert Dictamen Format** (see below)
+
+**Sub-agent isolation is mandatory.** Each expert must reason independently, without access to other experts' outputs. This prevents progressive anchoring and preserves the diversity that makes the council valuable.
+
+```
+CRITICAL: Do NOT role-play experts sequentially in a single context.
+Each expert MUST be invoked as a separate sub-agent.
+Sequential role-play destroys independence — the second expert
+is anchored by the first, the third by both, and so on.
+The entire value of the council depends on isolated invocation.
+```
+
+**Fallback for runtimes without sub-agent support:** If your runtime does not support sub-agent invocation, you may fall back to sequential prompting with explicit context resets between experts. Be aware that this is a **degraded mode** — context isolation cannot be fully guaranteed, and anchoring effects will reduce the diversity of perspectives.
+
 ### Step 4: Synthesis
+
+After all experts have produced their dictamens, synthesize the results:
+
+1. Read all expert dictamens.
+2. Identify **consensuses** — points where multiple experts independently agree.
+3. Identify **dissents** — points where experts disagree, with attribution.
+4. Identify **blind spots** — aspects of the problem that no expert addressed.
+5. Formulate a **final recommendation** that integrates the perspectives, weighs the dissents, and addresses the blind spots.
+
+Produce the output in the **Synthesis Format** (see below).
+
+Persist the synthesis as a `.md` file in the appropriate project directory.
 
 ## Expert Dictamen Format
 
