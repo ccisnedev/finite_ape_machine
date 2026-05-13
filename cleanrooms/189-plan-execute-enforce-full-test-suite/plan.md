@@ -18,8 +18,8 @@
 1. In `code/cli/test/assets_test.dart`, add `'Invoke-ExpertCouncil'` to the `unorderedEquals` list in the `listDirectory skills` test.
 
 ### Verification
-- [ ] `dart test` in `code/cli/` passes the `listDirectory skills returns all skill directories` test.
-- [ ] The list in the test matches the actual contents of `code/cli/assets/skills/`.
+- [x] `dart test` in `code/cli/` passes the `listDirectory skills returns all skill directories` test.
+- [x] The list in the test matches the actual contents of `code/cli/assets/skills/`.
 
 ### Risk
 - None. One-liner fix with no side effects.
@@ -39,8 +39,8 @@
 2. Update the "6 skills" string assertion to "7 skills" (or whatever count results from the addition).
 
 ### Verification
-- [ ] `dart test` in `code/cli/` passes all doctor-related tests.
-- [ ] The `testSkills` list length matches the assertion string.
+- [x] `dart test` in `code/cli/` passes all doctor-related tests.
+- [x] The `testSkills` list length matches the assertion string.
 
 ### Risk
 - The "N skills" string may appear in multiple assertions. Verify all occurrences are updated.
@@ -62,9 +62,9 @@
 2. The constraint must be placed prominently in the list (not buried at the bottom) to reduce risk of sub-agent skipping it (per diagnosis Risk #2).
 
 ### Verification
-- [ ] `plan.yaml` parses correctly (valid YAML).
-- [ ] The new constraint text does not reference any specific language, framework, or test runner.
-- [ ] `dart test` in `code/cli/` passes `assets_test.dart` (particularly the YAML content assertions that check for framework-specific markers).
+- [x] `plan.yaml` parses correctly (valid YAML).
+- [x] The new constraint text does not reference any specific language, framework, or test runner.
+- [x] `dart test` in `code/cli/` passes `assets_test.dart` (particularly the YAML content assertions that check for framework-specific markers).
 
 ### Risk
 - Prompt length increase is negligible (one additional constraint sentence).
@@ -86,9 +86,9 @@
 2. Place the constraint prominently (near the top of the constraints list).
 
 ### Verification
-- [ ] `execute.yaml` parses correctly (valid YAML).
-- [ ] The new constraint text does not reference any specific language, framework, or test runner.
-- [ ] `dart test` in `code/cli/` passes all YAML content assertions in `assets_test.dart`.
+- [x] `execute.yaml` parses correctly (valid YAML).
+- [x] The new constraint text does not reference any specific language, framework, or test runner.
+- [x] `dart test` in `code/cli/` passes all YAML content assertions in `assets_test.dart`.
 
 ### Risk
 - Same negligible prompt length increase as Phase 3.
@@ -108,8 +108,8 @@
 2. Confirm zero failures across all test files.
 
 ### Verification
-- [ ] Full test suite passes with zero failures.
-- [ ] No warnings or skipped tests that were previously passing.
+- [x] Full test suite passes with zero failures.
+- [x] No warnings or skipped tests that were previously passing.
 
 ### Risk
 - If any pre-existing test fails, it must be diagnosed as a pre-existing issue vs. a regression from this change. Only regressions from Phases 1–4 are in scope.
