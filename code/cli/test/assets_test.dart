@@ -151,6 +151,7 @@ void main() {
       expect(
         dirs,
         unorderedEquals([
+          'Invoke-ExpertCouncil',
           'doc-read',
           'doc-write',
           'inquiry-install',
