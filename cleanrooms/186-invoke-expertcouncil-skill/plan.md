@@ -27,8 +27,8 @@ This plan implements all decisions from [diagnosis.md](analyze/diagnosis.md) (D1
 
 **Steps:**
 
-- [ ] P1.1: Create directory `code/cli/assets/skills/Invoke-ExpertCouncil/`
-- [ ] P1.2: Create `SKILL.md` with YAML frontmatter:
+- [x] P1.1: Create directory `code/cli/assets/skills/Invoke-ExpertCouncil/`
+- [x] P1.2: Create `SKILL.md` with YAML frontmatter:
   ```yaml
   ---
   name: Invoke-ExpertCouncil
@@ -38,7 +38,7 @@ This plan implements all decisions from [diagnosis.md](analyze/diagnosis.md) (D1
   - `name` uses PascalCase Verb-Noun per D2 and Q5
   - `description` must be self-contained for agent discovery (evidence-inventory §2.3)
   - Only `name` and `description` fields — matching F1 convention
-- [ ] P1.3: Add section headers as skeleton (no content yet):
+- [x] P1.3: Add section headers as skeleton (no content yet):
   - `# Invoke-ExpertCouncil — Council of Experts (LEGION)`
   - `## When to Use`
   - `## Protocol`
