@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+### Changed
+- **Skill renamed**: `Invoke-ExpertCouncil` → `legion` — unified naming for technique and skill (#191)
+
 ## [0.4.2]
 ### Fixed
 - **Test suite alignment**: added `Invoke-ExpertCouncil` to hardcoded skill lists in `assets_test.dart` and `doctor_test.dart` to match actual assets (#189)

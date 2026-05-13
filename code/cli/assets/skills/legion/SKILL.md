@@ -1,9 +1,9 @@
 ---
-name: Invoke-ExpertCouncil
+name: legion
 description: 'Convoke a council of diverse experts as independent sub-agents to analyze a problem from multiple perspectives and synthesize their outputs into a persisted .md dictamen.'
 ---
 
-# Invoke-ExpertCouncil — Council of Experts (LEGION)
+# legion — Council of Experts (LEGION)
 
 ## When to Use
 

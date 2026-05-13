@@ -154,7 +154,7 @@ void main() {
           'doc-read',
           'doc-write',
           'inquiry-install',
-          'Invoke-ExpertCouncil',
+          'legion',
           'issue-create',
           'issue-end',
           'issue-start',

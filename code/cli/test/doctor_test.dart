@@ -99,7 +99,7 @@ void main() {
       'doc-read',
       'doc-write',
       'inquiry-install',
-      'Invoke-ExpertCouncil',
+      'legion',
       'issue-create',
       'issue-start',
       'issue-end',
@@ -375,7 +375,7 @@ void main() {
           'doc-read',
           'doc-write',
           'inquiry-install',
-          'Invoke-ExpertCouncil',
+          'legion',
           'issue-start',
           'issue-end',
         ]) {
