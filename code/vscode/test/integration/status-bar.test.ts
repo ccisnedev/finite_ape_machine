@@ -39,7 +39,7 @@ describe('StatusBar integration', function () {
 
   it('updateStatusBar con ApeState actualiza text y tooltip del item', async () => {
     const statePath = path.join(inquiryPath, 'state.yaml');
-    fs.writeFileSync(statePath, 'cycle:\n  phase: PLAN\n  task: "042"\n', 'utf-8');
+    fs.writeFileSync(statePath, 'state: PLAN\nissue: "042"\n', 'utf-8');
     const context = { subscriptions: [] as vscode.Disposable[] } as unknown as vscode.ExtensionContext;
     const [item, watcher] = createStatusBar(context, root) as [vscode.StatusBarItem, vscode.FileSystemWatcher];
 
@@ -54,7 +54,7 @@ describe('StatusBar integration', function () {
 
   it('dispose limpia el item y el watcher', async () => {
     const statePath = path.join(inquiryPath, 'state.yaml');
-    fs.writeFileSync(statePath, 'cycle:\n  phase: ANALYZE\n  task: "042"\n', 'utf-8');
+    fs.writeFileSync(statePath, 'state: ANALYZE\nissue: "042"\n', 'utf-8');
     const context = { subscriptions: [] as vscode.Disposable[] } as unknown as vscode.ExtensionContext;
     const [item, watcher] = createStatusBar(context, root) as [vscode.StatusBarItem, vscode.FileSystemWatcher];
 
@@ -64,7 +64,7 @@ describe('StatusBar integration', function () {
     watcher.dispose();
     item.dispose();
 
-    fs.writeFileSync(statePath, 'cycle:\n  phase: EXECUTE\n  task: "042"\n', 'utf-8');
+    fs.writeFileSync(statePath, 'state: EXECUTE\nissue: "042"\n', 'utf-8');
     await delay(250);
 
     assert.strictEqual(item.text, beforeDispose);
