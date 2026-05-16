@@ -8,6 +8,9 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 - **Standalone `research` skill**: new direct-use SKILL.md for staged web investigation with a single durable paper-style markdown report and BibTeX-compatible references (#193)
 
+### Fixed
+- **VS Code status bar integration tests**: aligned fixture state files with the flat `.inquiry/state.yaml` contract (`state` / `issue`) so repo-wide extension validation no longer times out (#194)
+
 ## [0.4.3]
 ### Changed
 - **Skill renamed**: `Invoke-ExpertCouncil` → `legion` — unified naming for technique and skill (#191)
