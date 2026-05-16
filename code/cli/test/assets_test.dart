@@ -155,6 +155,7 @@ void main() {
           'doc-write',
           'inquiry-install',
           'legion',
+          'research',
           'issue-create',
           'issue-end',
           'issue-start',

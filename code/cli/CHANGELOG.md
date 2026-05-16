@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.4.4]
+### Added
+- **Standalone `research` skill**: new direct-use SKILL.md for staged web investigation with a single durable paper-style markdown report and BibTeX-compatible references (#193)
+
+### Fixed
+- **VS Code status bar integration tests**: aligned fixture state files with the flat `.inquiry/state.yaml` contract (`state` / `issue`) so repo-wide extension validation no longer times out (#194)
+
 ## [0.4.3]
 ### Changed
 - **Skill renamed**: `Invoke-ExpertCouncil` → `legion` — unified naming for technique and skill (#191)
